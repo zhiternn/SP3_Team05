@@ -9,13 +9,14 @@ Generic Class for Weapons
 /******************************************************************************/
 
 #include "Weapon.h"
+#include "Projectile.h"
 
 /******************************************************************************/
 /*!
 \brief	Weapon Default Constructor
 */
 /******************************************************************************/
-Weapon::Weapon() : w_active(false), w_ammo(0), w_dmgval(0)
+Weapon::Weapon() :w_ammo(0), w_dmgval(0)
 {
 
 }
@@ -35,7 +36,6 @@ void Weapon::Fire()
     switch (w_type)
     {
     case GUN:
-        projectile.SetType(P_PLAYER_BULLET);
         break;
     case ROPEGUN:
         break;
