@@ -25,7 +25,7 @@ void Camera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 void Camera::Update(double dt)
 {
-	//Retrieve Entities from vector<Vector2>entityList and update the camera position based off their average pos
+	//Retrieve Entities from vector<Vector3>entityList and update the camera position based off their average pos
 	Vector3 *cameraPos;
 	//set first entity as default position
 	if (!entityList.empty())
