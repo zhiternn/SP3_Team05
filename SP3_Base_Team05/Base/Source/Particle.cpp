@@ -1,19 +1,26 @@
 #include "Particle.h"
 
 Particle::Particle() :
-pos(0, 0, 0),
-scale(1, 1, 1),
-rotation(0),
-rotationSpeed(0),
-lifetime(0.0f),
+mesh(NULL),
+pattern(PATTERN_NONE),
+rotation(0.0f),
+rotationSpeed(0.0f),
 active(false),
+lifetime(0.0f),
+isPhysics(false),
 entered(false),
-exited(false)
+exited(false),
+entrySpeed(1.0f),
+exitSpeed(1.0f),
+entryEffect(ENTRY_NONE),
+exitEffect(EXIT_NONE)
 {
 }
 
 Particle::~Particle()
 {
+	if (mesh)
+		delete mesh;
 }
 
 void Particle::Update(double dt)
