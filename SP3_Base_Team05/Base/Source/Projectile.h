@@ -61,4 +61,6 @@ private:
     PROJECTILE_TYPE proj_type;                              //< Projectile Type
 };
 
+CProjectile* FetchProjectile();
+
 #endif /* PROJECTILE_H */
