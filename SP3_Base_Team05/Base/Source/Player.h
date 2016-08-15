@@ -9,7 +9,9 @@ public:
 	Player();
 	~Player();
 
-
+	void Init(Vector3 pos, Vector3 scale, Vector3 front);
+	void UpdateInputs();
+	void Update(double dt);
 
 private:
 
