@@ -18,8 +18,11 @@ public:
 
 	float m_worldWidth, m_worldHeight;
 
+	void Include(Vector3 *pos);
+	
+private:
 	//Vector List of entities taken into account for camera position
-	std::vector<Vector3*>entityList;
+	std::vector<Vector3*> entityList;
 };
 
 #endif
