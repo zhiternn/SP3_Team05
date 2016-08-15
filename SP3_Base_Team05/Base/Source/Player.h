@@ -18,6 +18,7 @@ public:
 	void Update(double dt);
 
 private:
+
 	bool isMoving;
 	bool isDashed;
 	float cooldownTimer = 0;

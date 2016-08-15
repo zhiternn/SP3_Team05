@@ -41,23 +41,16 @@ void Camera::Update(double dt)
 		//Average the positions
 		cameraTarget.x /= entityList.size();
 		cameraTarget.y /= entityList.size();
-
-		//Check if player is within camera deadzone
-		if (Deadzone(entityList[0], cameraTarget))
-		{
-			this->target = cameraTarget;
-			this->position = this->target;
-			this->position.z += 1;
-		}
-
-		//Check if player is within camera deadzone
-		if (Deadzone(entityList[0], cameraTarget))
-		{
-			this->target = cameraTarget;
-			this->position = this->target;
-			this->position.z += 1;
-		}
-	}
+        
+        //Check if player is within camera deadzone
+        if (Deadzone(entityList[0], cameraTarget))
+        {
+			//if so, update the camera position
+            this->target = cameraTarget;
+            this->position = this->target;
+            this->position.z += 1;
+        }
+    }
 }
 
 void Camera::Include(Vector3* pos)
