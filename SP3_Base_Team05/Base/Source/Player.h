@@ -16,12 +16,12 @@ public:
 	void Init(Vector3 pos, Vector3 scale, Vector3 front);
 	void UpdateInputs(double dt);
 	void Update(double dt);
+	float cooldownTimer = 0;
 
 private:
-
 	bool isMoving;
 	bool isDashed;
-	float cooldownTimer = 0;
+
 };
 
 
