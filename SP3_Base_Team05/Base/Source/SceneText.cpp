@@ -63,12 +63,12 @@ void SceneText::Init()
 	m_ghost = new GameObject(GameObject::GO_BALL);
 
 	GameObject *go = FetchGO();
-	go->active = true;
-	go->scale.Set(20, 20, 20);
-	go->front.Set(1, 0, 0);
-	go->pos.Set(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	go->type = GameObject::GO_CUBE;
-	go->collider.type = Collider::COLLIDER_BOX;
+	go->SetActive(true);
+	go->SetScale(20, 20, 20);
+	go->SetFront(1, 0, 0);
+	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+	go->SetType(GameObject::GO_CUBE);
+	go->SetColliderType(Collider::COLLIDER_BOX);
 }
 
 void SceneText::Update(double dt)
@@ -84,14 +84,14 @@ void SceneText::Update(double dt)
 		x = m_worldWidth * (x / w);
 		y = m_worldHeight * ((h - y) / h);
 
-		m_ghost->pos.Set(x, y, 0);
-		m_ghost->scale.Set(1, 1, 1);
-		m_ghost->active = true;
+		m_ghost->SetPostion(x, y, 0);
+		m_ghost->SetScale(1, 1, 1);
+		m_ghost->SetActive(true);
 	}
 	else if(Controls::GetInstance().OnRelease(Controls::MOUSE_LBUTTON))
 	{
 		GameObject* ball = FetchGO();
-		ball->pos = m_ghost->pos;
+		ball->SetPostion(m_ghost->GetPosition());
 
 		double x, y;
 		Application::GetCursorPos(x, y);
@@ -100,11 +100,11 @@ void SceneText::Update(double dt)
 		x = m_worldWidth * (x / w);
 		y = m_worldHeight * ((h - y) / h);
 
-		ball->vel = m_ghost->pos - Vector3(x, y, 0);
-		ball->scale.Set(1, 1, 1);
-		ball->mass = 1;
-		ball->collider.type = Collider::COLLIDER_BALL;
-		m_ghost->active = false;
+		ball->SetVelocity(m_ghost->GetPosition() - Vector3(x, y, 0));
+		ball->SetScale(1, 1, 1);
+		ball->SetMass(1);
+		ball->SetColliderType(Collider::COLLIDER_BALL);
+		m_ghost->SetActive(false);
 	}
 	if (Controls::GetInstance().OnPress(Controls::KEY_V))
 	{
@@ -118,12 +118,12 @@ void SceneText::Update(double dt)
 			y = m_worldHeight * ((h - y) / h);
 
 			GameObject* ball = FetchGO();
-			ball->pos.Set(x, y, 0);
-			ball->vel.Set(Math::RandFloatMinMax(-5, 5), Math::RandFloatMinMax(-5, 5));
-			ball->scale.Set(1, 1, 1);
-			ball->mass = 1;
-			ball->collider.type = Collider::COLLIDER_BALL;
-			m_ghost->active = false;
+			ball->SetPostion(x, y, 0);
+			ball->SetVelocity(Math::RandFloatMinMax(-5, 5), Math::RandFloatMinMax(-5, 5), 0);
+			ball->SetScale(1, 1, 1);
+			ball->SetMass(1);
+			ball->SetColliderType(Collider::COLLIDER_BALL);
+			m_ghost->SetActive(false);
 		}
 	}
 
@@ -265,7 +265,7 @@ void SceneText::RenderMain()
 
 	//RenderSkyPlane();
 
-	if (m_ghost->active)
+	if (m_ghost->GetActive())
 		RenderGO(m_ghost);
 }
 
@@ -310,49 +310,46 @@ void SceneText::UpdateGameObjects(double dt)
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
 		GameObject *go = GameObject::goList[i];
-		if (go->active)
+		if (go->GetActive())
 		{
 			go->Update(dt);
 
-			if (go->collider.type == Collider::COLLIDER_BALL)
+			if (go->GetCollider().type == Collider::COLLIDER_BALL)
 			{
 				for (int j = 0; j < GameObject::goList.size(); ++j)
 				{
 					GameObject *go2 = GameObject::goList[j];
-					if (go2->active)
+					if (go2->GetActive())
 					{
-						if (go->CheckCollision(go2, dt))
-						{
-							go->CollisionResponse(go2);
-						}
+						go->HandleInteraction(go2, dt);
 					}
 				}
 			}
 
 			{//Handles out of bounds
 				//Check Horizontally against edges
-				if ((go->pos.x + go->scale.x > m_worldWidth && go->vel.x > 0) ||
-					(go->pos.x - go->scale.x < 0 && go->vel.x < 0))
+				if ((go->GetPosition().x + go->GetScale().x > m_worldWidth && go->GetVelocity().x > 0) ||
+					(go->GetPosition().x - go->GetScale().x < 0 && go->GetVelocity().x < 0))
 				{
-					go->vel.x *= -1;
+					go->SetVelocity(-go->GetVelocity().x, go->GetVelocity().y, go->GetVelocity().z);
 				}
 				//remove if it cant be seen completely
-				else if (go->pos.x - go->scale.x > m_worldWidth ||
-					go->pos.x + go->scale.x < 0)
+				else if (go->GetPosition().x - go->GetScale().x > m_worldWidth ||
+					go->GetPosition().x + go->GetScale().x < 0)
 				{
-					go->active = false;
+					go->SetActive(false);
 				}
 				//Check Vertically against edges
-				if ((go->pos.y + go->scale.y > m_worldHeight && go->vel.y > 0) ||
-					(go->pos.y - go->scale.y < 0 && go->vel.y < 0))
+				if ((go->GetPosition().y + go->GetScale().y > m_worldHeight && go->GetVelocity().y > 0) ||
+					(go->GetPosition().y - go->GetScale().y < 0 && go->GetVelocity().y < 0))
 				{
-					go->vel.y *= -1;
+					go->SetVelocity(go->GetVelocity().x, -go->GetVelocity().y, go->GetVelocity().z);
 				}
 				//remove if it cant be seen completely
-				else if (go->pos.y - go->scale.y > m_worldWidth ||
-					go->pos.y + go->scale.y < 0)
+				else if (go->GetPosition().y - go->GetScale().y > m_worldWidth ||
+					go->GetPosition().y + go->GetScale().y < 0)
 				{
-					go->active = false;
+					go->SetActive(false);
 				}
 			}
 		}
@@ -363,22 +360,22 @@ void SceneText::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
-	switch (go->type)
+	switch (go->GetType())
 	{
 	case GameObject::GO_BALL:
 	{
-		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
-		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
+		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
 		RenderMesh(meshList[GEO_SPHERE], false);
 	}
 		break;
 	case GameObject::GO_CUBE:
 	{
-		float degree = Math::RadianToDegree(atan2(go->front.y, go->front.x));
+		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
 		
-		modelStack.Translate(go->pos.x, go->pos.y, go->pos.z);
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
 		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->scale.x, go->scale.y, go->scale.z);
+		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
 		RenderMesh(meshList[GEO_CUBE], false);
 	}
 		break;
@@ -394,7 +391,7 @@ void SceneText::RenderGameObjects()
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
-		if (GameObject::goList[i]->active)
+		if (GameObject::goList[i]->GetActive())
 			RenderGO(GameObject::goList[i]);
 	}
 }

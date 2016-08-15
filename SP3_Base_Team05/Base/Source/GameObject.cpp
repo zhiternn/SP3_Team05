@@ -43,9 +43,9 @@ GameObject* FetchGO()
 {
 	for (std::vector<GameObject*>::iterator it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
 	{
-		if ((*it)->active == false)
+		if ((*it)->GetActive() == false)
 		{
-			(*it)->active = true;
+			(*it)->SetActive(true);
 			return (*it);
 		}
 	}
@@ -55,7 +55,7 @@ GameObject* FetchGO()
 		GameObject::goList.push_back(new GameObject(GameObject::GO_BALL));
 	}
 
-	(*(GameObject::goList.end() - 10))->active = true;
+	(*(GameObject::goList.end() - 10))->SetActive(true);
 	return (*(GameObject::goList.end() - 10));
 }
 
@@ -171,6 +171,7 @@ float GameObject::CheckCollision2(GameObject* b)
 	//}
 	return -1;
 }
+
 void GameObject::CollisionResponse(GameObject* b)
 {
 	if (this->collider.type != Collider::COLLIDER_BALL)
@@ -220,6 +221,120 @@ void GameObject::CollisionResponse(GameObject* b)
 
 	default:break;
 	}
+}
+
+void GameObject::HandleInteraction(GameObject* b, double dt)
+{
+	if (CheckCollision(b, dt))
+		CollisionResponse(b);
+}
+
+Vector3 GameObject::GetPosition()
+{
+	return this->pos;
+}
+
+Vector3 GameObject::GetVelocity()
+{
+	return this->vel;
+}
+
+Vector3 GameObject::GetFront()
+{
+	return this->front;
+}
+
+Vector3 GameObject::GetScale()
+{
+	return this->scale;
+}
+
+GameObject::GAMEOBJECT_TYPE GameObject::GetType()
+{
+	return this->type;
+}
+
+Collider GameObject::GetCollider()
+{
+	return this->collider;
+}
+
+bool GameObject::GetActive()
+{
+	return this->active;
+}
+
+float GameObject::GetMass()
+{
+	return this->mass;
+}
+
+void GameObject::SetPostion(float x, float y, float z)
+{
+	this->pos.x = x;
+	this->pos.y = y;
+	this->pos.z = z;
+}
+
+void GameObject::SetPostion(Vector3 pos)
+{
+	this->pos = pos;
+}
+
+void GameObject::SetVelocity(float x, float y, float z)
+{
+	this->vel.x = x;
+	this->vel.y = y;
+	this->vel.z = z;
+}
+
+void GameObject::SetVelocity(Vector3 vel)
+{
+	this->vel = vel;
+}
+
+void GameObject::SetScale(float x, float y, float z)
+{
+	this->scale.x = x;
+	this->scale.y = y;
+	this->scale.z = z;
+}
+
+void GameObject::SetScale(Vector3 scale)
+{
+	this->scale = scale;
+}
+
+void GameObject::SetFront(float x, float y, float z)
+{
+	this->front.x = x;
+	this->front.y = y;
+	this->front.z = z;
+}
+
+void GameObject::SetFront(Vector3 front)
+{
+	this->front = front;
+}
+
+void GameObject::SetType(GAMEOBJECT_TYPE type)
+{
+	this->type = type;
+}
+
+void GameObject::SetColliderType(Collider::COLLIDER_TYPE type)
+{
+	this->collider.type = type;
+}
+
+void GameObject::SetMass(float mass)
+{
+	this->mass = mass;
+}
+
+void GameObject::SetActive(bool active)
+{
+	this->active = active;
 }
 
 /*

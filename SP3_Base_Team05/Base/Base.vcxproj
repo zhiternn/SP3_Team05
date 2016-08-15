@@ -24,6 +24,7 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
+    <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="Source\DepthFBO.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\Geometry.h" />
+    <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
     <ClInclude Include="Source\LoadOBJ.h" />
