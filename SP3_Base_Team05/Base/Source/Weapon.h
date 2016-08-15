@@ -10,28 +10,32 @@ Generic Class for Weapons
 #ifndef WEAPON_H
 #define WEAPON_H
 
+#include "Projectile.h"
+
 /******************************************************************************/
 /*!
 Class GameObject.h:
 \brief	Creates Weapon for the game
 */
 /******************************************************************************/
-enum WEAPON_TYPE
+struct Weapon
 {
-	GUN,
-	ROPEGUN,
-	TRAP,
-	SHIELD,
-	GRENADE,
-	WEAPON_TOTAL
-};
 
-class Weapon
-{
-public:
-	Weapon();		//< Default Constructor
-	~Weapon();		//< Destructor
+    enum WEAPON_TYPE
+    {
+        GUN,
+        ROPEGUN,
+        TRAP,
+        SHIELD,
+        GRENADE,
+        WEAPON_TOTAL
+    };
 
+    bool w_active;          //< Weapon Active
+    WEAPON_TYPE w_type;     //< Weapon Type
+    float w_ammo;           //< Weapon Ammo Amount 
+    float w_dmgval;         //< Weapon Damange Value
+    //float w_hpval;          //< Weapon Health(Durability) Value (Shield)
 
 };
 

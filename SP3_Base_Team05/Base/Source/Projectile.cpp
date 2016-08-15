@@ -72,6 +72,20 @@ float CProjectile::GetLifetime()
 /******************************************************************************/
 /*!
 \brief
+GetProjectileType to get the projectile type
+
+\return
+Projectile Type
+*/
+/******************************************************************************/
+PROJECTILE_TYPE CProjectile::GetType()
+{
+    return proj_type;
+}
+
+/******************************************************************************/
+/*!
+\brief
 Setting the Projectile State with a new state;
 
 \param state
@@ -114,6 +128,20 @@ void CProjectile::SetLifetime(float lifetime)
 /******************************************************************************/
 /*!
 \brief
+Setting the Projectile Type with a new type;
+
+\param type
+The new type to replace the old one
+*/
+/******************************************************************************/
+void CProjectile::SetType(PROJECTILE_TYPE type)
+{
+    proj_type = type;
+}
+
+/******************************************************************************/
+/*!
+\brief
 Update the Game Object and Projectile
 
 \param dt
@@ -138,5 +166,9 @@ Time active
 /******************************************************************************/
 void CProjectile::HandleInteraction(CProjectile* b, double dt)
 {
+    if (b->type == GameObject::GO_PROJECTILE)
+        return;
 
+    GameObject::HandleInteraction(b, dt);
+    this->active = false;
 }
