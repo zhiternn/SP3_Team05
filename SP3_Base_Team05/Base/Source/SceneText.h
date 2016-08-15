@@ -4,6 +4,7 @@
 #include "SceneBase.h"
 #include "Camera.h"
 #include "GameObject.h"
+#include "Player.h"
 
 #include <vector>
 

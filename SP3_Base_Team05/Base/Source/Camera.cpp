@@ -25,20 +25,28 @@ void Camera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 void Camera::Update(double dt)
 {
-	//Retrieve Entities from vector<Vector2>entityList and update the camera position based off their average pos
-	Vector3 *cameraPos;
+	//Retrieve Entities from vector<Vector3>entityList and update the camera position based off their average pos
+	Vector3 cameraTarget;
 	//set first entity as default position
-	cameraPos = entityList[0];
 
-	for (int i = 1; i < entityList.size(); i++)
+	for (int i = 0; i < entityList.size(); i++)
 	{
 		//Average it out :3
-
-		cameraPos->x = ((cameraPos->x + entityList[i]->x) / 2);
-		cameraPos->y = ((cameraPos->y + entityList[i]->y) / 2);
+		cameraTarget.x += (entityList[i]->x);
+		cameraTarget.y += (entityList[i]->y);
+	}
+	if (entityList.size() > 0)
+	{
+		cameraTarget.x /= entityList.size();
+		cameraTarget.y /= entityList.size();
 	}
 
-	this->position.Set((cameraPos->x, cameraPos->y, cameraPos->z));
-	this->target.Set((cameraPos->x, cameraPos->y, cameraPos->z));
-	//Check for [Zero Value]
+	this->target = cameraTarget;
+	this->position = this->target;
+	this->position.z += 1;
+}
+
+void Camera::Include(Vector3 *pos)
+{
+	entityList.push_back(pos);
 }

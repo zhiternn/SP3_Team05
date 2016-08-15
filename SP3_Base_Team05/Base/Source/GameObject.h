@@ -14,6 +14,10 @@ public:
 		GO_BALL = 0,
 		GO_CUBE,
 
+		GO_PLAYER,
+		GO_PROJECTILE,
+		GO_ENEMY,
+
 		GO_END, //must be last
 	};
 
