@@ -16,9 +16,12 @@ Class to create Projectiles
 
 enum PROJECTILE_TYPE
 {
-	P_BULLET = 0,
-	P_GRENADE,
-	P_ROPE,
+    P_NEUTRAL = 0,
+
+	P_PLAYER_BULLET,
+	P_PLAYER_GRENADE,
+	P_PLAYER_ROPE,
+    P_ENEMY_BULLET,
 
     P_TOTAL
 };
@@ -35,7 +38,7 @@ public:
 	CProjectile();                                          //< Default Constructor
 	~CProjectile();                                         //< Destructor
 
-    void HandleInteraction(CProjectile* b, double dt);       //< Handling Interactions
+    void HandleInteraction(CProjectile* b, double dt);      //< Handling Interactions
 	virtual void Update(double dt);                         //< Abstract Update
 
 	//< Getters

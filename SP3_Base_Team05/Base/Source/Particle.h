@@ -2,6 +2,7 @@
 #define PARTICLE_H
 
 #include "Vector3.h"
+#include "Mesh.h"
 
 class Particle
 {
@@ -13,6 +14,15 @@ public:
 		ENTRY_SCALEIN,
 
 		ENTRY_END
+	};
+	enum PARTICLE_PATTERN
+	{
+		PATTERN_NONE,
+
+		PATTERN_SPRAY,
+		PATTERN_DISPERSE,
+
+		PATTERN_END
 	};
 	enum EXIT_EFFECT
 	{
@@ -31,15 +41,19 @@ public:
 	void ScaleIn(double dt);
 	void ScaleOut(double dt);
 
+	Mesh* mesh;
+
 	Vector3 pos;
 	Vector3 vel;
 	Vector3 scale;
+	PARTICLE_PATTERN pattern;
 
 	float rotation;
 	float rotationSpeed;
 	
 	bool active;
 	float lifetime;
+	bool isPhysics;
 
 	bool entered;
 	bool exited;
