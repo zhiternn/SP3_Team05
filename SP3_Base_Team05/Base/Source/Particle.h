@@ -36,12 +36,11 @@ public:
 	Particle();
 	~Particle();
 
+	virtual void Init(Vector3 pos, Vector3 vel);
 	virtual void Update(double dt);
 
 	void ScaleIn(double dt);
 	void ScaleOut(double dt);
-
-	Mesh* mesh;
 
 	Vector3 pos;
 	Vector3 vel;
@@ -60,7 +59,6 @@ public:
 	float entrySpeed;
 	float exitSpeed;
 	Vector3 entryTarget;
-	Vector3 exitTarget;
 	ENTRY_EFFECT entryEffect;
 	EXIT_EFFECT exitEffect;
 };
