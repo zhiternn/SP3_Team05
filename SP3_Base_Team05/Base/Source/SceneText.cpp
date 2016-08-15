@@ -69,6 +69,12 @@ void SceneText::Init()
 	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 	go->SetType(GameObject::GO_CUBE);
 	go->SetColliderType(Collider::COLLIDER_BOX);
+
+	player = new Player();
+	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(3, 3, 3), Vector3(1, 0, 0));
+	GameObject::goList.push_back(player);
+
+	mainCamera.Include(&(player->pos));
 }
 
 void SceneText::Update(double dt)
@@ -127,6 +133,8 @@ void SceneText::Update(double dt)
 		}
 	}
 
+	player->UpdateInputs(dt);
+
 	mainCamera.Update(dt);
 	UpdateGameObjects(dt);
 }
@@ -135,7 +143,7 @@ void SceneText::Render()
 {
 	Mtx44 perspective;
 	//perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	perspective.SetToOrtho(0, m_orthoWidth, 0, m_orthoHeight, -100, 100);
+	perspective.SetToOrtho(-m_orthoWidth * 0.5f, m_orthoWidth * 0.5f, -m_orthoHeight * 0.5f, m_orthoHeight * 0.5f, -100, 100);
 	projectionStack.LoadMatrix(perspective);
 
 	// Camera matrix

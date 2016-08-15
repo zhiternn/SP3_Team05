@@ -46,6 +46,8 @@ private:
 	Camera mainCamera;
 
 	GameObject* m_ghost;
+
+	Player* player;
 };
 
 #endif
