@@ -38,7 +38,7 @@ public:
 	CProjectile();                                          //< Default Constructor
 	~CProjectile();                                         //< Destructor
 
-    void HandleInteraction(CProjectile* b, double dt);       //< Handling Interactions
+    void HandleInteraction(CProjectile* b, double dt);      //< Handling Interactions
 	virtual void Update(double dt);                         //< Abstract Update
 
 	//< Getters

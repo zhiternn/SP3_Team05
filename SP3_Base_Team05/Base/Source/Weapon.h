@@ -18,9 +18,11 @@ Class GameObject.h:
 \brief	Creates Weapon for the game
 */
 /******************************************************************************/
-struct Weapon
+class Weapon
 {
-
+public:
+    Weapon();
+    ~Weapon();
     enum WEAPON_TYPE
     {
         GUN,
@@ -31,12 +33,17 @@ struct Weapon
         WEAPON_TOTAL
     };
 
+    void Fire();            //< Weapon Fire
+
     bool w_active;          //< Weapon Active
     WEAPON_TYPE w_type;     //< Weapon Type
     float w_ammo;           //< Weapon Ammo Amount 
     float w_dmgval;         //< Weapon Damange Value
+
+    CProjectile projectile; //< Projectile
     //float w_hpval;          //< Weapon Health(Durability) Value (Shield)
 
 };
+
 
 #endif /* WEAPON_H */
