@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include "Vector3.h"
+#include "Player.h"
 #include <vector>
 
 class Camera
@@ -19,6 +20,8 @@ public:
 	float m_worldWidth, m_worldHeight;
 
 	void Include(Vector3 *pos);
+
+	bool Deadzone(Vector3 *p, Vector3 cameraTarget);
 	
 private:
 	//Vector List of entities taken into account for camera position

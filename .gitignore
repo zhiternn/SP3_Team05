@@ -2,6 +2,7 @@
 *.slo
 *.lo
 *.o
+*.suo
 
 # Precompiled Headers
 *.gch
