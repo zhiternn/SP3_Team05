@@ -5,6 +5,7 @@
 
 static const float MOVEMENT_SPEED = 50.0f;
 static const float MOVEMENT_LIMIT = 15.f;
+static const float DASH_COOLDOWN = 5.f;
 
 class Player : public GameObject
 {
@@ -19,7 +20,8 @@ public:
 private:
 
 	bool isMoving;
-	bool isDashing;
+	bool isDashed;
+	float cooldownTimer = 0;
 };
 
 

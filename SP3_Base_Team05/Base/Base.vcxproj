@@ -57,6 +57,7 @@
     <ClInclude Include="Source\SceneBase.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Shield.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\TileMap.h" />
     <ClInclude Include="Source\Utility.h" />
