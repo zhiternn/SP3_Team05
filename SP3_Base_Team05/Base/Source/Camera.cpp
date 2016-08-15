@@ -46,6 +46,7 @@ void Camera::Update(double dt)
         //Check if player is within camera deadzone
         if (Deadzone(entityList[0], cameraTarget))
         {
+			//if so, update the camera position
             this->target = cameraTarget;
             this->position = this->target;
             this->position.z += 1;
@@ -56,7 +57,6 @@ void Camera::Update(double dt)
 void Camera::Include(Vector3* pos)
 {
 	entityList.push_back(pos);
-	std::cout << *entityList[0] << std::endl;
 }
 
 bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
