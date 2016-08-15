@@ -172,3 +172,35 @@ void CProjectile::HandleInteraction(CProjectile* b, double dt)
     GameObject::HandleInteraction(b, dt);
     this->active = false;
 }
+
+CProjectile* FetchProjectile()
+{
+   std::vector<GameObject*>::iterator it;
+   for (it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
+   {
+       CProjectile *proj = dynamic_cast<CProjectile*>((*it));
+       if (proj && proj->GetActive() == false)
+       {
+           proj->SetActive(true);
+           return proj;
+       }
+   }
+
+   for (int i = 0; i < 10; ++i)
+   {
+       GameObject::goList.push_back(new CProjectile());
+   }
+   CProjectile *proj = dynamic_cast<CProjectile*>(GameObject::goList.back() - 10);
+   if (proj)
+   {
+       proj->SetActive(true);
+       return proj;
+   }
+    
+   { //for safety measure
+       CProjectile *proj = new CProjectile();
+       proj->SetActive(true);
+       GameObject::goList.push_back(proj);
+       return proj;
+   }
+}

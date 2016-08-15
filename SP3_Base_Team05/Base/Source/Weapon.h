@@ -9,12 +9,9 @@ Generic Class for Weapons
 /******************************************************************************/
 #ifndef WEAPON_H
 #define WEAPON_H
-
-#include "Projectile.h"
-
 /******************************************************************************/
 /*!
-Class GameObject.h:
+Class Weapon.h:
 \brief	Creates Weapon for the game
 */
 /******************************************************************************/
@@ -35,13 +32,9 @@ public:
 
     void Fire();            //< Weapon Fire
 
-    bool w_active;          //< Weapon Active
     WEAPON_TYPE w_type;     //< Weapon Type
     float w_ammo;           //< Weapon Ammo Amount 
     float w_dmgval;         //< Weapon Damange Value
-
-    CProjectile projectile; //< Projectile
-    //float w_hpval;          //< Weapon Health(Durability) Value (Shield)
 
 };
 
