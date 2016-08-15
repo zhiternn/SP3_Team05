@@ -27,8 +27,8 @@ void Camera::Update(double dt)
 {
 	//Retrieve Entities from vector<Vector3>entityList and update the camera position based off their average pos
 	Vector3 cameraTarget;
-	//set first entity as default position
-
+	std::cout << entityList.size() << std::endl;
+	std::cout << *entityList[0] << std::endl;
 	//null check
 	if (!entityList.empty())
 	{
@@ -51,13 +51,12 @@ void Camera::Update(double dt)
             this->position.z += 1;
         }
     }
-
-
 }
 
-void Camera::Include(Vector3 *pos)
+void Camera::Include(Vector3* pos)
 {
 	entityList.push_back(pos);
+	std::cout << *entityList[0] << std::endl;
 }
 
 bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
@@ -93,5 +92,4 @@ bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
 	{
 		return false;
 	}
-
 }
