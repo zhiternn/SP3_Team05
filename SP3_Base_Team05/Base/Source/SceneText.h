@@ -48,6 +48,8 @@ private:
 	Camera mainCamera;
 
 	GameObject * m_ghost;
+
+	std::vector<Vector3*>entityList;
 };
 
 #endif

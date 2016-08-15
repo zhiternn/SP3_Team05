@@ -69,6 +69,8 @@ void SceneText::Init()
 	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 	go->SetType(GameObject::GO_CUBE);
 	go->SetColliderType(Collider::COLLIDER_BOX);
+
+	mainCamera.Include(&(go->pos));
 }
 
 void SceneText::Update(double dt)

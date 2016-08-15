@@ -55,14 +55,15 @@ public:
 	void SetType(GAMEOBJECT_TYPE type);
 	void SetColliderType(Collider::COLLIDER_TYPE type);
 	void SetMass(float mass);
-	void SetActive(bool active);
+	void SetActive(bool active);	
+	Vector3 pos;
 
 protected:
 	virtual bool CheckCollision(GameObject* b, double dt);
 	virtual float CheckCollision2(GameObject* b);
 	virtual void CollisionResponse(GameObject* b);
 
-	Vector3 pos;
+
 	Vector3 vel;
 	Vector3 front;
 	Vector3 scale;
