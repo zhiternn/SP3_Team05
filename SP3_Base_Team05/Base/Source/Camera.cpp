@@ -27,8 +27,7 @@ void Camera::Update(double dt)
 {
 	//Retrieve Entities from vector<Vector3>entityList and update the camera position based off their average pos
 	Vector3 cameraTarget;
-	std::cout << entityList.size() << std::endl;
-	std::cout << *entityList[0] << std::endl;
+
 	//null check
 	if (!entityList.empty())
 	{
@@ -46,6 +45,7 @@ void Camera::Update(double dt)
         //Check if player is within camera deadzone
         if (Deadzone(entityList[0], cameraTarget))
         {
+			//if so, update the camera position
             this->target = cameraTarget;
             this->position = this->target;
             this->position.z += 1;
@@ -56,7 +56,6 @@ void Camera::Update(double dt)
 void Camera::Include(Vector3* pos)
 {
 	entityList.push_back(pos);
-	std::cout << *entityList[0] << std::endl;
 }
 
 bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
