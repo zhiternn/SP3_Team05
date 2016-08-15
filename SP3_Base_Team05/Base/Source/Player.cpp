@@ -20,12 +20,12 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	vel.SetZero();
+	isDashed = false;
 }
 
 void Player::UpdateInputs(double dt)
 {
 	isMoving = false;
-	isDashing = false;
 	float forceMagnitude = 0;
 	Vector3 forceDir;
 
@@ -66,15 +66,24 @@ void Player::UpdateInputs(double dt)
 		}
 	}
 
-	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE) && !isDashing)
+	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE) && !isDashed)
 	{
 		forceMagnitude = MOVEMENT_SPEED * 100.0f;
+		isDashed = true;
+		cooldownTimer = DASH_COOLDOWN;
 	}
 	if (!isMoving)
 	{
 		vel *= 0.9f;
 	}
-
+	if (isDashed)
+	{
+		cooldownTimer -= 1.f * dt;
+		if (cooldownTimer <= 0)
+		{
+			isDashed = false;
+		}
+	}
 	if (!forceDir.IsZero())
 	{
 		forceDir.Normalize();
