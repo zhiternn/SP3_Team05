@@ -3,24 +3,33 @@
 
 #include "Vector3.h"
 
-enum PARTICLE_TYPE
-{
-	P_ARROW = 0,
-	P_FIRE,
-
-	P_TOTAL
-};
-
 class Particle
 {
 public:
-	Particle(PARTICLE_TYPE typeValue = P_ARROW);
+	enum ENTRY_EFFECT
+	{
+		ENTRY_NONE,
+
+		ENTRY_SCALEIN,
+
+		ENTRY_END
+	};
+	enum EXIT_EFFECT
+	{
+		EXIT_NONE,
+		
+		EXIT_SCALEOUT,
+		
+		EXIT_END
+	};
+
+	Particle();
 	~Particle();
 
-	void ScaleIn(Vector3 target, float speed);
-	void ScaleOut(Vector3 target, float speed);
+	virtual void Update(double dt);
 
-	PARTICLE_TYPE type;
+	void ScaleIn(double dt);
+	void ScaleOut(double dt);
 
 	Vector3 pos;
 	Vector3 vel;
@@ -28,13 +37,18 @@ public:
 
 	float rotation;
 	float rotationSpeed;
-
-	float lifetime;
-
+	
 	bool active;
+	float lifetime;
 
 	bool entered;
 	bool exited;
+	float entrySpeed;
+	float exitSpeed;
+	Vector3 entryTarget;
+	Vector3 exitTarget;
+	ENTRY_EFFECT entryEffect;
+	EXIT_EFFECT exitEffect;
 };
 
 #endif
