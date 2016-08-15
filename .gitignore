@@ -25,7 +25,7 @@
 *.out
 *.app
 
-
+SP3_Base_Team05/Base.sdf
 SP3_Base_Team05/Base.opensdf
 SP3_Base_Team05/Base.sdf
 SP3_Base_Team05/Base/Debug/Base.tlog/Base.lastbuildstate
@@ -53,4 +53,3 @@ SP3_Base_Team05/Base.opensdf
 *.opensdf
 *.sdf
 *.idb
-
