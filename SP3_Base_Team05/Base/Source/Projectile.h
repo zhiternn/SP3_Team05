@@ -12,11 +12,13 @@ Class to create Projectiles
 
 #include "GameObject.h"
 #include "Vector3.h"
+#include "Collider.h"
 
 enum PROJECTILE_TYPE
 {
-    P_ARROW = 0,
-    P_FIRE,
+	P_BULLET = 0,
+	P_GRENADE,
+	P_ROPE,
 
     P_TOTAL
 };
@@ -30,25 +32,30 @@ Class GameObject.h:
 class CProjectile : public GameObject
 {
 public:
-	CProjectile();                              //< Default Constructor
-	~CProjectile();                             //< Destructor
+	CProjectile();                                          //< Default Constructor
+	~CProjectile();                                         //< Destructor
+
+    void HandleInteraction(CProjectile* b, double dt);       //< Handling Interactions
+	virtual void Update(double dt);                         //< Abstract Update
 
 	//< Getters
-	float GetProjectileCount();                 //< Returns Projectile Count
-	float GetProjectileDMG();                   //< Returns Projectile Damage
-	float GetProjectileLifetime();              //< Returns Projectile Lifetime
+    bool GetState();                                        //< Returns Projectile State
+	float GetDMG();                                         //< Returns Projectile Damage
+	float GetLifetime();                                    //< Returns Projectile Lifetime
+    PROJECTILE_TYPE GetType();                              //< Returns Projectile Type
 	
 	//< Setters
-	void SetProjectileCount(float count);       //< Set Projectile Count
-	void SetProjectileDMG(float damage);        //< Set Projectile Damage
-	void SetProjectileLifetime(float lifetime); //< Set Projectile Lifetime
+	void SetState(bool state);                              //< Set Projectile State
+	void SetDMG(float damage);                              //< Set Projectile Damage
+	void SetLifetime(float lifetime);                       //< Set Projectile Lifetime
+    void SetType(PROJECTILE_TYPE type);                     //< Set Projectile Type
 
-    GameObject projectile;
 private:
 	//< Variables
-	float proj_count;                           //< Projectile Count
-	float proj_dmg;                             //< Projectile Damage
-	float proj_lifetime;                        //< Projectile Lifetime
+	bool proj_active;                                       //< Projectile State
+	float proj_dmg;                                         //< Projectile Damage
+	float proj_lifetime;                                    //< Projectile Lifetime
+    PROJECTILE_TYPE proj_type;                              //< Projectile Type
 };
 
 #endif /* PROJECTILE_H */

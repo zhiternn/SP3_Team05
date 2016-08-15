@@ -3,6 +3,9 @@
 
 #include "GameObject.h"
 
+static const float MOVEMENT_SPEED = 50.0f;
+static const float MOVEMENT_LIMIT = 10.0f;
+
 class Player : public GameObject
 {
 public:
@@ -10,7 +13,7 @@ public:
 	~Player();
 
 	void Init(Vector3 pos, Vector3 scale, Vector3 front);
-	void UpdateInputs();
+	void UpdateInputs(double dt);
 	void Update(double dt);
 
 private:

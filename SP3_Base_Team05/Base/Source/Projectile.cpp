@@ -9,9 +9,15 @@ Class to create Projectiles
 /******************************************************************************/
 #include "Projectile.h"
 
+/******************************************************************************/
+/*!
+\brief	CProjectile Default Constructor
+*/
+/******************************************************************************/
 CProjectile::CProjectile()
 {
 }
+
 /******************************************************************************/
 /*!
 \brief	Vector3 destructor
@@ -20,19 +26,21 @@ CProjectile::CProjectile()
 CProjectile::~CProjectile()
 {
 }
+
 /******************************************************************************/
 /*!
 \brief
-GetProjectileCount to get the projectile count
+GetProjectileState to get the projectile count
 
 \return
-Projectile Count
+Projectile State
 */
 /******************************************************************************/
-float CProjectile::GetProjectileCount()
+bool CProjectile::GetState()
 {
-    return proj_count;
+    return proj_active;
 }
+
 /******************************************************************************/
 /*!
 \brief
@@ -42,10 +50,11 @@ GetProjectileDMG to get the projectile damage
 Projectile Damage
 */
 /******************************************************************************/
-float CProjectile::GetProjectileDMG()
+float CProjectile::GetDMG()
 {
     return proj_dmg;
 }
+
 /******************************************************************************/
 /*!
 \brief
@@ -55,23 +64,25 @@ GetProjectileLifetime to get the projectile lifetime
 Projectile Lifetime
 */
 /******************************************************************************/
-float CProjectile::GetProjectileLifetime()
+float CProjectile::GetLifetime()
 {
     return proj_lifetime;
 }
+
 /******************************************************************************/
 /*!
 \brief
-Setting the Projectile Count with a new count;
+Setting the Projectile State with a new state;
 
-\param count
-The new count to replace the old one
+\param state
+The new state to replace the old one
 */
 /******************************************************************************/
-void CProjectile::SetProjectileCount(float count)
+void CProjectile::SetState(bool state)
 {
-    proj_count = count;
+    proj_active = state;
 }
+
 /******************************************************************************/
 /*!
 \brief
@@ -81,10 +92,11 @@ Setting the Projectile Damage with a new damage;
 The new damage to replace the old one
 */
 /******************************************************************************/
-void CProjectile::SetProjectileDMG(float damage)
+void CProjectile::SetDMG(float damage)
 {
     proj_dmg = damage;
 }
+
 /******************************************************************************/
 /*!
 \brief
@@ -94,7 +106,37 @@ Setting the Projectile Lifetime with a new lifetime;
 The new lifetime to replace the old one
 */
 /******************************************************************************/
-void CProjectile::SetProjectileLifetime(float lifetime)
+void CProjectile::SetLifetime(float lifetime)
 {
     proj_lifetime = lifetime;
+}
+
+/******************************************************************************/
+/*!
+\brief
+Update the Game Object and Projectile
+
+\param dt
+Time active
+*/
+/******************************************************************************/
+void CProjectile::Update(double dt)
+{
+	GameObject::Update(dt);
+    //GameObject::HandleInteraction(proj_type, dt);
+	proj_lifetime -= dt;
+}
+
+/******************************************************************************/
+/*!
+\brief
+Handling the Interaction with another Game Object
+
+\param dt
+Time active
+*/
+/******************************************************************************/
+void CProjectile::HandleInteraction(CProjectile* b, double dt)
+{
+
 }
