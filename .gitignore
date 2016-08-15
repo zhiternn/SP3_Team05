@@ -23,6 +23,8 @@
 *.exe
 *.out
 *.app
+
+
 SP3_Base_Team05/Base.opensdf
 SP3_Base_Team05/Base.sdf
 SP3_Base_Team05/Base/Debug/Base.tlog/Base.lastbuildstate
@@ -41,3 +43,13 @@ SP3_Base_Team05/Common/Debug/Common.tlog/Lib.read.1.tlog
 SP3_Base_Team05/Common/Debug/Common.tlog/cl.command.1.tlog
 SP3_Base_Team05/Common/Debug/Common.tlog/lib.command.1.tlog
 SP3_Base_Team05/Common/Debug/vc120.idb
+SP3_Base_Team05/Base.sdf
+SP3_Base_Team05/Base.opensdf
+
+#logs
+*.tlog
+*.pdb
+*.opensdf
+*.sdf
+*.idb
+
