@@ -1,7 +1,6 @@
 #include "Particle.h"
 
-Particle::Particle() :
-mesh(NULL),
+Particle::Particle():
 pattern(PATTERN_NONE),
 rotation(0.0f),
 rotationSpeed(0.0f),
@@ -19,8 +18,19 @@ exitEffect(EXIT_NONE)
 
 Particle::~Particle()
 {
-	if (mesh)
-		delete mesh;
+}
+
+void Particle::Init(Vector3 pos, Vector3 vel)
+{
+	switch (pattern)
+	{
+	case PATTERN_SPRAY:
+		break;
+	case PATTERN_DISPERSE:
+		break;
+
+	default:break;
+	}
 }
 
 void Particle::Update(double dt)
@@ -43,6 +53,7 @@ void Particle::Update(double dt)
 		if (lifetime > 0)
 		{
 			pos += vel * (float)dt;
+			rotation += rotationSpeed * dt;
 			lifetime -= (float)dt;
 		}
 		else
@@ -70,9 +81,9 @@ void Particle::Update(double dt)
 
 void Particle::ScaleIn(double dt)
 {
-	scale.x += entryTarget.x * dt * entrySpeed;
-	scale.y += entryTarget.y * dt * entrySpeed;
-	scale.z += entryTarget.z * dt * entrySpeed;
+	scale.x += dt * entrySpeed;
+	scale.y += dt * entrySpeed;
+	scale.z += dt * entrySpeed;
 
 	if (
 		scale.x >= entryTarget.x &&
@@ -86,14 +97,14 @@ void Particle::ScaleIn(double dt)
 
 void Particle::ScaleOut(double dt)
 {
-	scale.x -= exitTarget.x * dt * exitSpeed;
-	scale.y -= exitTarget.y * dt * exitSpeed;
-	scale.z -= exitTarget.z * dt * exitSpeed;
+	scale.x -= dt * exitSpeed;
+	scale.y -= dt * exitSpeed;
+	scale.z -= dt * exitSpeed;
 
 	if (
-		scale.x <= exitTarget.x &&
-		scale.y <= exitTarget.y &&
-		scale.z <= exitTarget.z
+		scale.x <= 0.1f &&
+		scale.y <= 0.1f &&
+		scale.z <= 0.1f
 		)
 	{
 		exited = true;

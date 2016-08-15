@@ -27,8 +27,7 @@ void Camera::Update(double dt)
 {
 	//Retrieve Entities from vector<Vector3>entityList and update the camera position based off their average pos
 	Vector3 cameraTarget;
-	std::cout << entityList.size() << std::endl;
-	std::cout << *entityList[0] << std::endl;
+
 	//null check
 	if (!entityList.empty())
 	{

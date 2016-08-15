@@ -24,27 +24,55 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 
 void Player::UpdateInputs(double dt)
 {
-	float forceMagnitude = MOVEMENT_SPEED;
+	isMoving = false;
+	isDashing = false;
+	float forceMagnitude = 0;
 	Vector3 forceDir;
-	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
-	{
-		forceMagnitude = 1000;
-	}
+
 	if (Controls::GetInstance().OnHold(Controls::KEY_W))
 	{
 		forceDir.y += 1;
-	} 
+		if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
+		{
+			isMoving = true;
+			forceMagnitude = MOVEMENT_SPEED;
+		}
+	}
 	if (Controls::GetInstance().OnHold(Controls::KEY_S))
 	{
 		forceDir.y -= 1;
+		if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
+		{
+			isMoving = true;
+			forceMagnitude = MOVEMENT_SPEED;
+		}
 	}
 	if (Controls::GetInstance().OnHold(Controls::KEY_A))
 	{
 		forceDir.x -= 1;
+		if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
+		{
+			isMoving = true;
+			forceMagnitude = MOVEMENT_SPEED;
+		}
 	}
 	if (Controls::GetInstance().OnHold(Controls::KEY_D))
 	{
 		forceDir.x += 1;
+		if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
+		{
+			isMoving = true;
+			forceMagnitude = MOVEMENT_SPEED;
+		}
+	}
+
+	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE) && !isDashing)
+	{
+		forceMagnitude = MOVEMENT_SPEED * 100.0f;
+	}
+	if (!isMoving)
+	{
+		vel *= 0.9f;
 	}
 
 	if (!forceDir.IsZero())
@@ -52,12 +80,6 @@ void Player::UpdateInputs(double dt)
 		forceDir.Normalize();
 		this->ApplyForce(dt, forceDir, forceMagnitude);
 	}
-
-	//if (vel.LengthSquared() > (MOVEMENT_LIMIT) * (MOVEMENT_LIMIT))
-	//{
-	//	vel.Normalize();
-	//	vel *= MOVEMENT_LIMIT;
-	//}
 }
 
 void Player::Update(double dt)

@@ -4,7 +4,7 @@
 #include "GameObject.h"
 
 static const float MOVEMENT_SPEED = 50.0f;
-static const float MOVEMENT_LIMIT = 10.0f;
+static const float MOVEMENT_LIMIT = 15.f;
 
 class Player : public GameObject
 {
@@ -18,7 +18,8 @@ public:
 
 private:
 
-
+	bool isMoving;
+	bool isDashing;
 };
 
 
