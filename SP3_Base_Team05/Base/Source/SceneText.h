@@ -30,12 +30,10 @@ public:
 	void RenderWorld();
 	void RenderHUD();
 
-	void RenderParticle(Particle* particle);
 	void RenderSkybox();
 	void RenderSkyPlane();
 
 private:
-	
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();
 	void RenderGO(GameObject* go);
@@ -47,7 +45,7 @@ private:
 
 	Camera mainCamera;
 
-	GameObject * m_ghost;
+	GameObject* m_ghost;
 };
 
 #endif

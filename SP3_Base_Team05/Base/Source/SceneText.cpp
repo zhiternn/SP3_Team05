@@ -127,9 +127,8 @@ void SceneText::Update(double dt)
 		}
 	}
 
-	UpdateGameObjects(dt);
-
 	mainCamera.Update(dt);
+	UpdateGameObjects(dt);
 }
 
 void SceneText::Render()
