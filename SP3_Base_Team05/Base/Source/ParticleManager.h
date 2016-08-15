@@ -12,21 +12,22 @@ static const Vector3 GRAVITY = Vector3(0, 0, -9.8f);
 
 class ParticleManager
 {
+public:
 	enum PARTICLE_EFFECT
 	{
 		P_HIT,
 
 		P_END,
 	};
-public:
+
 	static ParticleManager& GetInstance()
 	{
-		static ParticleManager pm;
-		return pm;
+		static ParticleManager app;
+		return app;
 	}
 
 	static vector<Particle> particleList;
-
+	
 	static void GenerateParticle(
 		Mesh* mesh,
 		PARTICLE_EFFECT type,
@@ -42,7 +43,7 @@ public:
 private:
 	ParticleManager();
 
-	static Particle *particle[P_END];
+	Particle *particle[P_END];
 };
 
 #endif

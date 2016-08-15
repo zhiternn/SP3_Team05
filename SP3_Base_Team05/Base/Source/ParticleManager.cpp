@@ -33,13 +33,13 @@ void ParticleManager::GenerateParticle(
 	if (!mesh)
 		return;
 
-	if (particle[type])
-		delete particle[type];
+	if (ParticleManager::GetInstance().particle[type])
+		delete ParticleManager::GetInstance().particle[type];
 
-	particle[type] = new Particle();
-	particle[type]->pattern = pattern;
-	particle[type]->entryEffect = entryEffect;
-	particle[type]->entrySpeed = entrySpeed;
-	particle[type]->exitEffect = exitEffect;
-	particle[type]->exitSpeed = exitSpeed;
+	ParticleManager::GetInstance().particle[type] = new Particle();
+	ParticleManager::GetInstance().particle[type]->pattern = pattern;
+	ParticleManager::GetInstance().particle[type]->entryEffect = entryEffect;
+	ParticleManager::GetInstance().particle[type]->entrySpeed = entrySpeed;
+	ParticleManager::GetInstance().particle[type]->exitEffect = exitEffect;
+	ParticleManager::GetInstance().particle[type]->exitSpeed = exitSpeed;
 }
