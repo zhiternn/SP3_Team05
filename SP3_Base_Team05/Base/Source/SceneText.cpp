@@ -79,6 +79,8 @@ void SceneText::Init()
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_screenBased);
+
+    weapon = new Weapon();
 }
 
 void SceneText::Update(double dt)
@@ -132,6 +134,18 @@ void SceneText::Update(double dt)
 			m_ghost->SetActive(false);
 		}
 	}
+    if (Controls::GetInstance().OnPress(Controls::KEY_J))
+    {
+        //for (int i = 0; i < 10; ++i)
+        //{
+        weapon->SetWeaponType(Weapon::GUN);
+        weapon->SetProjLifetime(3);
+        weapon->SetProjSpd(25);
+        weapon->SetDMGVal(5);
+        weapon->SetWeaponAmmo(5);
+        weapon->Fire(player->GetPosition(), player->GetFront());
+        //}
+    }
 
 
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))

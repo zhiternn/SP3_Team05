@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "Projectile.h"
 #include "Player.h"
+#include "Weapon.h"
 
 #include <vector>
 
@@ -49,6 +50,9 @@ private:
 	GameObject* m_ghost;
 
 	Player* player;
+
+    Weapon* weapon;
+
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
 };
