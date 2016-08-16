@@ -17,13 +17,7 @@ class SceneText : public SceneBase
 {
 	enum GEOMETRY_TYPE
 	{
-		P_BULLET = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END,
-		P_GRENADE,
-		P_ROPE,
-
-		GEO_FLOOR,
-
-		NUM_GEOMETRY
+		NUM_GEOMETRY = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END
 	};
 public:
 	SceneText();
