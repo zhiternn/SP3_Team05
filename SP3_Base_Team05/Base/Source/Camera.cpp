@@ -27,6 +27,10 @@ void Camera::Update(double dt)
 {
 	//Retrieve Entities from vector<Vector3>entityList and update the camera position based off their average pos
 	Vector3 cameraTarget;
+<<<<<<< HEAD
+
+=======
+>>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
 	//null check
 	if (!entityList.empty())
 	{
@@ -73,9 +77,12 @@ bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
 	upperRight.x = cameraTarget.x + 60;
 	upperRight.y = cameraTarget.y + 40;
 
+<<<<<<< HEAD
+=======
 	bottomLeft.x = cameraTarget.x - 60;
 	bottomLeft.y = cameraTarget.y - 40;
 
+>>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
 	//Position check
 	if (pos->x < upperRight.x && pos->x > bottomLeft.x)
 	{

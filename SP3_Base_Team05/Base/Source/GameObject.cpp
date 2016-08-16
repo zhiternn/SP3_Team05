@@ -43,7 +43,7 @@ GameObject* FetchGO()
 {
 	for (std::vector<GameObject*>::iterator it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
 	{
-		if ((*it)->GetActive() == false)
+		if ((*it)->IsActive() == false)
 		{
 			(*it)->SetActive(true);
 			return (*it);
@@ -259,7 +259,7 @@ Collider GameObject::GetCollider()
 	return this->collider;
 }
 
-bool GameObject::GetActive()
+bool GameObject::IsActive()
 {
 	return this->active;
 }
