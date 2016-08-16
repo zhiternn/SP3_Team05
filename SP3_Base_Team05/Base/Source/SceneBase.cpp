@@ -190,6 +190,18 @@ void SceneBase::Init()
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
 
+	meshList[GEO_P_BULLET];
+	meshList[GEO_P_GRENADE];
+	meshList[GEO_P_ROPE];
+	meshList[GEO_P_SHIELD];
+
+	meshList[GEO_BOSS_SNAKE];
+	meshList[GEO_BOSS_BODY];
+
+	meshList[GEO_PLAYER];
+
+	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f);
+
 	bLightEnabled = true;
 	isCulled = true;
 	isWireFrame = false;

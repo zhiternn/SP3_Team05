@@ -32,12 +32,6 @@ void SceneText::Init()
 		meshList[i] = SceneBase::meshList[i];
 	}
 	
-	meshList[P_BULLET];
-	meshList[P_GRENADE];
-	meshList[P_ROPE];
-
-	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(1, 1, 1), 1.f);
-	std::cout << "haha" << meshList[GEO_FLOOR] << std::endl;
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	//meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
@@ -96,6 +90,8 @@ void SceneText::Init()
 
 void SceneText::PlayerController(double dt)
 {
+	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
+	player->SetFront(lookDir);
 	Vector3 forceDir;
 	Vector3 mouseDir;
 	mouseDir = (mousePos_worldBased - player->pos).Normalized();
@@ -159,13 +155,6 @@ void SceneText::Update(double dt)
 	}
 	else if(Controls::GetInstance().OnRelease(Controls::MOUSE_LBUTTON))
 	{
-		CProjectile* ball = FetchProjectile();
-		ball->SetLifetime(3);
-		ball->SetPostion(m_ghost->GetPosition());
-		ball->SetVelocity(m_ghost->GetPosition() - Vector3(mousePos_worldBased.x, mousePos_worldBased.y, 0));
-		ball->SetScale(1, 1, 1);
-		ball->SetMass(1);
-		ball->SetColliderType(Collider::COLLIDER_BALL);
 		m_ghost->SetActive(false);
 	}
 	if (Controls::GetInstance().OnPress(Controls::KEY_V))
@@ -358,12 +347,11 @@ void SceneText::RenderMain()
 void SceneText::RenderWorld()
 {
 	{//Render Floor
-		//modelStack.PushMatrix();
-		//modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-		//modelStack.Scale(m_worldWidth, m_worldHeight, 0);
-		////std::cout << "hehe" << meshList[GEO_FLOOR] << std::endl;
-		//RenderMesh(meshList[GEO_FLOOR], false);
-		//modelStack.PopMatrix();
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+		RenderMesh(meshList[GEO_FLOOR], false);
+		modelStack.PopMatrix();
 	}
 
 	RenderGameObjects();
