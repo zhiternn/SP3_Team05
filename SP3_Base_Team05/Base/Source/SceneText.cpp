@@ -77,6 +77,45 @@ void SceneText::Init()
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_screenBased);
+
+	enemy = new Enemy();
+	GameObject::goList.push_back(enemy);
+	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
+}
+
+void SceneText::PlayerController(double dt)
+{
+	Vector3 forceDir;
+	if (Controls::GetInstance().OnHold(Controls::KEY_W))
+	{
+		forceDir.y += 1;
+	}
+	if (Controls::GetInstance().OnHold(Controls::KEY_S))
+	{
+		forceDir.y -= 1;
+	}
+	if (Controls::GetInstance().OnHold(Controls::KEY_A))
+	{
+		forceDir.x -= 1;
+	}
+	if (Controls::GetInstance().OnHold(Controls::KEY_D))
+	{
+		forceDir.x += 1;
+	}
+	
+	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
+	{
+		player->Dash(forceDir, dt);
+	}
+	if (forceDir.IsZero() == false)
+	{
+		forceDir.Normalize();
+		player->Move(forceDir, dt);
+	}
+	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+	{
+
+	}
 }
 
 void SceneText::Update(double dt)
@@ -129,8 +168,8 @@ void SceneText::Update(double dt)
 		}
 	}
 
-	player->UpdateInputs(dt);
-
+	enemy->UpdateMovement(dt);
+	PlayerController(dt);
 	mainCamera->Update(dt);
 	UpdateGameObjects(dt);
 }
@@ -265,10 +304,19 @@ void SceneText::RenderMain()
 	glUniform1i(m_parameters[U_SHADOW_MAP], 8);
 
 	RenderWorld();
+	RenderGO(enemy);
+	
+	if (enemy->destinations.size() > 0)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(enemy->destinations.top().x, enemy->destinations.top().y, 0);
+		RenderMesh(meshList[GEO_SPHERE], false);
+		modelStack.PopMatrix();
+	}
 
 	//RenderSkyPlane();
 
-	if (m_ghost->GetActive())
+	if (m_ghost->IsActive())
 		RenderGO(m_ghost);
 }
 
@@ -318,7 +366,7 @@ void SceneText::UpdateGameObjects(double dt)
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
 		GameObject *go = GameObject::goList[i];
-		if (go->GetActive())
+		if (go->IsActive())
 		{
 			go->Update(dt);
 
@@ -327,7 +375,7 @@ void SceneText::UpdateGameObjects(double dt)
 				for (int j = 0; j < GameObject::goList.size(); ++j)
 				{
 					GameObject *go2 = GameObject::goList[j];
-					if (go2->GetActive())
+					if (go2->IsActive())
 					{
 						go->HandleInteraction(go2, dt);
 					}
@@ -399,7 +447,7 @@ void SceneText::RenderGameObjects()
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
-		if (GameObject::goList[i]->GetActive())
+		if (GameObject::goList[i]->IsActive())
 			RenderGO(GameObject::goList[i]);
 	}
 }
