@@ -80,6 +80,7 @@ void SceneText::Init()
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_screenBased);
 
+    weapon = new Weapon();
 	enemy = new Enemy();
 	GameObject::goList.push_back(enemy);
 	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
@@ -171,23 +172,30 @@ void SceneText::Update(double dt)
 			m_ghost->SetActive(false);
 		}
 	}
+    if (Controls::GetInstance().OnPress(Controls::KEY_J))
+    {
+        //for (int i = 0; i < 10; ++i)
+        //{
+        weapon->SetWeaponType(Weapon::GUN);
+        weapon->SetProjLifetime(3);
+        weapon->SetProjSpd(25);
+        weapon->SetDMGVal(5);
+        weapon->SetWeaponAmmo(5);
+        weapon->Fire(player->GetPosition(), player->GetFront());
+        //}
+    }
 
-<<<<<<< HEAD
 	enemy->UpdateMovement(dt);
-	PlayerController(dt);
-=======
 
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
 	{
-		player->UpdateInputs(dt);
+	    PlayerController(dt);
 	}
 	else
 	{
 		player->SetVelocity(0, 0, 0);
 	}
 	
-
->>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
 	mainCamera->Update(dt);
 	UpdateGameObjects(dt);
 }
