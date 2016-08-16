@@ -17,8 +17,15 @@ Vector3 Trap::getPosition()
 
 void Trap::SpawnTrap(Vector3 pos)
 {
-	w_active = true;
-	GameObject *m_trap = new GameObject(GameObject::GO_CUBE);
-	m_trap->SetScale(0.5, 0.5, 0.5);
+	Weapon *m_trap = new Weapon();
+
+	m_trap->w_type = TRAP;
+
+
 	//Spawn the GO at [pos] coordinates
+}
+
+void Trap::DestroyTrap()
+{
+
 }
