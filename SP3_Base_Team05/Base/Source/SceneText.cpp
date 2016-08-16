@@ -76,7 +76,7 @@ void SceneText::Init()
 	GameObject::goList.push_back(player);
 
 	mainCamera->Include(&(player->pos));
-	mainCamera->Include(&mousePos_screenBased);
+	mainCamera->Include(&mousePos_worldBased);
 }
 
 void SceneText::Update(double dt)
@@ -88,13 +88,13 @@ void SceneText::Update(double dt)
 		Application::GetCursorPos(x, y);
 		int w = Application::GetWindowWidth();
 		int h = Application::GetWindowHeight();
-		x = m_worldWidth * (x / w);
-		y = m_worldHeight * ((h - y) / h);
+		x = m_orthoWidth * (x / w);
+		y = m_orthoHeight * ((h - y) / h);
 
 		mousePos_screenBased.Set(x, y, 0);
 		mousePos_worldBased.Set(
-			x + mainCamera->target.x - m_orthoWidth * 0.5f,
-			y + mainCamera->target.y - m_orthoHeight * 0.5f,
+			x + mainCamera->target.x - (m_orthoWidth * 0.5f),
+			y + mainCamera->target.y - (m_orthoHeight * 0.5f),
 			0
 			);
 	}
