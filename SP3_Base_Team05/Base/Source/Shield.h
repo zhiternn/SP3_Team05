@@ -20,9 +20,21 @@ Class Shield.h:
 /******************************************************************************/
 class Shield : public Weapon
 {
+public:
     Shield(Weapon::WEAPON_TYPE weaponType);     //< Overloaded Constructor
     ~Shield();                                  //< Destructor
 
+    // Getter
+    float GetCurrHealth();
+    float GetMaxHealth();
+
+    // Setter
+    void SetCurrHealth(float curr);
+    void SetMaxHealth(float max);
+
+private:
+    float CurrHealth;
+    float MaxHealth;
 };
 
 #endif /* SHEILD_H */

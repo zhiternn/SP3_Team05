@@ -28,6 +28,7 @@ public:
 	std::vector<Vector3*>entityList;
 
 	Vector3 GetPosition();
+	void Constrain(Player p, Vector3 cameraTarget);
 	//Vector List of entities taken into account for camera position
 
 };

@@ -79,10 +79,19 @@ void SceneText::Init()
 	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(3, 3, 3), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
+	player->weapon = new Shotgun();
+	CProjectile* proj = new CProjectile();
+	proj->SetLifetime(10);
+	proj->SetDMG(10);
+	proj->SetScale(0.5f, 0.5f, 0.5f);
+	proj->SetMass(1);
+	player->weapon->AssignProjectile(proj);
+
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 
-    weapon = new Weapon();
+	enemy = new Enemy();
+	GameObject::goList.push_back(enemy);
 	enemy = FetchEnemy();
 	enemy->SetType(GameObject::GO_ENEMY);
 	enemy->SetActive(true);
@@ -97,8 +106,7 @@ void SceneText::PlayerController(double dt)
 	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
 	player->SetFront(lookDir);
 	Vector3 forceDir;
-	Vector3 mouseDir;
-	mouseDir = (mousePos_worldBased - player->pos).Normalized();
+
 	if (Controls::GetInstance().OnHold(Controls::KEY_W))
 	{
 		forceDir.y += 1;
@@ -127,6 +135,8 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
+		Vector3 mouseDir;
+		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
 }
@@ -151,16 +161,6 @@ void SceneText::Update(double dt)
 			);
 	}
 
-	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
-	{
-		m_ghost->SetPostion(mousePos_worldBased.x, mousePos_worldBased.y, 0);
-		m_ghost->SetScale(1, 1, 1);
-		m_ghost->SetActive(true);
-	}
-	else if(Controls::GetInstance().OnRelease(Controls::MOUSE_LBUTTON))
-	{
-		m_ghost->SetActive(false);
-	}
 	if (Controls::GetInstance().OnPress(Controls::KEY_V))
 	{
 		for (int i = 0; i < 10; ++i)
@@ -174,38 +174,21 @@ void SceneText::Update(double dt)
 			m_ghost->SetActive(false);
 		}
 	}
-    if (Controls::GetInstance().OnPress(Controls::KEY_J))
-    {
-        //for (int i = 0; i < 10; ++i)
-        //{
-        weapon->SetWeaponType(Weapon::GUN);
-        weapon->SetProjLifetime(3);
-        weapon->SetProjSpd(25);
-        weapon->SetDMGVal(5);
-        weapon->SetWeaponAmmo(5);
-        weapon->Fire(player->GetPosition(), player->GetFront());
-        //}
-    }
+
+	enemy->UpdateMovement(dt);
 
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
 	{
 	    PlayerController(dt);
 	}
 
-
 	enemy->UpdateMovement(dt);
-	PlayerController(dt);
 	//Restrict the player from moving past the deadzone
 
 	enemy->UpdateMovement(dt);
 
-	if (!(mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition())))
-	{
-		player->SetVelocity( -(player->GetVelocity()) );
-	}	
-
 	mainCamera->Update(dt);
-
+	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
 }
 
