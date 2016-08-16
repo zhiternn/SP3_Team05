@@ -116,6 +116,7 @@ protected:
         P_BULLET,
         P_GRENADE,
         P_ROPE,
+		P_TRAP,
 
         P_TOTAL,
     };

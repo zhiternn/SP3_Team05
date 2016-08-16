@@ -193,6 +193,7 @@ void SceneBase::Init()
 
     // Projectile Render
     meshList[P_BULLET] = MeshBuilder::GenerateCube("p_bullet", Color(1, 1, 1));
+	meshList[P_GRENADE] = MeshBuilder::GenerateSphere("p_grenade", Color(0.1, 0.1, 0.1), 9, 18, 0.5f);
 
 	bLightEnabled = true;
 	isCulled = true;

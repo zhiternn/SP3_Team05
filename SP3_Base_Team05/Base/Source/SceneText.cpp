@@ -172,22 +172,16 @@ void SceneText::Update(double dt)
 		}
 	}
 
-<<<<<<< HEAD
+
 	enemy->UpdateMovement(dt);
 	PlayerController(dt);
-=======
-
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
+	//Restrict the player from moving past the deadzone
+	if (!(mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition())))
 	{
-		player->UpdateInputs(dt);
-	}
-	else
-	{
-		player->SetVelocity(0, 0, 0);
+		player->SetVelocity( -(player->GetVelocity()));
 	}
 	
 
->>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
 	mainCamera->Update(dt);
 	UpdateGameObjects(dt);
 }

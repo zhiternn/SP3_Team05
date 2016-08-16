@@ -21,16 +21,14 @@ void Camera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 	m_worldHeight = 100.0f;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+	isDeadzoned = false;
 }
 
 void Camera::Update(double dt)
 {
 	//Retrieve Entities from vector<Vector3>entityList and update the camera position based off their average pos
 	Vector3 cameraTarget;
-<<<<<<< HEAD
 
-=======
->>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
 	//null check
 	if (!entityList.empty())
 	{
@@ -45,7 +43,6 @@ void Camera::Update(double dt)
 		cameraTarget.x /= entityList.size();
 		cameraTarget.y /= entityList.size();
 
-		std::cout << cameraTarget << std::endl;
         //Check if player is within camera deadzone
         if (Deadzone(entityList[0], cameraTarget))
         {
@@ -71,42 +68,41 @@ bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
 	//Create a deadzone
 	Vector3 upperRight;
 	Vector3 bottomLeft;
-
 	//They call me the mother of hardcoding hehe xd
 	//Set the upperRight and bottomLeft Bounds
-	upperRight.x = cameraTarget.x + 60;
-	upperRight.y = cameraTarget.y + 40;
+	
 
-<<<<<<< HEAD
-=======
-	bottomLeft.x = cameraTarget.x - 60;
-	bottomLeft.y = cameraTarget.y - 40;
+	upperRight.x = cameraTarget.x + 63.5;
+	upperRight.y = cameraTarget.y + 47;
 
->>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
+
+	bottomLeft.x = cameraTarget.x - 63.5;
+	bottomLeft.y = cameraTarget.y - 47;
+	
+	std::cout << cameraTarget << std::endl;
+	
 	//Position check
 	if (pos->x < upperRight.x && pos->x > bottomLeft.x)
 	{
 		if (pos->y < upperRight.y && pos->y > bottomLeft.y)
 		{
 			//Player is within bounds
-			//isDeadzoned = false;
+		
 			return true;
 		}
 		//Player is out of bounds
 		else
 		{
-			//isDeadzoned = true;
+			tempTarget = cameraTarget;
+			
 			return false;		
 		}
 	}
 	//player is out of bounds
 	else
 	{
-		//isDeadzoned = true;
+		tempTarget = cameraTarget;
+		
 		return false;
 	}
-	//if (isDeadzoned)
-	//{
-	//	//store cameratarget to prevent it from updating
-	//}
 }
