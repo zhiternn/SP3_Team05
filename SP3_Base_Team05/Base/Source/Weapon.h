@@ -12,7 +12,7 @@ Generic Class for Weapons
 /******************************************************************************/
 /*!
 Class Weapon.h:
-\brief	Creates Weapon for the game
+\brief	Creates Weapon for the game.
 */
 /******************************************************************************/
 class Weapon
@@ -31,10 +31,20 @@ public:
     };
 
     void Fire();            //< Weapon Fire
+    
+    // Getters
+    WEAPON_TYPE GetWeaponType();
+    float GetWeaponAmmo();
+    float GetDMGVal();
+
+    // Setters
+    void SetWeaponType(WEAPON_TYPE type);
+    void SetWeaponAmmo(float ammo);
+    void SetDMGVal(float dmg);
 
     WEAPON_TYPE w_type;     //< Weapon Type
     float w_ammo;           //< Weapon Ammo Amount 
-    float w_dmgval;         //< Weapon Damage Value
+    float w_dmgval;         //< Weapon Damange Value
 
 };
 
