@@ -25,6 +25,19 @@ w_dmgval(0)
 
 /******************************************************************************/
 /*!
+\brief	Weapon Overloaded Constructor
+*/
+/******************************************************************************/
+Weapon::Weapon(WEAPON_TYPE weaponType) :
+w_type(weaponType),
+w_ammo(0),
+w_dmgval(0)
+{
+
+}
+
+/******************************************************************************/
+/*!
 \brief	Weapon destructor
 */
 /******************************************************************************/
@@ -205,6 +218,14 @@ void Weapon::Fire(Vector3 pos, Vector3 dir)
     case ROPEGUN:
         break;
     case SHIELD:
+        CProjectile* shield = FetchProjectile();
+        shield->SetLifetime(w_projectileLifetime);
+        shield->SetPostion(pos);
+        dir = dir.Normalized() * w_projectileSpeed;
+        shield->SetVelocity(dir);
+        shield->SetScale(1, 1, 1);
+        shield->SetMass(1);
+        shield->SetColliderType(Collider::COLLIDER_BALL);
         break;
     case GRENADE:
         break;

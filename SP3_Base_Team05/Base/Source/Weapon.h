@@ -4,7 +4,7 @@
 \author Quek Tse Hiang Reuben
 \par	email: 152773F\@nyp.edu.sg
 \brief
-Generic Class for Weapons
+Generic Class for Weapons (Abstract Class)
 */
 /******************************************************************************/
 #ifndef WEAPON_H
@@ -21,11 +21,6 @@ Class Weapon.h:
 class Weapon
 {
 public:
-    Weapon();                                   //< 
-    virtual ~Weapon();                          //<
-    virtual void Update(double dt);             //<
-
-
     enum WEAPON_TYPE
     {
         GUN,
@@ -35,6 +30,10 @@ public:
         GRENADE,
         WEAPON_TOTAL,
     };
+    Weapon();                                   //< Default Constructor
+    Weapon(WEAPON_TYPE weaponType);             //< Overloaded Constructor
+    virtual ~Weapon();                          //< Virtual Destructor
+    virtual void Update(double dt);             //< Virtual Update
 
     void Fire(Vector3 pos, Vector3 dir);        //< Weapon Fire
     
