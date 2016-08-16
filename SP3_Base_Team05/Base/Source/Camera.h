@@ -24,6 +24,8 @@ public:
 	bool Deadzone(Vector3 *p, Vector3 cameraTarget);
 
 	std::vector<Vector3*>entityList;
+
+	Vector3 GetPosition();
 	//Vector List of entities taken into account for camera position
 
 };

@@ -27,7 +27,10 @@ void Camera::Update(double dt)
 {
 	//Retrieve Entities from vector<Vector3>entityList and update the camera position based off their average pos
 	Vector3 cameraTarget;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
 	//null check
 	if (!entityList.empty())
 	{
@@ -41,7 +44,8 @@ void Camera::Update(double dt)
 		//Average the positions
 		cameraTarget.x /= entityList.size();
 		cameraTarget.y /= entityList.size();
-        
+
+		std::cout << cameraTarget << std::endl;
         //Check if player is within camera deadzone
         if (Deadzone(entityList[0], cameraTarget))
         {
@@ -58,6 +62,10 @@ void Camera::Include(Vector3* pos)
 	entityList.push_back(pos);
 }
 
+Vector3 Camera::GetPosition()
+{
+	return this->position;
+}
 bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
 {
 	//Create a deadzone
@@ -66,29 +74,39 @@ bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
 
 	//They call me the mother of hardcoding hehe xd
 	//Set the upperRight and bottomLeft Bounds
-	upperRight.x = cameraTarget.x + 400;
-	upperRight.y = cameraTarget.y + 600;
+	upperRight.x = cameraTarget.x + 60;
+	upperRight.y = cameraTarget.y + 40;
 
-	bottomLeft.x = cameraTarget.x - 400;
-	bottomLeft.y = cameraTarget.y - 600;
+<<<<<<< HEAD
+=======
+	bottomLeft.x = cameraTarget.x - 60;
+	bottomLeft.y = cameraTarget.y - 40;
 
+>>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
 	//Position check
 	if (pos->x < upperRight.x && pos->x > bottomLeft.x)
 	{
 		if (pos->y < upperRight.y && pos->y > bottomLeft.y)
 		{
 			//Player is within bounds
+			//isDeadzoned = false;
 			return true;
 		}
 		//Player is out of bounds
 		else
 		{
-			return false;
+			//isDeadzoned = true;
+			return false;		
 		}
 	}
 	//player is out of bounds
 	else
 	{
+		//isDeadzoned = true;
 		return false;
 	}
+	//if (isDeadzoned)
+	//{
+	//	//store cameratarget to prevent it from updating
+	//}
 }

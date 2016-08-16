@@ -14,7 +14,8 @@ Class to create Projectiles
 \brief	CProjectile Default Constructor
 */
 /******************************************************************************/
-CProjectile::CProjectile()
+CProjectile::CProjectile():
+GameObject(GameObject::GO_PROJECTILE)
 {
 }
 
@@ -25,20 +26,6 @@ CProjectile::CProjectile()
 /******************************************************************************/
 CProjectile::~CProjectile()
 {
-}
-
-/******************************************************************************/
-/*!
-\brief
-GetProjectileState to get the projectile count
-
-\return
-Projectile State
-*/
-/******************************************************************************/
-bool CProjectile::GetState()
-{
-    return proj_active;
 }
 
 /******************************************************************************/
@@ -81,20 +68,6 @@ Projectile Type
 PROJECTILE_TYPE CProjectile::GetType()
 {
     return proj_type;
-}
-
-/******************************************************************************/
-/*!
-\brief
-Setting the Projectile State with a new state;
-
-\param state
-The new state to replace the old one
-*/
-/******************************************************************************/
-void CProjectile::SetState(bool state)
-{
-    proj_active = state;
 }
 
 /******************************************************************************/
@@ -151,8 +124,9 @@ Time active
 void CProjectile::Update(double dt)
 {
 	GameObject::Update(dt);
-    //GameObject::HandleInteraction(proj_type, dt);
 	proj_lifetime -= dt;
+	if (proj_lifetime <= 0)
+		active = false;
 }
 
 /******************************************************************************/
@@ -179,10 +153,11 @@ CProjectile* FetchProjectile()
    for (it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
    {
        CProjectile *proj = dynamic_cast<CProjectile*>((*it));
-       if (proj && proj->GetActive() == false)
+	   if (proj && proj->GetActive() == false)
        {
-           proj->SetActive(true);
-           return proj;
+			proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+			proj->SetActive(true);
+			return proj;
        }
    }
 
@@ -190,15 +165,17 @@ CProjectile* FetchProjectile()
    {
        GameObject::goList.push_back(new CProjectile());
    }
-   CProjectile *proj = dynamic_cast<CProjectile*>(GameObject::goList.back() - 10);
+   CProjectile *proj = dynamic_cast<CProjectile*>(*(GameObject::goList.end() - 10));
    if (proj)
    {
+	   proj->GameObject::SetType(GameObject::GO_PROJECTILE);
        proj->SetActive(true);
        return proj;
    }
     
    { //for safety measure
        CProjectile *proj = new CProjectile();
+	   proj->GameObject::SetType(GameObject::GO_PROJECTILE);
        proj->SetActive(true);
        GameObject::goList.push_back(proj);
        return proj;

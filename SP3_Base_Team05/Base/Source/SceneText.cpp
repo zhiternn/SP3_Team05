@@ -52,10 +52,12 @@ void SceneText::Init()
 	////perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	//projectionStack.LoadMatrix(perspective);
 
-	m_worldHeight = 100.0f;
+	//World Space
+	m_worldHeight = 500;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
-	m_orthoHeight = 100.0f;
+	//World Space View
+	m_orthoHeight = 100;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -122,7 +124,8 @@ void SceneText::Update(double dt)
 {
 	SceneBase::Update(dt);
 
-	{//handles required mouse calculationsdouble x, y;
+	{
+		//handles required mouse calculationsdouble x, y;
 		double x, y;
 		Application::GetCursorPos(x, y);
 		int w = Application::GetWindowWidth();
@@ -146,7 +149,8 @@ void SceneText::Update(double dt)
 	}
 	else if(Controls::GetInstance().OnRelease(Controls::MOUSE_LBUTTON))
 	{
-		GameObject* ball = FetchGO();
+		CProjectile* ball = FetchProjectile();
+		ball->SetLifetime(3);
 		ball->SetPostion(m_ghost->GetPosition());
 		ball->SetVelocity(m_ghost->GetPosition() - Vector3(mousePos_worldBased.x, mousePos_worldBased.y, 0));
 		ball->SetScale(1, 1, 1);
@@ -168,8 +172,22 @@ void SceneText::Update(double dt)
 		}
 	}
 
+<<<<<<< HEAD
 	enemy->UpdateMovement(dt);
 	PlayerController(dt);
+=======
+
+	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
+	{
+		player->UpdateInputs(dt);
+	}
+	else
+	{
+		player->SetVelocity(0, 0, 0);
+	}
+	
+
+>>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
 	mainCamera->Update(dt);
 	UpdateGameObjects(dt);
 }
@@ -435,6 +453,16 @@ void SceneText::RenderGO(GameObject* go)
 		RenderMesh(meshList[GEO_CUBE], false);
 	}
 		break;
+	case GameObject::GO_PROJECTILE:
+	{
+		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
+
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
+		modelStack.Rotate(degree, 0, 0, 1);
+		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
+		RenderMesh(meshList[GEO_SPHERE], false);
+	}
+	break;
 
 
 	default:break;
