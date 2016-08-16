@@ -9,23 +9,51 @@ Enemy::~Enemy()
 {
 }
 
+void Enemy::Init(Vector3 pos)
+{
+	this->pos = pos;
+	active = true;
+	type = GameObject::GO_BALL;
+	collider.type = Collider::COLLIDER_NONE; //Collider::COLLIDER_BALL;
+	mass = 1;
+	checkReached = REACH_CHECKER;
+	speedLimit = 10.f;
+}
+
+void Enemy::Update(double dt)
+{
+	GameObject::Update(dt);
+	checkReached -= 1.f * dt;
+}
+
 void Enemy::UpdateMovement(double dt)
 {
+	checkReached -= 1.f * dt;
 	if (destinations.size() > 0)
 	{
 		Vector3 dir = (destinations.top() - pos).Normalized();
-		if (Reached(destinations.top()))
+		if (Reached(destinations.top()) || checkReached <= 0)
 		{
+			checkReached = REACH_CHECKER;
 			destinations.pop();
 		}
 		else
 		{
-			vel = dir * 10;
+			this->ApplyForce(dt, dir, ENEMY_MOVEMENT_SPEED);
+			if (vel.LengthSquared() > speedLimit * speedLimit)
+			{
+				vel = vel.Normalized() * speedLimit;
+			}
 		}
 	}
 	else
 	{
-		Vector3 temp = Vector3(Math::RandFloatMinMax(10, 50), Math::RandFloatMinMax(10, 50), 0);
+<<<<<<< HEAD
+		Vector3 temp(Math::RandFloatMinMax(200, 250), Math::RandFloatMinMax(200, 250), 0);
+=======
+		Vector3 temp(Math::RandFloatMinMax(10, 50), Math::RandFloatMinMax(10, 50), 0);
+>>>>>>> 70a0f48041e1d1c3d9eed7b8210d7d2757c4b3db
+		std::cout << temp << std::endl;
 		AddDestination(temp);
 	}
 }
@@ -51,7 +79,7 @@ Enemy* FetchEnemy()
 	for (it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
 	{
 		Enemy *enemy = dynamic_cast<Enemy*>((*it));
-		if (enemy && enemy->GetActive() == false)
+		if (enemy && enemy->IsActive() == false)
 		{
 			enemy->GameObject::SetType(GameObject::GO_PROJECTILE);
 			enemy->SetActive(true);

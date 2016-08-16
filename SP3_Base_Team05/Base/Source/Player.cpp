@@ -1,5 +1,6 @@
 #include "Player.h"
 #include "Controls.h"
+#include "Projectile.h"
 
 Player::Player():
 GameObject(GameObject::GO_BALL)
@@ -12,6 +13,7 @@ Player::~Player()
 
 void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 {
+	weapon = new Weapon();
 	this->scale.Set(scale.x, scale.y, scale.z);
 	this->pos.Set(pos.x, pos.y, pos.z);
 	this->front.Set(front.x, front.y, front.z);
@@ -23,55 +25,10 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	isDashed = false;
 }
 
-void Player::UpdateInputs(double dt)
+void Player::Update(double dt)
 {
+	GameObject::Update(dt);
 	isMoving = false;
-	float forceMagnitude = 0;
-	Vector3 forceDir;
-
-	if (Controls::GetInstance().OnHold(Controls::KEY_W))
-	{
-		forceDir.y += 1;
-		if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
-		{
-			isMoving = true;
-			forceMagnitude = MOVEMENT_SPEED;
-		}
-	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_S))
-	{
-		forceDir.y -= 1;
-		if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
-		{
-			isMoving = true;
-			forceMagnitude = MOVEMENT_SPEED;
-		}
-	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_A))
-	{
-		forceDir.x -= 1;
-		if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
-		{
-			isMoving = true;
-			forceMagnitude = MOVEMENT_SPEED;
-		}
-	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_D))
-	{
-		forceDir.x += 1;
-		if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
-		{
-			isMoving = true;
-			forceMagnitude = MOVEMENT_SPEED;
-		}
-	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE) && !isDashed)
-	{
-		forceMagnitude = MOVEMENT_SPEED * 100.0f;
-		isDashed = true;
-		cooldownTimer = DASH_COOLDOWN;
-	}
 	if (!isMoving)
 	{
 		vel *= 0.9f;
@@ -84,14 +41,50 @@ void Player::UpdateInputs(double dt)
 			isDashed = false;
 		}
 	}
-	if (!forceDir.IsZero())
+}
+
+void Player::Move(Vector3 dir, double dt)
+{
+	if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
 	{
-		forceDir.Normalize();
-		this->ApplyForce(dt, forceDir, forceMagnitude);
+		isMoving = true;
+		forceMagnitude = MOVEMENT_SPEED;
+		this->ApplyForce(dt, dir, forceMagnitude);
 	}
 }
 
-void Player::Update(double dt)
+void Player::Dash(Vector3 dir, double dt)
 {
-	GameObject::Update(dt);
+	if (!isDashed && !dir.IsZero())
+	{
+		forceMagnitude = MOVEMENT_SPEED * 100.0f;
+		this->ApplyForce(dt, dir, forceMagnitude);
+		isDashed = true;
+		cooldownTimer = DASH_COOLDOWN;
+	}
+}
+
+void Player::Shoot()
+{
+	weapon->Fire();
+}
+
+void Player::SetMoving(bool isMoving)
+{
+	this->isMoving = isMoving;
+}
+
+void Player::SetDashed(bool isDashed)
+{
+	this->isDashed = isDashed;
+}
+
+bool Player::IsMoving()
+{
+	return isMoving;
+}
+
+bool Player::IsDashed()
+{
+	return isDashed;
 }

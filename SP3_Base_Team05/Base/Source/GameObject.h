@@ -40,7 +40,7 @@ public:
 	Vector3 GetScale();
 	GAMEOBJECT_TYPE GetType();
 	Collider GetCollider();
-	bool GetActive();
+	bool IsActive();
 	float GetMass();
 
 	// Setters
@@ -62,7 +62,6 @@ protected:
 	virtual bool CheckCollision(GameObject* b, double dt);
 	virtual float CheckCollision2(GameObject* b);
 	virtual void CollisionResponse(GameObject* b);
-
 
 	Vector3 vel;
 	Vector3 front;

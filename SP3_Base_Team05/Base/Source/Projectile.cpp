@@ -153,7 +153,7 @@ CProjectile* FetchProjectile()
    for (it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
    {
        CProjectile *proj = dynamic_cast<CProjectile*>((*it));
-	   if (proj && proj->GetActive() == false)
+	   if (proj && proj->IsActive() == false)
        {
 			proj->GameObject::SetType(GameObject::GO_PROJECTILE);
 			proj->SetActive(true);
