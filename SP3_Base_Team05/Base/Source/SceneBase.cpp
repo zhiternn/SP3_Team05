@@ -191,6 +191,9 @@ void SceneBase::Init()
 	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
 	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
 
+    // Projectile Render
+    meshList[P_BULLET] = MeshBuilder::GenerateCube("p_bullet", Color(1, 1, 1));
+
 	bLightEnabled = true;
 	isCulled = true;
 	isWireFrame = false;
