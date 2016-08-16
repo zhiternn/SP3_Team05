@@ -177,13 +177,8 @@ void SceneText::Update(double dt)
 
 	enemy->UpdateMovement(dt);
 
-	if (!(mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition())))
-	{
-		player->SetVelocity( -(player->GetVelocity()) );
-	}	
-
 	mainCamera->Update(dt);
-
+	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
 }
 
