@@ -193,10 +193,11 @@ void SceneText::Update(double dt)
 
 	if (!(mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition())))
 	{
-		player->SetVelocity( -(player->GetVelocity()));
-	}
-	
+		player->SetVelocity( -(player->GetVelocity()) );
+	}	
+
 	mainCamera->Update(dt);
+
 	UpdateGameObjects(dt);
 }
 

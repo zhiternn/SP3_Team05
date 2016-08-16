@@ -44,11 +44,13 @@ void Camera::Update(double dt)
 		cameraTarget.y /= entityList.size();
 
         
-
+		
 		//if so, update the camera position
-        this->target = cameraTarget;
-        this->position = this->target;
-        this->position.z += 1;
+		this->target = cameraTarget;
+		this->position = this->target;
+		this->position.z += 1;
+		
+
     }
 }
 
@@ -70,13 +72,13 @@ bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
 	//Set the upperRight and bottomLeft Bounds
 	
 
-	upperRight.x = cameraTarget.x + 63.5;
+	upperRight.x = cameraTarget.x + 63;
 	upperRight.y = cameraTarget.y + 47;
 
 
-	bottomLeft.x = cameraTarget.x - 63.5;
+	bottomLeft.x = cameraTarget.x - 63;
 	bottomLeft.y = cameraTarget.y - 47;
-	
+
 	//Position check
 	if (pos->x < upperRight.x && pos->x > bottomLeft.x)
 	{
