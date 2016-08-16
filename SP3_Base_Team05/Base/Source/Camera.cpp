@@ -111,8 +111,8 @@ void Camera::Constrain(Player p, Vector3 cameraTarget)
 	Vector3 *b;
 	std::cout << cameraTarget << std::endl;
 
-	u = new Vector3(cameraTarget.x + 20, cameraTarget.y + 20, 0);
-	b = new Vector3(cameraTarget.x - 20, cameraTarget.y - 20, 0);
+	u = new Vector3(cameraTarget.x + 10, cameraTarget.y + 10, 0);
+	b = new Vector3(cameraTarget.x - 10, cameraTarget.y - 10, 0);
 
 
 	std::cout << *u << std::endl;
