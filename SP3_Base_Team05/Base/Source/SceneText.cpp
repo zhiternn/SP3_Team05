@@ -97,6 +97,8 @@ void SceneText::PlayerController(double dt)
 	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
 	player->SetFront(lookDir);
 	Vector3 forceDir;
+	Vector3 mouseDir;
+	mouseDir = (mousePos_worldBased - player->pos).Normalized();
 	if (Controls::GetInstance().OnHold(Controls::KEY_W))
 	{
 		forceDir.y += 1;
@@ -125,7 +127,7 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
-
+		player->Shoot(mouseDir);
 	}
 }
 
@@ -189,12 +191,21 @@ void SceneText::Update(double dt)
 	{
 	    PlayerController(dt);
 	}
-	else
+
+
+	enemy->UpdateMovement(dt);
+	PlayerController(dt);
+	//Restrict the player from moving past the deadzone
+
+	enemy->UpdateMovement(dt);
+
+	if (!(mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition())))
 	{
-		player->SetVelocity(0, 0, 0);
-	}
-	
+		player->SetVelocity( -(player->GetVelocity()) );
+	}	
+
 	mainCamera->Update(dt);
+
 	UpdateGameObjects(dt);
 }
 

@@ -54,6 +54,7 @@ void Enemy::UpdateMovement(double dt)
 	}
 	else
 	{
+
 		Vector3 temp(Math::RandFloatMinMax(200, 250), Math::RandFloatMinMax(200, 250), 0);
 		AddDestination(temp);
 	}

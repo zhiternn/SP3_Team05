@@ -20,7 +20,7 @@ public:
 	
 	void Move(Vector3 dir, double dt);
 	void Dash(Vector3 dir, double dt);
-	void Shoot();
+	void Shoot(Vector3 dir);
 	// Setters
 	void SetMoving(bool isMoving);
 	void SetDashed(bool isDashed);
