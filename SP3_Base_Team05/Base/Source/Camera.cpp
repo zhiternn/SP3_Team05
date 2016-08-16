@@ -21,6 +21,7 @@ void Camera::Init(const Vector3& pos, const Vector3& target, const Vector3& up)
 
 	m_worldHeight = 100.0f;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+	isDeadzoned = false;
 }
 
 void Camera::Update(double dt)
@@ -42,15 +43,14 @@ void Camera::Update(double dt)
 		cameraTarget.x /= entityList.size();
 		cameraTarget.y /= entityList.size();
 
-		std::cout << cameraTarget << std::endl;
-        //Check if player is within camera deadzone
-        if (Deadzone(entityList[0], cameraTarget))
-        {
-			//if so, update the camera position
-            this->target = cameraTarget;
-            this->position = this->target;
-            this->position.z += 1;
-        }
+        
+		
+		//if so, update the camera position
+		this->target.Lerp( cameraTarget, 5*dt);
+		this->position = this->target;
+		this->position.z += 1;
+		
+
     }
 }
 
@@ -68,14 +68,16 @@ bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
 	//Create a deadzone
 	Vector3 upperRight;
 	Vector3 bottomLeft;
-
 	//They call me the mother of hardcoding hehe xd
 	//Set the upperRight and bottomLeft Bounds
-	upperRight.x = cameraTarget.x + 60;
-	upperRight.y = cameraTarget.y + 40;
+	
 
-	bottomLeft.x = cameraTarget.x - 60;
-	bottomLeft.y = cameraTarget.y - 40;
+	upperRight.x = cameraTarget.x + 63;
+	upperRight.y = cameraTarget.y + 47;
+
+
+	bottomLeft.x = cameraTarget.x - 63;
+	bottomLeft.y = cameraTarget.y - 47;
 
 	//Position check
 	if (pos->x < upperRight.x && pos->x > bottomLeft.x)
@@ -83,24 +85,49 @@ bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
 		if (pos->y < upperRight.y && pos->y > bottomLeft.y)
 		{
 			//Player is within bounds
-			//isDeadzoned = false;
+		
 			return true;
 		}
 		//Player is out of bounds
 		else
 		{
-			//isDeadzoned = true;
+			tempTarget = cameraTarget;
+			
 			return false;		
 		}
 	}
 	//player is out of bounds
 	else
 	{
-		//isDeadzoned = true;
+		tempTarget = cameraTarget;
+		
 		return false;
 	}
-	//if (isDeadzoned)
-	//{
-	//	//store cameratarget to prevent it from updating
-	//}
+}
+
+void Camera::Constrain(Player p, Vector3 cameraTarget)
+{
+	Vector3 *u;
+	Vector3 *b;
+	std::cout << cameraTarget << std::endl;
+
+	u = new Vector3(cameraTarget.x + 20, cameraTarget.y + 20, 0);
+	b = new Vector3(cameraTarget.x - 20, cameraTarget.y - 20, 0);
+
+
+	std::cout << *u << std::endl;
+	std::cout << *b << std::endl;
+
+	if (p.GetPosition().x > u->x - 10 || p.GetPosition().y > u->y - 10 || p.GetPosition().x < b->x + 10 || p.GetPosition().y < b->y + 10)
+	{
+		if (p.GetPosition().x < u->x || p.GetPosition().y < u->y || p.GetPosition().x > b->x || p.GetPosition().y > b->y)
+		{
+			std::cout << p.GetVelocity() << std::endl;
+			cameraTarget += p.GetVelocity();
+		}			
+	}
+	std::cout << p.GetPosition() << std::endl;
+	std::cout << *u << std::endl;
+	std::cout << *b << std::endl;
+
 }

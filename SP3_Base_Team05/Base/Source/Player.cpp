@@ -3,15 +3,15 @@
 #include "Projectile.h"
 
 Player::Player():
-GameObject(GameObject::GO_BALL),
-weapon(NULL)
+weapon(NULL),
+GameObject(GameObject::GO_PLAYER)
 {
 }
 
 Player::~Player()
 {
-	if (weapon)
-		delete weapon;
+	//if (weapon)
+	//	delete weapon;
 }
 
 void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
@@ -20,7 +20,7 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	this->pos.Set(pos.x, pos.y, pos.z);
 	this->front.Set(front.x, front.y, front.z);
 	active = true;
-	type = GameObject::GO_BALL;
+	type = GameObject::GO_PLAYER;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	vel.SetZero();

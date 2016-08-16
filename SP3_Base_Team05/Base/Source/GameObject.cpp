@@ -96,80 +96,79 @@ bool GameObject::CheckCollision(GameObject* b, double dt)
 }
 float GameObject::CheckCollision2(GameObject* b)
 {
-	//switch (b->colliderType)
-	//{
-	//case GameObject::COLLIDER_BALL:
-	//{
-	//	Vector3 relVel = a->vel - b->vel;
-	//	Vector3 relDir = a->pos - b->pos;
+	switch (b->collider.type)
+	{
+	case Collider::COLLIDER_BALL:
+	{
+		Vector3 relVel = this->vel - b->vel;
+		Vector3 relDir = this->pos - b->pos;
 
-	//	//direction check. checks relative vel against relative displacement
-	//	if (relVel.Dot(relDir) > 0)
-	//	{
-	//	  return -1.0f;
-	//	}
+		//direction check. checks relative vel against relative displacement
+		if (relVel.Dot(relDir) > 0)
+		{
+		  return -1.0f;
+		}
 
-	//	float combinedRadius = a->scale.x + b->scale.x;
+		float combinedRadius = this->scale.x + b->scale.x;
 
-	//	float A = relVel.Dot(relVel);
-	//	float B = 2 * relVel.Dot(relDir);
-	//	float C = relDir.Dot(relDir) - (combinedRadius * combinedRadius);
+		float A = relVel.Dot(relVel);
+		float B = 2 * relVel.Dot(relDir);
+		float C = relDir.Dot(relDir) - (combinedRadius * combinedRadius);
 
-	//	float discriminant = (B * B) - (4 * A * C);
+		float discriminant = (B * B) - (4 * A * C);
 
-	//	float t = (-B - sqrt(discriminant)) / (2 * A);
-	//	if (t < 0)
-	//	  t = (-B + sqrt(discriminant)) / (2 * A);
+		float t = (-B - sqrt(discriminant)) / (2 * A);
+		if (t < 0)
+		  t = (-B + sqrt(discriminant)) / (2 * A);
 
-	//	if (t >= 0)
-	//	{
-	//	  return t;
-	//	}
-	//	else
-	//	{
-	//	  return -1.0f;
-	//	}
-	//}
-	//	break;
-	//case GameObject::COLLIDER_BOX:
-	//{
-	//	Vector3 w0 = b->pos;
-	//	Vector3 b1 = a->pos;
-	//	Vector3 N = b->normal;
-	//	Vector3 dir = w0 - b1;
-	//	if (dir.Dot(N) < 0)
-	//		return -1;
+		if (t >= 0)
+		{
+		  return t;
+		}
+		else
+		{
+		  return -1.0f;
+		}
+	}
+		break;
+	case Collider::COLLIDER_BOX:
+	{
+		Vector3 w0 = b->pos;
+		Vector3 b1 = this->pos;
+		Vector3 N = b->front;
+		Vector3 dir = w0 - b1;
+		if (dir.Dot(N) < 0)
+			return -1;
 
-	//	Vector3 U = a->vel;
-	//	float r = a->scale.x;
-	//	float h = b->scale.x;
+		Vector3 U = this->vel;
+		float r = this->scale.x;
+		float h = b->scale.x;
 
-	//	w0 -= (r + h * 0.5f) * N;
+		w0 -= (r + h * 0.5f) * N;
 
-	//	float dist = (w0 - b1).Dot(N);
-	//	float speed = U.Dot(N);
-	//	float th = dist / speed;
+		float dist = (w0 - b1).Dot(N);
+		float speed = U.Dot(N);
+		float th = dist / speed;
 
-	//	Vector3 NP = Vector3(-N.y, N.x, N.z);
+		Vector3 NP = Vector3(-N.y, N.x, N.z);
 
-	//	float l = b->scale.y;
-	//	Vector3 w1 = w0 + (l * 0.5f) * NP;
-	//	Vector3 w2 = w0 - (l * 0.5f) * NP;
+		float l = b->scale.y;
+		Vector3 w1 = w0 + (l * 0.5f) * NP;
+		Vector3 w2 = w0 - (l * 0.5f) * NP;
 
-	//	Vector3 bh = b1 + U * th;
+		Vector3 bh = b1 + U * th;
 
-	//	if ((w1 - bh).Dot(w2 - bh) > 0)
-	//		return -1;
+		if ((w1 - bh).Dot(w2 - bh) > 0)
+			return -1;
 
-	//	return th;
-	//}
-	//	break;
+		return th;
+	}
+		break;
 
-	//default:
-	//	return -1;
-	//	break;
-	//}
-	return -1;
+	default:
+		return -1;
+		break;
+	}
 }
 
 void GameObject::CollisionResponse(GameObject* b)
@@ -226,7 +225,9 @@ void GameObject::CollisionResponse(GameObject* b)
 void GameObject::HandleInteraction(GameObject* b, double dt)
 {
 	if (CheckCollision(b, dt))
+	{
 		CollisionResponse(b);
+	}
 }
 
 Vector3 GameObject::GetPosition()

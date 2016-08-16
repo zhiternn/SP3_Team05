@@ -12,6 +12,8 @@ public:
 	Vector3 target;
 	Vector3 up;
 
+	bool isDeadzoned;
+	Vector3 tempTarget;
 	Camera();
 	~Camera();
 	virtual void Init(const Vector3& pos, const Vector3& target, const Vector3& up);
@@ -26,6 +28,7 @@ public:
 	std::vector<Vector3*>entityList;
 
 	Vector3 GetPosition();
+	void Constrain(Player p, Vector3 cameraTarget);
 	//Vector List of entities taken into account for camera position
 
 };

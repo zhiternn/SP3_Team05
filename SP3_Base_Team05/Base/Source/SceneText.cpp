@@ -79,7 +79,7 @@ void SceneText::Init()
 	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(3, 3, 3), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	player->weapon = new MachineGun();
+	player->weapon = new Shotgun();
 	CProjectile* proj = new CProjectile();
 	proj->SetLifetime(10);
 	proj->SetDMG(10);
@@ -92,6 +92,12 @@ void SceneText::Init()
 
 	enemy = new Enemy();
 	GameObject::goList.push_back(enemy);
+	enemy = FetchEnemy();
+	enemy->SetType(GameObject::GO_ENEMY);
+	enemy->SetActive(true);
+	enemy->SetColliderType(Collider::COLLIDER_BALL);
+	enemy->SetScale(2, 2, 2);
+	enemy->SetMass(3);
 	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
 }
 
@@ -154,6 +160,7 @@ void SceneText::Update(double dt)
 			0
 			);
 	}
+
 	if (Controls::GetInstance().OnPress(Controls::KEY_V))
 	{
 		for (int i = 0; i < 10; ++i)
@@ -174,12 +181,14 @@ void SceneText::Update(double dt)
 	{
 	    PlayerController(dt);
 	}
-	else
-	{
-		player->SetVelocity(0, 0, 0);
-	}
-	
+
+	enemy->UpdateMovement(dt);
+	//Restrict the player from moving past the deadzone
+
+	enemy->UpdateMovement(dt);
+
 	mainCamera->Update(dt);
+	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
 }
 
@@ -468,7 +477,26 @@ void SceneText::RenderGO(GameObject* go)
 		RenderMesh(meshList[GEO_SPHERE], false);
 	}
 	break;
+	case GameObject::GO_ENEMY:
+	{
+		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
 
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
+		modelStack.Rotate(degree, 0, 0, 1);
+		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
+		RenderMesh(meshList[GEO_SPHERE], false);
+	}
+	break;
+	case GameObject::GO_PLAYER:
+	{
+		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
+
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
+		modelStack.Rotate(degree, 0, 0, 1);
+		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
+		RenderMesh(meshList[GEO_SPHERE], false);
+	}
+	break;
 
 	default:break;
 	}

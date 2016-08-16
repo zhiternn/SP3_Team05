@@ -4,8 +4,8 @@
 #include "GameObject.h"
 #include "Weapon.h"
 
-static const float MOVEMENT_SPEED = 50.0f;
-static const float MOVEMENT_LIMIT = 15.f;
+static const float MOVEMENT_SPEED = 80.0f;
+static const float MOVEMENT_LIMIT = 30.f;
 static const float DASH_COOLDOWN = 2.f;
 
 class Player : public GameObject

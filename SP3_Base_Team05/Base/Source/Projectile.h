@@ -42,25 +42,27 @@ public:
 		P_TOTAL
 	};
 
-    void HandleInteraction(CProjectile* b, double dt);      //< Handling Interactions
+    void HandleInteraction(CProjectile* b, double dt);			//< Handling Interactions
 	void Init(Vector3 pos, Vector3 dir, float speed);
-	virtual void Update(double dt);                         //< Abstract Update
+	virtual void Update(double dt);								//< Abstract Update
+
+	virtual void HandleInteraction(GameObject* b, double dt);	//< Handling Interactions
 
 	//< Getters
-	float GetDMG();                                         //< Returns Projectile Damage
-	float GetLifetime();                                    //< Returns Projectile Lifetime
-    PROJECTILE_TYPE GetType();                              //< Returns Projectile Type
+	float GetDMG();												//< Returns Projectile Damage
+	float GetLifetime();										//< Returns Projectile Lifetime
+    PROJECTILE_TYPE GetType();									//< Returns Projectile Type
 	
 	//< Setters
-	void SetDMG(float damage);                              //< Set Projectile Damage
-	void SetLifetime(float lifetime);                       //< Set Projectile Lifetime
-    void SetType(PROJECTILE_TYPE type);                     //< Set Projectile Type
+	void SetDMG(float damage);									//< Set Projectile Damage
+	void SetLifetime(float lifetime);							//< Set Projectile Lifetime
+    void SetType(PROJECTILE_TYPE type);							//< Set Projectile Type
 
 private:
 	//< Variables
-	float proj_dmg;                                         //< Projectile Damage
-	float proj_lifetime;                                    //< Projectile Lifetime
-    PROJECTILE_TYPE proj_type;                              //< Projectile Type
+	float proj_dmg;												//< Projectile Damage
+	float proj_lifetime;										//< Projectile Lifetime
+    PROJECTILE_TYPE proj_type;									//< Projectile Type
 };
 
 CProjectile* FetchProjectile();

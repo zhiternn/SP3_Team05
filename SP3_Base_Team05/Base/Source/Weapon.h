@@ -4,7 +4,7 @@
 \author Quek Tse Hiang Reuben
 \par	email: 152773F\@nyp.edu.sg
 \brief
-Generic Class for Weapons
+Generic Class for Weapons (Abstract Class)
 */
 /******************************************************************************/
 #ifndef WEAPON_H
