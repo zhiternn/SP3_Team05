@@ -182,7 +182,10 @@ void CProjectile::HandleInteraction(GameObject* b, double dt)
         return;
 
 	if (CheckCollision(b, dt))
+	{
+		CollisionResponse(b);
 		this->active = false;
+	}
 }
 
 CProjectile* FetchProjectile()
