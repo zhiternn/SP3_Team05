@@ -110,7 +110,8 @@ void SceneText::Update(double dt)
 	}
 	else if(Controls::GetInstance().OnRelease(Controls::MOUSE_LBUTTON))
 	{
-		GameObject* ball = FetchGO();
+		CProjectile* ball = FetchProjectile();
+		ball->SetLifetime(3);
 		ball->SetPostion(m_ghost->GetPosition());
 		ball->SetVelocity(m_ghost->GetPosition() - Vector3(mousePos_worldBased.x, mousePos_worldBased.y, 0));
 		ball->SetScale(1, 1, 1);
@@ -399,6 +400,16 @@ void SceneText::RenderGO(GameObject* go)
 		RenderMesh(meshList[GEO_CUBE], false);
 	}
 		break;
+	case GameObject::GO_PROJECTILE:
+	{
+		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
+
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
+		modelStack.Rotate(degree, 0, 0, 1);
+		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
+		RenderMesh(meshList[GEO_SPHERE], false);
+	}
+	break;
 
 
 	default:break;
