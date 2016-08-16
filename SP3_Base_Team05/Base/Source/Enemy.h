@@ -6,7 +6,6 @@
 #include "GameObject.h"
 
 static const float ENEMY_MOVEMENT_SPEED = 20.0f;
-static const float ENEMY_MOVEMENT_LIMIT = 10.0f;
 static const float REACH_CHECKER = 5.0f;
 
 class Enemy : public GameObject
@@ -27,6 +26,7 @@ private:
 	//std::stack<Vector3> destinations;
 	bool Reached(Vector3 pos);
 	float checkReached;
+	float speedLimit;
 
 };
 

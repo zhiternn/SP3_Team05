@@ -17,6 +17,7 @@ void Enemy::Init(Vector3 pos)
 	collider.type = Collider::COLLIDER_NONE; //Collider::COLLIDER_BALL;
 	mass = 1;
 	checkReached = REACH_CHECKER;
+	speedLimit = 10.f;
 }
 
 void Enemy::Update(double dt)
@@ -39,17 +40,16 @@ void Enemy::UpdateMovement(double dt)
 		else
 		{
 			this->ApplyForce(dt, dir, ENEMY_MOVEMENT_SPEED);
-			if (vel.LengthSquared() > ENEMY_MOVEMENT_LIMIT * ENEMY_MOVEMENT_LIMIT)
+			if (vel.LengthSquared() > speedLimit * speedLimit)
 			{
-				vel = vel.Normalized() * ENEMY_MOVEMENT_LIMIT;
+				vel = vel.Normalized() * speedLimit;
 			}
 		}
 	}
 	else
 	{
-		Vector3 temp(Math::RandFloatMinMax(10, 50), Math::RandFloatMinMax(10, 50), 0);
-		std::cout << temp << std::endl;
 
+		Vector3 temp(Math::RandFloatMinMax(200, 250), Math::RandFloatMinMax(200, 250), 0);
 		AddDestination(temp);
 	}
 }

@@ -66,7 +66,7 @@ void Player::Dash(Vector3 dir, double dt)
 
 void Player::Shoot()
 {
-	weapon->Fire();
+	//weapon->Fire();
 }
 
 void Player::SetMoving(bool isMoving)

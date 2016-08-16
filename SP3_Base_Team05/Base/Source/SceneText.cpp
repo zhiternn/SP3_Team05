@@ -2,10 +2,13 @@
 
 #include "Application.h"
 #include "Controls.h"
+#include "MeshBuilder.h"
 
 #include <sstream>
 
-SceneText::SceneText()
+SceneText::SceneText():
+player(NULL),
+mainCamera(NULL)
 {
 }
 
@@ -19,12 +22,11 @@ void SceneText::Init()
 	Math::InitRNG();
 
 	//Clears meshList
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
+	for (int i = GEO_DEFAULT_END; i < NUM_GEOMETRY; ++i)
 	{
 		meshList[i] = NULL;
 	}
-	
-	//Insert default Meshes into meshList
+	//Loads default meshes
 	for (int i = 0; i < GEO_DEFAULT_END; ++i)
 	{
 		meshList[i] = SceneBase::meshList[i];
@@ -78,8 +80,9 @@ void SceneText::Init()
 	GameObject::goList.push_back(player);
 
 	mainCamera->Include(&(player->pos));
-	mainCamera->Include(&mousePos_screenBased);
+	mainCamera->Include(&mousePos_worldBased);
 
+    weapon = new Weapon();
 	enemy = new Enemy();
 	GameObject::goList.push_back(enemy);
 	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
@@ -87,6 +90,8 @@ void SceneText::Init()
 
 void SceneText::PlayerController(double dt)
 {
+	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
+	player->SetFront(lookDir);
 	Vector3 forceDir;
 	if (Controls::GetInstance().OnHold(Controls::KEY_W))
 	{
@@ -124,19 +129,18 @@ void SceneText::Update(double dt)
 {
 	SceneBase::Update(dt);
 
-	{
-		//handles required mouse calculationsdouble x, y;
+	{//handles required mouse calculationsdouble x, y;
 		double x, y;
 		Application::GetCursorPos(x, y);
 		int w = Application::GetWindowWidth();
 		int h = Application::GetWindowHeight();
-		x = m_worldWidth * (x / w);
-		y = m_worldHeight * ((h - y) / h);
+		x = m_orthoWidth * (x / w);
+		y = m_orthoHeight * ((h - y) / h);
 
 		mousePos_screenBased.Set(x, y, 0);
 		mousePos_worldBased.Set(
-			x + mainCamera->target.x - m_orthoWidth * 0.5f,
-			y + mainCamera->target.y - m_orthoHeight * 0.5f,
+			x + mainCamera->target.x - (m_orthoWidth * 0.5f),
+			y + mainCamera->target.y - (m_orthoHeight * 0.5f),
 			0
 			);
 	}
@@ -149,13 +153,6 @@ void SceneText::Update(double dt)
 	}
 	else if(Controls::GetInstance().OnRelease(Controls::MOUSE_LBUTTON))
 	{
-		CProjectile* ball = FetchProjectile();
-		ball->SetLifetime(3);
-		ball->SetPostion(m_ghost->GetPosition());
-		ball->SetVelocity(m_ghost->GetPosition() - Vector3(mousePos_worldBased.x, mousePos_worldBased.y, 0));
-		ball->SetScale(1, 1, 1);
-		ball->SetMass(1);
-		ball->SetColliderType(Collider::COLLIDER_BALL);
 		m_ghost->SetActive(false);
 	}
 	if (Controls::GetInstance().OnPress(Controls::KEY_V))
@@ -171,17 +168,32 @@ void SceneText::Update(double dt)
 			m_ghost->SetActive(false);
 		}
 	}
+    if (Controls::GetInstance().OnPress(Controls::KEY_J))
+    {
+        //for (int i = 0; i < 10; ++i)
+        //{
+        weapon->SetWeaponType(Weapon::GUN);
+        weapon->SetProjLifetime(3);
+        weapon->SetProjSpd(25);
+        weapon->SetDMGVal(5);
+        weapon->SetWeaponAmmo(5);
+        weapon->Fire(player->GetPosition(), player->GetFront());
+        //}
+    }
+
 
 
 	enemy->UpdateMovement(dt);
 	PlayerController(dt);
 	//Restrict the player from moving past the deadzone
+
+	enemy->UpdateMovement(dt);
+
 	if (!(mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition())))
 	{
 		player->SetVelocity( -(player->GetVelocity()));
 	}
 	
-
 	mainCamera->Update(dt);
 	UpdateGameObjects(dt);
 }
@@ -334,7 +346,16 @@ void SceneText::RenderMain()
 
 void SceneText::RenderWorld()
 {
+	{//Render Floor
+		modelStack.PushMatrix();
+		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+		RenderMesh(meshList[GEO_FLOOR], false);
+		modelStack.PopMatrix();
+	}
+
 	RenderGameObjects();
+
 }
 
 void SceneText::RenderHUD()
@@ -364,13 +385,18 @@ void SceneText::RenderHUD()
 
 void SceneText::Exit()
 {
-	SceneBase::Exit();
+	if (mainCamera)
+		delete mainCamera;
+	if (player)
+		delete player;
 
 	for(int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		if(meshList[i])
 			delete meshList[i];
 	}
+
+	SceneBase::Exit();
 }
 
 void SceneText::UpdateGameObjects(double dt)

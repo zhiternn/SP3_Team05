@@ -21,10 +21,6 @@ public:
 	virtual void Render();
 	virtual void Exit();
 
-	void RenderText(Mesh* mesh, std::string text, Color color);
-	void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
-	void RenderMesh(Mesh *mesh, bool enableLight);
-	
 	//void RenderGPass();
 	//void RenderMain();
 	//void RenderWorld();
@@ -109,23 +105,28 @@ protected:
 		GEO_TEXT,
 		GEO_LIGHT_DEPTH_QUAD,
 
+		GEO_P_BULLET,
+		GEO_P_GRENADE,
+		GEO_P_ROPE,
+		GEO_P_SHIELD,
+
+		GEO_BOSS_SNAKE,
+		GEO_BOSS_BODY,
+
+		GEO_PLAYER,
+		GEO_FLOOR,
+
 		GEO_DEFAULT_END,
 	};
-    enum PROJECTILE_RENDER_DEFAULT
-    {
-        P_BULLET,
-        P_GRENADE,
-        P_ROPE,
-		P_TRAP,
-
-        P_TOTAL,
-    };
-
 	enum RENDER_PASS
 	{
 		RENDER_PASS_PRE,
 		RENDER_PASS_MAIN,
 	};
+
+	virtual void RenderText(Mesh* mesh, std::string text, Color color);
+	virtual void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
+	virtual void RenderMesh(Mesh *mesh, bool enableLight);
 
 	void SetupLights();
 	void SetHUD(const bool HUDmode, float fromX = 0.0f, float toX = 80.0f, float fromY = 0.0f, float toY = 60.0f, float fromZ = -10.0f, float toZ = 10.0f);

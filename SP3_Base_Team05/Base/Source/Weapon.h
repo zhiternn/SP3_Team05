@@ -9,6 +9,9 @@ Generic Class for Weapons
 /******************************************************************************/
 #ifndef WEAPON_H
 #define WEAPON_H
+
+#include "Vector3.h"
+
 /******************************************************************************/
 /*!
 Class Weapon.h:
@@ -18,8 +21,11 @@ Class Weapon.h:
 class Weapon
 {
 public:
-    Weapon();
-    ~Weapon();
+    Weapon();                                   //< 
+    virtual ~Weapon();                          //<
+    virtual void Update(double dt);             //<
+
+
     enum WEAPON_TYPE
     {
         GUN,
@@ -30,21 +36,27 @@ public:
         WEAPON_TOTAL,
     };
 
-    void Fire();            //< Weapon Fire
+    void Fire(Vector3 pos, Vector3 dir);        //< Weapon Fire
     
     // Getters
-    WEAPON_TYPE GetWeaponType();
-    float GetWeaponAmmo();
-    float GetDMGVal();
+    WEAPON_TYPE GetWeaponType();                //< Returns Weapon Type
+    float GetWeaponAmmo();                      //< Returns Weapon Ammo Amount
+    float GetDMGVal();                          //< Returns Get Damage Value
+    float GetProjSpd();                         //< Returns Weapon Projectile Speed
+    float GetProjLifetime();                    //< Returns Projectile Lifetime
 
     // Setters
-    void SetWeaponType(WEAPON_TYPE type);
-    void SetWeaponAmmo(float ammo);
-    void SetDMGVal(float dmg);
+    void SetWeaponType(WEAPON_TYPE type);       //< Sets Weapon Type
+    void SetWeaponAmmo(float ammo);             //< Sets Weapon Ammo Amount
+    void SetDMGVal(float dmg);                  //< Sets Get Damage Value
+    void SetProjSpd(float speed);               //< Sets Weapon Projectile Speed
+    void SetProjLifetime(float lifetime);       //< Sets Projectile Lifetime
 
-    WEAPON_TYPE w_type;     //< Weapon Type
-    float w_ammo;           //< Weapon Ammo Amount 
-    float w_dmgval;         //< Weapon Damange Value
+    WEAPON_TYPE w_type;                         //< Weapon Type
+    float w_ammo;                               //< Weapon Ammo Amount 
+    float w_dmgval;                             //< Weapon Damange Value
+    float w_projectileSpeed;                    //< Weapon Projectile Speed
+    float w_projectileLifetime;                 //< Weapon Projectile Lifetime
 
 };
 
