@@ -53,3 +53,6 @@ SP3_Base_Team05/Base.opensdf
 *.opensdf
 *.sdf
 *.idb
+*.vcxproj
+*.filters
+*.v12.suo
