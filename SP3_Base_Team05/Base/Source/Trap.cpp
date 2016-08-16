@@ -22,8 +22,14 @@ void Trap::SpawnTrap(Vector3 pos)
 	m_trap->w_type = TRAP;
 
 
-	//Spawn the GO at [pos] coordinates
-}
+	//Spawn the GameObject at [pos] coordinates
+
+	m_trap->SetActive(true);
+	m_trap->SetScale(20, 20, 20);
+	m_trap->SetFront(1, 0, 0);
+	m_trap->SetPostion(pos);
+	m_trap->SetType(GameObject::GO_BALL);
+} 
 
 void Trap::DestroyTrap()
 {

@@ -7,6 +7,7 @@
 #include "Projectile.h"
 #include "Player.h"
 #include "Weapon.h"
+#include "Enemy.h"
 
 #include <vector>
 
@@ -36,6 +37,7 @@ public:
 	void RenderSkyPlane();
 
 private:
+	void PlayerController(double dt);
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();
 	void RenderGO(GameObject* go);
@@ -55,6 +57,8 @@ private:
 
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
+
+	Enemy* enemy;
 };
 
 #endif
