@@ -52,13 +52,16 @@ void SceneText::Init()
 	////perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
 	//projectionStack.LoadMatrix(perspective);
 
-	m_worldHeight = 100.0f;
+	//World Space
+	m_worldHeight = 500;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
-	m_orthoHeight = 100.0f;
+	//World Space View
+	m_orthoHeight = 100;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
-	mainCamera.Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	mainCamera = new Camera();
+	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
 	m_ghost = new GameObject(GameObject::GO_BALL);
 
@@ -74,15 +77,16 @@ void SceneText::Init()
 	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(3, 3, 3), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	mainCamera.Include(&(player->pos));
+	mainCamera->Include(&(player->pos));
+	mainCamera->Include(&mousePos_screenBased);
 }
 
 void SceneText::Update(double dt)
 {
 	SceneBase::Update(dt);
 
-	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
+		//handles required mouse calculationsdouble x, y;
 		double x, y;
 		Application::GetCursorPos(x, y);
 		int w = Application::GetWindowWidth();
@@ -90,23 +94,26 @@ void SceneText::Update(double dt)
 		x = m_worldWidth * (x / w);
 		y = m_worldHeight * ((h - y) / h);
 
-		m_ghost->SetPostion(x, y, 0);
+		mousePos_screenBased.Set(x, y, 0);
+		mousePos_worldBased.Set(
+			x + mainCamera->target.x - m_orthoWidth * 0.5f,
+			y + mainCamera->target.y - m_orthoHeight * 0.5f,
+			0
+			);
+	}
+
+	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+	{
+		m_ghost->SetPostion(mousePos_worldBased.x, mousePos_worldBased.y, 0);
 		m_ghost->SetScale(1, 1, 1);
 		m_ghost->SetActive(true);
 	}
 	else if(Controls::GetInstance().OnRelease(Controls::MOUSE_LBUTTON))
 	{
-		GameObject* ball = FetchGO();
+		CProjectile* ball = FetchProjectile();
+		ball->SetLifetime(3);
 		ball->SetPostion(m_ghost->GetPosition());
-
-		double x, y;
-		Application::GetCursorPos(x, y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		x = m_worldWidth * (x / w);
-		y = m_worldHeight * ((h - y) / h);
-
-		ball->SetVelocity(m_ghost->GetPosition() - Vector3(x, y, 0));
+		ball->SetVelocity(m_ghost->GetPosition() - Vector3(mousePos_worldBased.x, mousePos_worldBased.y, 0));
 		ball->SetScale(1, 1, 1);
 		ball->SetMass(1);
 		ball->SetColliderType(Collider::COLLIDER_BALL);
@@ -116,15 +123,8 @@ void SceneText::Update(double dt)
 	{
 		for (int i = 0; i < 10; ++i)
 		{
-			double x, y;
-			Application::GetCursorPos(x, y);
-			int w = Application::GetWindowWidth();
-			int h = Application::GetWindowHeight();
-			x = m_worldWidth * (x / w);
-			y = m_worldHeight * ((h - y) / h);
-
 			GameObject* ball = FetchGO();
-			ball->SetPostion(x, y, 0);
+			ball->SetPostion(mousePos_worldBased.x, mousePos_worldBased.y, 0);
 			ball->SetVelocity(Math::RandFloatMinMax(-5, 5), Math::RandFloatMinMax(-5, 5), 0);
 			ball->SetScale(1, 1, 1);
 			ball->SetMass(1);
@@ -133,9 +133,18 @@ void SceneText::Update(double dt)
 		}
 	}
 
-	player->UpdateInputs(dt);
 
-	mainCamera.Update(dt);
+	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
+	{
+		player->UpdateInputs(dt);
+	}
+	else
+	{
+		player->SetVelocity(0, 0, 0);
+	}
+	
+
+	mainCamera->Update(dt);
 	UpdateGameObjects(dt);
 }
 
@@ -149,9 +158,9 @@ void SceneText::Render()
 	// Camera matrix
 	viewStack.LoadIdentity();
 	viewStack.LookAt(
-		mainCamera.position.x, mainCamera.position.y, mainCamera.position.z,
-		mainCamera.target.x, mainCamera.target.y, mainCamera.target.z,
-		mainCamera.up.x, mainCamera.up.y, mainCamera.up.z
+		mainCamera->position.x, mainCamera->position.y, mainCamera->position.z,
+		mainCamera->target.x, mainCamera->target.y, mainCamera->target.z,
+		mainCamera->up.x, mainCamera->up.y, mainCamera->up.z
 		);
 	// Model matrix : an identity matrix (model will be at the origin)
 	modelStack.LoadIdentity();
@@ -391,6 +400,16 @@ void SceneText::RenderGO(GameObject* go)
 		RenderMesh(meshList[GEO_CUBE], false);
 	}
 		break;
+	case GameObject::GO_PROJECTILE:
+	{
+		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
+
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
+		modelStack.Rotate(degree, 0, 0, 1);
+		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
+		RenderMesh(meshList[GEO_SPHERE], false);
+	}
+	break;
 
 
 	default:break;

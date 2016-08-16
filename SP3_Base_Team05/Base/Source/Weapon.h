@@ -34,7 +34,7 @@ public:
 
     WEAPON_TYPE w_type;     //< Weapon Type
     float w_ammo;           //< Weapon Ammo Amount 
-    float w_dmgval;         //< Weapon Damange Value
+    float w_dmgval;         //< Weapon Damage Value
 
 };
 

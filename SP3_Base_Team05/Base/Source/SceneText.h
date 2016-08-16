@@ -4,6 +4,7 @@
 #include "SceneBase.h"
 #include "Camera.h"
 #include "GameObject.h"
+#include "Projectile.h"
 #include "Player.h"
 
 #include <vector>
@@ -43,11 +44,13 @@ private:
 
 	Mesh* meshList[GEO_DEFAULT_END];
 
-	Camera mainCamera;
+	Camera* mainCamera;
 
 	GameObject* m_ghost;
 
 	Player* player;
+	Vector3 mousePos_screenBased;
+	Vector3 mousePos_worldBased;
 };
 
 #endif

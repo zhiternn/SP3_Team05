@@ -42,20 +42,17 @@ public:
 	virtual void Update(double dt);                         //< Abstract Update
 
 	//< Getters
-    bool GetState();                                        //< Returns Projectile State
 	float GetDMG();                                         //< Returns Projectile Damage
 	float GetLifetime();                                    //< Returns Projectile Lifetime
     PROJECTILE_TYPE GetType();                              //< Returns Projectile Type
 	
 	//< Setters
-	void SetState(bool state);                              //< Set Projectile State
 	void SetDMG(float damage);                              //< Set Projectile Damage
 	void SetLifetime(float lifetime);                       //< Set Projectile Lifetime
     void SetType(PROJECTILE_TYPE type);                     //< Set Projectile Type
 
 private:
 	//< Variables
-	bool proj_active;                                       //< Projectile State
 	float proj_dmg;                                         //< Projectile Damage
 	float proj_lifetime;                                    //< Projectile Lifetime
     PROJECTILE_TYPE proj_type;                              //< Projectile Type
