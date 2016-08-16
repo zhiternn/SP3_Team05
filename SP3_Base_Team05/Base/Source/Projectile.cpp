@@ -138,13 +138,13 @@ Handling the Interaction with another Game Object
 Time active
 */
 /******************************************************************************/
-void CProjectile::HandleInteraction(CProjectile* b, double dt)
+void CProjectile::HandleInteraction(GameObject* b, double dt)
 {
-    if (b->type == GameObject::GO_PROJECTILE)
+    if (b->GetType() == GameObject::GO_PROJECTILE)
         return;
 
-    GameObject::HandleInteraction(b, dt);
-    this->active = false;
+	if (CheckCollision(b, dt))
+		this->active = false;
 }
 
 CProjectile* FetchProjectile()

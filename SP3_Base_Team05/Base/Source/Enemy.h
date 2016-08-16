@@ -16,6 +16,7 @@ public:
 
 	void Init(Vector3 pos);
 	void Update(double dt);
+	virtual void HandleInteraction(GameObject* b, double dt);
 
 	void UpdateMovement(double dt);
 	void AddDestination(Vector3 pos);

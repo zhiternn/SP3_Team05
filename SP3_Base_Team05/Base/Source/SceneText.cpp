@@ -83,8 +83,12 @@ void SceneText::Init()
 	mainCamera->Include(&mousePos_worldBased);
 
     weapon = new Weapon();
-	enemy = new Enemy();
-	GameObject::goList.push_back(enemy);
+	enemy = FetchEnemy();
+	enemy->SetType(GameObject::GO_ENEMY);
+	enemy->SetActive(true);
+	enemy->SetColliderType(Collider::COLLIDER_BALL);
+	enemy->SetScale(2, 2, 2);
+	enemy->SetMass(3);
 	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
 }
 
@@ -180,8 +184,6 @@ void SceneText::Update(double dt)
         weapon->Fire(player->GetPosition(), player->GetFront());
         //}
     }
-
-	enemy->UpdateMovement(dt);
 
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
 	{
@@ -481,7 +483,26 @@ void SceneText::RenderGO(GameObject* go)
 		RenderMesh(meshList[GEO_SPHERE], false);
 	}
 	break;
+	case GameObject::GO_ENEMY:
+	{
+		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
 
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
+		modelStack.Rotate(degree, 0, 0, 1);
+		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
+		RenderMesh(meshList[GEO_SPHERE], false);
+	}
+	break;
+	case GameObject::GO_PLAYER:
+	{
+		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
+
+		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
+		modelStack.Rotate(degree, 0, 0, 1);
+		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
+		RenderMesh(meshList[GEO_SPHERE], false);
+	}
+	break;
 
 	default:break;
 	}
