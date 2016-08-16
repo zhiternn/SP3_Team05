@@ -2,10 +2,13 @@
 
 #include "Application.h"
 #include "Controls.h"
+#include "MeshBuilder.h"
 
 #include <sstream>
 
-SceneText::SceneText()
+SceneText::SceneText():
+player(NULL),
+mainCamera(NULL)
 {
 }
 
@@ -19,17 +22,22 @@ void SceneText::Init()
 	Math::InitRNG();
 
 	//Clears meshList
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
+	for (int i = GEO_DEFAULT_END; i < NUM_GEOMETRY; ++i)
 	{
 		meshList[i] = NULL;
 	}
-	
-	//Insert default Meshes into meshList
+	//Loads default meshes
 	for (int i = 0; i < GEO_DEFAULT_END; ++i)
 	{
 		meshList[i] = SceneBase::meshList[i];
 	}
 	
+	meshList[P_BULLET];
+	meshList[P_GRENADE];
+	meshList[P_ROPE];
+
+	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(1, 1, 1), 1.f);
+	std::cout << "haha" << meshList[GEO_FLOOR] << std::endl;
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	//meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
@@ -85,8 +93,7 @@ void SceneText::Update(double dt)
 {
 	SceneBase::Update(dt);
 
-	{
-		//handles required mouse calculationsdouble x, y;
+	{//handles required mouse calculationsdouble x, y;
 		double x, y;
 		Application::GetCursorPos(x, y);
 		int w = Application::GetWindowWidth();
@@ -287,7 +294,17 @@ void SceneText::RenderMain()
 
 void SceneText::RenderWorld()
 {
+	{//Render Floor
+		//modelStack.PushMatrix();
+		//modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+		//modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+		////std::cout << "hehe" << meshList[GEO_FLOOR] << std::endl;
+		//RenderMesh(meshList[GEO_FLOOR], false);
+		//modelStack.PopMatrix();
+	}
+
 	RenderGameObjects();
+
 }
 
 void SceneText::RenderHUD()
@@ -317,13 +334,18 @@ void SceneText::RenderHUD()
 
 void SceneText::Exit()
 {
-	SceneBase::Exit();
+	if (mainCamera)
+		delete mainCamera;
+	if (player)
+		delete player;
 
 	for(int i = 0; i < NUM_GEOMETRY; ++i)
 	{
 		if(meshList[i])
 			delete meshList[i];
 	}
+
+	SceneBase::Exit();
 }
 
 void SceneText::UpdateGameObjects(double dt)
