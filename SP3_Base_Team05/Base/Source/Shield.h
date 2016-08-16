@@ -18,11 +18,10 @@ Class Shield.h:
 \brief	Creates Shield for the game
 */
 /******************************************************************************/
-class Shield
+class Shield : public Weapon
 {
-    Shield();
-    ~Shield();
-
+    Shield(Weapon::WEAPON_TYPE weaponType);     //< Overloaded Constructor
+    ~Shield();                                  //< Destructor
 
 };
 

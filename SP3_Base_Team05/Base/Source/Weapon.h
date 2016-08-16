@@ -27,7 +27,7 @@ public:
         TRAP,
         SHIELD,
         GRENADE,
-        WEAPON_TOTAL
+        WEAPON_TOTAL,
     };
 
     void Fire();            //< Weapon Fire

@@ -111,6 +111,15 @@ protected:
 
 		GEO_DEFAULT_END,
 	};
+    enum PROJECTILE_RENDER_DEFAULT
+    {
+        P_BULLET,
+        P_GRENADE,
+        P_ROPE,
+
+        P_TOTAL,
+    };
+
 	enum RENDER_PASS
 	{
 		RENDER_PASS_PRE,
