@@ -97,6 +97,8 @@ void SceneText::Init()
 void SceneText::PlayerController(double dt)
 {
 	Vector3 forceDir;
+	Vector3 mouseDir;
+	mouseDir = (mousePos_worldBased - player->pos).Normalized();
 	if (Controls::GetInstance().OnHold(Controls::KEY_W))
 	{
 		forceDir.y += 1;
@@ -125,7 +127,7 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
-
+		player->Shoot(mouseDir);
 	}
 }
 
