@@ -47,12 +47,8 @@ void Enemy::UpdateMovement(double dt)
 	}
 	else
 	{
-<<<<<<< HEAD
 		Vector3 temp(Math::RandFloatMinMax(10, 50), Math::RandFloatMinMax(10, 50), 0);
 		std::cout << temp << std::endl;
-=======
-		Vector3 temp = Vector3(Math::RandFloatMinMax(10, 50), Math::RandFloatMinMax(10, 50), 0);
->>>>>>> 5aaf853aace50ff56d14f26e978a0c1ea3c93dc1
 		AddDestination(temp);
 	}
 }
