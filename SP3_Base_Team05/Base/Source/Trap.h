@@ -1,5 +1,6 @@
 #pragma once
 #include "Weapon.h"
+#include "Vector3.h"
 class Trap : public Weapon
 {
 private:
@@ -10,6 +11,7 @@ public:
 	
 	Vector3 getPosition();
 	void SpawnTrap(Vector3 pos);
+	void DestroyTrap();
 
 };
 
