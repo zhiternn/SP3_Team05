@@ -299,6 +299,11 @@ void SceneText::RenderHUD()
 	ss1.precision(4);
 	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+
+	std::ostringstream ss2;
+	ss2.precision(2);
+	ss2 << "Dash cooldown: " << player->cooldownTimer;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 3, 0, 9);
 }
 
 void SceneText::Exit()
