@@ -64,9 +64,13 @@ void Player::Dash(Vector3 dir, double dt)
 	}
 }
 
-void Player::Shoot()
+void Player::Shoot(Vector3 dir)
 {
-	//weapon->Fire();
+	weapon->SetWeaponType(Weapon::GUN);
+	weapon->SetProjLifetime(3);
+	weapon->SetProjSpd(100);
+	Vector3 tempPos(pos.x + dir.x * (scale.x), pos.y + dir.y * (scale.y), 0);
+	weapon->Fire(tempPos, dir);
 }
 
 void Player::SetMoving(bool isMoving)
