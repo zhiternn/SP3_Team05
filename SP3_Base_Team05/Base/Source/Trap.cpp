@@ -22,7 +22,7 @@ void Trap::SpawnTrap(Vector3 pos)
 	m_trap->w_type = TRAP;
 
 
-	//Spawn the GO at [pos] coordinates
+	//Spawn the GameObject at [pos] coordinates
 }
 
 void Trap::DestroyTrap()
