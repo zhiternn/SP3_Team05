@@ -65,7 +65,7 @@ GetProjectileType to get the projectile type
 Projectile Type
 */
 /******************************************************************************/
-PROJECTILE_TYPE CProjectile::GetType()
+CProjectile::PROJECTILE_TYPE CProjectile::GetType()
 {
     return proj_type;
 }
@@ -109,7 +109,45 @@ The new type to replace the old one
 /******************************************************************************/
 void CProjectile::SetType(PROJECTILE_TYPE type)
 {
-    proj_type = type;
+	switch (type)
+	{
+	case CProjectile::P_PLAYER_BULLET:
+		proj_dmg = 10;
+		proj_lifetime = 5;
+		proj_type = type;
+		break;
+	case CProjectile::P_PLAYER_GRENADE:
+		proj_dmg = 50;
+		proj_lifetime = 3;
+		proj_type = type;
+		break;
+	case CProjectile::P_PLAYER_ROPE:
+		proj_dmg = 10;
+		proj_lifetime = 5;
+		proj_type = type;
+		break;
+	case CProjectile::P_PLAYER_SHIELD:
+		proj_dmg = 10;
+		proj_lifetime = 5;
+		proj_type = type;
+		break;
+	case CProjectile::P_PLAYER_TRAP:
+		proj_dmg = 10;
+		proj_lifetime = 5;
+		proj_type = type;
+		break;
+	default:
+		break;
+	}
+}
+
+void CProjectile::Init(Vector3 pos, Vector3 dir, float speed)
+{
+	std::cout << "hehe" << std::endl;
+	this->active = true;
+	this->type = GameObject::GO_PROJECTILE;
+	this->pos = pos;
+	this->vel = dir.Normalized() * speed;
 }
 
 /******************************************************************************/

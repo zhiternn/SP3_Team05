@@ -14,17 +14,7 @@ Class to create Projectiles
 #include "Vector3.h"
 #include "Collider.h"
 
-enum PROJECTILE_TYPE
-{
-    P_NEUTRAL = 0,
 
-	P_PLAYER_BULLET,
-	P_PLAYER_GRENADE,
-	P_PLAYER_ROPE,
-    P_ENEMY_BULLET,
-
-    P_TOTAL
-};
 
 /******************************************************************************/
 /*!
@@ -37,8 +27,23 @@ class CProjectile : public GameObject
 public:
 	CProjectile();                                          //< Default Constructor
 	~CProjectile();                                         //< Destructor
+	
+	enum PROJECTILE_TYPE
+	{
+		P_NEUTRAL = 0,
+
+		P_PLAYER_BULLET,
+		P_PLAYER_GRENADE,
+		P_PLAYER_ROPE,
+		P_PLAYER_SHIELD,
+		P_PLAYER_TRAP,
+		P_ENEMY_BULLET,
+
+		P_TOTAL
+	};
 
     void HandleInteraction(CProjectile* b, double dt);      //< Handling Interactions
+	void Init(Vector3 pos, Vector3 dir, float speed);
 	virtual void Update(double dt);                         //< Abstract Update
 
 	//< Getters

@@ -23,7 +23,7 @@ void Enemy::Init(Vector3 pos)
 void Enemy::Update(double dt)
 {
 	GameObject::Update(dt);
-	checkReached -= 1.f * dt;
+	UpdateMovement(dt);
 }
 
 void Enemy::UpdateMovement(double dt)
