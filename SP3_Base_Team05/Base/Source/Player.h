@@ -21,6 +21,7 @@ public:
 	void Move(Vector3 dir, double dt);
 	void Dash(Vector3 dir, double dt);
 	void Shoot(Vector3 dir);
+	void ChangeWeapon(int type);
 	// Setters
 	void SetMoving(bool isMoving);
 	void SetDashed(bool isDashed);
@@ -31,12 +32,13 @@ public:
 
 	float cooldownTimer = 0;
 
+	Weapon *weapon;
 private:
 	bool isMoving;
 	bool isDashed;
 	float forceMagnitude = 0;
 
-	Weapon *weapon;
+	
 };
 
 

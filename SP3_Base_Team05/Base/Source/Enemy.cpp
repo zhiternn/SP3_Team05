@@ -22,8 +22,8 @@ void Enemy::Init(Vector3 pos)
 
 void Enemy::Update(double dt)
 {
-	UpdateMovement(dt);
 	GameObject::Update(dt);
+	UpdateMovement(dt);
 }
 
 void Enemy::HandleInteraction(GameObject* b, double dt)

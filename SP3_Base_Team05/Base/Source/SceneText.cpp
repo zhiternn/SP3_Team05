@@ -79,10 +79,19 @@ void SceneText::Init()
 	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(3, 3, 3), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
+	player->weapon = new Shotgun();
+	CProjectile* proj = new CProjectile();
+	proj->SetLifetime(10);
+	proj->SetDMG(10);
+	proj->SetScale(0.5f, 0.5f, 0.5f);
+	proj->SetMass(1);
+	player->weapon->AssignProjectile(proj);
+
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 
-    weapon = new Weapon();
+	enemy = new Enemy();
+	GameObject::goList.push_back(enemy);
 	enemy = FetchEnemy();
 	enemy->SetType(GameObject::GO_ENEMY);
 	enemy->SetActive(true);
@@ -97,8 +106,7 @@ void SceneText::PlayerController(double dt)
 	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
 	player->SetFront(lookDir);
 	Vector3 forceDir;
-	Vector3 mouseDir;
-	mouseDir = (mousePos_worldBased - player->pos).Normalized();
+
 	if (Controls::GetInstance().OnHold(Controls::KEY_W))
 	{
 		forceDir.y += 1;
@@ -127,6 +135,8 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
+		Vector3 mouseDir;
+		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
 }
@@ -165,14 +175,14 @@ void SceneText::Update(double dt)
 		}
 	}
 
+	enemy->UpdateMovement(dt);
+
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
 	{
 	    PlayerController(dt);
 	}
 
-
 	enemy->UpdateMovement(dt);
-	PlayerController(dt);
 	//Restrict the player from moving past the deadzone
 
 	enemy->UpdateMovement(dt);

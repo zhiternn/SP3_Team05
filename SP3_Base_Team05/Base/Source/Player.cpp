@@ -3,17 +3,19 @@
 #include "Projectile.h"
 
 Player::Player():
+weapon(NULL),
 GameObject(GameObject::GO_PLAYER)
 {
 }
 
 Player::~Player()
 {
+	//if (weapon)
+	//	delete weapon;
 }
 
 void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 {
-	weapon = new Weapon();
 	this->scale.Set(scale.x, scale.y, scale.z);
 	this->pos.Set(pos.x, pos.y, pos.z);
 	this->front.Set(front.x, front.y, front.z);
@@ -66,11 +68,32 @@ void Player::Dash(Vector3 dir, double dt)
 
 void Player::Shoot(Vector3 dir)
 {
-	weapon->SetWeaponType(Weapon::GUN);
-	weapon->SetProjLifetime(3);
-	weapon->SetProjSpd(100);
-	Vector3 tempPos(pos.x + dir.x * (scale.x), pos.y + dir.y * (scale.y), 0);
-	weapon->Fire(tempPos, dir);
+	this->weapon->Fire(this->pos, dir);
+}
+
+void Player::ChangeWeapon(int type)
+{
+	//switch (type)
+	//{
+	//case 1:
+	//	weapon->SetWeaponType(Weapon::GUN);
+	//	break;
+	//case 2:
+	//	weapon->SetWeaponType(Weapon::ROPEGUN);
+	//	break;
+	//case 3:
+	//	weapon->SetWeaponType(Weapon::TRAP);
+	//	break;
+	//case 4:
+	//	weapon->SetWeaponType(Weapon::SHIELD);
+	//	break;
+	//case 5:
+	//	weapon->SetWeaponType(Weapon::GRENADE);
+	//	break;
+	//default:
+	//	break;
+	//}
+
 }
 
 void Player::SetMoving(bool isMoving)
