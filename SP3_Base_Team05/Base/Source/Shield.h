@@ -24,10 +24,15 @@ public:
     Shield(Weapon::WEAPON_TYPE weaponType);     //< Overloaded Constructor
     ~Shield();                                  //< Destructor
 
+    // Getter
+    float GetCurrHealth();
+    float GetMaxHealth();
 
+    // Setter
+    void SetCurrHealth(float curr);
+    void SetMaxHealth(float max);
 
 private:
-    WEAPON_TYPE shield;
     float CurrHealth;
     float MaxHealth;
 };

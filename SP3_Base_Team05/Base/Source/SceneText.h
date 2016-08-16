@@ -17,7 +17,7 @@ class SceneText : public SceneBase
 {
 	enum GEOMETRY_TYPE
 	{
-		NUM_GEOMETRY = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END,
+		NUM_GEOMETRY = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END
 	};
 public:
 	SceneText();

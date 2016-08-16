@@ -27,11 +27,10 @@ public:
 	virtual ~GameObject();
 
 	virtual void Update(double dt);
+	virtual void HandleInteraction(GameObject* b, double dt);
 
 	void ApplyForce(double dt, Vector3 direction, float magnitude = 0.0f);
 	float GetForce();
-
-	void HandleInteraction(GameObject* b, double dt);
 
 	// Getters
 	Vector3 GetPosition();

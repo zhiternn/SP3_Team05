@@ -3,7 +3,7 @@
 #include "Projectile.h"
 
 Player::Player():
-GameObject(GameObject::GO_BALL)
+GameObject(GameObject::GO_PLAYER)
 {
 }
 
@@ -18,7 +18,7 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	this->pos.Set(pos.x, pos.y, pos.z);
 	this->front.Set(front.x, front.y, front.z);
 	active = true;
-	type = GameObject::GO_BALL;
+	type = GameObject::GO_PLAYER;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	vel.SetZero();
@@ -64,9 +64,13 @@ void Player::Dash(Vector3 dir, double dt)
 	}
 }
 
-void Player::Shoot()
+void Player::Shoot(Vector3 dir)
 {
-	weapon->Fire(GetPosition(), GetFront());
+	weapon->SetWeaponType(Weapon::GUN);
+	weapon->SetProjLifetime(3);
+	weapon->SetProjSpd(100);
+	Vector3 tempPos(pos.x + dir.x * (scale.x), pos.y + dir.y * (scale.y), 0);
+	weapon->Fire(tempPos, dir);
 }
 
 void Player::SetMoving(bool isMoving)

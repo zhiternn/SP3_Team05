@@ -218,6 +218,7 @@ void Weapon::Fire(Vector3 pos, Vector3 dir)
     case ROPEGUN:
         break;
     case SHIELD:
+    {
         CProjectile* shield = FetchProjectile();
         shield->SetLifetime(w_projectileLifetime);
         shield->SetPostion(pos);
@@ -226,6 +227,7 @@ void Weapon::Fire(Vector3 pos, Vector3 dir)
         shield->SetScale(1, 1, 1);
         shield->SetMass(1);
         shield->SetColliderType(Collider::COLLIDER_BALL);
+    }
         break;
     case GRENADE:
         break;
