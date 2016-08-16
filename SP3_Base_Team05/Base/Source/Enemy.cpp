@@ -1,6 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy()
+Enemy::Enemy():
+GameObject(GameObject::GO_ENEMY)
 {
 }
 
@@ -25,7 +26,6 @@ void Enemy::UpdateMovement(double dt)
 	else
 	{
 		Vector3 temp = Vector3(Math::RandFloatMinMax(10, 50), Math::RandFloatMinMax(10, 50), 0);
-		std::cout << temp << std::endl;
 		AddDestination(temp);
 	}
 }
@@ -53,6 +53,7 @@ Enemy* FetchEnemy()
 		Enemy *enemy = dynamic_cast<Enemy*>((*it));
 		if (enemy && enemy->GetActive() == false)
 		{
+			enemy->GameObject::SetType(GameObject::GO_PROJECTILE);
 			enemy->SetActive(true);
 			return enemy;
 		}
@@ -62,15 +63,17 @@ Enemy* FetchEnemy()
 	{
 		GameObject::goList.push_back(new Enemy());
 	}
-	Enemy *enemy = dynamic_cast<Enemy*>(GameObject::goList.back() - 10);
+	Enemy *enemy = dynamic_cast<Enemy*>(*(GameObject::goList.end() - 10));
 	if (enemy)
 	{
+		enemy->GameObject::SetType(GameObject::GO_PROJECTILE);
 		enemy->SetActive(true);
 		return enemy;
 	}
 
    { //for safety measure
 	   Enemy *enemy = new Enemy();
+	   enemy->GameObject::SetType(GameObject::GO_PROJECTILE);
 	   enemy->SetActive(true);
 	   GameObject::goList.push_back(enemy);
 	   return enemy;
