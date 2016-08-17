@@ -80,9 +80,6 @@ void SceneText::Init()
 	GameObject::goList.push_back(player);
 
 	player->weapon = new MachineGun();
-	CProjectile* proj = new Shield();
-	proj->SetTeam(CProjectile::TEAM_PLAYER);
-	player->weapon->AssignProjectile(proj);
 
 
 	mainCamera->Include(&(player->pos));
@@ -133,23 +130,29 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
+		CProjectile* proj = new Shield();
+		proj->SetTeam(CProjectile::TEAM_PLAYER);
+		player->weapon->AssignProjectile(proj);
+
 		Vector3 mouseDir;
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
 	if (Controls::GetInstance().OnPress(Controls::KEY_E))
 	{
-		CProjectile *proj = new Trap();
-		proj->SetTeam(CProjectile::TEAM_PLAYER);
-		proj->SetVelocity(0, 0, 0);
-		proj->SetColliderType(Collider::COLLIDER_BOX);
-		player->weapon->AssignProjectile(proj);
+		CProjectile *proj_trap = new Trap();
+		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
+		proj_trap->SetVelocity(0, 0, 0);
+		proj_trap->SetColliderType(Collider::COLLIDER_BOX);
+		player->weapon->AssignProjectile(proj_trap);
 
 		Vector3 pos;
 		pos = player->pos.Normalized();
 		player->Shoot(pos);
 	}
 }
+
+//Enemy* enemy = dynamic_cast<Enemy*>(b);
 
 void SceneText::Update(double dt)
 {
