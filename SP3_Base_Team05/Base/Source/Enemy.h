@@ -18,16 +18,21 @@ public:
 	void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
 
-	void UpdateMovement(double dt);
+	void TakeDamage(unsigned amount);
+	bool IsDead();
+
+protected:
 	void AddDestination(Vector3 pos);
+	bool UpdateMovement(double dt);
+	bool Reached(Vector3 pos);
 
 	std::stack<Vector3> destinations;
+	
+	bool isDead;
 
-private:
-	//std::stack<Vector3> destinations;
-	bool Reached(Vector3 pos);
 	float checkReached;
 	float speedLimit;
+	unsigned health;
 };
 
 Enemy* FetchEnemy();
