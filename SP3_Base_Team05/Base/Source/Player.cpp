@@ -3,8 +3,7 @@
 #include "Projectile.h"
 
 Player::Player():
-weapon(NULL),
-GameObject(GameObject::GO_ENTITY)
+weapon(NULL)
 {
 	inventory = new Inventory();
 	inventory->weapons.front()->AssignProjectile(inventory->bullets.front());
