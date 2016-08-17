@@ -15,11 +15,39 @@ Class for Shield
 \brief	Shield Default Constructor
 */
 /******************************************************************************/
-Shield::Shield(WEAPON_TYPE weaponType) : 
+Shield::Shield(CProjectile::PROJECTILE_TYPE projectileType) :
 CurrHealth(0),
-MaxHealth(2000)
+MaxHealth(2000),
+activeState(false),
+aliveState(false)
 {
 
+}
+
+void Shield::Update(double dt)
+{
+    CProjectile::Update(dt);
+    if (activeState == false)
+        SetLifetime(0);
+
+    if (CurrHealth <= 0)
+    {
+        SetLifetime(0);
+    }
+
+    regenerateShield(CurrHealth, dt);
+}
+
+void Shield::HandleInteraction(GameObject* b, double dt)
+{
+}
+
+void Shield::regenerateShield(float currHP, double dt)
+{
+    if (activeState == false && CurrHealth < MaxHealth)
+    {
+        CurrHealth += dt * 2;
+    }
 }
 
 /******************************************************************************/
@@ -57,6 +85,34 @@ Max Shield Health
 float Shield::GetMaxHealth()
 {
     return MaxHealth;
+}
+
+/******************************************************************************/
+/*!
+\brief
+Returns Projectile Shield Active State
+
+\return
+Projectile Shield Active State
+*/
+/******************************************************************************/
+bool Shield::GetActiveState()
+{
+    return activeState;
+}
+
+/******************************************************************************/
+/*!
+\brief
+Returns Projectile Shield Alive State
+
+\return
+Projectile Shield Alive State
+*/
+/******************************************************************************/
+bool Shield::GetAliveState()
+{
+    return aliveState;
 }
 
 /******************************************************************************/

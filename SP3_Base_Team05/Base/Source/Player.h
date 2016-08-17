@@ -21,6 +21,7 @@ public:
 	void Move(Vector3 dir, double dt);
 	void Dash(Vector3 dir, double dt);
 	void Shoot(Vector3 dir);
+    void Shield(Vector3 dir);
 	void ChangeWeapon(int type);
 
 	// Setters
