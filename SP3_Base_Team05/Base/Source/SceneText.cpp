@@ -137,12 +137,23 @@ void SceneText::PlayerController(double dt)
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+	{
+		CProjectile *proj = new Trap();
+		proj->SetTeam(CProjectile::TEAM_PLAYER);
+		proj->SetVelocity(0, 0, 0);
+		proj->SetColliderType(Collider::COLLIDER_BOX);
+		player->weapon->AssignProjectile(proj);
+
+		Vector3 pos;
+		pos = player->pos.Normalized();
+		player->Shoot(pos);
+	}
 }
 
 void SceneText::Update(double dt)
 {
 	SceneBase::Update(dt);
-
 	{//handles required mouse calculationsdouble x, y;
 		double x, y;
 		Application::GetCursorPos(x, y);
