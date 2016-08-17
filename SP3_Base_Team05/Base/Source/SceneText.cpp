@@ -198,17 +198,11 @@ void SceneText::Update(double dt)
 		}
 	}
 
-	enemy->UpdateMovement(dt);
-
+	//Restrict the player from moving past the deadzone
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
 	{
 	    PlayerController(dt);
 	}
-
-	enemy->UpdateMovement(dt);
-	//Restrict the player from moving past the deadzone
-
-	enemy->UpdateMovement(dt);
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -347,14 +341,6 @@ void SceneText::RenderMain()
 	RenderWorld();
 	RenderGO(enemy);
 	
-	if (enemy->destinations.size() > 0)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(enemy->destinations.top().x, enemy->destinations.top().y, 0);
-		RenderMesh(meshList[GEO_SPHERE], false);
-		modelStack.PopMatrix();
-	}
-
 	//RenderSkyPlane();
 
 	if (m_ghost->IsActive())

@@ -23,15 +23,11 @@ void Enemy::Init(Vector3 pos)
 
 void Enemy::Update(double dt)
 {
-	//if ()
-	{
-		GameObject::Update(dt);
-		UpdateMovement(dt);
-	}
-	//else
-	{
-		//despawn the enemy
-		this->SetActive(false);
+	GameObject::Update(dt);
+	if (!UpdateMovement(dt))
+	{//if fail to update (zero destination left)
+		Vector3 temp(Math::RandFloatMinMax(200, 250), Math::RandFloatMinMax(200, 250), 0);
+		AddDestination(temp);
 	}
 }
 
@@ -39,7 +35,7 @@ void Enemy::HandleInteraction(GameObject* b, double dt)
 {
 }
 
-void Enemy::UpdateMovement(double dt)
+bool Enemy::UpdateMovement(double dt)
 {
 	checkReached -= dt;
 
@@ -59,12 +55,12 @@ void Enemy::UpdateMovement(double dt)
 				vel = vel.Normalized() * speedLimit;
 			}
 		}
+
+		return true;
 	}
 	else
 	{
-
-		Vector3 temp(Math::RandFloatMinMax(200, 250), Math::RandFloatMinMax(200, 250), 0);
-		AddDestination(temp);
+		return false;
 	}
 }
 
@@ -81,6 +77,21 @@ bool Enemy::Reached(Vector3 pos)
 void Enemy::AddDestination(Vector3 pos)
 {
 	this->destinations.push(pos);
+}
+
+void Enemy::TakeDamage(unsigned amount)
+{
+	health -= amount;
+	if (health < 0)
+	{
+		health = 0;
+		isDead = true;
+	}
+}
+
+bool Enemy::IsDead()
+{
+	return isDead;
 }
 
 Enemy* FetchEnemy()
