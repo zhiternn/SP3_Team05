@@ -80,4 +80,35 @@ private:
 
 	float captureChance;
 };
+
+class Shield : public CProjectile
+{
+public:
+    Shield(CProjectile::PROJECTILE_TYPE projectileType = CProjectile::SHIELD);                //< Overloaded Constructor
+    ~Shield();                                                          //< Destructor
+
+    virtual void Update(double dt);                                     //< Update
+    virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Shotgun Shell
+
+    void regenerateShield(float currHP, double dt);                     //< Regenerates Shield Health
+
+    // Getter
+    bool GetActiveState();                                              //< Sets Shield Active State
+    bool GetAliveState();                                               //< Sets Shield Alive State
+    float GetCurrHealth();                                              //< Sets Shield Curr Health
+    float GetMaxHealth();                                               //< Sets Shield Max Health
+
+    // Setter
+    void SetActiveState(bool active);                                   //< Returns Shield Active State 
+    void SetAliveState(bool alive);                                     //< Returns Shield Alive State
+    void SetCurrHealth(float curr);                                     //< Returns Shield Curr Health
+    void SetMaxHealth(float max);                                       //< Returns Shield Max Health
+
+private:
+    bool activeState;
+    bool aliveState;
+    float CurrHealth;
+    float MaxHealth;
+    float startShieldRegen;
+};
 #endif // !PROJECTILELIST_H
