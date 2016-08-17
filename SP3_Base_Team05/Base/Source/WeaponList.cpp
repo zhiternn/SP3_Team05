@@ -14,8 +14,8 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 
 			CProjectile* proj = FetchProjectile();
 			*proj = *projectileInfo;
+			proj->Init(pos, dir + offset);
 			proj->SetTeam(team);
-			proj->Init(pos, dir + offset, projectileSpeed);
 		}
 	}
 }
@@ -26,16 +26,7 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 	{
 		CProjectile* proj = FetchProjectile();
 		*proj = *projectileInfo;
+		proj->Init(pos, dir);
 		proj->SetTeam(team);
-		proj->Init(pos, dir, projectileSpeed);
 	}
-}
-
-void Trap::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
-{
-	CProjectile *proj = FetchProjectile();
-	*proj = *projectileInfo;
-	proj->SetTeam(team);
-	proj->SetVelocity(0, 0, 0);
-	proj->Init(pos, dir - dir, 0);
 }

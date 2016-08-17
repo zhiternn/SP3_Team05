@@ -38,6 +38,8 @@ public:
 	void ApplyForce(double dt, Vector3 direction, float magnitude = 0.0f);
 	float GetForce();
 
+	void TakeDamage(unsigned int dmg);
+
 	// Getters
 	Vector3 GetPosition();
 	Vector3 GetVelocity();
@@ -48,6 +50,7 @@ public:
 	bool IsActive();
 	float GetMass();
 	TEAM_TYPE GetTeam();
+
 
 	// Setters
 	void SetPostion(float x, float y, float z);
@@ -81,7 +84,6 @@ protected:
 	TEAM_TYPE team;
 
 	float mass;
-
 };
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        GameObject* FetchGO();

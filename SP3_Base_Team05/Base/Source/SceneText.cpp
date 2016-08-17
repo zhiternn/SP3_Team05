@@ -85,7 +85,9 @@ void SceneText::Init()
 	proj->SetDMG(10);
 	proj->SetScale(0.5f, 0.5f, 0.5f);
 	proj->SetMass(1);
+	proj->SetTeam(CProjectile::TEAM_PLAYER);
 	player->weapon->AssignProjectile(proj);
+
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
@@ -98,7 +100,7 @@ void SceneText::Init()
 	enemy->SetColliderType(Collider::COLLIDER_BALL);
 	enemy->SetScale(2, 2, 2);
 	enemy->SetMass(3);
-	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), 100);
+	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
 }
 
 void SceneText::PlayerController(double dt)

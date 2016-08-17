@@ -19,6 +19,9 @@ CProjectile::CProjectile(PROJECTILE_TYPE type) :
 GameObject(GameObject::GO_PROJECTILE),
 proj_type(type)
 {
+	proj_dmg = 1;
+	proj_lifetime = 2;
+	proj_speed = 20;
 }
 
 /******************************************************************************/
@@ -58,6 +61,16 @@ float CProjectile::GetLifetime()
     return proj_lifetime;
 }
 
+float CProjectile::GetProjectileSpeed()
+{
+	return proj_speed;
+}
+
+CProjectile::PROJECTILE_TYPE CProjectile::GetType()
+{
+	return proj_type;
+}
+
 /******************************************************************************/
 /*!
 \brief
@@ -86,13 +99,23 @@ void CProjectile::SetLifetime(float lifetime)
     proj_lifetime = lifetime;
 }
 
-void CProjectile::Init(Vector3 pos, Vector3 dir, float speed)
+void CProjectile::SetProjectileSpeed(float speed)
+{
+	this->proj_speed = speed;
+}
+
+void CProjectile::SetType(PROJECTILE_TYPE type)
+{
+	this->proj_type = type;
+}
+
+void CProjectile::Init(Vector3 pos, Vector3 dir)
 {
 	this->active = true;
 	this->type = GameObject::GO_PROJECTILE;
 	this->collider.type = Collider::COLLIDER_BALL;
 	this->pos = pos;
-	this->vel = dir.Normalized() * speed;
+	this->vel = dir.Normalized() * proj_speed;
 }
 
 /******************************************************************************/
