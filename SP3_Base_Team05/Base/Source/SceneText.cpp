@@ -98,7 +98,7 @@ void SceneText::Init()
 	enemy->SetColliderType(Collider::COLLIDER_BALL);
 	enemy->SetScale(2, 2, 2);
 	enemy->SetMass(3);
-	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
+	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), 100);
 }
 
 void SceneText::PlayerController(double dt)
