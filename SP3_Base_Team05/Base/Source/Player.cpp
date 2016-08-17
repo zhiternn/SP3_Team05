@@ -6,6 +6,9 @@ Player::Player():
 weapon(NULL),
 GameObject(GameObject::GO_ENTITY)
 {
+	inventory = new Inventory();
+	inventory->weapons.front()->AssignProjectile(inventory->bullets.front());
+	weapon = inventory->weapons.front();
 }
 
 Player::~Player()
@@ -72,29 +75,29 @@ void Player::Shoot(Vector3 dir)
 	this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
 }
 
-void Player::ChangeWeapon(int type)
+void Player::ChangeWeaponUp()
 {
-	//switch (type)
-	//{
-	//case 1:
-	//	weapon->SetWeaponType(Weapon::GUN);
-	//	break;
-	//case 2:
-	//	weapon->SetWeaponType(Weapon::ROPEGUN);
-	//	break;
-	//case 3:
-	//	weapon->SetWeaponType(Weapon::TRAP);
-	//	break;
-	//case 4:
-	//	weapon->SetWeaponType(Weapon::SHIELD);
-	//	break;
-	//case 5:
-	//	weapon->SetWeaponType(Weapon::GRENADE);
-	//	break;
-	//default:
-	//	break;
-	//}
+	weaponIter++;
+	if (weaponIter == inventory->weapons.size())
+	{
+		weaponIter = 0;
+	}
+	weapon = inventory->weapons[weaponIter];
+	weapon->AssignProjectile(inventory->bullets.front());
+}
 
+void Player::ChangeWeaponDown()
+{
+	if (weaponIter == 0)
+	{
+		weaponIter = inventory->weapons.size() - 1;
+	}
+	else
+	{ 
+		weaponIter--;
+	}
+	weapon = inventory->weapons[weaponIter];
+	weapon->AssignProjectile(inventory->bullets.front());
 }
 
 void Player::SetMoving(bool isMoving)

@@ -79,15 +79,6 @@ void SceneText::Init()
 	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(3, 3, 3), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	player->weapon = new MachineGun();
-	CProjectile* proj = new CProjectile();
-	proj->SetLifetime(10);
-	proj->SetDMG(10);
-	proj->SetScale(0.5f, 0.5f, 0.5f);
-	proj->SetMass(1);
-	proj->SetTeam(CProjectile::TEAM_PLAYER);
-	player->weapon->AssignProjectile(proj);
-
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
@@ -140,6 +131,16 @@ void SceneText::PlayerController(double dt)
 		Vector3 mouseDir;
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
+	}
+	//if (Controls::GetInstance().mouse_ScrollY < 1)
+	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+	{
+		player->ChangeWeaponDown();
+	}
+	//if (Controls::GetInstance().mouse_ScrollY > 1)
+	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	{
+		player->ChangeWeaponUp();
 	}
 }
 
