@@ -40,4 +40,5 @@ public:
 private:
 	float m_timer;
 };
+
 #endif // !WEAPONLIST_H
