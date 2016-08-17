@@ -65,8 +65,6 @@ void SceneText::Init()
 	mainCamera = new Camera();
 	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-	m_ghost = new GameObject(GameObject::GO_ENVIRONMENT);
-
 	GameObject *go = FetchGO();
 	go->SetActive(true);
 	go->SetScale(20, 20, 20);
@@ -76,24 +74,22 @@ void SceneText::Init()
 	go->SetColliderType(Collider::COLLIDER_BOX);
 
 	player = new Player();
-	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(3, 3, 3), Vector3(1, 0, 0));
+	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	player->weapon = new MachineGun();
-
-
-	mainCamera->Include(&(player->pos));
-	mainCamera->Include(&mousePos_worldBased);
-
-	enemy = new Enemy();
+	enemy = new SnakeHead();
 	GameObject::goList.push_back(enemy);
-	enemy = FetchEnemy();
+	enemy->SetTarget(player);
 	enemy->SetType(GameObject::GO_ENTITY);
 	enemy->SetActive(true);
 	enemy->SetColliderType(Collider::COLLIDER_BALL);
-	enemy->SetScale(2, 2, 2);
+	enemy->SetScale(3, 3, 3);
 	enemy->SetMass(3);
 	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
+
+	mainCamera->Include(&(player->pos));
+	mainCamera->Include(&mousePos_worldBased);
+	mainCamera->Include(&(enemy->pos));
 }
 
 void SceneText::PlayerController(double dt)
@@ -130,10 +126,6 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
-		CProjectile* proj = new Shield();
-		proj->SetTeam(CProjectile::TEAM_PLAYER);
-		player->weapon->AssignProjectile(proj);
-
 		Vector3 mouseDir;
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
@@ -163,8 +155,6 @@ void SceneText::PlayerController(double dt)
 	}
 }
 
-//Enemy* enemy = dynamic_cast<Enemy*>(b);
-
 void SceneText::Update(double dt)
 {
 	SceneBase::Update(dt);
@@ -182,20 +172,6 @@ void SceneText::Update(double dt)
 			y + mainCamera->target.y - (m_orthoHeight * 0.5f),
 			0
 			);
-	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_V))
-	{
-		for (int i = 0; i < 10; ++i)
-		{
-			GameObject* ball = FetchGO();
-			ball->SetPostion(mousePos_worldBased.x, mousePos_worldBased.y, 0);
-			ball->SetVelocity(Math::RandFloatMinMax(-5, 5), Math::RandFloatMinMax(-5, 5), 0);
-			ball->SetScale(1, 1, 1);
-			ball->SetMass(1);
-			ball->SetColliderType(Collider::COLLIDER_BALL);
-			m_ghost->SetActive(false);
-		}
 	}
 
 	//Restrict the player from moving past the deadzone
@@ -339,12 +315,17 @@ void SceneText::RenderMain()
 	glUniform1i(m_parameters[U_SHADOW_MAP], 8);
 
 	RenderWorld();
-	RenderGO(enemy);
+
+	float degree = Math::RadianToDegree(atan2(enemy->GetFront().y, enemy->GetFront().x));
+	modelStack.PushMatrix();
+	modelStack.Translate(enemy->pos.x, enemy->pos.y, enemy->pos.z);
+	modelStack.Rotate(degree -90, 0, 0, 1);
+	modelStack.Translate(0, 3.0f, 0);
+	modelStack.Scale(1.0f, 1.0f, 1.0f);
+	RenderMesh(meshList[GEO_SPHERE], false);
+	modelStack.PopMatrix();
 	
 	//RenderSkyPlane();
-
-	if (m_ghost->IsActive())
-		RenderGO(m_ghost);
 }
 
 void SceneText::RenderWorld()
@@ -485,7 +466,6 @@ void SceneText::RenderGO(GameObject* go)
 	case GameObject::GO_ENTITY:
 	{
 		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
 		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
 		modelStack.Rotate(degree, 0, 0, 1);
 		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);

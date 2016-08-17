@@ -1,6 +1,7 @@
 #include "Enemy.h"
 
-Enemy::Enemy()
+Enemy::Enemy():
+Entity()
 {
 }
 
@@ -54,6 +55,8 @@ bool Enemy::UpdateMovement(double dt)
 				vel = vel.Normalized() * speedLimit;
 			}
 		}
+		if (vel.IsZero() == false)
+			front = vel.Normalized();
 
 		return true;
 	}
