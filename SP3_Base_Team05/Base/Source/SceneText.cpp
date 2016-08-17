@@ -138,7 +138,7 @@ void SceneText::PlayerController(double dt)
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
-	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+	if (Controls::GetInstance().OnPress(Controls::KEY_LSHIFT))
 	{
 		CProjectile *proj_trap = new Trap();
 		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
@@ -149,6 +149,17 @@ void SceneText::PlayerController(double dt)
 		Vector3 pos;
 		pos = player->pos.Normalized();
 		player->Shoot(pos);
+	}
+	//if (Controls::GetInstance().mouse_ScrollY < 1)
+	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+	{
+		player->ChangeWeaponDown();
+	}
+	//if (Controls::GetInstance().mouse_ScrollY > 1)
+	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	{
+		player->ChangeWeaponUp();
+
 	}
 }
 
