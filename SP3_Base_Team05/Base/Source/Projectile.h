@@ -12,7 +12,6 @@ Class to create Projectiles
 
 #include "GameObject.h"
 #include "Vector3.h"
-#include "Collider.h"
 
 /******************************************************************************/
 /*!
@@ -39,7 +38,6 @@ public:
 		ROPE,
 		TRAP,
 		RAY,
-
 
 		MAX,
 	};
