@@ -29,9 +29,6 @@ public:
 	void SetMoving(bool isMoving);
 	void SetDashed(bool isDashed);
 
-	//Getters
-	unsigned int GetHP();
-
 	// Issers 
 	bool IsMoving();
 	bool IsDashed();

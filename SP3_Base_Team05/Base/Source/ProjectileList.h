@@ -42,4 +42,25 @@ private:
 
 };
 
+
+class Trap : public CProjectile
+{
+public:
+	Trap():CProjectile(PROJECTILE_TYPE::TRAP){
+		SetDMG(10);
+		SetLifetime(30);
+		SetProjectileSpeed(0);
+	}
+	~Trap(){}
+
+	virtual void Update(double dt);
+	virtual void HandleInteraction(GameObject *b, double dt);
+
+	void CalculateChance(unsigned int enemyHealth);
+
+	bool Capture();
+private:
+
+	float captureChance;
+};
 #endif // !PROJECTILELIST_H
