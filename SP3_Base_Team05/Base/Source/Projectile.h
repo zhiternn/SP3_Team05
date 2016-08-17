@@ -14,8 +14,6 @@ Class to create Projectiles
 #include "Vector3.h"
 #include "Collider.h"
 
-
-
 /******************************************************************************/
 /*!
 Class GameObject.h:
@@ -25,44 +23,53 @@ Class GameObject.h:
 class CProjectile : public GameObject
 {
 public:
-	CProjectile();                                          //< Default Constructor
-	~CProjectile();                                         //< Destructor
 	
+	
+	enum PROJECTILE_TEAM
+	{
+		TEAM_NEUTRAL = 0,
+
+		TEAM_PLAYER,
+		TEAM_ENEMY,
+
+		TEAM_END
+	};
 	enum PROJECTILE_TYPE
 	{
-		P_NEUTRAL = 0,
+		BULLET,
+		SHIELD,
+		ROPE,
+		TRAP,
+		RAY,
 
-		P_PLAYER_BULLET,
-		P_PLAYER_GRENADE,
-		P_PLAYER_ROPE,
-		P_PLAYER_SHIELD,
-		P_PLAYER_TRAP,
-		P_ENEMY_BULLET,
 
-		P_TOTAL
+		MAX,
 	};
 
-    void HandleInteraction(CProjectile* b, double dt);			//< Handling Interactions
-	void Init(Vector3 pos, Vector3 dir, float speed);
-	virtual void Update(double dt);								//< Abstract Update
+	CProjectile(PROJECTILE_TYPE type = PROJECTILE_TYPE::BULLET);                      //< Default Constructor
+	~CProjectile();                                         //< Destructor
 
-	virtual void HandleInteraction(GameObject* b, double dt);	//< Handling Interactions
+	void Init(Vector3 pos, Vector3 dir, float speed);
+	virtual void Update(double dt);									//< Abstract Update
+	virtual void HandleInteraction(GameObject* b, double dt);		//< Handling Interactions
 
 	//< Getters
-	float GetDMG();												//< Returns Projectile Damage
-	float GetLifetime();										//< Returns Projectile Lifetime
-    PROJECTILE_TYPE GetType();									//< Returns Projectile Type
+	float GetDMG();													//< Returns Projectile Damage
+	float GetLifetime();											//< Returns Projectile Lifetime
+	PROJECTILE_TEAM GetTeam();										//< Returns Projectile Type
 	
 	//< Setters
-	void SetDMG(float damage);									//< Set Projectile Damage
-	void SetLifetime(float lifetime);							//< Set Projectile Lifetime
-    void SetType(PROJECTILE_TYPE type);							//< Set Projectile Type
+	void SetDMG(float damage);										//< Set Projectile Damage
+	void SetLifetime(float lifetime);								//< Set Projectile Lifetime
+	void SetTeam(PROJECTILE_TEAM team);								//< Set Projectile Type
 
-private:
+protected:
 	//< Variables
-	float proj_dmg;												//< Projectile Damage
-	float proj_lifetime;										//< Projectile Lifetime
-    PROJECTILE_TYPE proj_type;									//< Projectile Type
+	float proj_dmg;													//< Projectile Damage
+	float proj_lifetime;											//< Projectile Lifetime
+	PROJECTILE_TEAM proj_team;										//< Projectile Type
+	PROJECTILE_TYPE proj_type;
+
 };
 
 CProjectile* FetchProjectile();

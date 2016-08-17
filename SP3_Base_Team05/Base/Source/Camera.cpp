@@ -109,25 +109,14 @@ void Camera::Constrain(Player p, Vector3 cameraTarget)
 {
 	Vector3 *u;
 	Vector3 *b;
-	std::cout << cameraTarget << std::endl;
-
 	u = new Vector3(cameraTarget.x + 20, cameraTarget.y + 20, 0);
 	b = new Vector3(cameraTarget.x - 20, cameraTarget.y - 20, 0);
-
-
-	std::cout << *u << std::endl;
-	std::cout << *b << std::endl;
 
 	if (p.GetPosition().x > u->x - 10 || p.GetPosition().y > u->y - 10 || p.GetPosition().x < b->x + 10 || p.GetPosition().y < b->y + 10)
 	{
 		if (p.GetPosition().x < u->x || p.GetPosition().y < u->y || p.GetPosition().x > b->x || p.GetPosition().y > b->y)
 		{
-			std::cout << p.GetVelocity() << std::endl;
 			cameraTarget += p.GetVelocity();
 		}			
 	}
-	std::cout << p.GetPosition() << std::endl;
-	std::cout << *u << std::endl;
-	std::cout << *b << std::endl;
-
 }

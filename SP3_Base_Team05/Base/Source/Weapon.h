@@ -26,6 +26,14 @@ public:
 	virtual void Fire(Vector3 pos, Vector3 dir) = 0;
 	void AssignProjectile(CProjectile* proj);
 
+	// Getters
+	float GetFireRate();
+	float GetProjectileSpeed();
+
+	// Setters
+	void SetFireRate(float fireRate);
+	void SetProjectileSpeed(float projectileSpeed);
+
 protected:
 	Weapon();
 	

@@ -6,7 +6,7 @@
 class Shotgun : public Weapon
 {
 public:
-	Shotgun():projectileCount(5), spread(0.2f){}
+	Shotgun():projectileCount(5), spread(0.8f){}
 	~Shotgun(){}
 
 	virtual	void Fire(Vector3 pos, Vector3 dir);
