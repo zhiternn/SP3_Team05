@@ -7,7 +7,6 @@
 #include "Player.h"
 #include "WeaponList.h"
 #include "ProjectileList.h"
-#include "Shield.h"
 #include "Enemy.h"
 
 #include <vector>
