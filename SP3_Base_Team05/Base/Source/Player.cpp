@@ -4,7 +4,7 @@
 
 Player::Player():
 weapon(NULL),
-GameObject(GameObject::GO_PLAYER)
+GameObject(GameObject::GO_ENTITY)
 {
 }
 
@@ -19,8 +19,9 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	this->scale.Set(scale.x, scale.y, scale.z);
 	this->pos.Set(pos.x, pos.y, pos.z);
 	this->front.Set(front.x, front.y, front.z);
+	team = TEAM_PLAYER;
 	active = true;
-	type = GameObject::GO_PLAYER;
+	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	vel.SetZero();

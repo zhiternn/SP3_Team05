@@ -1,7 +1,7 @@
 #include "Enemy.h"
 
 Enemy::Enemy():
-GameObject(GameObject::GO_ENEMY)
+GameObject(GameObject::GO_ENTITY)
 {
 }
 
@@ -13,7 +13,8 @@ void Enemy::Init(Vector3 pos, unsigned int health)
 {
 	this->pos = pos;
 	active = true;
-	type = GameObject::GO_ENEMY;
+	type = GameObject::GO_ENTITY;
+	team = TEAM_ENEMY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	checkReached = REACH_CHECKER;
@@ -38,10 +39,6 @@ void Enemy::Update(double dt)
 
 void Enemy::HandleInteraction(GameObject* b, double dt)
 {
-	if (b->GetType() == GameObject::GO_PROJECTILE)
-		return;
-
-	GameObject::HandleInteraction(b, dt);
 }
 
 void Enemy::UpdateMovement(double dt)
@@ -96,7 +93,7 @@ Enemy* FetchEnemy()
 		Enemy *enemy = dynamic_cast<Enemy*>((*it));
 		if (enemy && enemy->IsActive() == false)
 		{
-			enemy->GameObject::SetType(GameObject::GO_ENEMY);
+			enemy->GameObject::SetType(GameObject::GO_ENTITY);
 			enemy->SetActive(true);
 			return enemy;
 		}
@@ -109,14 +106,14 @@ Enemy* FetchEnemy()
 	Enemy *enemy = dynamic_cast<Enemy*>(*(GameObject::goList.end() - 10));
 	if (enemy)
 	{
-		enemy->GameObject::SetType(GameObject::GO_ENEMY);
+		enemy->GameObject::SetType(GameObject::GO_ENTITY);
 		enemy->SetActive(true);
 		return enemy;
 	}
 
    { //for safety measure
 	   Enemy *enemy = new Enemy();
-	   enemy->GameObject::SetType(GameObject::GO_ENEMY);
+	   enemy->GameObject::SetType(GameObject::GO_ENTITY);
 	   enemy->SetActive(true);
 	   GameObject::goList.push_back(enemy);
 	   return enemy;

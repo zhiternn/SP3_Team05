@@ -17,7 +17,6 @@ Class to create Projectiles
 
 CProjectile::CProjectile(PROJECTILE_TYPE type) :
 GameObject(GameObject::GO_PROJECTILE),
-proj_team(PROJECTILE_TEAM::TEAM_NEUTRAL),
 proj_type(type)
 {
 }
@@ -62,20 +61,6 @@ float CProjectile::GetLifetime()
 /******************************************************************************/
 /*!
 \brief
-GetProjectileType to get the projectile type
-
-\return
-Projectile Type
-*/
-/******************************************************************************/
-CProjectile::PROJECTILE_TEAM CProjectile::GetTeam()
-{
-    return proj_team;
-}
-
-/******************************************************************************/
-/*!
-\brief
 Setting the Projectile Damage with a new damage;
 
 \param damage
@@ -99,20 +84,6 @@ The new lifetime to replace the old one
 void CProjectile::SetLifetime(float lifetime)
 {
     proj_lifetime = lifetime;
-}
-
-/******************************************************************************/
-/*!
-\brief
-Setting the Projectile Type with a new type;
-
-\param type
-The new type to replace the old one
-*/
-/******************************************************************************/
-void CProjectile::SetTeam(PROJECTILE_TEAM team)
-{
-	this->proj_team = team;
 }
 
 void CProjectile::Init(Vector3 pos, Vector3 dir, float speed)
@@ -152,36 +123,6 @@ Time active
 /******************************************************************************/
 void CProjectile::HandleInteraction(GameObject* b, double dt)
 {
-    if (b->GetType() == GameObject::GO_PROJECTILE)
-        return;
-
-	if (b->GetType() == GameObject::GO_PLAYER)
-		return;
-	
-	if (this->proj_team == PROJECTILE_TEAM::TEAM_PLAYER && b->GetType() == GameObject::GO_ENEMY)
-	{
-		if (CheckCollision(b, dt))
-		{
-			CollisionResponse(b);
-			this->active = false;
-		}
-	}
-	else if (this->proj_team == PROJECTILE_TEAM::TEAM_ENEMY && b->GetType() == GameObject::GO_PLAYER)
-	{
-		if (CheckCollision(b, dt))
-		{
-			CollisionResponse(b);
-			this->active = false;
-		}
-	}
-	else//neutral bullet
-	{
-		if (CheckCollision(b, dt))
-		{
-			CollisionResponse(b);
-			this->active = false;
-		}
-	}
 }
 
 CProjectile* FetchProjectile()

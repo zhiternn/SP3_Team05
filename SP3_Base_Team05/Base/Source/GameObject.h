@@ -11,19 +11,25 @@ class GameObject
 public:
 	enum GAMEOBJECT_TYPE
 	{
-		GO_BALL = 0,
-		GO_CUBE,
-
-		GO_PLAYER,
+		GO_ENVIRONMENT = 0,
 		GO_PROJECTILE,
-		GO_ENEMY,
+		GO_ENTITY,
 
 		GO_END, //must be last
 	};
+	enum TEAM_TYPE
+	{
+		TEAM_NEUTRAL,
+		TEAM_PLAYER,
+		TEAM_ENEMY,
+
+		TEAM_MAX,
+	};
+
 
 	static std::vector<GameObject*> goList;
 
-	GameObject(GAMEOBJECT_TYPE typeValue = GO_BALL);
+	GameObject(GAMEOBJECT_TYPE typeValue = GO_ENVIRONMENT);
 	virtual ~GameObject();
 
 	virtual void Update(double dt);
@@ -41,6 +47,7 @@ public:
 	Collider GetCollider();
 	bool IsActive();
 	float GetMass();
+	TEAM_TYPE GetTeam();
 
 	// Setters
 	void SetPostion(float x, float y, float z);
@@ -55,6 +62,8 @@ public:
 	void SetColliderType(Collider::COLLIDER_TYPE type);
 	void SetMass(float mass);
 	void SetActive(bool active);	
+	void SetTeam(TEAM_TYPE team);
+
 	Vector3 pos;
 
 protected:
@@ -69,11 +78,12 @@ protected:
 
 	GAMEOBJECT_TYPE type;
 	Collider collider;
+	TEAM_TYPE team;
 
 	float mass;
 
 };
 
-GameObject* FetchGO();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       GameObject* FetchGO();
 
 #endif
