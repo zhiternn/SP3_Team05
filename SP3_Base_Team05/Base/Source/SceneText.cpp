@@ -77,6 +77,7 @@ void SceneText::Init()
 	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
+
 	enemy = new SnakeHead();
 	GameObject::goList.push_back(enemy);
 	enemy->SetTarget(player);
@@ -124,7 +125,7 @@ void SceneText::PlayerController(double dt)
 		forceDir.Normalize();
 		player->Move(forceDir, dt);
 	}
-	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+	if (Controls::GetInstance().OnHold(Controls::MOUSE_LBUTTON))
 	{
 		Vector3 mouseDir;
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
@@ -151,7 +152,6 @@ void SceneText::PlayerController(double dt)
 	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
 	{
 		player->ChangeWeaponUp();
-
 	}
 }
 
@@ -365,6 +365,11 @@ void SceneText::RenderHUD()
 	ss2.precision(2);
 	ss2 << "Dash cooldown: " << player->cooldownTimer;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 3, 0, 9);
+
+	std::ostringstream ss3;
+	ss3.precision(2);
+	ss3 << "Weapon: " << player->weaponIter;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
 }
 
 void SceneText::Exit()

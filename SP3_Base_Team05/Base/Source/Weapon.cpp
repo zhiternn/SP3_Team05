@@ -12,6 +12,18 @@ Weapon::~Weapon()
 		delete projectileInfo;
 }
 
+void Weapon::Update(double dt)
+{
+	if (shootDelay >= 0)
+	{
+		shootDelay -= fireRate * dt;
+	}
+	else
+	{
+		shootDelay = 1.0f; // per second
+	}
+}
+
 void Weapon::AssignProjectile(CProjectile* proj)
 {
 	if (projectileInfo)

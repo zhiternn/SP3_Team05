@@ -22,6 +22,8 @@ public:
 	void Move(Vector3 dir, double dt);
 	void Dash(Vector3 dir, double dt);
 	void Shoot(Vector3 dir);
+    void Shield(Vector3 dir);
+	void ChangeWeapon(int type);
 	void ChangeWeaponUp();
 	void ChangeWeaponDown();
 
@@ -32,10 +34,6 @@ public:
 	// Issers 
 	bool IsMoving();
 	bool IsDashed();
-
-	//Damage Functions
-	void TakeDamage(unsigned int dmg);
-
 	Inventory *inventory;
 	Weapon *weapon;
 	float cooldownTimer = 0;
@@ -45,9 +43,6 @@ private:
 	bool isMoving;
 	bool isDashed;
 	float forceMagnitude = 0;
-
-	unsigned int playerHP;
-	
 };
 
 

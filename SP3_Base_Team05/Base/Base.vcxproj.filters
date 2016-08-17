@@ -96,12 +96,15 @@
     <ClCompile Include="Source\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="Source\SnakeBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\SnakeHead.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+=======
+>>>>>>> 89d03d49d9934c903491eafbdf04b72107e13d3d
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -200,11 +203,14 @@
     <ClInclude Include="Source\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="Source\SnakeBody.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\SnakeHead.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+=======
+>>>>>>> 89d03d49d9934c903491eafbdf04b72107e13d3d
   </ItemGroup>
 </Project>

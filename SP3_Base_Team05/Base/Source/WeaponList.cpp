@@ -2,7 +2,7 @@
 
 void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
-	//if (fireRate <= 0.0f)
+	if (shootDelay <= 0.0f)
 	{
 		for (int i = 0; i < projectileCount; ++i)
 		{
@@ -22,7 +22,7 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 
 void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
-	//if (fireRate <= 0.0f)
+	if (shootDelay <= 0.0f)
 	{
 		CProjectile* proj = FetchProjectile();
 		*proj = *projectileInfo;

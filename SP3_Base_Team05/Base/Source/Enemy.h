@@ -18,6 +18,10 @@ public:
 	void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
 
+	void SetRate(float rate);
+
+	float GetRate();
+
 protected:
 	enum DESTINATION_PRIORITY
 	{
@@ -36,6 +40,8 @@ protected:
 
 	float checkReached;
 	float speedLimit;
+
+	float captureRatio;
 };
 
 Enemy* FetchEnemy();
