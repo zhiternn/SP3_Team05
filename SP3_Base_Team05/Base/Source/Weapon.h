@@ -23,6 +23,7 @@ class Weapon
 {
 public:
 	virtual ~Weapon();
+	void Update(double dt);
 	virtual void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team = CProjectile::TEAM_NEUTRAL) = 0;
 	void AssignProjectile(CProjectile* proj);
 
@@ -36,6 +37,7 @@ protected:
 	Weapon();
 	
 	float fireRate;
+	float shootDelay;
 	CProjectile* projectileInfo;
 };
 

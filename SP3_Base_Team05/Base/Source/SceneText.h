@@ -7,7 +7,7 @@
 #include "Player.h"
 #include "WeaponList.h"
 #include "ProjectileList.h"
-#include "Enemy.h"
+#include "SnakeHead.h"
 
 #include <vector>
 
@@ -50,16 +50,15 @@ private:
 
 	Camera* mainCamera;
 
-	GameObject* m_ghost;
-
 	Player* player;
 
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
 
-	Enemy* enemy;
 
     Shield* testshield;
+
+	SnakeHead* enemy;
 };
 
 #endif

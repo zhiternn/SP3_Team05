@@ -33,6 +33,8 @@
     <ClCompile Include="Source\SceneBase.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\SnakeBody.cpp" />
+    <ClCompile Include="Source\SnakeHead.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\TileMap.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
@@ -49,7 +51,6 @@
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\GameObject.h" />
-    <ClInclude Include="Source\Geometry.h" />
     <ClInclude Include="Source\Inventory.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Light.h" />
@@ -67,6 +68,8 @@
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Shield.h" />
+    <ClInclude Include="Source\SnakeBody.h" />
+    <ClInclude Include="Source\SnakeHead.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\TileMap.h" />
     <ClInclude Include="Source\Utility.h" />

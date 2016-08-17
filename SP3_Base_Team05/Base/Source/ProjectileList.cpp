@@ -231,3 +231,17 @@ void Shield::SetCurrHealth(float curr)
 {
     CurrHealth = curr;
 }
+
+void Bullet::Update(double dt)
+{
+	CProjectile::Update(dt);
+}
+
+void Bullet::HandleInteraction(GameObject *b, double dt)
+{
+	if (b->GetType() == GameObject::GO_PROJECTILE)
+	{
+		if (CheckCollision(b, dt))
+			b->SetActive(false);
+	}
+}

@@ -2,7 +2,7 @@
 
 Entity::Entity():
 GameObject(GameObject::GO_ENTITY),
-health(3)
+health(100)
 {
 }
 
@@ -13,7 +13,6 @@ Entity::~Entity()
 void Entity::TakeDamage(unsigned amount)
 {
 	health -= amount;
-	std::cout << health << std::endl;
 	if (health < 0)
 	{
 		health = 0;

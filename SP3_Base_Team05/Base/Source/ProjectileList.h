@@ -120,4 +120,20 @@ private:
     float MaxHealth;
     float startShieldRegen;
 };
+
+class Bullet : public CProjectile
+{
+public:
+	Bullet():CProjectile(PROJECTILE_TYPE::BULLET){
+		SetDMG(10);
+		SetLifetime(30);
+		SetProjectileSpeed(200.f);
+		SetScale(.5f, .5f, .5f);
+	}					//< Overloaded Constructor
+	~Bullet(){};																					//< Destructor
+
+	virtual void Update(double dt);																//< Update
+	virtual void HandleInteraction(GameObject* b, double dt);									//< Handles Interaction for Bullet
+};
+
 #endif // !PROJECTILELIST_H

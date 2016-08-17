@@ -95,6 +95,7 @@ bool GameObject::CheckCollision(GameObject* b, double dt)
 		break;
 	}
 }
+
 float GameObject::CheckCollision2(GameObject* b)
 {
 	switch (b->collider.type)

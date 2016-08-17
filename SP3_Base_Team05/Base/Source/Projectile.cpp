@@ -20,7 +20,7 @@ CProjectile::CProjectile(PROJECTILE_TYPE type) :
 GameObject(GameObject::GO_PROJECTILE),
 proj_type(type)
 {
-	proj_dmg = 1;
+	proj_dmg = 10;
 	proj_lifetime = 2;
 	proj_speed = 20;
 }
@@ -147,14 +147,14 @@ Time active
 /******************************************************************************/
 void CProjectile::HandleInteraction(GameObject* b, double dt)
 {
-	if (b->GetType() == GameObject::GO_ENTITY)
+	if (CheckCollision(b, dt))
 	{
 		Entity* entity = dynamic_cast<Entity*>(b);
 		if (entity)
 		{
-			if (CheckCollision(b, dt))
-				entity->TakeDamage(proj_dmg);
+			entity->TakeDamage(proj_dmg);
 		}
+		this->active = false;
 	}
 }
 
