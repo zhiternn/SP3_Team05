@@ -28,18 +28,14 @@ public:
 	CProjectile();                                          //< Default Constructor
 	~CProjectile();                                         //< Destructor
 	
-	enum PROJECTILE_TYPE
+	enum PROJECTILE_TEAM
 	{
-		P_NEUTRAL = 0,
+		TEAM_NEUTRAL = 0,
 
-		P_PLAYER_BULLET,
-		P_PLAYER_GRENADE,
-		P_PLAYER_ROPE,
-		P_PLAYER_SHIELD,
-		P_PLAYER_TRAP,
-		P_ENEMY_BULLET,
+		TEAM_PLAYER,
+		TEAM_ENEMY,
 
-		P_TOTAL
+		TEAM_END
 	};
 
     void HandleInteraction(CProjectile* b, double dt);			//< Handling Interactions
@@ -51,18 +47,18 @@ public:
 	//< Getters
 	float GetDMG();												//< Returns Projectile Damage
 	float GetLifetime();										//< Returns Projectile Lifetime
-    PROJECTILE_TYPE GetType();									//< Returns Projectile Type
+	PROJECTILE_TEAM GetTeam();									//< Returns Projectile Type
 	
 	//< Setters
 	void SetDMG(float damage);									//< Set Projectile Damage
 	void SetLifetime(float lifetime);							//< Set Projectile Lifetime
-    void SetType(PROJECTILE_TYPE type);							//< Set Projectile Type
+	void SetTeam(PROJECTILE_TEAM team);							//< Set Projectile Type
 
 private:
 	//< Variables
 	float proj_dmg;												//< Projectile Damage
 	float proj_lifetime;										//< Projectile Lifetime
-    PROJECTILE_TYPE proj_type;									//< Projectile Type
+	PROJECTILE_TEAM proj_team;									//< Projectile Type
 };
 
 CProjectile* FetchProjectile();
