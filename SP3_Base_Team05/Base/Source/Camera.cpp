@@ -109,8 +109,9 @@ void Camera::Constrain(Player p, Vector3 cameraTarget)
 {
 	Vector3 *u;
 	Vector3 *b;
-	u = new Vector3(cameraTarget.x + 20, cameraTarget.y + 20, 0);
-	b = new Vector3(cameraTarget.x - 20, cameraTarget.y - 20, 0);
+
+	u = new Vector3(cameraTarget.x + 10, cameraTarget.y + 10, 0);
+	b = new Vector3(cameraTarget.x - 10, cameraTarget.y - 10, 0);
 
 	if (p.GetPosition().x > u->x - 10 || p.GetPosition().y > u->y - 10 || p.GetPosition().x < b->x + 10 || p.GetPosition().y < b->y + 10)
 	{

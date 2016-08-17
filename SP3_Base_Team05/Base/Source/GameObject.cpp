@@ -187,6 +187,12 @@ void GameObject::CollisionResponse(GameObject* b)
 
 		this->vel = this->vel + (((2 * b->mass) / (this->mass + b->mass)) * (u2N - u1N));
 		b->vel = b->vel + (((2 * this->mass) / (this->mass + b->mass)) * (u1N - u2N));
+
+		float distanceSquared = (this->pos - b->pos).LengthSquared();
+		float combinedRadius = this->scale.x + b->scale.x;
+		float difference = distanceSquared - (combinedRadius * combinedRadius);
+
+		this->vel -= N * difference;
 	}
 		break;
 
@@ -204,6 +210,9 @@ void GameObject::CollisionResponse(GameObject* b)
 			   return;
 
 		   this->vel = this->vel - ((2 * this->vel).Dot(NP)) * NP;
+
+		   float difference = ab.Dot(NP) - (b->scale.x * 0.5f + this->scale.x);
+		   this->vel -= NP * difference;
 		}
 		else
 
@@ -214,6 +223,9 @@ void GameObject::CollisionResponse(GameObject* b)
 			   return;
 
 		   this->vel = this->vel - ((2 * this->vel).Dot(N)) * N;
+
+		   float difference = ab.Dot(N) - (b->scale.y * 0.5f + this->scale.x);
+		   this->vel += N * difference;
 		}
 	}
 		break;

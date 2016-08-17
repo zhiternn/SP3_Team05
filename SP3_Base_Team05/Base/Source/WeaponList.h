@@ -29,4 +29,15 @@ private:
 
 };
 
+class Trap : public Weapon
+{
+public:
+	Trap(){}
+	~Trap(){}
+
+	virtual void Fire(Vector3 pos, Vector3 dir);
+
+private:
+	float m_timer;
+};
 #endif // !WEAPONLIST_H

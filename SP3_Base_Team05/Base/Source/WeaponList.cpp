@@ -29,3 +29,11 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir)
 		proj->Init(pos, dir, projectileSpeed);
 	}
 }
+
+void Trap::Fire(Vector3 pos, Vector3 dir)
+{
+	CProjectile *proj = FetchProjectile();
+	*proj = *projectileInfo;
+	proj->SetVelocity(0, 0, 0);
+	proj->Init(pos, dir - dir, 0);
+}
