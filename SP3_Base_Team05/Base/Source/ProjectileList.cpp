@@ -206,3 +206,17 @@ void Shield::SetMaxHealth(float max)
 {
     MaxHealth = max;
 }
+
+void Bullet::Update(double dt)
+{
+	CProjectile::Update(dt);
+}
+
+void Bullet::HandleInteraction(GameObject *b, double dt)
+{
+	if (b->GetType() == GameObject::GO_PROJECTILE)
+	{
+		if (CheckCollision(b, dt))
+			b->SetActive(false);
+	}
+}

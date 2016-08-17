@@ -2,7 +2,7 @@
 
 Entity::Entity():
 GameObject(GameObject::GO_ENTITY),
-health(3)
+health(100)
 {
 }
 

@@ -130,7 +130,7 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
-		CProjectile* proj = new Shield();
+		CProjectile* proj = new Bullet();
 		proj->SetTeam(CProjectile::TEAM_PLAYER);
 		player->weapon->AssignProjectile(proj);
 
