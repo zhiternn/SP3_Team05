@@ -74,19 +74,6 @@ void Trap::Update(double dt)
 	CProjectile::Update(dt);
 }
 
-/******************************************************************************/
-/*!
-\brief	Shield Default Constructor
-*/
-/******************************************************************************/
-Shield::Shield(CProjectile::PROJECTILE_TYPE projectileType) :
-CurrHealth(0),
-MaxHealth(2000),
-activeState(false),
-aliveState(false)
-{
-
-}
 
 void Shield::Update(double dt)
 {
@@ -104,6 +91,24 @@ void Shield::Update(double dt)
 
 void Shield::HandleInteraction(GameObject* b, double dt)
 {
+    //If GameObject type is of GO_ENEMY
+    if (b->GetType() == GameObject::GO_ENTITY)
+    {
+        ////Prevents them from moving
+        //b->SetVelocity(0, 0, 0);
+
+        ////Remove the trap once enemy is constrained
+        //this->SetActive(false);
+
+        //CalculateChance(b);
+        CurrHealth -= 10;
+        if (CurrHealth <= 0)
+        {
+            SetLifetime(0);
+            SetActiveState(false);
+        }
+    }
+
 }
 
 void Shield::regenerateShield(float currHP, double dt)
@@ -112,14 +117,6 @@ void Shield::regenerateShield(float currHP, double dt)
     {
         CurrHealth += dt * 2;
     }
-}
-
-/******************************************************************************/
-/*!
-\brief	Destructor
-/******************************************************************************/
-Shield::~Shield()
-{
 }
 
 /******************************************************************************/
@@ -133,7 +130,7 @@ Current Shield Health
 /******************************************************************************/
 float Shield::GetCurrHealth()
 {
-    return CurrHealth;
+    return this->CurrHealth;
 }
 
 /******************************************************************************/
@@ -182,27 +179,55 @@ bool Shield::GetAliveState()
 /******************************************************************************/
 /*!
 \brief
-Setting the Current Shield Amount with a new amount;
+Setting the Projectile Shield Active State
 
-\param curr
-The current shield health to replace the old one
+\param active
+The new active to replace the old one
 */
 /******************************************************************************/
-void Shield::SetCurrHealth(float curr)
+void Shield::SetActiveState(bool active)
 {
-    CurrHealth = curr;
+    activeState = active;
 }
 
 /******************************************************************************/
 /*!
 \brief
-Setting the Max Shield Amount with a new amount;
+Setting the Projectile Shield Alive State
 
-\return
-The max shield health to replace the old one
+\param alive
+The new alive to replace the old one
+*/
+/******************************************************************************/
+void Shield::SetAliveState(bool alive)
+{
+    aliveState = alive;
+}
+
+/******************************************************************************/
+/*!
+\brief
+Setting the Projectile Shield Max HP
+
+\param maxhp
+The new maxhp to replace the old one
 */
 /******************************************************************************/
 void Shield::SetMaxHealth(float max)
 {
     MaxHealth = max;
+}
+
+/******************************************************************************/
+/*!
+\brief
+Setting the Projectile Shield Curr HP
+
+\param currhp
+The new currhp to replace the old one
+*/
+/******************************************************************************/
+void Shield::SetCurrHealth(float curr)
+{
+    CurrHealth = curr;
 }

@@ -94,6 +94,9 @@ void SceneText::Init()
 	enemy->SetScale(2, 2, 2);
 	enemy->SetMass(3);
 	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
+
+    testshield = new Shield();
+    testshield->SetCurrHealth(2000);
 }
 
 void SceneText::PlayerController(double dt)
@@ -130,8 +133,9 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
-		CProjectile* proj = new Shield();
+		CProjectile* proj = new ShotgunShell();
 		proj->SetTeam(CProjectile::TEAM_PLAYER);
+        proj->SetColliderType(Collider::COLLIDER_BOX);
 		player->weapon->AssignProjectile(proj);
 
 		Vector3 mouseDir;
@@ -160,6 +164,16 @@ void SceneText::PlayerController(double dt)
 	{
 		player->ChangeWeaponUp();
 	}
+    if (Controls::GetInstance().OnHold(Controls::MOUSE_RBUTTON))
+    {
+        CProjectile* proj = new Shield();
+        proj->SetTeam(CProjectile::TEAM_PLAYER);
+        player->weapon->AssignProjectile(proj);
+
+        Vector3 mouseDir;
+        mouseDir = (mousePos_worldBased - player->pos).Normalized();
+        player->Shield(mouseDir);
+    }
 }
 
 //Enemy* enemy = dynamic_cast<Enemy*>(b);
@@ -383,6 +397,11 @@ void SceneText::RenderHUD()
 	ss2.precision(2);
 	ss2 << "Dash cooldown: " << player->cooldownTimer;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 3, 0, 9);
+
+    std::ostringstream ss3;
+    ss3.precision(2);
+    ss3 << "Shield Health: " << testshield->GetMaxHealth();
+    RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
 }
 
 void SceneText::Exit()

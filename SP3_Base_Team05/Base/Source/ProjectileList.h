@@ -24,7 +24,7 @@ class ShotgunShell : public CProjectile
 {
 public:
     ShotgunShell() :CProjectile(PROJECTILE_TYPE::BULLET){
-        SetDMG(0);
+        SetDMG(1);
         SetLifetime(2);
         SetProjectileSpeed(30.0f);
         SetScale(1, 1, 1);
@@ -84,8 +84,17 @@ private:
 class Shield : public CProjectile
 {
 public:
-    Shield(CProjectile::PROJECTILE_TYPE projectileType = CProjectile::SHIELD);                //< Overloaded Constructor
-    ~Shield();                                                          //< Destructor
+    Shield() : CProjectile(PROJECTILE_TYPE::SHIELD) {
+        SetDMG(0);
+        SetLifetime(0.02);
+        SetProjectileSpeed(0);
+        SetScale(4, 4, 4);
+        SetCurrHealth(2000);
+        SetMaxHealth(2000);
+        SetActiveState(true);
+        SetAliveState(false);
+    }//< Overloaded Constructor
+    ~Shield(){}                                                          //< Destructor
 
     virtual void Update(double dt);                                     //< Update
     virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Shotgun Shell

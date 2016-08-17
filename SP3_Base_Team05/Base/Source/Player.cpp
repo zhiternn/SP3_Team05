@@ -76,7 +76,9 @@ void Player::Shoot(Vector3 dir)
 
 void Player::Shield(Vector3 dir)
 {
-    this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
+    //weapon->Fire();
+    Vector3 tempPos(pos.x + dir.x * (scale.x + 4), pos.y + dir.y * (scale.y + 4), 0);
+    this->weapon->Fire(tempPos, dir, CProjectile::TEAM_PLAYER);
 }
 
 void Player::ChangeWeaponUp()
@@ -123,5 +125,3 @@ bool Player::IsDashed()
 {
 	return isDashed;
 }
-
-

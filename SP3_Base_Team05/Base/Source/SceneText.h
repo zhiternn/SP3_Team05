@@ -58,6 +58,8 @@ private:
 	Vector3 mousePos_worldBased;
 
 	Enemy* enemy;
+
+    Shield* testshield;
 };
 
 #endif
