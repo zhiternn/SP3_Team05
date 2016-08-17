@@ -3,9 +3,11 @@
 #include "Projectile.h"
 
 Player::Player():
-weapon(NULL),
-GameObject(GameObject::GO_PLAYER)
+weapon(NULL)
 {
+	inventory = new Inventory();
+	inventory->weapons.front()->AssignProjectile(inventory->bullets.front());
+	weapon = inventory->weapons.front();
 }
 
 Player::~Player()
@@ -19,13 +21,13 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	this->scale.Set(scale.x, scale.y, scale.z);
 	this->pos.Set(pos.x, pos.y, pos.z);
 	this->front.Set(front.x, front.y, front.z);
+	team = TEAM_PLAYER;
 	active = true;
-	type = GameObject::GO_PLAYER;
+	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	vel.SetZero();
 	isDashed = false;
-	playerHP = 100;
 }
 
 void Player::Update(double dt)
@@ -77,29 +79,29 @@ void Player::Shield(Vector3 dir)
     this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
 }
 
-void Player::ChangeWeapon(int type)
+void Player::ChangeWeaponUp()
 {
-	//switch (type)
-	//{
-	//case 1:
-	//	weapon->SetWeaponType(Weapon::GUN);
-	//	break;
-	//case 2:
-	//	weapon->SetWeaponType(Weapon::ROPEGUN);
-	//	break;
-	//case 3:
-	//	weapon->SetWeaponType(Weapon::TRAP);
-	//	break;
-	//case 4:
-	//	weapon->SetWeaponType(Weapon::SHIELD);
-	//	break;
-	//case 5:
-	//	weapon->SetWeaponType(Weapon::GRENADE);
-	//	break;
-	//default:
-	//	break;
-	//}
+	weaponIter++;
+	if (weaponIter == inventory->weapons.size())
+	{
+		weaponIter = 0;
+	}
+	weapon = inventory->weapons[weaponIter];
+	weapon->AssignProjectile(inventory->bullets.front());
+}
 
+void Player::ChangeWeaponDown()
+{
+	if (weaponIter == 0)
+	{
+		weaponIter = inventory->weapons.size() - 1;
+	}
+	else
+	{ 
+		weaponIter--;
+	}
+	weapon = inventory->weapons[weaponIter];
+	weapon->AssignProjectile(inventory->bullets.front());
 }
 
 void Player::SetMoving(bool isMoving)
@@ -120,16 +122,6 @@ bool Player::IsMoving()
 bool Player::IsDashed()
 {
 	return isDashed;
-}
-
-unsigned int Player::GetHP()
-{
-	return this->playerHP;
-}
-
-void Player::TakeDamage(unsigned int dmg)
-{
-	this->playerHP -= dmg;
 }
 
 

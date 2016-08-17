@@ -11,6 +11,7 @@ active(false),
 mass(1.0f),
 front(1, 0, 0)
 {
+	team = TEAM_NEUTRAL;
 	collider.type = Collider::COLLIDER_NONE;
 	collider.isStatic = false;
 	collider.isTrigger = false;
@@ -52,7 +53,7 @@ GameObject* FetchGO()
 
 	for (int i = 0; i < 10; ++i)
 	{
-		GameObject::goList.push_back(new GameObject(GameObject::GO_BALL));
+		GameObject::goList.push_back(new GameObject(GameObject::GO_ENVIRONMENT));
 	}
 
 	(*(GameObject::goList.end() - 10))->SetActive(true);
@@ -236,9 +237,6 @@ void GameObject::CollisionResponse(GameObject* b)
 
 void GameObject::HandleInteraction(GameObject* b, double dt)
 {
-	if (b->GetType() == GameObject::GO_PROJECTILE)
-		return;
-
 	if (CheckCollision(b, dt))
 	{
 		CollisionResponse(b);
@@ -283,6 +281,11 @@ bool GameObject::IsActive()
 float GameObject::GetMass()
 {
 	return this->mass;
+}
+
+GameObject::TEAM_TYPE GameObject::GetTeam()
+{
+	return team;
 }
 
 void GameObject::SetPostion(float x, float y, float z)
@@ -351,6 +354,11 @@ void GameObject::SetMass(float mass)
 void GameObject::SetActive(bool active)
 {
 	this->active = active;
+}
+
+void GameObject::SetTeam(TEAM_TYPE team)
+{
+	this->team = team;
 }
 
 /*

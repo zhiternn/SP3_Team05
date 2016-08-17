@@ -9,7 +9,7 @@ public:
 	Shotgun():projectileCount(5), spread(0.8f){}
 	~Shotgun(){}
 
-	virtual	void Fire(Vector3 pos, Vector3 dir, CProjectile::PROJECTILE_TEAM team);
+	virtual	void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
 
 private:
 	float spread;
@@ -23,22 +23,10 @@ public:
 	MachineGun(){}
 	~MachineGun(){}
 
-	virtual	void Fire(Vector3 pos, Vector3 dir, CProjectile::PROJECTILE_TEAM team);
+	virtual	void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
 
 private:
 
-};
-
-class Trap : public Weapon
-{
-public:
-	Trap(){}
-	~Trap(){}
-
-	virtual void Fire(Vector3 pos, Vector3 dir, CProjectile::PROJECTILE_TEAM team);
-
-private:
-	float m_timer;
 };
 
 #endif // !WEAPONLIST_H

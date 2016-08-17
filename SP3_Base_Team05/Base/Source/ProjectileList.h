@@ -12,6 +12,7 @@ Pure Abstract Class to create Projectiles
 #define PROJECTILELIST_H
 
 #include "Projectile.h"
+#include "Enemy.h"
 
 /******************************************************************************/
 /*!
@@ -57,4 +58,26 @@ private:
 	
 };
 
+
+class Trap : public CProjectile
+{
+public:
+	Trap():CProjectile(PROJECTILE_TYPE::TRAP){
+		SetDMG(10);
+		SetLifetime(30);
+		SetProjectileSpeed(0);
+		SetScale(1, 1, 1);
+	}
+	~Trap(){}
+
+	virtual void Update(double dt);
+	virtual void HandleInteraction(GameObject *b, double dt);
+
+	void CalculateChance(Enemy *enemy);
+
+	bool Capture();
+private:
+
+	float captureChance;
+};
 #endif // !PROJECTILELIST_H

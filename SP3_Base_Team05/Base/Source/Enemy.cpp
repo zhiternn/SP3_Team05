@@ -1,7 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy():
-GameObject(GameObject::GO_ENEMY)
+Enemy::Enemy()
 {
 }
 
@@ -9,42 +8,35 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::Init(Vector3 pos, unsigned int health)
+void Enemy::Init(Vector3 pos)
 {
 	this->pos = pos;
 	active = true;
-	type = GameObject::GO_ENEMY;
+	type = GameObject::GO_ENTITY;
+	team = TEAM_ENEMY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	checkReached = REACH_CHECKER;
 	speedLimit = 10.f;
-	enemyHP = health;
+
+	captureRatio = 1.f;
 }
 
 void Enemy::Update(double dt)
 {
-	if (enemyHP > 0)
-	{
-		GameObject::Update(dt);
-		UpdateMovement(dt);
+	GameObject::Update(dt);
+	if (!UpdateMovement(dt))
+	{//if fail to update (zero destination left)
+		Vector3 temp(Math::RandFloatMinMax(200, 250), Math::RandFloatMinMax(200, 250), 0);
+		AddDestination(temp);
 	}
-	else
-	{
-		//despawn the enemy
-		this->SetActive(false);
-	}
-	
 }
 
 void Enemy::HandleInteraction(GameObject* b, double dt)
 {
-	if (b->GetType() == GameObject::GO_PROJECTILE)
-		return;
-
-	GameObject::HandleInteraction(b, dt);
 }
 
-void Enemy::UpdateMovement(double dt)
+bool Enemy::UpdateMovement(double dt)
 {
 	checkReached -= dt;
 
@@ -64,12 +56,12 @@ void Enemy::UpdateMovement(double dt)
 				vel = vel.Normalized() * speedLimit;
 			}
 		}
+
+		return true;
 	}
 	else
 	{
-
-		Vector3 temp(Math::RandFloatMinMax(200, 250), Math::RandFloatMinMax(200, 250), 0);
-		AddDestination(temp);
+		return false;
 	}
 }
 
@@ -96,7 +88,7 @@ Enemy* FetchEnemy()
 		Enemy *enemy = dynamic_cast<Enemy*>((*it));
 		if (enemy && enemy->IsActive() == false)
 		{
-			enemy->GameObject::SetType(GameObject::GO_ENEMY);
+			enemy->GameObject::SetType(GameObject::GO_ENTITY);
 			enemy->SetActive(true);
 			return enemy;
 		}
@@ -109,26 +101,28 @@ Enemy* FetchEnemy()
 	Enemy *enemy = dynamic_cast<Enemy*>(*(GameObject::goList.end() - 10));
 	if (enemy)
 	{
-		enemy->GameObject::SetType(GameObject::GO_ENEMY);
+		enemy->GameObject::SetType(GameObject::GO_ENTITY);
 		enemy->SetActive(true);
 		return enemy;
 	}
 
    { //for safety measure
 	   Enemy *enemy = new Enemy();
-	   enemy->GameObject::SetType(GameObject::GO_ENEMY);
+	   enemy->GameObject::SetType(GameObject::GO_ENTITY);
 	   enemy->SetActive(true);
 	   GameObject::goList.push_back(enemy);
 	   return enemy;
    }
 }
 
-unsigned int Enemy::GetHP()
+void Enemy::SetRate(float rate)
 {
-	return this->enemyHP;
+	//Clamp the captureRatio
+	Math::Clamp(rate, 0.f, 1.f);
+	captureRatio = rate;
 }
 
-void Enemy::TakeDamage(unsigned int dmg)
+float Enemy::GetRate()
 {
-	this->enemyHP -= dmg;
+	return this->captureRatio;
 }

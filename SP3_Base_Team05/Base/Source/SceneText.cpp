@@ -65,14 +65,14 @@ void SceneText::Init()
 	mainCamera = new Camera();
 	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-	m_ghost = new GameObject(GameObject::GO_BALL);
+	m_ghost = new GameObject(GameObject::GO_ENVIRONMENT);
 
 	GameObject *go = FetchGO();
 	go->SetActive(true);
 	go->SetScale(20, 20, 20);
 	go->SetFront(1, 0, 0);
 	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	go->SetType(GameObject::GO_CUBE);
+	go->SetType(GameObject::GO_ENVIRONMENT);
 	go->SetColliderType(Collider::COLLIDER_BOX);
 
 	player = new Player();
@@ -80,9 +80,6 @@ void SceneText::Init()
 	GameObject::goList.push_back(player);
 
 	player->weapon = new MachineGun();
-	CProjectile* proj = new Shield();
-	proj->SetTeam(CProjectile::TEAM_PLAYER);
-	player->weapon->AssignProjectile(proj);
 
 
 	mainCamera->Include(&(player->pos));
@@ -91,12 +88,12 @@ void SceneText::Init()
 	enemy = new Enemy();
 	GameObject::goList.push_back(enemy);
 	enemy = FetchEnemy();
-	enemy->SetType(GameObject::GO_ENEMY);
+	enemy->SetType(GameObject::GO_ENTITY);
 	enemy->SetActive(true);
 	enemy->SetColliderType(Collider::COLLIDER_BALL);
 	enemy->SetScale(2, 2, 2);
 	enemy->SetMass(3);
-	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), 100);
+	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
 }
 
 void SceneText::PlayerController(double dt)
@@ -133,16 +130,43 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
+		CProjectile* proj = new Shield();
+		proj->SetTeam(CProjectile::TEAM_PLAYER);
+		player->weapon->AssignProjectile(proj);
+
 		Vector3 mouseDir;
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_LSHIFT))
+	{
+		CProjectile *proj_trap = new Trap();
+		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
+		proj_trap->SetVelocity(0, 0, 0);
+		proj_trap->SetColliderType(Collider::COLLIDER_BOX);
+		player->weapon->AssignProjectile(proj_trap);
+
+		Vector3 pos;
+		pos = player->pos.Normalized();
+		player->Shoot(pos);
+	}
+	//if (Controls::GetInstance().mouse_ScrollY < 1)
+	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+	{
+		player->ChangeWeaponDown();
+	}
+	//if (Controls::GetInstance().mouse_ScrollY > 1)
+	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	{
+		player->ChangeWeaponUp();
+	}
 }
+
+//Enemy* enemy = dynamic_cast<Enemy*>(b);
 
 void SceneText::Update(double dt)
 {
 	SceneBase::Update(dt);
-
 	{//handles required mouse calculationsdouble x, y;
 		double x, y;
 		Application::GetCursorPos(x, y);
@@ -173,17 +197,11 @@ void SceneText::Update(double dt)
 		}
 	}
 
-	enemy->UpdateMovement(dt);
-
+	//Restrict the player from moving past the deadzone
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
 	{
 	    PlayerController(dt);
 	}
-
-	enemy->UpdateMovement(dt);
-	//Restrict the player from moving past the deadzone
-
-	enemy->UpdateMovement(dt);
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -322,14 +340,6 @@ void SceneText::RenderMain()
 	RenderWorld();
 	RenderGO(enemy);
 	
-	if (enemy->destinations.size() > 0)
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(enemy->destinations.top().x, enemy->destinations.top().y, 0);
-		RenderMesh(meshList[GEO_SPHERE], false);
-		modelStack.PopMatrix();
-	}
-
 	//RenderSkyPlane();
 
 	if (m_ghost->IsActive())
@@ -405,7 +415,7 @@ void SceneText::UpdateGameObjects(double dt)
 				for (int j = 0; j < GameObject::goList.size(); ++j)
 				{
 					GameObject *go2 = GameObject::goList[j];
-					if (go2->IsActive())
+					if (go2->IsActive() && go->GetTeam() != go2->GetTeam() && go2->GetType() != GameObject::GO_PROJECTILE)
 					{
 						go->HandleInteraction(go2, dt);
 					}
@@ -448,21 +458,17 @@ void SceneText::RenderGO(GameObject* go)
 
 	switch (go->GetType())
 	{
-	case GameObject::GO_BALL:
-	{
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-		break;
-	case GameObject::GO_CUBE:
+	case GameObject::GO_ENVIRONMENT:
 	{
 		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-		
+
 		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
 		modelStack.Rotate(degree, 0, 0, 1);
 		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_CUBE], false);
+		if (go->GetCollider().type == Collider::COLLIDER_BALL)
+			RenderMesh(meshList[GEO_SPHERE], false);
+		else
+			RenderMesh(meshList[GEO_CUBE], false);
 	}
 		break;
 	case GameObject::GO_PROJECTILE:
@@ -475,17 +481,7 @@ void SceneText::RenderGO(GameObject* go)
 		RenderMesh(meshList[GEO_SPHERE], false);
 	}
 	break;
-	case GameObject::GO_ENEMY:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-	break;
-	case GameObject::GO_PLAYER:
+	case GameObject::GO_ENTITY:
 	{
 		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
 

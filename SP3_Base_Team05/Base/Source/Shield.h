@@ -21,10 +21,11 @@ Class Shield.h:
 class Shield : public CProjectile
 {
 public:
-    Shield(CProjectile::PROJECTILE_TYPE projectileType);                //< Overloaded Constructor
+    Shield(CProjectile::PROJECTILE_TYPE projectileType = CProjectile::SHIELD);                //< Overloaded Constructor
     ~Shield();                                                          //< Destructor
 
     virtual void Update(double dt);                                     //< Update
+    virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Shotgun Shell
 
     void regenerateShield(float currHP, double dt);                     //< Regenerates Shield Health
 

@@ -8,6 +8,7 @@ Class to create Projectiles
 */
 /******************************************************************************/
 #include "Projectile.h"
+#include "Entity.h"
 
 /******************************************************************************/
 /*!
@@ -17,7 +18,6 @@ Class to create Projectiles
 
 CProjectile::CProjectile(PROJECTILE_TYPE type) :
 GameObject(GameObject::GO_PROJECTILE),
-proj_team(PROJECTILE_TEAM::TEAM_NEUTRAL),
 proj_type(type)
 {
 	proj_dmg = 1;
@@ -62,24 +62,9 @@ float CProjectile::GetLifetime()
     return proj_lifetime;
 }
 
-float CProjectile::GetProjecttileSpeed()
+float CProjectile::GetProjectileSpeed()
 {
 	return proj_speed;
-}
-
-
-/******************************************************************************/
-/*!
-\brief
-GetProjectileType to get the projectile type
-
-\return
-Projectile Type
-*/
-/******************************************************************************/
-CProjectile::PROJECTILE_TEAM CProjectile::GetTeam()
-{
-    return proj_team;
 }
 
 CProjectile::PROJECTILE_TYPE CProjectile::GetType()
@@ -118,20 +103,6 @@ void CProjectile::SetLifetime(float lifetime)
 void CProjectile::SetProjectileSpeed(float speed)
 {
 	this->proj_speed = speed;
-}
-
-/******************************************************************************/
-/*!
-\brief
-Setting the Projectile Type with a new type;
-
-\param type
-The new type to replace the old one
-*/
-/******************************************************************************/
-void CProjectile::SetTeam(PROJECTILE_TEAM team)
-{
-	this->proj_team = team;
 }
 
 void CProjectile::SetType(PROJECTILE_TYPE type)
@@ -176,34 +147,13 @@ Time active
 /******************************************************************************/
 void CProjectile::HandleInteraction(GameObject* b, double dt)
 {
-    if (b->GetType() == GameObject::GO_PROJECTILE)
-        return;
-
-	if (b->GetType() == GameObject::GO_PLAYER)
-		return;
-	
-	if (this->proj_team == PROJECTILE_TEAM::TEAM_PLAYER && b->GetType() == GameObject::GO_ENEMY)
+	if (b->GetType() == GameObject::GO_ENTITY)
 	{
-		if (CheckCollision(b, dt))
+		Entity* entity = dynamic_cast<Entity*>(b);
+		if (entity)
 		{
-			CollisionResponse(b);
-			this->active = false;
-		}
-	}
-	else if (this->proj_team == PROJECTILE_TEAM::TEAM_ENEMY && b->GetType() == GameObject::GO_PLAYER)
-	{
-		if (CheckCollision(b, dt))
-		{
-			CollisionResponse(b);
-			this->active = false;
-		}
-	}
-	else//neutral bullet
-	{
-		if (CheckCollision(b, dt))
-		{
-			CollisionResponse(b);
-			this->active = false;
+			if (CheckCollision(b, dt))
+				entity->TakeDamage(proj_dmg);
 		}
 	}
 }
