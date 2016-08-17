@@ -1,7 +1,6 @@
 #include "Enemy.h"
 
-Enemy::Enemy():
-GameObject(GameObject::GO_ENTITY)
+Enemy::Enemy()
 {
 }
 
@@ -77,21 +76,6 @@ bool Enemy::Reached(Vector3 pos)
 void Enemy::AddDestination(Vector3 pos)
 {
 	this->destinations.push(pos);
-}
-
-void Enemy::TakeDamage(unsigned amount)
-{
-	health -= amount;
-	if (health < 0)
-	{
-		health = 0;
-		isDead = true;
-	}
-}
-
-bool Enemy::IsDead()
-{
-	return isDead;
 }
 
 Enemy* FetchEnemy()

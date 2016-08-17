@@ -1,14 +1,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "GameObject.h"
+#include "Entity.h"
 #include "Inventory.h"
 
 static const float MOVEMENT_SPEED = 80.0f;
 static const float MOVEMENT_LIMIT = 30.f;
 static const float DASH_COOLDOWN = 2.f;
 
-class Player : public GameObject
+class Player : public Entity
 {
 public:
 	Player();

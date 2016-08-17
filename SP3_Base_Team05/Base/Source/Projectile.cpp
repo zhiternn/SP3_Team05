@@ -8,6 +8,7 @@ Class to create Projectiles
 */
 /******************************************************************************/
 #include "Projectile.h"
+#include "Entity.h"
 
 /******************************************************************************/
 /*!
@@ -146,6 +147,15 @@ Time active
 /******************************************************************************/
 void CProjectile::HandleInteraction(GameObject* b, double dt)
 {
+	if (b->GetType() == GameObject::GO_ENTITY)
+	{
+		Entity* entity = dynamic_cast<Entity*>(b);
+		if (entity)
+		{
+			if (CheckCollision(b, dt))
+				entity->TakeDamage(proj_dmg);
+		}
+	}
 }
 
 CProjectile* FetchProjectile()

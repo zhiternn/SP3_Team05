@@ -3,12 +3,12 @@
 
 #include <stack>
 #include "Vector3.h"
-#include "GameObject.h"
+#include "Entity.h"
 
 static const float ENEMY_MOVEMENT_SPEED = 20.0f;
 static const float REACH_CHECKER = 5.0f;
 
-class Enemy : public GameObject
+class Enemy : public Entity
 {
 public:
 	Enemy();
@@ -18,21 +18,15 @@ public:
 	void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
 
-	void TakeDamage(unsigned amount);
-	bool IsDead();
-
 protected:
 	void AddDestination(Vector3 pos);
 	bool UpdateMovement(double dt);
 	bool Reached(Vector3 pos);
 
 	std::stack<Vector3> destinations;
-	
-	bool isDead;
 
 	float checkReached;
 	float speedLimit;
-	unsigned health;
 };
 
 Enemy* FetchEnemy();
