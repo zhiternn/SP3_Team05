@@ -9,7 +9,7 @@ public:
 	Shotgun():projectileCount(5), spread(0.8f){}
 	~Shotgun(){}
 
-	virtual	void Fire(Vector3 pos, Vector3 dir);
+	virtual	void Fire(Vector3 pos, Vector3 dir, CProjectile::PROJECTILE_TEAM team);
 
 private:
 	float spread;
@@ -23,10 +23,9 @@ public:
 	MachineGun(){}
 	~MachineGun(){}
 
-	virtual	void Fire(Vector3 pos, Vector3 dir);
+	virtual	void Fire(Vector3 pos, Vector3 dir, CProjectile::PROJECTILE_TEAM team);
 
 private:
 
 };
-
 #endif // !WEAPONLIST_H

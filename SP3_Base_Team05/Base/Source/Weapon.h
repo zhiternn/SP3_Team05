@@ -23,22 +23,19 @@ class Weapon
 {
 public:
 	virtual ~Weapon();
-	virtual void Fire(Vector3 pos, Vector3 dir) = 0;
+	virtual void Fire(Vector3 pos, Vector3 dir, CProjectile::PROJECTILE_TEAM team = CProjectile::TEAM_NEUTRAL) = 0;
 	void AssignProjectile(CProjectile* proj);
 
 	// Getters
 	float GetFireRate();
-	float GetProjectileSpeed();
 
 	// Setters
 	void SetFireRate(float fireRate);
-	void SetProjectileSpeed(float projectileSpeed);
 
 protected:
 	Weapon();
 	
 	float fireRate;
-	float projectileSpeed;
 	CProjectile* projectileInfo;
 };
 

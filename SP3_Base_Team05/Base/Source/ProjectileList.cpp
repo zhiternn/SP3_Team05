@@ -3,14 +3,25 @@
 /*
 ROPE
 */
+void Rope::Update(double dt)
+{
+	CProjectile::Update(dt);
+}
+
 void Rope::HandleInteraction(GameObject* b, double dt)
 {
 
 }
 
+
 /*
 SHIELD
 */
+
+void Shield::Update(double dt)
+{
+	CProjectile::Update(dt);
+}
 void Shield::HandleInteraction(GameObject* b, double dt)
 {
 	if (b->GetType() == GameObject::GO_PROJECTILE)
@@ -65,4 +76,9 @@ bool Trap::Capture()
 		//actually lucky 7 massive kek
 		return true;
 	}
+}
+
+void Trap::Update(double dt)
+{
+	CProjectile::Update(dt);
 }

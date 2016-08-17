@@ -2,8 +2,7 @@
 
 Weapon::Weapon():
 projectileInfo(NULL),
-fireRate(1.0f),
-projectileSpeed(250)
+fireRate(1.0f)
 {
 }
 
@@ -27,17 +26,7 @@ float Weapon::GetFireRate()
 	return this->fireRate;
 }
 
-float Weapon::GetProjectileSpeed()
-{
-	return this->projectileSpeed;
-}
-
 void Weapon::SetFireRate(float fireRate)
 {
 	this->fireRate = fireRate;
-}
-
-void Weapon::SetProjectileSpeed(float projectileSpeed)
-{
-	this->projectileSpeed = projectileSpeed;
 }

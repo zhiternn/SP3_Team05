@@ -37,6 +37,9 @@ void Enemy::Update(double dt)
 
 void Enemy::HandleInteraction(GameObject* b, double dt)
 {
+	if (b->GetType() == GameObject::GO_PROJECTILE)
+		return;
+
 	GameObject::HandleInteraction(b, dt);
 }
 

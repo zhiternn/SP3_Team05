@@ -14,10 +14,15 @@ Class to create Projectiles
 \brief	CProjectile Default Constructor
 */
 /******************************************************************************/
+
 CProjectile::CProjectile(PROJECTILE_TYPE type) :
-GameObject(GameObject::GO_PROJECTILE)
-, proj_type(type)
+GameObject(GameObject::GO_PROJECTILE),
+proj_team(PROJECTILE_TEAM::TEAM_NEUTRAL),
+proj_type(type)
 {
+	proj_dmg = 1;
+	proj_lifetime = 2;
+	proj_speed = 20;
 }
 
 /******************************************************************************/
@@ -57,6 +62,12 @@ float CProjectile::GetLifetime()
     return proj_lifetime;
 }
 
+float CProjectile::GetProjecttileSpeed()
+{
+	return proj_speed;
+}
+
+
 /******************************************************************************/
 /*!
 \brief
@@ -69,6 +80,11 @@ Projectile Type
 CProjectile::PROJECTILE_TEAM CProjectile::GetTeam()
 {
     return proj_team;
+}
+
+CProjectile::PROJECTILE_TYPE CProjectile::GetType()
+{
+	return proj_type;
 }
 
 /******************************************************************************/
@@ -99,6 +115,11 @@ void CProjectile::SetLifetime(float lifetime)
     proj_lifetime = lifetime;
 }
 
+void CProjectile::SetProjectileSpeed(float speed)
+{
+	this->proj_speed = speed;
+}
+
 /******************************************************************************/
 /*!
 \brief
@@ -113,12 +134,18 @@ void CProjectile::SetTeam(PROJECTILE_TEAM team)
 	this->proj_team = team;
 }
 
-void CProjectile::Init(Vector3 pos, Vector3 dir, float speed)
+void CProjectile::SetType(PROJECTILE_TYPE type)
+{
+	this->proj_type = type;
+}
+
+void CProjectile::Init(Vector3 pos, Vector3 dir)
 {
 	this->active = true;
 	this->type = GameObject::GO_PROJECTILE;
+	this->collider.type = Collider::COLLIDER_BALL;
 	this->pos = pos;
-	this->vel = dir.Normalized() * speed;
+	this->vel = dir.Normalized() * proj_speed;
 }
 
 /******************************************************************************/
@@ -152,10 +179,32 @@ void CProjectile::HandleInteraction(GameObject* b, double dt)
     if (b->GetType() == GameObject::GO_PROJECTILE)
         return;
 
-	if (CheckCollision(b, dt))
+	if (b->GetType() == GameObject::GO_PLAYER)
+		return;
+	
+	if (this->proj_team == PROJECTILE_TEAM::TEAM_PLAYER && b->GetType() == GameObject::GO_ENEMY)
 	{
-		CollisionResponse(b);
-		this->active = false;
+		if (CheckCollision(b, dt))
+		{
+			CollisionResponse(b);
+			this->active = false;
+		}
+	}
+	else if (this->proj_team == PROJECTILE_TEAM::TEAM_ENEMY && b->GetType() == GameObject::GO_PLAYER)
+	{
+		if (CheckCollision(b, dt))
+		{
+			CollisionResponse(b);
+			this->active = false;
+		}
+	}
+	else//neutral bullet
+	{
+		if (CheckCollision(b, dt))
+		{
+			CollisionResponse(b);
+			this->active = false;
+		}
 	}
 }
 

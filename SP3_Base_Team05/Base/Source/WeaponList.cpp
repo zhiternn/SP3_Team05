@@ -1,6 +1,6 @@
 #include "WeaponList.h"
 
-void Shotgun::Fire(Vector3 pos, Vector3 dir)
+void Shotgun::Fire(Vector3 pos, Vector3 dir, CProjectile::PROJECTILE_TEAM team)
 {
 	//if (fireRate <= 0.0f)
 	{
@@ -14,18 +14,20 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir)
 
 			CProjectile* proj = FetchProjectile();
 			*proj = *projectileInfo;
-
-			proj->Init(pos, dir + offset, projectileSpeed);
+			proj->Init(pos, dir + offset);
+			proj->SetTeam(team);
 		}
 	}
 }
 
-void MachineGun::Fire(Vector3 pos, Vector3 dir)
+void MachineGun::Fire(Vector3 pos, Vector3 dir, CProjectile::PROJECTILE_TEAM team)
 {
 	//if (fireRate <= 0.0f)
 	{
 		CProjectile* proj = FetchProjectile();
 		*proj = *projectileInfo;
-		proj->Init(pos, dir, projectileSpeed);
+		proj->Init(pos, dir);
+		proj->SetTeam(team);
 	}
 }
+

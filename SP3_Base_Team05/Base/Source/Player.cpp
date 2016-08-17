@@ -68,7 +68,7 @@ void Player::Dash(Vector3 dir, double dt)
 
 void Player::Shoot(Vector3 dir)
 {
-	this->weapon->Fire(this->pos, dir);
+	this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
 }
 
 void Player::ChangeWeapon(int type)
