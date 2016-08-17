@@ -79,13 +79,11 @@ void SceneText::Init()
 	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(3, 3, 3), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	player->weapon = new Shotgun();
-	CProjectile* proj = new CProjectile();
-	proj->SetLifetime(10);
-	proj->SetDMG(10);
-	proj->SetScale(0.5f, 0.5f, 0.5f);
-	proj->SetMass(1);
+	player->weapon = new MachineGun();
+	CProjectile* proj = new Shield();
+	proj->SetTeam(CProjectile::TEAM_PLAYER);
 	player->weapon->AssignProjectile(proj);
+
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);

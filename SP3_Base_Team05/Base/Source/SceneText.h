@@ -4,9 +4,9 @@
 #include "SceneBase.h"
 #include "Camera.h"
 #include "GameObject.h"
-#include "Projectile.h"
 #include "Player.h"
 #include "WeaponList.h"
+#include "ProjectileList.h"
 #include "Enemy.h"
 
 #include <vector>

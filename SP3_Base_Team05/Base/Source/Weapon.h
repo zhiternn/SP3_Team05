@@ -28,17 +28,14 @@ public:
 
 	// Getters
 	float GetFireRate();
-	float GetProjectileSpeed();
 
 	// Setters
 	void SetFireRate(float fireRate);
-	void SetProjectileSpeed(float projectileSpeed);
 
 protected:
 	Weapon();
 	
 	float fireRate;
-	float projectileSpeed;
 	CProjectile* projectileInfo;
 };
 
