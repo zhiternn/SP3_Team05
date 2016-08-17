@@ -2,6 +2,7 @@
 #define PROJECTILELIST_H
 
 #include "Projectile.h"
+#include "Enemy.h"
 
 class Rope : public CProjectile
 {
@@ -57,7 +58,7 @@ public:
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject *b, double dt);
 
-	void CalculateChance(unsigned int enemyHealth);
+	void CalculateChance(Enemy *enemy);
 
 	bool Capture();
 private:

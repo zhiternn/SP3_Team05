@@ -32,10 +32,6 @@ public:
 	// Issers 
 	bool IsMoving();
 	bool IsDashed();
-
-	//Damage Functions
-	void TakeDamage(unsigned int dmg);
-
 	Inventory *inventory;
 	Weapon *weapon;
 	float cooldownTimer = 0;
@@ -46,7 +42,6 @@ private:
 	bool isDashed;
 	float forceMagnitude = 0;
 
-	unsigned int playerHP;
 	
 };
 

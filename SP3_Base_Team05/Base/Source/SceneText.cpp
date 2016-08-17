@@ -159,7 +159,6 @@ void SceneText::PlayerController(double dt)
 	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
 	{
 		player->ChangeWeaponUp();
-
 	}
 }
 

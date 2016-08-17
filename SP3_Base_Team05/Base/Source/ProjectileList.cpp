@@ -39,11 +39,25 @@ void Trap::HandleInteraction(GameObject *b, double dt)
 	//If GameObject type is of GO_ENEMY
 	if (b->GetType() == GameObject::GO_ENTITY)
 	{
+		//Prevents them from moving
+		b->SetVelocity(0, 0, 0);
+		//Remove the trap once enemy is constrained
+		this->SetActive(false);
+
+		//CalculateChance(b);
+		if (Capture())
+		{
+			b->SetActive(false);
+			//Return a Higher Score to the player
+			// or maybe money
+		}
+
 	}
 }
 
-void Trap::CalculateChance(unsigned int enemyHealth)
+void Trap::CalculateChance(Enemy *enemy)
 {
+
 }
 
 bool Trap::Capture()
