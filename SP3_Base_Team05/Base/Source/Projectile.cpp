@@ -14,9 +14,11 @@ Class to create Projectiles
 \brief	CProjectile Default Constructor
 */
 /******************************************************************************/
-CProjectile::CProjectile():
+
+CProjectile::CProjectile(PROJECTILE_TYPE type) :
 GameObject(GameObject::GO_PROJECTILE),
-proj_team(PROJECTILE_TEAM::TEAM_NEUTRAL)
+proj_team(PROJECTILE_TEAM::TEAM_NEUTRAL),
+proj_type(type)
 {
 }
 
@@ -152,6 +154,9 @@ void CProjectile::HandleInteraction(GameObject* b, double dt)
 {
     if (b->GetType() == GameObject::GO_PROJECTILE)
         return;
+
+	if (b->GetType() == GameObject::GO_PLAYER)
+		return;
 	
 	if (this->proj_team == PROJECTILE_TEAM::TEAM_PLAYER && b->GetType() == GameObject::GO_ENEMY)
 	{
@@ -162,6 +167,14 @@ void CProjectile::HandleInteraction(GameObject* b, double dt)
 		}
 	}
 	else if (this->proj_team == PROJECTILE_TEAM::TEAM_ENEMY && b->GetType() == GameObject::GO_PLAYER)
+	{
+		if (CheckCollision(b, dt))
+		{
+			CollisionResponse(b);
+			this->active = false;
+		}
+	}
+	else//neutral bullet
 	{
 		if (CheckCollision(b, dt))
 		{

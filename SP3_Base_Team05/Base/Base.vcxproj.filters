@@ -84,10 +84,10 @@
     <ClCompile Include="Source\Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Grenade.cpp">
+    <ClCompile Include="Source\WeaponList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\WeaponList.cpp">
+    <ClCompile Include="Source\ProjectileList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -179,10 +179,10 @@
     <ClInclude Include="Source\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Grenade.h">
+    <ClInclude Include="Source\WeaponList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\WeaponList.h">
+    <ClInclude Include="Source\ProjectileList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,7 +14,7 @@ public:
 	Enemy();
 	~Enemy();
 
-	void Init(Vector3 pos);
+	void Init(Vector3 pos, unsigned int HP);
 	void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
 
@@ -23,12 +23,17 @@ public:
 
 	std::stack<Vector3> destinations;
 
+	//Damage Functions
+	unsigned int GetHP();
+	void TakeDamage(unsigned int dmg);
+
 private:
 	//std::stack<Vector3> destinations;
 	bool Reached(Vector3 pos);
 	float checkReached;
 	float speedLimit;
 
+	unsigned int enemyHP;
 };
 
 Enemy* FetchEnemy();

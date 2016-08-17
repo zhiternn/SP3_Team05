@@ -236,6 +236,9 @@ void GameObject::CollisionResponse(GameObject* b)
 
 void GameObject::HandleInteraction(GameObject* b, double dt)
 {
+	if (b->GetType() == GameObject::GO_PROJECTILE)
+		return;
+
 	if (CheckCollision(b, dt))
 	{
 		CollisionResponse(b);

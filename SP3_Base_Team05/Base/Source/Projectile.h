@@ -12,9 +12,6 @@ Class to create Projectiles
 
 #include "GameObject.h"
 #include "Vector3.h"
-#include "Collider.h"
-
-
 
 /******************************************************************************/
 /*!
@@ -25,9 +22,6 @@ Class GameObject.h:
 class CProjectile : public GameObject
 {
 public:
-	CProjectile();                                          //< Default Constructor
-	~CProjectile();                                         //< Destructor
-	
 	enum PROJECTILE_TEAM
 	{
 		TEAM_NEUTRAL = 0,
@@ -37,12 +31,23 @@ public:
 
 		TEAM_END
 	};
+	enum PROJECTILE_TYPE
+	{
+		BULLET,
+		SHIELD,
+		ROPE,
+		TRAP,
+		RAY,
 
-    void HandleInteraction(CProjectile* b, double dt);			//< Handling Interactions
+		MAX,
+	};
+
+	CProjectile(PROJECTILE_TYPE type = PROJECTILE_TYPE::BULLET);                      //< Default Constructor
+	~CProjectile();                                         //< Destructor
+
 	void Init(Vector3 pos, Vector3 dir, float speed);
-	virtual void Update(double dt);								//< Abstract Update
-
-	virtual void HandleInteraction(GameObject* b, double dt);	//< Handling Interactions
+	virtual void Update(double dt);									//< Abstract Update
+	virtual void HandleInteraction(GameObject* b, double dt);		//< Handling Interactions
 
 	//< Getters
 	float GetDMG();												//< Returns Projectile Damage
@@ -54,11 +59,13 @@ public:
 	void SetLifetime(float lifetime);							//< Set Projectile Lifetime
 	void SetTeam(PROJECTILE_TEAM team);							//< Set Projectile Type
 
-private:
+protected:
 	//< Variables
-	float proj_dmg;												//< Projectile Damage
-	float proj_lifetime;										//< Projectile Lifetime
-	PROJECTILE_TEAM proj_team;									//< Projectile Type
+	float proj_dmg;													//< Projectile Damage
+	float proj_lifetime;											//< Projectile Lifetime
+	PROJECTILE_TEAM proj_team;										//< Projectile Type
+	PROJECTILE_TYPE proj_type;
+
 };
 
 CProjectile* FetchProjectile();

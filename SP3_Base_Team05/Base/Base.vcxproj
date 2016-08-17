@@ -18,7 +18,6 @@
     <ClCompile Include="Source\DepthFBO.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
-    <ClCompile Include="Source\Grenade.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
@@ -28,6 +27,7 @@
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
+    <ClCompile Include="Source\ProjectileList.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
@@ -47,7 +47,6 @@
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\Geometry.h" />
-    <ClInclude Include="Source\Grenade.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
@@ -58,6 +57,7 @@
     <ClInclude Include="Source\MeshBuilder.h" />
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\Projectile.h" />
+    <ClInclude Include="Source\ProjectileList.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
     <ClInclude Include="Source\SceneText.h" />

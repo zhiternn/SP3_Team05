@@ -25,6 +25,7 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	mass = 1;
 	vel.SetZero();
 	isDashed = false;
+	playerHP = 100;
 }
 
 void Player::Update(double dt)
@@ -68,7 +69,7 @@ void Player::Dash(Vector3 dir, double dt)
 
 void Player::Shoot(Vector3 dir)
 {
-	this->weapon->Fire(this->pos, dir);
+	this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
 }
 
 void Player::ChangeWeapon(int type)
@@ -115,3 +116,15 @@ bool Player::IsDashed()
 {
 	return isDashed;
 }
+
+unsigned int Player::GetHP()
+{
+	return this->playerHP;
+}
+
+void Player::TakeDamage(unsigned int dmg)
+{
+	this->playerHP -= dmg;
+}
+
+
