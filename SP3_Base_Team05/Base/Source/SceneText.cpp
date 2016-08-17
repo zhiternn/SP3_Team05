@@ -79,6 +79,8 @@ void SceneText::Init()
 	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(3, 3, 3), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
+	player->weapon = new MachineGun();
+
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
@@ -128,9 +130,25 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
 	{
+		CProjectile* proj = new Shield();
+		proj->SetTeam(CProjectile::TEAM_PLAYER);
+		player->weapon->AssignProjectile(proj);
+
 		Vector3 mouseDir;
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_LSHIFT))
+	{
+		CProjectile *proj_trap = new Trap();
+		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
+		proj_trap->SetVelocity(0, 0, 0);
+		proj_trap->SetColliderType(Collider::COLLIDER_BOX);
+		player->weapon->AssignProjectile(proj_trap);
+
+		Vector3 pos;
+		pos = player->pos.Normalized();
+		player->Shoot(pos);
 	}
 	//if (Controls::GetInstance().mouse_ScrollY < 1)
 	if (Controls::GetInstance().OnPress(Controls::KEY_E))
@@ -141,13 +159,15 @@ void SceneText::PlayerController(double dt)
 	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
 	{
 		player->ChangeWeaponUp();
+
 	}
 }
+
+//Enemy* enemy = dynamic_cast<Enemy*>(b);
 
 void SceneText::Update(double dt)
 {
 	SceneBase::Update(dt);
-
 	{//handles required mouse calculationsdouble x, y;
 		double x, y;
 		Application::GetCursorPos(x, y);

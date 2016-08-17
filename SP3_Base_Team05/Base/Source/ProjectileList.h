@@ -50,6 +50,7 @@ public:
 		SetDMG(10);
 		SetLifetime(30);
 		SetProjectileSpeed(0);
+		SetScale(1, 1, 1);
 	}
 	~Trap(){}
 
