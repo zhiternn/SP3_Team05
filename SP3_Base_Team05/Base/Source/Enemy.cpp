@@ -18,6 +18,8 @@ void Enemy::Init(Vector3 pos)
 	mass = 1;
 	checkReached = REACH_CHECKER;
 	speedLimit = 10.f;
+
+	captureRatio = 1.f;
 }
 
 void Enemy::Update(double dt)
@@ -111,4 +113,16 @@ Enemy* FetchEnemy()
 	   GameObject::goList.push_back(enemy);
 	   return enemy;
    }
+}
+
+void Enemy::SetRate(float rate)
+{
+	//Clamp the captureRatio
+	Math::Clamp(rate, 0.f, 1.f);
+	captureRatio = rate;
+}
+
+float Enemy::GetRate()
+{
+	return this->captureRatio;
 }

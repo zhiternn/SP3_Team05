@@ -75,6 +75,11 @@ void Player::Shoot(Vector3 dir)
 	this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
 }
 
+void Player::Shield(Vector3 dir)
+{
+    this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
+}
+
 void Player::ChangeWeaponUp()
 {
 	weaponIter++;

@@ -11,6 +11,7 @@ public:
 
 	void TakeDamage(unsigned amount);
 	bool IsDead();
+	unsigned int GetHP();
 
 protected:
 	short int health;

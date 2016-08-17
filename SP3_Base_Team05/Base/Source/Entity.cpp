@@ -2,7 +2,7 @@
 
 Entity::Entity():
 GameObject(GameObject::GO_ENTITY),
-health(3)
+health(100)
 {
 }
 
@@ -25,4 +25,9 @@ void Entity::TakeDamage(unsigned amount)
 bool Entity::IsDead()
 {
 	return isDead;
+}
+
+unsigned int Entity::GetHP()
+{
+	return this->health;
 }
