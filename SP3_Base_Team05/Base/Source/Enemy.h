@@ -23,7 +23,6 @@ public:
 
 	std::stack<Vector3> destinations;
 
-
 private:
 	//std::stack<Vector3> destinations;
 	bool Reached(Vector3 pos);
