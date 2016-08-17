@@ -33,6 +33,7 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 void Player::Update(double dt)
 {
 	GameObject::Update(dt);
+	weapon->Update(dt);
 	isMoving = false;
 	if (!isMoving)
 	{
@@ -40,7 +41,7 @@ void Player::Update(double dt)
 	}
 	if (isDashed)
 	{
-		cooldownTimer -= 1.f * dt;
+		cooldownTimer -= dt;
 		if (cooldownTimer <= 0)
 		{
 			isDashed = false;
