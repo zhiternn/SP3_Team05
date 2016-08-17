@@ -9,7 +9,7 @@ Enemy::~Enemy()
 {
 }
 
-void Enemy::Init(Vector3 pos, unsigned int health)
+void Enemy::Init(Vector3 pos)
 {
 	this->pos = pos;
 	active = true;
@@ -18,12 +18,11 @@ void Enemy::Init(Vector3 pos, unsigned int health)
 	mass = 1;
 	checkReached = REACH_CHECKER;
 	speedLimit = 10.f;
-	enemyHP = health;
 }
 
 void Enemy::Update(double dt)
 {
-	if (enemyHP > 0)
+	if (this->GetHP() > 0)
 	{
 		GameObject::Update(dt);
 		UpdateMovement(dt);
@@ -118,14 +117,4 @@ Enemy* FetchEnemy()
 	   GameObject::goList.push_back(enemy);
 	   return enemy;
    }
-}
-
-unsigned int Enemy::GetHP()
-{
-	return this->enemyHP;
-}
-
-void Enemy::TakeDamage(unsigned int dmg)
-{
-	this->enemyHP -= dmg;
 }

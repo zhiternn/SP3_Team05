@@ -32,6 +32,8 @@ public:
 	void ApplyForce(double dt, Vector3 direction, float magnitude = 0.0f);
 	float GetForce();
 
+	void TakeDamage(unsigned int dmg);
+
 	// Getters
 	Vector3 GetPosition();
 	Vector3 GetVelocity();
@@ -41,6 +43,8 @@ public:
 	Collider GetCollider();
 	bool IsActive();
 	float GetMass();
+	unsigned int GetHP();
+	float GetRatio();
 
 	// Setters
 	void SetPostion(float x, float y, float z);
@@ -54,7 +58,8 @@ public:
 	void SetType(GAMEOBJECT_TYPE type);
 	void SetColliderType(Collider::COLLIDER_TYPE type);
 	void SetMass(float mass);
-	void SetActive(bool active);	
+	void SetActive(bool active);
+	void SetHP(unsigned int health);
 	Vector3 pos;
 
 protected:
@@ -72,6 +77,10 @@ protected:
 
 	float mass;
 
+	unsigned int health;
+
+	//Range in between 0.5 and 2.0
+	float captureRatio;
 };
 
 GameObject* FetchGO();

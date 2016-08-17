@@ -25,7 +25,6 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	mass = 1;
 	vel.SetZero();
 	isDashed = false;
-	playerHP = 100;
 }
 
 void Player::Update(double dt)
@@ -117,14 +116,5 @@ bool Player::IsDashed()
 	return isDashed;
 }
 
-unsigned int Player::GetHP()
-{
-	return this->playerHP;
-}
-
-void Player::TakeDamage(unsigned int dmg)
-{
-	this->playerHP -= dmg;
-}
 
 

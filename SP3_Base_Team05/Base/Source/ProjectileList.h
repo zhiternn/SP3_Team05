@@ -27,4 +27,19 @@ private:
 
 };
 
+
+class Trap : public CProjectile
+{
+	Trap() :CProjectile(PROJECTILE_TYPE::TRAP){}
+	~Trap(){}
+
+	virtual void HandleInteraction(GameObject *b, double dt);
+
+	void CalculateChance(unsigned int enemyHealth);
+
+	bool Capture();
+private:
+
+	float captureChance;
+};
 #endif // !PROJECTILELIST_H

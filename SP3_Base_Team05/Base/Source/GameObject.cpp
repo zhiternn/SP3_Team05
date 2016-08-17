@@ -282,6 +282,16 @@ float GameObject::GetMass()
 	return this->mass;
 }
 
+unsigned int GameObject::GetHP()
+{
+	return this->health;
+}
+
+float GameObject::GetRatio()
+{
+	return this->captureRatio;
+}
+
 void GameObject::SetPostion(float x, float y, float z)
 {
 	this->pos.x = x;
@@ -348,6 +358,17 @@ void GameObject::SetMass(float mass)
 void GameObject::SetActive(bool active)
 {
 	this->active = active;
+}
+
+void GameObject::SetHP(unsigned int hp)
+{
+	this->health = hp;
+}
+
+
+void GameObject::TakeDamage(unsigned int dmg)
+{
+	this->health -= dmg;
 }
 
 /*
