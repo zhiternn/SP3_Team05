@@ -18,6 +18,10 @@ public:
 	void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
 
+	void SetRate(float rate);
+
+	float GetRate();
+
 protected:
 	void AddDestination(Vector3 pos);
 	bool UpdateMovement(double dt);
@@ -27,6 +31,8 @@ protected:
 
 	float checkReached;
 	float speedLimit;
+
+	float captureRatio;
 };
 
 Enemy* FetchEnemy();

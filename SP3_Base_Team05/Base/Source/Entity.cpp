@@ -26,3 +26,8 @@ bool Entity::IsDead()
 {
 	return isDead;
 }
+
+unsigned int Entity::GetHP()
+{
+	return this->health;
+}
