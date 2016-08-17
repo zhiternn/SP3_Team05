@@ -29,7 +29,7 @@ public:
 	Shield() :CProjectile(PROJECTILE_TYPE::SHIELD){
 		SetDMG(0);
 		SetLifetime(2);
-		SetProjectileSpeed(1.0f);
+		SetProjectileSpeed(100.f);
 		SetScale(2, 2, 2);
 		SetMass(1);
 	}
