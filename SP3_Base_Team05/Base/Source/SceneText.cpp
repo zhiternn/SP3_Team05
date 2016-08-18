@@ -88,6 +88,8 @@ void SceneText::Init()
 	enemy->SetMass(3);
 	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
 
+    testshield = new Shield();
+
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 }
@@ -126,6 +128,11 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnHold(Controls::MOUSE_LBUTTON))
 	{
+		CProjectile* proj = new ShotgunShell();
+		proj->SetTeam(CProjectile::TEAM_PLAYER);
+        proj->SetColliderType(Collider::COLLIDER_BOX);
+		player->weapon->AssignProjectile(proj);
+
 		Vector3 mouseDir;
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
@@ -152,6 +159,16 @@ void SceneText::PlayerController(double dt)
 	{
 		player->ChangeWeaponUp();
 	}
+    if (Controls::GetInstance().OnHold(Controls::MOUSE_RBUTTON))
+    {
+        CProjectile* proj = new Shield();
+        proj->SetTeam(CProjectile::TEAM_PLAYER);
+        player->weapon->AssignProjectile(proj);
+
+        Vector3 mouseDir;
+        mouseDir = (mousePos_worldBased - player->pos).Normalized();
+        player->Shield(mouseDir);
+    }
 }
 
 void SceneText::Update(double dt)
@@ -369,6 +386,11 @@ void SceneText::RenderHUD()
 	ss3.precision(2);
 	ss3 << "Weapon: " << player->weaponIter;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
+
+    std::ostringstream ss4;
+    ss4.precision(2);
+    ss4 << "Shield Health: " << testshield->GetMaxHealth();
+    RenderTextOnScreen(meshList[GEO_TEXT], ss4.str(), Color(0, 1, 0), 3, 0, 15);
 }
 
 void SceneText::Exit()
