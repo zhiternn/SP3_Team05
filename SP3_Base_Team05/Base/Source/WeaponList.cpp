@@ -1,4 +1,5 @@
 #include "WeaponList.h"
+#include "Mtx44.h"
 
 void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
@@ -30,40 +31,37 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 		*proj = *projectileInfo;
 		proj->Init(pos, dir);
 		proj->SetTeam(team);
-		
 	}
 }
 
 //< DETLAFF WEAPONS
 // SET AS RANDOM FOR NOW
-void DetlaffArc::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
+void SplitGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
 	if (shootDelay <= 0.0f)
 	{
-		for (int i = 0; i < projectileCount; i++)
+		Mtx44 rotate;
+		float offsetAngle;
+		float initialAngle = -coneAngle / 2;
+
+		if (projectileCount % 2 == 0)//even number of projectileCount
 		{
-			float split = spread / projectileCount;
-			float hehe_xd = split / 2;
+			offsetAngle = coneAngle / (projectileCount);
+			initialAngle += offsetAngle / 2;
+		}
+		else//odd number of projectileCount
+		{
+			offsetAngle = coneAngle / (projectileCount - 1);
+		}
 
-
-
-			float offsetVal = -(spread) + (i * split);
-
-			Vector3 offset = Vector3(
-				Math::RandFloatMinMax(-spread, spread),
-				-Math::RandFloatMinMax(-spread, spread),
-				0
-				);
-
-	
-			std::cout << offsetVal << std::endl;
-
+		for (int i = 0; i < projectileCount; ++i)
+		{
+			rotate.SetToRotation(initialAngle + offsetAngle * i, 0, 0, 1);
 
 			CProjectile* proj = FetchProjectile();
 			*proj = *projectileInfo;
-			proj->Init(pos, dir + offset);
+			proj->Init(pos, rotate * dir);
 			proj->SetTeam(team);
 		}
-
 	}
 }

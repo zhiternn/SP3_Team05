@@ -36,18 +36,18 @@ private:
 //< Wayne's Boss
 //< DETLAFF - BOSS WEAPONS
 
-class DetlaffArc : public Weapon
+class SplitGun : public Weapon
 {
 public:
-	DetlaffArc() : spread(4.f) , projectileCount(36) {
+	SplitGun() : coneAngle(45.0f), projectileCount(2) {
 		SetFireRate(1);
 	}
-	~DetlaffArc(){}
+	~SplitGun(){}
 
 	virtual void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
 
 private:
-	float spread;
+	float coneAngle;
 	int projectileCount;
 
 };

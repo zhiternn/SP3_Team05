@@ -15,13 +15,13 @@ void SnakeHead::Init(Vector3 pos)
 {
 	Enemy::Init(pos);
 	scale;
-	speedLimit = 15.0f;
-	movementSpeed = 30.0f;
+	speedLimit = 30.0f;
+	movementSpeed = 60.0f;
 	health;
 	captureRatio;
 
 	SnakeBody* body = new SnakeBody();
-	body->SetScale(2, 2, 2);
+	body->SetScale(4, 4, 4);
 	body->Init(pos);
 	GameObject::goList.push_back(body);
 	back = body;
@@ -30,7 +30,7 @@ void SnakeHead::Init(Vector3 pos)
 	for (int i = 0; i < 20; ++i)
 	{
 		SnakeBody* body2 = new SnakeBody();
-		body2->SetScale(2, 2, 2);
+		body2->SetScale(4, 4, 4);
 		body2->Init(pos);
 		GameObject::goList.push_back(body2);
 		prev->LinkTo(body2);

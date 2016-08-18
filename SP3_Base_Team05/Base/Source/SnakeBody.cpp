@@ -4,8 +4,8 @@ SnakeBody::SnakeBody():
 Enemy(),
 back(NULL)
 {
-	speedLimit = 15.0f;
-	movementSpeed = 30.0f;
+	speedLimit = 30.0f;
+	movementSpeed = 60.0f;
 	collider.type = Collider::COLLIDER_BALL;
 }
 
