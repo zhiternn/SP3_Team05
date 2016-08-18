@@ -112,7 +112,7 @@ void SceneBase::Init()
 
 	//light settings
 	lights[0].type = Light::LIGHT_DIRECTIONAL;
-	lights[0].position.Set(600, 600, 600);
+	lights[0].position.Set(-10, -10, 50);
 	lights[0].color.Set(1, 1, 1);
 	lights[0].power = 1.0f;
 	lights[0].kC = 1.f;
@@ -121,7 +121,7 @@ void SceneBase::Init()
 	lights[0].cosCutoff = cos(Math::DegreeToRadian(45));
 	lights[0].cosInner = cos(Math::DegreeToRadian(30));
 	lights[0].exponent = 3.f;
-	lights[0].spotDirection.Set(0.f, 1.f, 0.f);
+	lights[0].spotDirection.Set(0.2f, -0.2f, -1.f);
 
 	lights[1].type = Light::LIGHT_POINT;
 	lights[1].position.Set(1, 1, 0);
@@ -146,8 +146,7 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_LIGHT0_KQ], lights[0].kQ);
 	glUniform1f(m_parameters[U_LIGHT0_COSCUTOFF], lights[0].cosCutoff);
 	glUniform1f(m_parameters[U_LIGHT0_COSINNER], lights[0].cosInner);
-	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], lights[0].
-		exponent);
+	glUniform1f(m_parameters[U_LIGHT0_EXPONENT], lights[0].exponent);
 
 	glUniform1i(m_parameters[U_LIGHT1_TYPE], lights[1].type);
 	glUniform3fv(m_parameters[U_LIGHT1_COLOR], 1, &lights[1].color.r);
