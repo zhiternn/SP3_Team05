@@ -31,12 +31,14 @@
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\ProjectileList.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
+    <ClCompile Include="Source\SceneSummoner.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SnakeBody.cpp" />
     <ClCompile Include="Source\SnakeHead.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
     <ClCompile Include="Source\Summoner.cpp" />
+    <ClCompile Include="Source\Summons.cpp" />
     <ClCompile Include="Source\TileMap.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
     <ClCompile Include="Source\Weapon.cpp" />
@@ -66,6 +68,7 @@
     <ClInclude Include="Source\ProjectileList.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
+    <ClInclude Include="Source\SceneSummoner.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Shield.h" />
@@ -73,6 +76,7 @@
     <ClInclude Include="Source\SnakeHead.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />
     <ClInclude Include="Source\Summoner.h" />
+    <ClInclude Include="Source\Summons.h" />
     <ClInclude Include="Source\TileMap.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />

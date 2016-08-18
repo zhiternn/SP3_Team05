@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -105,10 +105,10 @@
     <ClCompile Include="Source\Summoner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GolemHead.cpp">
+    <ClCompile Include="Source\Summons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\GolemHand.cpp">
+    <ClCompile Include="Source\SceneSummoner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -218,10 +218,10 @@
     <ClInclude Include="Source\Summoner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GolemHead.h">
+    <ClInclude Include="Source\Summons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GolemHand.h">
+    <ClInclude Include="Source\SceneSummoner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
