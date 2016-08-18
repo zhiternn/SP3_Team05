@@ -4,6 +4,8 @@
 SnakeHead::SnakeHead():
 target(NULL)
 {
+	//< Bodied by Jensen
+
 	SnakeBody* body = new SnakeBody();
 	body->LinkTo(this);
 	body->SetScale(2, 2, 2);

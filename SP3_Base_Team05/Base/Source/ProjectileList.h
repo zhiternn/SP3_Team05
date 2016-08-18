@@ -24,7 +24,7 @@ class ShotgunShell : public CProjectile
 {
 public:
     ShotgunShell() :CProjectile(PROJECTILE_TYPE::BULLET){
-        SetDMG(1);
+        SetDMG(5);
         SetLifetime(2);
         SetProjectileSpeed(30.0f);
         SetScale(1, 1, 1);

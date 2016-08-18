@@ -33,4 +33,23 @@ private:
 
 };
 
+//< Wayne's Boss
+//< DETLAFF - BOSS WEAPONS
+
+class DetlaffArc : public Weapon
+{
+public:
+	DetlaffArc() : spread(4.f) , projectileCount(10) {
+		SetFireRate(1);
+	}
+	~DetlaffArc(){}
+
+	virtual void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
+
+private:
+	float spread;
+	int projectileCount;
+
+};
+
 #endif // !WEAPONLIST_H
