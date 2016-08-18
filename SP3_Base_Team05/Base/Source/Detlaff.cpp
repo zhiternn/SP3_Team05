@@ -1,8 +1,12 @@
 #include "Detlaff.h"
+#include "WeaponList.h"
+#include "ProjectileList.h"
 
 
-CDetlaff::CDetlaff() : target(NULL)
+CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 {
+	//set weapon to STATE_1 default weapon
+	weapon = new DetlaffArc();
 }
 
 
@@ -10,13 +14,41 @@ CDetlaff::~CDetlaff()
 {
 	if (target)
 		delete target;
+
+	if (weapon)
+		delete weapon;
 }
 
 void CDetlaff::Update(double dt)
 {
 	GameObject::Update(dt);
 
-	//< THIS BOSS WILL BE AN IMMOBILE JUGGERNAUGHT
+	//< THIS BOSS WILL BE AN IMMOBILE JUGGERNAUT
+
+	//Update States
+	if (this->GetHP() <= 0)
+	{
+		delete weapon;
+		switch (state)
+		{
+			case STATE_1:
+			{
+				//Spawn Stage 2 Boss
+				state = STATE_2;
+				this->health = 200;
+				//weapon = new MachineGun();
+				break;
+			}
+			case STATE_2:
+			{
+				//Spawn State 3 Boss
+				state = STATE_3;
+				this->health = 400;
+				//weapon = new BIGGRENADABOMBHEHEXD()
+				break;
+			}
+		}
+	}
 }
 
 void CDetlaff::HandleInteraction(GameObject *b, double dt)
@@ -25,26 +57,4 @@ void CDetlaff::HandleInteraction(GameObject *b, double dt)
 	{
 		CollisionResponse(b);
 	}
-}
-
-void CDetlaff::FireOnTarget(Entity* target)
-{
-	this->target = target;
-
-	//player upper right and bottom left boundaries
-	Vector3 upperRight = Vector3(target->GetPosition().x + 5, target->GetPosition().y + 5, 0);
-	Vector3 bottomLeft = Vector3(target->GetPosition().x - 5, target->GetPosition().y - 5, 0);
-
-	//create a vector of type Vector3 to store the locations
-	std::vector<Vector3>location;
-	//clear the vector
-	location.clear();
-
-	//Push in 3 locations for the bomb
-	for (int i = 0; i < 3; i++)
-	{
-		location.push_back(Vector3(Math::RandFloatMinMax(upperRight.x, bottomLeft.x), Math::RandFloatMinMax(upperRight.x, bottomLeft.x), 0));
-	}
-	
-
 }

@@ -2,6 +2,7 @@
 #define SUMMONER_H
 
 #include "Enemy.h"
+#include "Summons.h"
 
 class Summoner : public Enemy
 {
@@ -13,9 +14,13 @@ public:
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
 
+	void UpdateSummons(double dt);
+	void Defend();
+
 private:
 	float safetyThreshold;
 	float chaseThreshold;
+	std::vector<Summons*> summonsList;
 
 };
 

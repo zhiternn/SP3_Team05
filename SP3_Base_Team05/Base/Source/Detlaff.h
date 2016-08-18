@@ -20,10 +20,11 @@ public:
 		STATE_3,
 		STATE_END
 	};
+
 	BOSS_STATE state;
 	//BOSS Cooldown before firing
 private: 
 	Entity *target;
-	Weapon* weapon;
+	Weapon *weapon;
 };
 
