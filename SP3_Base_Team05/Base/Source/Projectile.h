@@ -51,12 +51,15 @@ public:
 	void SetProjectileSpeed(float speed);
 	void SetType(PROJECTILE_TYPE type);
 
+
 protected:
 	//< Variables
 	float proj_dmg;													//< Projectile Damage
 	float proj_lifetime;											//< Projectile Lifetime
-	float proj_speed;								
+	float proj_speed;
+
 	PROJECTILE_TYPE proj_type;										//< Projectile Type
+
 };
 
 CProjectile* FetchProjectile();

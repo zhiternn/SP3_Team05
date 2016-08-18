@@ -16,6 +16,7 @@
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Controls.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
+    <ClCompile Include="Source\Detlaff.cpp" />
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Entity.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="Source\ProjectileList.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
     <ClCompile Include="Source\SceneSummoner.cpp" />
+    <ClCompile Include="Source\SceneDetlaff.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SnakeBody.cpp" />
@@ -51,6 +53,7 @@
     <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Controls.h" />
     <ClInclude Include="Source\DepthFBO.h" />
+    <ClInclude Include="Source\Detlaff.h" />
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\GameObject.h" />
@@ -69,6 +72,7 @@
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
     <ClInclude Include="Source\SceneSummoner.h" />
+    <ClInclude Include="Source\SceneDetlaff.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Shield.h" />

@@ -1,5 +1,5 @@
-#ifndef SCENE_TEXT_H
-#define SCENE_TEXT_H
+#ifndef SCENE_DETLAFF_H
+#define SCENE_DETLAFF_H
 
 #include "SceneBase.h"
 #include "Camera.h"
@@ -13,15 +13,15 @@
 
 using std::vector;
 
-class SceneText : public SceneBase
+class SceneDetlaff : public SceneBase
 {
 	enum GEOMETRY_TYPE
 	{
 		NUM_GEOMETRY = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END
 	};
 public:
-	SceneText();
-	~SceneText();
+	SceneDetlaff();
+	~SceneDetlaff();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -37,7 +37,7 @@ public:
 	void RenderSkyPlane();
 
 private:
-	
+
 	void PlayerController(double dt);
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();

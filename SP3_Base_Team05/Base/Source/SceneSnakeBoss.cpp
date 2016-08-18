@@ -1,4 +1,4 @@
-#include "SceneText.h"
+#include "SceneSnakeBoss.h"
 
 #include "Application.h"
 #include "Controls.h"
@@ -6,17 +6,17 @@
 
 #include <sstream>
 
-SceneText::SceneText():
+SceneSnakeBoss::SceneSnakeBoss() :
 player(NULL),
 mainCamera(NULL)
 {
 }
 
-SceneText::~SceneText()
+SceneSnakeBoss::~SceneSnakeBoss()
 {
 }
 
-void SceneText::Init()
+void SceneSnakeBoss::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
@@ -31,7 +31,7 @@ void SceneText::Init()
 	{
 		meshList[i] = SceneBase::meshList[i];
 	}
-	
+
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	//meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
@@ -59,34 +59,39 @@ void SceneText::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 100;
+	m_orthoHeight = 300;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
 	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-	GameObject *go = FetchGO();
-	go->SetActive(true);
-	go->SetScale(20, 20, 20);
-	go->SetFront(1, 0, 0);
-	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	go->SetType(GameObject::GO_ENVIRONMENT);
-	go->SetColliderType(Collider::COLLIDER_BOX);
+	//GameObject *go = FetchGO();
+	//go->SetActive(true);
+	//go->SetScale(20, 20, 20);
+	//go->SetFront(1, 0, 0);
+	//go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+	//go->SetType(GameObject::GO_ENVIRONMENT);
+	//go->SetColliderType(Collider::COLLIDER_BOX);
 
 	player = new Player();
-	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	summoner = new Summoner();
-	GameObject::goList.push_back(summoner);
-	summoner->SetTarget(player);
-	summoner->Init(Vector3(0,0, 0));
+	enemy = new SnakeHead();
+	GameObject::goList.push_back(enemy);
+	enemy->SetTarget(player);
+	enemy->SetType(GameObject::GO_ENTITY);
+	enemy->SetActive(true);
+	enemy->SetColliderType(Collider::COLLIDER_BALL);
+	enemy->SetScale(3, 3, 3);
+	enemy->SetMass(3);
+	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 }
 
-void SceneText::PlayerController(double dt)
+void SceneSnakeBoss::PlayerController(double dt)
 {
 	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
 	player->SetFront(lookDir);
@@ -108,7 +113,7 @@ void SceneText::PlayerController(double dt)
 	{
 		forceDir.x += 1;
 	}
-	
+
 	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
 	{
 		player->Dash(forceDir, dt);
@@ -124,34 +129,6 @@ void SceneText::PlayerController(double dt)
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
-	{
-		CProjectile *proj_trap = new Trap();
-		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
-		proj_trap->SetVelocity(0, 0, 0);
-		proj_trap->SetColliderType(Collider::COLLIDER_BOX);
-		player->weapon->AssignProjectile(proj_trap);
-	
-		for (int i = 0; i < GameObject::goList.size(); i++)
-		{
-			if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
-			{
-				//Trap found in current map
-				break;
-			}
-			else
-			{
-				//push it into the list to check for next iteration
-				GameObject::goList.push_back(proj_trap);
-
-				Vector3 pos;
-				pos = player->pos.Normalized();
-				player->Shoot(pos);
-				break;
-			}
-		}
-	}
-
 	//if (Controls::GetInstance().mouse_ScrollY < 1)
 	if (Controls::GetInstance().OnPress(Controls::KEY_E))
 	{
@@ -164,7 +141,7 @@ void SceneText::PlayerController(double dt)
 	}
 }
 
-void SceneText::Update(double dt)
+void SceneSnakeBoss::Update(double dt)
 {
 	SceneBase::Update(dt);
 	{//handles required mouse calculationsdouble x, y;
@@ -186,7 +163,7 @@ void SceneText::Update(double dt)
 	//Restrict the player from moving past the deadzone
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
 	{
-	    PlayerController(dt);
+		PlayerController(dt);
 	}
 
 	mainCamera->Update(dt);
@@ -194,7 +171,7 @@ void SceneText::Update(double dt)
 	UpdateGameObjects(dt);
 }
 
-void SceneText::Render()
+void SceneSnakeBoss::Render()
 {
 	Mtx44 perspective;
 	//perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -226,7 +203,7 @@ void SceneText::Render()
 }
 
 static const float SKYBOXSIZE = 1000.f;
-void SceneText::RenderSkybox()
+void SceneSnakeBoss::RenderSkybox()
 {
 	////front
 	//modelStack.PushMatrix();
@@ -279,7 +256,7 @@ void SceneText::RenderSkybox()
 	//modelStack.PopMatrix();
 }
 
-void SceneText::RenderSkyPlane()
+void SceneSnakeBoss::RenderSkyPlane()
 {
 	//modelStack.PushMatrix();
 	//modelStack.Translate(0, 2500, 0);
@@ -288,7 +265,7 @@ void SceneText::RenderSkyPlane()
 	//modelStack.PopMatrix();
 }
 
-void SceneText::RenderGPass()
+void SceneSnakeBoss::RenderGPass()
 {
 	m_renderPass = RENDER_PASS_PRE;
 
@@ -298,10 +275,10 @@ void SceneText::RenderGPass()
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glUseProgram(m_gPassShaderID);
 	//These matrices should change when light position or direction changes
-		if (lights[0].type == Light::LIGHT_DIRECTIONAL)
-			m_lightDepthProj.SetToOrtho(-m_worldWidth * 0.5f, m_worldWidth * 0.5f, -m_worldHeight * 0.5f, m_worldHeight * 0.5f, 0, 100);
-		else
-			m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
+	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
+		m_lightDepthProj.SetToOrtho(-m_worldWidth * 0.5f, m_worldWidth * 0.5f, -m_worldHeight * 0.5f, m_worldHeight * 0.5f, 0, 100);
+	else
+		m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
 
 	m_lightDepthView.SetToLookAt(lights[0].position.x,
 		lights[0].position.y, lights[0].position.z, 0, 0, 0, 0, 1, 0);
@@ -309,7 +286,7 @@ void SceneText::RenderGPass()
 	RenderWorld();
 }
 
-void SceneText::RenderMain()
+void SceneSnakeBoss::RenderMain()
 {
 	m_renderPass = RENDER_PASS_MAIN;
 
@@ -325,18 +302,19 @@ void SceneText::RenderMain()
 
 	RenderWorld();
 
-	if (!summoner->destinations.empty())
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(summoner->destinations.front().x, summoner->destinations.front().y, 0);
-		RenderMesh(meshList[GEO_CUBE], false);
-		modelStack.PopMatrix();
-	}
-	
+	float degree = Math::RadianToDegree(atan2(enemy->GetFront().y, enemy->GetFront().x));
+	modelStack.PushMatrix();
+	modelStack.Translate(enemy->pos.x, enemy->pos.y, enemy->pos.z);
+	modelStack.Rotate(degree - 90, 0, 0, 1);
+	modelStack.Translate(0, 3.0f, 0);
+	modelStack.Scale(1.0f, 1.0f, 1.0f);
+	RenderMesh(meshList[GEO_SPHERE], false);
+	modelStack.PopMatrix();
+
 	//RenderSkyPlane();
 }
 
-void SceneText::RenderWorld()
+void SceneSnakeBoss::RenderWorld()
 {
 	{//Render Floor
 		modelStack.PushMatrix();
@@ -350,7 +328,7 @@ void SceneText::RenderWorld()
 
 }
 
-void SceneText::RenderHUD()
+void SceneSnakeBoss::RenderHUD()
 {
 	// Render the crosshair
 	modelStack.PushMatrix();
@@ -380,23 +358,23 @@ void SceneText::RenderHUD()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
 }
 
-void SceneText::Exit()
+void SceneSnakeBoss::Exit()
 {
 	if (mainCamera)
 		delete mainCamera;
 	if (player)
 		delete player;
 
-	for(int i = 0; i < NUM_GEOMETRY; ++i)
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
-		if(meshList[i])
+		if (meshList[i])
 			delete meshList[i];
 	}
 
 	SceneBase::Exit();
 }
 
-void SceneText::UpdateGameObjects(double dt)
+void SceneSnakeBoss::UpdateGameObjects(double dt)
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
@@ -447,7 +425,7 @@ void SceneText::UpdateGameObjects(double dt)
 	}
 }
 
-void SceneText::RenderGO(GameObject* go)
+void SceneSnakeBoss::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
@@ -465,7 +443,7 @@ void SceneText::RenderGO(GameObject* go)
 		else
 			RenderMesh(meshList[GEO_CUBE], false);
 	}
-		break;
+	break;
 	case GameObject::GO_PROJECTILE:
 	{
 		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
@@ -492,7 +470,7 @@ void SceneText::RenderGO(GameObject* go)
 	modelStack.PopMatrix();
 }
 
-void SceneText::RenderGameObjects()
+void SceneSnakeBoss::RenderGameObjects()
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{

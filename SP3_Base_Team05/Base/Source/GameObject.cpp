@@ -30,7 +30,8 @@ void GameObject::ApplyForce(double dt, Vector3 direction, float magnitude)
 {
 	if (magnitude != 0)
 	{
-		direction = direction.Normalized() * magnitude;
+		if (!direction.IsZero())
+			direction = direction.Normalized() * magnitude;
 	}
 	vel += (direction / mass) * dt;
 }
@@ -219,7 +220,7 @@ void GameObject::CollisionResponse(GameObject* b)
 		   this->vel = this->vel - ((2 * this->vel).Dot(NP)) * NP;
 
 		   float difference = ab.Dot(NP) - (b->scale.x * 0.5f + this->scale.x);
-		   this->pos -= NP * difference;
+		   this->pos += NP * difference;
 		}
 		else
 		{
@@ -231,7 +232,7 @@ void GameObject::CollisionResponse(GameObject* b)
 		   this->vel = this->vel - ((2 * this->vel).Dot(N)) * N;
 
 		   float difference = ab.Dot(N) - (b->scale.y * 0.5f + this->scale.x);
-		   this->pos -= N * difference;
+		   this->pos += N * difference;
 		}
 	}
 		break;

@@ -1,4 +1,4 @@
-#include "SceneText.h"
+#include "SceneDetlaff.h"
 
 #include "Application.h"
 #include "Controls.h"
@@ -6,17 +6,17 @@
 
 #include <sstream>
 
-SceneText::SceneText():
+SceneDetlaff::SceneDetlaff() :
 player(NULL),
 mainCamera(NULL)
 {
 }
 
-SceneText::~SceneText()
+SceneDetlaff::~SceneDetlaff()
 {
 }
 
-void SceneText::Init()
+void SceneDetlaff::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
@@ -31,7 +31,7 @@ void SceneText::Init()
 	{
 		meshList[i] = SceneBase::meshList[i];
 	}
-	
+
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	//meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
@@ -80,13 +80,13 @@ void SceneText::Init()
 	summoner = new Summoner();
 	GameObject::goList.push_back(summoner);
 	summoner->SetTarget(player);
-	summoner->Init(Vector3(0,0, 0));
+	summoner->Init(Vector3(0, 0, 0));
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 }
 
-void SceneText::PlayerController(double dt)
+void SceneDetlaff::PlayerController(double dt)
 {
 	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
 	player->SetFront(lookDir);
@@ -108,7 +108,7 @@ void SceneText::PlayerController(double dt)
 	{
 		forceDir.x += 1;
 	}
-	
+
 	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
 	{
 		player->Dash(forceDir, dt);
@@ -131,7 +131,7 @@ void SceneText::PlayerController(double dt)
 		proj_trap->SetVelocity(0, 0, 0);
 		proj_trap->SetColliderType(Collider::COLLIDER_BOX);
 		player->weapon->AssignProjectile(proj_trap);
-	
+
 		for (int i = 0; i < GameObject::goList.size(); i++)
 		{
 			if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
@@ -164,7 +164,7 @@ void SceneText::PlayerController(double dt)
 	}
 }
 
-void SceneText::Update(double dt)
+void SceneDetlaff::Update(double dt)
 {
 	SceneBase::Update(dt);
 	{//handles required mouse calculationsdouble x, y;
@@ -186,7 +186,7 @@ void SceneText::Update(double dt)
 	//Restrict the player from moving past the deadzone
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
 	{
-	    PlayerController(dt);
+		PlayerController(dt);
 	}
 
 	mainCamera->Update(dt);
@@ -194,7 +194,7 @@ void SceneText::Update(double dt)
 	UpdateGameObjects(dt);
 }
 
-void SceneText::Render()
+void SceneDetlaff::Render()
 {
 	Mtx44 perspective;
 	//perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -226,7 +226,7 @@ void SceneText::Render()
 }
 
 static const float SKYBOXSIZE = 1000.f;
-void SceneText::RenderSkybox()
+void SceneDetlaff::RenderSkybox()
 {
 	////front
 	//modelStack.PushMatrix();
@@ -279,7 +279,7 @@ void SceneText::RenderSkybox()
 	//modelStack.PopMatrix();
 }
 
-void SceneText::RenderSkyPlane()
+void SceneDetlaff::RenderSkyPlane()
 {
 	//modelStack.PushMatrix();
 	//modelStack.Translate(0, 2500, 0);
@@ -288,7 +288,7 @@ void SceneText::RenderSkyPlane()
 	//modelStack.PopMatrix();
 }
 
-void SceneText::RenderGPass()
+void SceneDetlaff::RenderGPass()
 {
 	m_renderPass = RENDER_PASS_PRE;
 
@@ -298,10 +298,10 @@ void SceneText::RenderGPass()
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glUseProgram(m_gPassShaderID);
 	//These matrices should change when light position or direction changes
-		if (lights[0].type == Light::LIGHT_DIRECTIONAL)
-			m_lightDepthProj.SetToOrtho(-m_worldWidth * 0.5f, m_worldWidth * 0.5f, -m_worldHeight * 0.5f, m_worldHeight * 0.5f, 0, 100);
-		else
-			m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
+	if (lights[0].type == Light::LIGHT_DIRECTIONAL)
+		m_lightDepthProj.SetToOrtho(-m_worldWidth * 0.5f, m_worldWidth * 0.5f, -m_worldHeight * 0.5f, m_worldHeight * 0.5f, 0, 100);
+	else
+		m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
 
 	m_lightDepthView.SetToLookAt(lights[0].position.x,
 		lights[0].position.y, lights[0].position.z, 0, 0, 0, 0, 1, 0);
@@ -309,7 +309,7 @@ void SceneText::RenderGPass()
 	RenderWorld();
 }
 
-void SceneText::RenderMain()
+void SceneDetlaff::RenderMain()
 {
 	m_renderPass = RENDER_PASS_MAIN;
 
@@ -332,11 +332,11 @@ void SceneText::RenderMain()
 		RenderMesh(meshList[GEO_CUBE], false);
 		modelStack.PopMatrix();
 	}
-	
+
 	//RenderSkyPlane();
 }
 
-void SceneText::RenderWorld()
+void SceneDetlaff::RenderWorld()
 {
 	{//Render Floor
 		modelStack.PushMatrix();
@@ -350,7 +350,7 @@ void SceneText::RenderWorld()
 
 }
 
-void SceneText::RenderHUD()
+void SceneDetlaff::RenderHUD()
 {
 	// Render the crosshair
 	modelStack.PushMatrix();
@@ -380,23 +380,23 @@ void SceneText::RenderHUD()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
 }
 
-void SceneText::Exit()
+void SceneDetlaff::Exit()
 {
 	if (mainCamera)
 		delete mainCamera;
 	if (player)
 		delete player;
 
-	for(int i = 0; i < NUM_GEOMETRY; ++i)
+	for (int i = 0; i < NUM_GEOMETRY; ++i)
 	{
-		if(meshList[i])
+		if (meshList[i])
 			delete meshList[i];
 	}
 
 	SceneBase::Exit();
 }
 
-void SceneText::UpdateGameObjects(double dt)
+void SceneDetlaff::UpdateGameObjects(double dt)
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
@@ -447,7 +447,7 @@ void SceneText::UpdateGameObjects(double dt)
 	}
 }
 
-void SceneText::RenderGO(GameObject* go)
+void SceneDetlaff::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
@@ -465,7 +465,7 @@ void SceneText::RenderGO(GameObject* go)
 		else
 			RenderMesh(meshList[GEO_CUBE], false);
 	}
-		break;
+	break;
 	case GameObject::GO_PROJECTILE:
 	{
 		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
@@ -492,7 +492,7 @@ void SceneText::RenderGO(GameObject* go)
 	modelStack.PopMatrix();
 }
 
-void SceneText::RenderGameObjects()
+void SceneDetlaff::RenderGameObjects()
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
