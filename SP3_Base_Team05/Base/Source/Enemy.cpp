@@ -15,6 +15,9 @@ Enemy::~Enemy()
 void Enemy::Init(Vector3 pos)
 {
 	this->pos = pos;
+	this->active = true;
+	destinationCountdown = REACH_CHECKER;
+	team = TEAM_ENEMY;
 }
 
 void Enemy::Update(double dt)
@@ -30,18 +33,21 @@ void Enemy::Update(double dt)
 
 bool Enemy::UpdateMovement(double dt)
 {
-	destinationCountdown -= dt;
-	if (destinationCountdown <= 0)
-	{
-		destinationCountdown = REACH_CHECKER;
-		destinations.pop_back();
-	}
+	if (destinationCountdown > 0)
+		destinationCountdown -= dt;
 	if (destinations.size() > 0)
 	{
 		if (Reached(destinations.back()))
 		{
+			if (destinations.size() > 0)
+				destinations.pop_back();
+		}
+		else if (destinationCountdown <= 0)
+		{
+			destinationCountdown = REACH_CHECKER;
 			destinations.pop_back();
 		}
+		
 		else
 		{
 			Vector3 dir = (destinations.back() - pos).Normalized();

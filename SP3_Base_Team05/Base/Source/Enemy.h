@@ -21,6 +21,8 @@ public:
 	//Getters
 	float GetRate();
 
+	std::vector<Vector3> destinations;
+
 protected:
 	enum DESTINATION_PRIORITY
 	{
@@ -36,7 +38,8 @@ protected:
 	bool Reached(Vector3 pos);
 	Vector3 FindNewPath(Vector3 destination, GameObject* obstacle);
 
-	std::vector<Vector3> destinations;
+	// moved to public for testing
+	//std::vector<Vector3> destinations;
 	float destinationCountdown;
 
 	Entity* target;

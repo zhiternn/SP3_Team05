@@ -56,9 +56,6 @@ private:
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
 
-
-    Shield* testshield;
-
 	SnakeHead* enemy;
 	Summoner* summoner;
 };
