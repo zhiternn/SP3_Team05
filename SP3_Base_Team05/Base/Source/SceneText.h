@@ -8,6 +8,7 @@
 #include "WeaponList.h"
 #include "ProjectileList.h"
 #include "SnakeHead.h"
+#include "Summoner.h"
 
 #include <vector>
 
@@ -59,6 +60,7 @@ private:
     Shield* testshield;
 
 	SnakeHead* enemy;
+	Summoner* summoner;
 };
 
 #endif
