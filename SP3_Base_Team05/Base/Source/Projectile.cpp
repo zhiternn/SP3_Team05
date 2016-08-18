@@ -133,7 +133,21 @@ void CProjectile::Update(double dt)
 	GameObject::Update(dt);
 	proj_lifetime -= dt;
 	if (proj_lifetime <= 0)
+	{
 		active = false;
+		if (this->proj_type == (CProjectile::TRAP))
+		{
+			for (int i = 0; i < GameObject::goList.size(); i++)
+			{
+				if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
+				{
+					GameObject::goList.erase(GameObject::goList.begin() + i);
+				}
+			}
+		}
+	}
+		
+
 }
 
 /******************************************************************************/

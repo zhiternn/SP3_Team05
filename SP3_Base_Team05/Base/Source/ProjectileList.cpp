@@ -37,7 +37,7 @@ void Trap::HandleInteraction(GameObject *b, double dt)
 		//Remove the trap once enemy is constrained
 		this->SetActive(false);
 
-		//CalculateChance(b);
+		CalculateChance(dynamic_cast<Enemy*>(b));
 		if (Capture())
 		{
 			b->SetActive(false);
@@ -72,6 +72,7 @@ bool Trap::Capture()
 void Trap::Update(double dt)
 {
 	CProjectile::Update(dt);
+
 }
 
 

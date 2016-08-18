@@ -124,6 +124,34 @@ void SceneText::PlayerController(double dt)
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
+	if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
+	{
+		CProjectile *proj_trap = new Trap();
+		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
+		proj_trap->SetVelocity(0, 0, 0);
+		proj_trap->SetColliderType(Collider::COLLIDER_BOX);
+		player->weapon->AssignProjectile(proj_trap);
+	
+		for (int i = 0; i < GameObject::goList.size(); i++)
+		{
+			if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
+			{
+				//Trap found in current map
+				break;
+			}
+			else
+			{
+				//push it into the list to check for next iteration
+				GameObject::goList.push_back(proj_trap);
+
+				Vector3 pos;
+				pos = player->pos.Normalized();
+				player->Shoot(pos);
+				break;
+			}
+		}
+	}
+
 	//if (Controls::GetInstance().mouse_ScrollY < 1)
 	if (Controls::GetInstance().OnPress(Controls::KEY_E))
 	{
