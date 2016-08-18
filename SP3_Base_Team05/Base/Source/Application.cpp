@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include "SceneText.h"
+#include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
 
 GLFWwindow* m_window;
