@@ -24,8 +24,8 @@ public:
     GolemHead();
     ~GolemHead();
 
+    virtual void Init(Vector3 pos);
     virtual void Update(double dt);
-    virtual void HandleInteraction(GameObject* b, double dt);
 
 private:
 
