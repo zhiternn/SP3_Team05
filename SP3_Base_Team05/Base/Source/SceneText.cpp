@@ -77,16 +77,6 @@ void SceneText::Init()
 	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	enemy = new SnakeHead();
-	GameObject::goList.push_back(enemy);
-	enemy->SetTarget(player);
-	enemy->SetType(GameObject::GO_ENTITY);
-	enemy->SetActive(true);
-	enemy->SetColliderType(Collider::COLLIDER_BALL);
-	enemy->SetScale(3, 3, 3);
-	enemy->SetMass(3);
-	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
-
 	summoner = new Summoner();
 	GameObject::goList.push_back(summoner);
 	summoner->SetTarget(player);
@@ -306,15 +296,6 @@ void SceneText::RenderMain()
 	glUniform1i(m_parameters[U_SHADOW_MAP], 8);
 
 	RenderWorld();
-
-	float degree = Math::RadianToDegree(atan2(enemy->GetFront().y, enemy->GetFront().x));
-	modelStack.PushMatrix();
-	modelStack.Translate(enemy->pos.x, enemy->pos.y, enemy->pos.z);
-	modelStack.Rotate(degree -90, 0, 0, 1);
-	modelStack.Translate(0, 3.0f, 0);
-	modelStack.Scale(1.0f, 1.0f, 1.0f);
-	RenderMesh(meshList[GEO_SPHERE], false);
-	modelStack.PopMatrix();
 
 	if (!summoner->destinations.empty())
 	{

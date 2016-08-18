@@ -7,7 +7,6 @@
 #include "Player.h"
 #include "WeaponList.h"
 #include "ProjectileList.h"
-#include "SnakeHead.h"
 #include "Summoner.h"
 
 #include <vector>
@@ -56,7 +55,6 @@ private:
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
 
-	SnakeHead* enemy;
 	Summoner* summoner;
 };
 

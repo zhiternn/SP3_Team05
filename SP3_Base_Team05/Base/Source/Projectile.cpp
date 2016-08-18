@@ -153,6 +153,7 @@ void CProjectile::HandleInteraction(GameObject* b, double dt)
 		if (entity)
 		{
 			entity->TakeDamage(proj_dmg);
+			CollisionResponse(b);
 		}
 		this->active = false;
 	}
