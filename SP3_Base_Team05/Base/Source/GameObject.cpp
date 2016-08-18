@@ -187,14 +187,19 @@ void GameObject::CollisionResponse(GameObject* b)
 		Vector3 u1N = this->vel.Dot(N) * N;
 		Vector3 u2N = b->vel.Dot(N) * N;
 
-		this->vel = this->vel + (((2 * b->mass) / (this->mass + b->mass)) * (u2N - u1N));
-		b->vel = b->vel + (((2 * this->mass) / (this->mass + b->mass)) * (u1N - u2N));
+		if (!b->GetCollider().isStatic)
+			b->vel = b->vel + (((2 * this->mass) / (this->mass + b->mass)) * (u1N - u2N));
 
-		float distanceSquared = (this->pos - b->pos).LengthSquared();
-		float combinedRadius = this->scale.x + b->scale.x;
-		float difference = distanceSquared - (combinedRadius * combinedRadius);
+		if (!this->collider.isStatic)
+		{
+			this->vel = this->vel + (((2 * b->mass) / (this->mass + b->mass)) * (u2N - u1N));
 
-		this->vel -= N * difference;
+			float distanceSquared = (this->pos - b->pos).LengthSquared();
+			float combinedRadius = this->scale.x + b->scale.x;
+			float difference = distanceSquared - (combinedRadius * combinedRadius);
+
+			this->vel -= N * difference;
+		}
 	}
 		break;
 
@@ -214,7 +219,7 @@ void GameObject::CollisionResponse(GameObject* b)
 		   this->vel = this->vel - ((2 * this->vel).Dot(NP)) * NP;
 
 		   float difference = ab.Dot(NP) - (b->scale.x * 0.5f + this->scale.x);
-		   this->pos += NP * difference;
+		   this->pos -= NP * difference;
 		}
 		else
 		{
@@ -226,7 +231,7 @@ void GameObject::CollisionResponse(GameObject* b)
 		   this->vel = this->vel - ((2 * this->vel).Dot(N)) * N;
 
 		   float difference = ab.Dot(N) - (b->scale.y * 0.5f + this->scale.x);
-		   this->pos += N * difference;
+		   this->pos -= N * difference;
 		}
 	}
 		break;

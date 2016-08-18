@@ -68,39 +68,32 @@ Vector3 Enemy::FindNewPath(Vector3 destination, GameObject* obstacle)
 	{
 	case Collider::COLLIDER_BALL:
 	{
-		Vector3 toObstacle = (obstacle->pos - pos).Normalized();
-		Vector3 NP = Vector3(-toObstacle.y, toObstacle.x, toObstacle.z);
-		float offset = obstacle->GetScale().x + (scale.x * 1.5f);
+		Vector3 toDestination = destination - pos;
+		Vector3 toDestinationP = Vector3(-toDestination.y, toDestination.x, 0).Normalized();
+		Vector3 toObstacle = obstacle->pos - pos;
 
-		return obstacle->pos + (NP * offset);
+		if (toObstacle.Dot(toDestinationP) > 0)
+			toDestinationP = -toDestinationP;
+
+		float NPoffset = obstacle->GetScale().x + this->scale.x * 1.5f;
+		return obstacle->pos + (toDestinationP.Normalized() * NPoffset);
 	}
 		break;
 	case Collider::COLLIDER_BOX:
 	{
-		Vector3 toDestination = destination - pos;
 		Vector3 toObstacle = obstacle->pos - pos;
-		Vector3 pointOnBox = obstacle->pos;
 		Vector3 N = obstacle->GetFront();
-		Vector3 NP = Vector3(-N.y, N.x, N.z);
+		Vector3 NP = Vector3(-N.y, N.x, 0);
 
-		if (toObstacle.Dot(NP) < 0)
-			NP = -NP;
-		if (toObstacle.Dot(N) < 0)
+		if (toObstacle.Dot(N) > 0)
 			N = -N;
+		if (toObstacle.Dot(NP) > 0)
+			NP = -NP;
 
-		pointOnBox += (toObstacle.Dot(N) * N) + (toObstacle.Dot(NP) * NP);
+		float Noffset = obstacle->GetScale().x * 0.5f + this->scale.x * 1.5f;
+		float NPoffset = obstacle->GetScale().y * 0.5f + this->scale.x * 1.5f;
 
-		if (toObstacle.Dot(N) < toObstacle.Dot(NP))
-		{
-			float offset = (toObstacle.Dot(N) - obstacle->GetScale().x) + this->scale.x;
-			return obstacle->pos + (NP * obstacle->GetScale().y) + (N * offset);
-		}
-		else
-		{
-			float offset = (toObstacle.Dot(NP) - obstacle->GetScale().y) + this->scale.x;
-			return obstacle->pos + (N * obstacle->GetScale().x) + (NP * offset);
-		}
-
+		return obstacle->pos + (N * Noffset) + (NP * NPoffset);
 	}
 		break;
 
@@ -119,9 +112,12 @@ bool Enemy::Reached(Vector3 pos)
 		return false;
 }
 
-void Enemy::AddDestination(Vector3 pos)
+void Enemy::ChangeDestination(Enemy::MOVEMENT_PRIORITY priority, Vector3 pos)
 {
-	this->destinations.push_back(pos);
+	if (destinations.size() < priority + 1)
+		this->destinations.push_back(pos);
+	else
+		this->destinations[priority] = pos;
 }
 
 Enemy* FetchEnemy()
@@ -174,4 +170,31 @@ void Enemy::SetTarget(Entity* target)
 float Enemy::GetRate()
 {
 	return this->captureRatio;
+}
+
+void Enemy::HandleInteraction(GameObject* b, double dt)
+{
+	if (CheckCollision(b, dt))
+	{
+		if (b->GetType() == GameObject::GO_ENVIRONMENT)
+		{
+			Vector3 newPath = FindNewPath(target->pos, b);
+			ChangeDestination(MOVETO_AVOID_ENVIRONMENT, newPath);
+
+			CollisionResponse(b);
+
+			{//testy stuff
+				static GameObject* hehe = NULL;
+				GameObject* go = FetchGO();
+				go->SetActive(true);
+				go->SetScale(5, 5, 5);
+
+				go->pos = newPath;
+
+				if (hehe)
+					hehe->SetActive(false);
+				hehe = go;
+			}
+		}
+	}
 }

@@ -14,6 +14,7 @@ public:
 
 	virtual void Init(Vector3 pos);
 	virtual void Update(double dt);
+	virtual void HandleInteraction(GameObject* b, double dt);
 
 	//Setters
 	void SetTarget(Entity* target);
@@ -22,16 +23,16 @@ public:
 	float GetRate();
 
 protected:
-	enum DESTINATION_PRIORITY
+	enum MOVEMENT_PRIORITY
 	{
-		D_MAIN,
-		D_ENVIRONMENT,
-		D_DODGE,
+		MOVETO_TARGET,
+		MOVETO_AVOID_ENVIRONMENT,
+		MOVETO_AVOID_PROJECTILE,
 
-		D_END
+		MOVETO_END,
 	};
 
-	void AddDestination(Vector3 pos);
+	void ChangeDestination(MOVEMENT_PRIORITY priority, Vector3 pos);
 	bool UpdateMovement(double dt);//returns false if out of waypoints
 	bool Reached(Vector3 pos);
 	Vector3 FindNewPath(Vector3 destination, GameObject* obstacle);

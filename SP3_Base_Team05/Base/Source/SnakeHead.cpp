@@ -38,7 +38,7 @@ void SnakeHead::Init(Vector3 pos)
 	mass = 1;
 	destinationCountdown = REACH_CHECKER;
 	speedLimit = 10.f;
-	movementSpeed = 20.0f;
+	movementSpeed = 5.0f;
 
 	captureRatio = 1.f;
 }
@@ -54,12 +54,23 @@ void SnakeHead::Update(double dt)
 		if (target)
 		{
 			float combinedRadius = scale.x + target->GetScale().x;
-			float offset = Math::RandFloatMinMax(combinedRadius * 1.5f, combinedRadius * 2.0f);
+			float offset = Math::RandFloatMinMax(combinedRadius * 2, combinedRadius * 3);
 			Vector3 offsetDir = target->pos - pos;
 			offsetDir.Set(-offsetDir.y, offsetDir.x, offsetDir.z);
 
 			Vector3 destination = target->pos + offsetDir.Normalized() * offset;
-			AddDestination(destination);
+			ChangeDestination(MOVETO_TARGET, destination);
+			
+			{//testy stuff
+				static GameObject* hehe = NULL;
+				GameObject* go = FetchGO();
+				go->SetActive(true);
+
+				go->pos = destination;
+				if (hehe)
+					hehe->SetActive(false);
+				hehe = go;
+			}
 		}
 	}
 }
