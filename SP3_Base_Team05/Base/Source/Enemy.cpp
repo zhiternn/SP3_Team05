@@ -39,8 +39,7 @@ bool Enemy::UpdateMovement(double dt)
 	{
 		if (Reached(destinations.back()))
 		{
-			if (destinations.size() > 0)
-				destinations.pop_back();
+			destinations.pop_back();
 		}
 		else if (destinationCountdown <= 0)
 		{

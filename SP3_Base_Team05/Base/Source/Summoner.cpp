@@ -39,7 +39,7 @@ void Summoner::Update(double dt)
 				Vector3 offsetDir = target->pos - pos;
 
 				Vector3 finalDestination = target->pos - offsetDir.Normalized() * offset;
-				AddDestination(finalDestination);
+				ChangeDestination(MOVETO_TARGET, finalDestination);
 			}
 		}
 		else
