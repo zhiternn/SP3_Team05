@@ -18,7 +18,6 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			proj->SetTeam(team);
 			
 		}
-
 	}
 }
 
@@ -36,16 +35,29 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 }
 
 //< DETLAFF WEAPONS
+// SET AS RANDOM FOR NOW
 void DetlaffArc::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
 	if (shootDelay <= 0.0f)
 	{
-		for (int i = 0; i < projectileCount; ++i)
+		for (int i = 0; i < projectileCount; i++)
 		{
 			float split = spread / projectileCount;
 			float hehe_xd = split / 2;
 
-			Vector3 offset = Vector3(-hehe_xd , hehe_xd, 0);
+
+
+			float offsetVal = -(spread) + (i * split);
+
+			Vector3 offset = Vector3(
+				Math::RandFloatMinMax(-spread, spread),
+				-Math::RandFloatMinMax(-spread, spread),
+				0
+				);
+
+	
+			std::cout << offsetVal << std::endl;
+
 
 			CProjectile* proj = FetchProjectile();
 			*proj = *projectileInfo;

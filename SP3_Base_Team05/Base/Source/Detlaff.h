@@ -11,7 +11,7 @@ public:
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject *b, double dt);
 
-	void SetTarget(Entity *target);
+	void FireOnTarget(Entity *target);
 
 	enum BOSS_STATE
 	{
@@ -22,7 +22,6 @@ public:
 	};
 	BOSS_STATE state;
 	//BOSS Cooldown before firing
-	float cooldown;
 private: 
 	Entity *target;
 	Weapon* weapon;

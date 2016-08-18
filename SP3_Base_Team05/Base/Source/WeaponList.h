@@ -6,7 +6,7 @@
 class Shotgun : public Weapon
 {
 public:
-	Shotgun():projectileCount(5), spread(0.8f){
+	Shotgun():projectileCount(36), spread(4.f){
 		SetFireRate(0.5);
 	}
 	~Shotgun(){}
@@ -39,7 +39,7 @@ private:
 class DetlaffArc : public Weapon
 {
 public:
-	DetlaffArc() : spread(4.f) , projectileCount(10) {
+	DetlaffArc() : spread(4.f) , projectileCount(36) {
 		SetFireRate(1);
 	}
 	~DetlaffArc(){}
