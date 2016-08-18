@@ -55,7 +55,7 @@ void SceneText::Init()
 	//projectionStack.LoadMatrix(perspective);
 
 	//World Space
-	m_worldHeight = 500;
+	m_worldHeight = 300;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
@@ -74,9 +74,8 @@ void SceneText::Init()
 	go->SetColliderType(Collider::COLLIDER_BOX);
 
 	player = new Player();
-	player->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
-
 
 	enemy = new SnakeHead();
 	GameObject::goList.push_back(enemy);
@@ -88,12 +87,13 @@ void SceneText::Init()
 	enemy->SetMass(3);
 	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
 
-    testshield = new Shield();
+	summoner = new Summoner();
+	GameObject::goList.push_back(summoner);
+	summoner->SetTarget(player);
+	summoner->Init(Vector3(0,0, 0));
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
-	mainCamera->Include(&(enemy->pos));
-
 }
 
 void SceneText::PlayerController(double dt)
@@ -130,11 +130,6 @@ void SceneText::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnHold(Controls::MOUSE_LBUTTON))
 	{
-		CProjectile* proj = new ShotgunShell();
-		proj->SetTeam(CProjectile::TEAM_PLAYER);
-        proj->SetColliderType(Collider::COLLIDER_BOX);
-		player->weapon->AssignProjectile(proj);
-
 		Vector3 mouseDir;
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
@@ -166,6 +161,7 @@ void SceneText::PlayerController(double dt)
 			}
 		}
 	}
+
 	//if (Controls::GetInstance().mouse_ScrollY < 1)
 	if (Controls::GetInstance().OnPress(Controls::KEY_E))
 	{
@@ -176,16 +172,6 @@ void SceneText::PlayerController(double dt)
 	{
 		player->ChangeWeaponUp();
 	}
-    if (Controls::GetInstance().OnHold(Controls::MOUSE_RBUTTON))
-    {
-        CProjectile* proj = new Shield();
-        proj->SetTeam(CProjectile::TEAM_PLAYER);
-        player->weapon->AssignProjectile(proj);
-
-        Vector3 mouseDir;
-        mouseDir = (mousePos_worldBased - player->pos).Normalized();
-        player->Shield(mouseDir);
-    }
 }
 
 void SceneText::Update(double dt)
@@ -323,7 +309,7 @@ void SceneText::RenderGPass()
 	glUseProgram(m_gPassShaderID);
 	//These matrices should change when light position or direction changes
 		if (lights[0].type == Light::LIGHT_DIRECTIONAL)
-			m_lightDepthProj.SetToOrtho(-800, 800, -600, 600, 0, 10000);
+			m_lightDepthProj.SetToOrtho(-m_worldWidth * 0.5f, m_worldWidth * 0.5f, -m_worldHeight * 0.5f, m_worldHeight * 0.5f, 0, 100);
 		else
 			m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
 
@@ -357,6 +343,14 @@ void SceneText::RenderMain()
 	modelStack.Scale(1.0f, 1.0f, 1.0f);
 	RenderMesh(meshList[GEO_SPHERE], false);
 	modelStack.PopMatrix();
+
+	if (!summoner->destinations.empty())
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(summoner->destinations.front().x, summoner->destinations.front().y, 0);
+		RenderMesh(meshList[GEO_CUBE], false);
+		modelStack.PopMatrix();
+	}
 	
 	//RenderSkyPlane();
 }
@@ -403,11 +397,6 @@ void SceneText::RenderHUD()
 	ss3.precision(2);
 	ss3 << "Weapon: " << player->weaponIter;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
-
-    std::ostringstream ss4;
-    ss4.precision(2);
-    ss4 << "Shield Health: " << testshield->GetMaxHealth();
-    RenderTextOnScreen(meshList[GEO_TEXT], ss4.str(), Color(0, 1, 0), 3, 0, 15);
 }
 
 void SceneText::Exit()

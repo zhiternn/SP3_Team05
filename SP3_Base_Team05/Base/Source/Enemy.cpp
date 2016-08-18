@@ -1,70 +1,109 @@
 #include "Enemy.h"
 
 Enemy::Enemy():
-Entity()
+Entity(),
+target(NULL)
 {
 }
 
 Enemy::~Enemy()
 {
+	if (target)
+		delete target;
 }
 
 void Enemy::Init(Vector3 pos)
 {
 	this->pos = pos;
-	active = true;
-	type = GameObject::GO_ENTITY;
+	this->active = true;
+	destinationCountdown = REACH_CHECKER;
 	team = TEAM_ENEMY;
-	collider.type = Collider::COLLIDER_BALL;
-	mass = 1;
-	checkReached = REACH_CHECKER;
-	speedLimit = 10.f;
-
-	captureRatio = 1.f;
 }
 
 void Enemy::Update(double dt)
 {
 	GameObject::Update(dt);
+	if (vel.IsZero() == false)
+		front = vel.Normalized();
+
 	if (!UpdateMovement(dt))
 	{//if fail to update (zero destination left)
-		Vector3 temp(Math::RandFloatMinMax(200, 250), Math::RandFloatMinMax(200, 250), 0);
-		AddDestination(temp);
 	}
-}
-
-void Enemy::HandleInteraction(GameObject* b, double dt)
-{
 }
 
 bool Enemy::UpdateMovement(double dt)
 {
-	checkReached -= dt;
-
+	if (destinationCountdown > 0)
+		destinationCountdown -= dt;
 	if (destinations.size() > 0)
 	{
-		Vector3 dir = (destinations.top() - pos).Normalized();
-		if (Reached(destinations.top()) || checkReached <= 0)
+		if (Reached(destinations.back()))
 		{
-			checkReached = REACH_CHECKER;
-			destinations.pop();
+			destinations.pop_back();
 		}
+		else if (destinationCountdown <= 0)
+		{
+			destinationCountdown = REACH_CHECKER;
+			destinations.pop_back();
+		}
+		
 		else
 		{
-			this->ApplyForce(dt, dir, ENEMY_MOVEMENT_SPEED);
+			Vector3 dir = (destinations.back() - pos).Normalized();
+
+			vel += dir * movementSpeed;
+
 			if (vel.LengthSquared() > speedLimit * speedLimit)
 			{
 				vel = vel.Normalized() * speedLimit;
 			}
 		}
-		if (vel.IsZero() == false)
-			front = vel.Normalized();
 
 		return true;
 	}
 	else
 	{
 		return false;
+	}
+}
+
+Vector3 Enemy::FindNewPath(Vector3 destination, GameObject* obstacle)
+{
+	switch (obstacle->GetCollider().type)
+	{
+	case Collider::COLLIDER_BALL:
+	{
+		Vector3 toDestination = destination - pos;
+		Vector3 toDestinationP = Vector3(-toDestination.y, toDestination.x, 0).Normalized();
+		Vector3 toObstacle = obstacle->pos - pos;
+
+		if (toObstacle.Dot(toDestinationP) > 0)
+			toDestinationP = -toDestinationP;
+
+		float NPoffset = obstacle->GetScale().x + this->scale.x * 1.5f;
+		return obstacle->pos + (toDestinationP.Normalized() * NPoffset);
+	}
+		break;
+	case Collider::COLLIDER_BOX:
+	{
+		Vector3 toObstacle = obstacle->pos - pos;
+		Vector3 N = obstacle->GetFront();
+		Vector3 NP = Vector3(-N.y, N.x, 0);
+
+		if (toObstacle.Dot(N) > 0)
+			N = -N;
+		if (toObstacle.Dot(NP) > 0)
+			NP = -NP;
+
+		float Noffset = obstacle->GetScale().x * 0.5f + this->scale.x * 1.5f;
+		float NPoffset = obstacle->GetScale().y * 0.5f + this->scale.x * 1.5f;
+
+		return obstacle->pos + (N * Noffset) + (NP * NPoffset);
+	}
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -78,9 +117,12 @@ bool Enemy::Reached(Vector3 pos)
 		return false;
 }
 
-void Enemy::AddDestination(Vector3 pos)
+void Enemy::ChangeDestination(Enemy::MOVEMENT_PRIORITY priority, Vector3 pos)
 {
-	this->destinations.push(pos);
+	if (destinations.size() < priority + 1)
+		this->destinations.push_back(pos);
+	else
+		this->destinations[priority] = pos;
 }
 
 Enemy* FetchEnemy()
@@ -125,7 +167,39 @@ void Enemy::SetRate(float rate)
 	captureRatio = rate;
 }
 
+void Enemy::SetTarget(Entity* target)
+{
+	this->target = target;
+}
+
 float Enemy::GetRate()
 {
 	return this->captureRatio;
+}
+
+void Enemy::HandleInteraction(GameObject* b, double dt)
+{
+	if (CheckCollision(b, dt))
+	{
+		if (b->GetType() == GameObject::GO_ENVIRONMENT)
+		{
+			Vector3 newPath = FindNewPath(target->pos, b);
+			ChangeDestination(MOVETO_AVOID_ENVIRONMENT, newPath);
+
+			CollisionResponse(b);
+
+			{//testy stuff
+				static GameObject* hehe = NULL;
+				GameObject* go = FetchGO();
+				go->SetActive(true);
+				go->SetScale(5, 5, 5);
+
+				go->pos = newPath;
+
+				if (hehe)
+					hehe->SetActive(false);
+				hehe = go;
+			}
+		}
+	}
 }

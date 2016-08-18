@@ -6,8 +6,8 @@
 class Shotgun : public Weapon
 {
 public:
-	Shotgun():projectileCount(36), spread(4.f){
-		SetFireRate(0.5);
+	Shotgun():projectileCount(5), spread(0.25f){
+		SetFireRate(1.5);
 	}
 	~Shotgun(){}
 

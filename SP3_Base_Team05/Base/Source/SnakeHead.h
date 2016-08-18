@@ -9,13 +9,11 @@ public:
 	SnakeHead();
 	~SnakeHead();
 
+	virtual void Init(Vector3 pos);
 	virtual void Update(double dt);
-	virtual void HandleInteraction(GameObject* b, double dt);
-
-	void SetTarget(Entity* target);
 
 private:
-	Entity* target;
+	
 };
 
 #endif

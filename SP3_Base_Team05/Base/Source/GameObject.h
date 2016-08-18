@@ -68,6 +68,7 @@ public:
 	void SetTeam(TEAM_TYPE team);
 
 	Vector3 pos;
+	Collider collider;
 
 protected:
 	virtual bool CheckCollision(GameObject* b, double dt);
@@ -80,7 +81,6 @@ protected:
 	bool active;
 
 	GAMEOBJECT_TYPE type;
-	Collider collider;
 	TEAM_TYPE team;
 
 	float mass;
