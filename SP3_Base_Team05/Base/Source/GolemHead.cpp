@@ -1,9 +1,23 @@
 #include "GolemHead.h"
 
-GolemHead::GolemHead() :
-Enemy()/*,
-       link(NULL)*/
+GolemHead::GolemHead()
+/*link(NULL)*/
 {
+}
+
+void GolemHead::Init(Vector3 pos)
+{
+    this->pos = pos;
+    active = true;
+    type = GameObject::GO_ENTITY;
+    team = TEAM_ENEMY;
+    collider.type = Collider::COLLIDER_BOX;
+    mass = 1000;
+    destinationCountdown = REACH_CHECKER;
+    speedLimit = 5.0f;
+    movementSpeed = 1.0f;
+
+    captureRatio = 1.f;
 }
 
 GolemHead::~GolemHead()
@@ -13,10 +27,9 @@ GolemHead::~GolemHead()
 
 void GolemHead::Update(double dt)
 {
+    GameObject::Update(dt);
+    if (vel.IsZero() == false)
+        front = vel.Normalized();
 
-}
-
-void GolemHead::HandleInteraction(GameObject* b, double dt)
-{
-
+    // No Movement on Head
 }

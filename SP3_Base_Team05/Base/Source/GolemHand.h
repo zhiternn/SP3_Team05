@@ -4,7 +4,7 @@
 \author Quek Tse Hiang Reuben
 \par	email: 152773F\@nyp.edu.sg
 \brief
-Class to handle Boss Golem Head
+Class to handle Boss Golem Hand
 */
 /******************************************************************************/
 #ifndef GOLEMHAND_H
@@ -15,21 +15,43 @@ Class to handle Boss Golem Head
 /******************************************************************************/
 /*!
 Class GolemHand.h:
-\brief	Class to handle Boss Golem Head
+\brief	Class to handle Boss Golem Hand
 */
 /******************************************************************************/
-class GolemHand : public Enemy
+class GolemRightHand : public Enemy
 {
 public:
-    GolemHand();
-    ~GolemHand();
+    GolemRightHand();
+    ~GolemRightHand();
 
+    virtual void Init(Vector3 pos);
     virtual void Update(double dt);
 
-    void SetTarget(Entity* target);
+    void LinkTo(Entity* entity);
 
 private:
-    Entity* target;
+    Entity* link;
+};
+
+/******************************************************************************/
+/*!
+Class GolemHand.h:
+\brief	Class to handle Boss Golem Hand
+*/
+/******************************************************************************/
+class GolemLeftHand : public Enemy
+{
+public:
+    GolemLeftHand();
+    ~GolemLeftHand();
+
+    virtual void Init(Vector3 pos);
+    virtual void Update(double dt);
+
+    void LinkTo(Entity* entity);
+
+private:
+    Entity* link;
 };
 
 #endif /* GOLEMHAND_H */
