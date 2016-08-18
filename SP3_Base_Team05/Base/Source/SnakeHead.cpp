@@ -1,46 +1,41 @@
 #include "SnakeHead.h"
-#include "SnakeBody.h"
 
-SnakeHead::SnakeHead()
+SnakeHead::SnakeHead():
+back(NULL)
 {
-	//SnakeBody* body = new SnakeBody();
-	//body->LinkTo(this);
-	//body->SetScale(2, 2, 2);
-	//body->SetPostion(Math::RandFloatMinMax(350, 370), Math::RandFloatMinMax(230, 270), 0);
-	//body->SetActive(true);
-	//GameObject::goList.push_back(body);
-
-	//SnakeBody* prevBody = body;
-
-	//for (int i = 0; i < 5; ++i)
-	//{
-	//	SnakeBody* body2 = new SnakeBody();
-	//	body2->LinkTo(prevBody);
-	//	body2->SetActive(true);
-	//	body2->SetScale(2, 2, 2);
-	//	body->SetPostion(Math::RandFloatMinMax(350, 370), Math::RandFloatMinMax(230, 270), 0);
-	//	GameObject::goList.push_back(body2);
-	//	prevBody = body2;
-	//}
 }
 
 SnakeHead::~SnakeHead()
 {
+	if (back)
+		delete back;
 }
 
 void SnakeHead::Init(Vector3 pos)
 {
-	this->pos = pos;
-	active = true;
-	type = GameObject::GO_ENTITY;
-	team = TEAM_ENEMY;
-	collider.type = Collider::COLLIDER_BALL;
-	mass = 1;
-	destinationCountdown = REACH_CHECKER;
-	speedLimit = 10.f;
-	movementSpeed = 5.0f;
+	Enemy::Init(pos);
+	scale;
+	speedLimit = 15.0f;
+	movementSpeed = 30.0f;
+	health;
+	captureRatio;
 
-	captureRatio = 1.f;
+	SnakeBody* body = new SnakeBody();
+	body->SetScale(2, 2, 2);
+	body->Init(pos);
+	GameObject::goList.push_back(body);
+	back = body;
+
+	SnakeBody* prev = body;
+	for (int i = 0; i < 20; ++i)
+	{
+		SnakeBody* body2 = new SnakeBody();
+		body2->SetScale(2, 2, 2);
+		body2->Init(pos);
+		GameObject::goList.push_back(body2);
+		prev->LinkTo(body2);
+		prev = body2;
+	}
 }
 
 void SnakeHead::Update(double dt)
@@ -60,11 +55,12 @@ void SnakeHead::Update(double dt)
 
 			Vector3 destination = target->pos + offsetDir.Normalized() * offset;
 			ChangeDestination(MOVETO_TARGET, destination);
-			
+
 			{//testy stuff
 				static GameObject* hehe = NULL;
 				GameObject* go = FetchGO();
 				go->SetActive(true);
+				go->SetScale(1, 1, 1);
 
 				go->pos = destination;
 				if (hehe)
@@ -72,5 +68,16 @@ void SnakeHead::Update(double dt)
 				hehe = go;
 			}
 		}
+	}
+	if (back)
+		Pull(back);
+}
+
+void SnakeHead::Pull(SnakeBody* body)
+{
+	Vector3 point = pos - front * scale.x;
+	if (!body->Reached(point))
+	{
+		body->Goto(point);
 	}
 }

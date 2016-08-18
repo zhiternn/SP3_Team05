@@ -13,6 +13,7 @@
 
 #include "SceneText.h"
 #include "SceneGolem.h"
+#include "SceneSnakeBoss.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -248,7 +249,7 @@ void Application::Run()
 {
 	Controls &control = Controls::GetInstance();
 
-	Scene* scene = new SceneGolem();
+	Scene* scene = new SceneText();
 
 	//Main Loop
 	scene->Init();

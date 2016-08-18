@@ -1,5 +1,5 @@
-#ifndef SCENE_TEXT_H
-#define SCENE_TEXT_H
+#ifndef SCENE_SNAKE_H
+#define SCENE_SNAKE_H
 
 #include "SceneBase.h"
 #include "Camera.h"
@@ -7,21 +7,22 @@
 #include "Player.h"
 #include "WeaponList.h"
 #include "ProjectileList.h"
+#include "SnakeHead.h"
 #include "Summoner.h"
 
 #include <vector>
 
 using std::vector;
 
-class SceneText : public SceneBase
+class SceneSnakeBoss : public SceneBase
 {
 	enum GEOMETRY_TYPE
 	{
 		NUM_GEOMETRY = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END
 	};
 public:
-	SceneText();
-	~SceneText();
+	SceneSnakeBoss();
+	~SceneSnakeBoss();
 
 	virtual void Init();
 	virtual void Update(double dt);
@@ -37,7 +38,7 @@ public:
 	void RenderSkyPlane();
 
 private:
-	
+
 	void PlayerController(double dt);
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();
@@ -55,7 +56,7 @@ private:
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
 
-	Summoner* summoner;
+	SnakeHead* enemy;
 };
 
 #endif

@@ -10,11 +10,13 @@ public:
 	~SnakeBody();
 
 	virtual void Update(double dt);
+	void LinkTo(SnakeBody* entity);
 
-	void LinkTo(Entity* entity);
+	void Goto(Vector3 pos);
 
 private:
-	Entity* link;
+	void Pull(SnakeBody* body);
+	SnakeBody* back;
 
 };
 
