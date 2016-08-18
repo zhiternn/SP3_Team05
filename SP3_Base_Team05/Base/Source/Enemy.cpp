@@ -17,6 +17,7 @@ void Enemy::Init(Vector3 pos)
 	this->pos = pos;
 	this->active = true;
 	destinationCountdown = REACH_CHECKER;
+	type = GameObject::GO_ENTITY;
 	team = TEAM_ENEMY;
 }
 
@@ -51,7 +52,7 @@ bool Enemy::UpdateMovement(double dt)
 		{
 			Vector3 dir = (destinations.back() - pos).Normalized();
 
-			vel += dir * movementSpeed;
+			vel += dir * movementSpeed * dt;
 
 			if (vel.LengthSquared() > speedLimit * speedLimit)
 			{
@@ -86,7 +87,7 @@ Vector3 Enemy::FindNewPath(Vector3 destination, GameObject* obstacle)
 		break;
 	case Collider::COLLIDER_BOX:
 	{
-		Vector3 toObstacle = obstacle->pos - pos;
+		Vector3 toObstacle = destination - pos;
 		Vector3 N = obstacle->GetFront();
 		Vector3 NP = Vector3(-N.y, N.x, 0);
 

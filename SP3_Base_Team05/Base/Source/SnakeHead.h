@@ -1,6 +1,8 @@
 #ifndef SNAKEMAIN_H
 #define SNAKEMAIN_H
 
+#include "SnakeBody.h"
+
 #include "Enemy.h"
 
 class SnakeHead : public Enemy
@@ -13,6 +15,8 @@ public:
 	virtual void Update(double dt);
 
 private:
+	void Pull(SnakeBody* body);
+	SnakeBody* back;
 	
 };
 

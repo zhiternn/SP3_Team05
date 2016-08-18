@@ -21,6 +21,7 @@ public:
 	void SetRate(float rate);
 	//Getters
 	float GetRate();
+	bool Reached(Vector3 pos);
 
 	std::vector<Vector3> destinations;
 
@@ -36,7 +37,6 @@ protected:
 
 	void ChangeDestination(MOVEMENT_PRIORITY priority, Vector3 pos);
 	bool UpdateMovement(double dt);//returns false if out of waypoints
-	bool Reached(Vector3 pos);
 	Vector3 FindNewPath(Vector3 destination, GameObject* obstacle);
 
 	// moved to public for testing
