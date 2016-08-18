@@ -217,7 +217,6 @@ void GameObject::CollisionResponse(GameObject* b)
 		   this->pos += NP * difference;
 		}
 		else
-
 		{
 		   if (ab.Dot(N) < 0)
 			   N = -N;

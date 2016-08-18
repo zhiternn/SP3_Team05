@@ -55,7 +55,7 @@ void SceneText::Init()
 	//projectionStack.LoadMatrix(perspective);
 
 	//World Space
-	m_worldHeight = 500;
+	m_worldHeight = 300;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
@@ -90,7 +90,6 @@ void SceneText::Init()
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
-	mainCamera->Include(&(enemy->pos));
 }
 
 void SceneText::PlayerController(double dt)
@@ -290,7 +289,7 @@ void SceneText::RenderGPass()
 	glUseProgram(m_gPassShaderID);
 	//These matrices should change when light position or direction changes
 		if (lights[0].type == Light::LIGHT_DIRECTIONAL)
-			m_lightDepthProj.SetToOrtho(-800, 800, -600, 600, 0, 10000);
+			m_lightDepthProj.SetToOrtho(-m_worldWidth * 0.5f, m_worldWidth * 0.5f, -m_worldHeight * 0.5f, m_worldHeight * 0.5f, 0, 100);
 		else
 			m_lightDepthProj.SetToPerspective(90, 1.f, 0.1, 20);
 
