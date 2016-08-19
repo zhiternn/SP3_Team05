@@ -204,3 +204,8 @@ void Enemy::HandleInteraction(GameObject* b, double dt)
 		}
 	}
 }
+
+void Enemy::Shoot(Vector3 dir)
+{
+	this->weapon->Fire(this->pos, dir, CProjectile::TEAM_ENEMY);
+}

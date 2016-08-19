@@ -54,8 +54,6 @@ private:
 
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
-
-	Summoner* summoner;
 };
 
 #endif

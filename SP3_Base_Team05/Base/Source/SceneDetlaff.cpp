@@ -65,25 +65,34 @@ void SceneDetlaff::Init()
 	mainCamera = new Camera();
 	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-	GameObject *go = FetchGO();
+	/*GameObject *go = FetchGO();
 	go->SetActive(true);
 	go->SetScale(20, 20, 20);
 	go->SetFront(1, 0, 0);
 	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 	go->SetType(GameObject::GO_ENVIRONMENT);
-	go->SetColliderType(Collider::COLLIDER_BOX);
+	go->SetColliderType(Collider::COLLIDER_BOX);*/
 
 	player = new Player();
 	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	summoner = new Summoner();
-	GameObject::goList.push_back(summoner);
-	summoner->SetTarget(player);
-	summoner->Init(Vector3(0, 0, 0));
+	detlaff = new CDetlaff();
+	GameObject::goList.push_back(detlaff);
+	detlaff->SetTarget(player);
+	detlaff->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0));
+	detlaff->SetScale(20, 20, 20);
+	
+	detlaff->SetType(GameObject::GO_ENTITY);
+	detlaff->SetActive(true);
+	detlaff->SetColliderType(Collider::COLLIDER_BALL);
+	detlaff->SetMass(999999);
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
+
+	enemyFireDelay = 2.0f;
+	hehexd = 0.f;
 }
 
 void SceneDetlaff::PlayerController(double dt)
@@ -189,9 +198,25 @@ void SceneDetlaff::Update(double dt)
 		PlayerController(dt);
 	}
 
+	if (enemyFireDelay <= 0.f)
+	{
+		Vector3 mouseDir;
+		mouseDir = (mousePos_worldBased - player->pos).Normalized();
+		std::cout << "Shoot" << std::endl;
+		detlaff->Shoot(mouseDir);
+		enemyFireDelay = 2.f;
+	}
+	else
+	{
+		enemyFireDelay -= detlaff->weapon->GetFireRate() * dt;
+		/*Math::Clamp(enemyFireDelay, 0.f , 2.f);*/
+	}
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
+
+	std::cout << enemyFireDelay << std::endl;
+
 }
 
 void SceneDetlaff::Render()
@@ -325,20 +350,21 @@ void SceneDetlaff::RenderMain()
 
 	RenderWorld();
 
-	if (!summoner->destinations.empty())
+	/*if (!detlaff->destinations.empty())
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(summoner->destinations.front().x, summoner->destinations.front().y, 0);
+		modelStack.Translate(detlaff->destinations.front().x, detlaff->destinations.front().y, 0);
 		RenderMesh(meshList[GEO_CUBE], false);
 		modelStack.PopMatrix();
-	}
+	}*/
 
 	//RenderSkyPlane();
 }
 
 void SceneDetlaff::RenderWorld()
 {
-	{//Render Floor
+	{
+		//Render Floor
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
