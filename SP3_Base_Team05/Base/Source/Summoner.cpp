@@ -1,5 +1,7 @@
 #include "Summoner.h"
 
+using namespace std;
+
 Summoner::Summoner()
 {
 }
@@ -17,6 +19,9 @@ void Summoner::Init(Vector3 pos)
 	speedLimit = 30.0f;
 	movementSpeed = 40.0f;
 	scale.Set(10, 10, 10);
+	health = 300;
+	isDead = false;
+	agressiveLevel = 1 - ((float)health / 100.f);
 	safetyThreshold = this->GetScale().x * 5;
 	chaseThreshold = safetyThreshold * 1.5f;
 	for (int i = 0; i < 6; ++i)
@@ -40,7 +45,17 @@ void Summoner::Init(Vector3 pos)
 void Summoner::Update(double dt)
 {
 	GameObject::Update(dt);
+
+	if (summonsList.size() <= 6)
+	{
+		Summons* summons = new Summons();
+		summons->Init(this->pos);
+		summons->SetTarget(this);
+		summonsList.push_back(summons);
+		GameObject::goList.push_back(summons);
+	}
 	Defend();
+	//Attack();
 	if (!Enemy::UpdateMovement(dt))
 	{
 		float distanceFromTarget = (target->pos - pos).LengthSquared();
@@ -64,28 +79,33 @@ void Summoner::Update(double dt)
 	}
 }
 
-void Summoner::HandleInteraction(GameObject* b, double dt)
+void Summoner::TakeDamage(unsigned amount)
 {
-
+	Entity::TakeDamage(amount);
+	agressiveLevel = 1 - ((float)health / 100.f);
 }
 
-void Summoner::UpdateSummons(double dt)
+void Summoner::CleaningUpMess()
 {
-	//for (auto q : summonsList)
-	//{
-	//	q->
-	//}
+	for (int i = 0; i < summonsList.size(); ++i)
+	{
+		if (summonsList[i]->IsDead())
+		{
+			summonsList.erase(summonsList.begin() + i);
+		}
+	}
 }
 
 void Summoner::Defend()
 {
+	CleaningUpMess();
 	if (!summonsList.empty())
 	{
 		Vector3 N = (target->pos - this->pos).Normalized();
 		Vector3 NP = Vector3(-N.y, N.x, 0);
 		float diameter = summonsList.front()->GetScale().x * 2;
-		float wallLength = summonsList.size()/2 * diameter;
-		wallLength = -wallLength / 2;
+		float wallLength = ((summonsList.size() * agressiveLevel) - 1) * diameter;
+		wallLength = -wallLength * 0.5f;
 
 		Vector3 bossFront;
 		bossFront.Set(
@@ -93,42 +113,16 @@ void Summoner::Defend()
 			this->pos.y + N.y * (diameter + this->scale.y),
 			0);
 
-		for (int i = 0; i < summonsList.size()/2; ++i)
+		for (int i = 0; i < summonsList.size() * agressiveLevel; ++i)
 		{
+			cout << agressiveLevel << endl;
 			float formingWallLength = diameter * i;
 			summonsList[i]->Goto(bossFront + (NP * (wallLength + formingWallLength)));
-			if (summonsList[i]->IsDead())
-			{
-				summonsList.erase(summonsList.begin() + i);
-			}
 		}
 	}
 }
 
 void Summoner::Attack()
 {
-	if (!summonsList.empty())
-	{
-		Vector3 N = (target->pos - this->pos).Normalized();
-		Vector3 NP = Vector3(-N.y, N.x, 0);
-		float diameter = summonsList.front()->GetScale().x * 2;
-		float wallLength = summonsList.size() * diameter;
-		wallLength = -wallLength / 2;
 
-		Vector3 bossFront;
-		bossFront.Set(
-			this->pos.x + N.x * (diameter + this->scale.x),
-			this->pos.y + N.y * (diameter + this->scale.y),
-			0);
-
-		for (int i = 0; i < summonsList.size(); ++i)
-		{
-			float formingWallLength = diameter * i;
-			summonsList[i]->Goto(bossFront + (NP * (wallLength + formingWallLength)));
-			if (summonsList[i]->IsDead())
-			{
-				summonsList.erase(summonsList.begin() + i);
-			}
-		}
-	}
 }

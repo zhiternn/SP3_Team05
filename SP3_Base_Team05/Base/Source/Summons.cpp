@@ -15,8 +15,8 @@ void Summons::Init(Vector3 pos)
 	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
-	speedLimit = 30;
-	movementSpeed = 40.0f;
+	speedLimit = 30.f;
+	movementSpeed = 30.f;
 	scale.Set(5, 5, 5);
 	health = 10;
 	isDead = false;
@@ -28,8 +28,8 @@ void Summons::Update(double dt)
 {
 	GameObject::Update(dt);
 
-	if (vel.LengthSquared() > 10 * 10)
-		vel = vel.Normalized() * 10;
+	if (vel.LengthSquared() > speedLimit * speedLimit)
+		vel = vel.Normalized() * speedLimit;
 	//if (!Enemy::UpdateMovement(dt))
 	//{
 	//	if (target)
@@ -56,5 +56,5 @@ void Summons::Update(double dt)
 
 void Summons::Goto(Vector3 pos)
 {
-	this->vel += (pos - this->pos).Normalized() * 10;
+	this->vel += (pos - this->pos).Normalized() * movementSpeed;
 }

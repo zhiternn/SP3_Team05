@@ -9,7 +9,7 @@ public:
 	Entity();
 	~Entity();
 
-	void TakeDamage(unsigned amount);
+	virtual void TakeDamage(unsigned amount);
 	bool IsDead();
 	unsigned int GetHP();
 
