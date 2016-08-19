@@ -59,7 +59,7 @@ void SceneDetlaff::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 100;
+	m_orthoHeight = 300;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -81,7 +81,7 @@ void SceneDetlaff::Init()
 	GameObject::goList.push_back(detlaff);
 	detlaff->SetTarget(player);
 	detlaff->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0));
-	detlaff->SetScale(20, 20, 20);
+	detlaff->SetScale(10, 10, 10);
 	
 	detlaff->SetType(GameObject::GO_ENTITY);
 	detlaff->SetActive(true);
@@ -171,6 +171,13 @@ void SceneDetlaff::PlayerController(double dt)
 	{
 		player->ChangeWeaponUp();
 	}
+
+	if (Controls::GetInstance().OnPress(Controls::KEY_M))
+	{
+		Vector3 mouseDir;
+		mouseDir = (player->pos - detlaff->pos).Normalized();
+		detlaff->Shoot(mouseDir);
+	}
 }
 
 void SceneDetlaff::Update(double dt)
@@ -198,19 +205,6 @@ void SceneDetlaff::Update(double dt)
 		PlayerController(dt);
 	}
 
-	//if (enemyFireDelay <= 0.f)
-	//{
-	//	Vector3 mouseDir;
-	//	mouseDir = (mousePos_worldBased - player->pos).Normalized();
-	//	std::cout << "Shoot" << std::endl;
-	//	detlaff->Shoot(mouseDir);
-	//	enemyFireDelay = 2.f;
-	//}
-	//else
-	//{
-	//	enemyFireDelay -= detlaff->weapon->GetFireRate() * dt;
-	//	/*Math::Clamp(enemyFireDelay, 0.f , 2.f);*/
-	//}
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
