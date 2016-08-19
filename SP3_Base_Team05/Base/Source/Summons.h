@@ -2,6 +2,7 @@
 #define SUMMONS_H
 
 #include "Enemy.h"
+#include "WeaponList.h"
 
 class Summons : public Enemy
 {
@@ -12,10 +13,13 @@ public:
 	virtual void Init(Vector3 pos);
 	virtual void Update(double dt);
 	void Goto(Vector3 pos);
+	void Shoot();
+
+	bool isDefending;
+
+	Weapon* weapon;
 
 private:
-	float innerThreshold;
-	float outerThreshold;
 
 };
 
