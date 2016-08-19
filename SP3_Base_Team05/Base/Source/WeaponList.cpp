@@ -68,3 +68,13 @@ void SplitGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 		}
 	}
 }
+
+void SplitGun::SetAngle(float angle)
+{
+	this->coneAngle = angle;
+}
+void SplitGun::SetCount(int count)
+{
+	this->projectileCount = count;
+}
+
