@@ -15,9 +15,11 @@ void Summons::Init(Vector3 pos)
 	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
-	speedLimit = 20;
-	movementSpeed = 20.0f;
+	speedLimit = 30;
+	movementSpeed = 40.0f;
 	scale.Set(5, 5, 5);
+	health = 10;
+	isDead = false;
 	innerThreshold = this->GetScale().x;
 	outerThreshold = innerThreshold * 1.5f;
 }

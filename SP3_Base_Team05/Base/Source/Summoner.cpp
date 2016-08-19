@@ -14,12 +14,12 @@ void Summoner::Init(Vector3 pos)
 	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
-	speedLimit = 20;
-	movementSpeed = 20.0f;
+	speedLimit = 30.0f;
+	movementSpeed = 40.0f;
 	scale.Set(10, 10, 10);
 	safetyThreshold = this->GetScale().x * 5;
 	chaseThreshold = safetyThreshold * 1.5f;
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 6; ++i)
 	{
 		Summons* summons = new Summons();
 		Vector3 offset(Math::RandFloatMinMax(0, 5), Math::RandFloatMinMax(0, 5), 0);
@@ -49,6 +49,7 @@ void Summoner::Update(double dt)
 		{
 			if (target)
 			{
+				this->front.Set(target->GetPosition().x * (this->scale.x), target->GetPosition().y * (this->scale.y), 0);
 				float offset = Math::RandFloatMinMax(safetyThreshold, chaseThreshold);
 				Vector3 offsetDir = target->pos - pos;
 
@@ -78,20 +79,56 @@ void Summoner::UpdateSummons(double dt)
 
 void Summoner::Defend()
 {
-	int defendee = 5;
-	Vector3 N = (target->pos - this->pos).Normalized();
-	Vector3 NP = Vector3(-N.y, N.x, 0);
-	float diameter = 5 * 2;
-	float wallLength = defendee * diameter;
-	wallLength = -wallLength / 2;
-
-	Vector3 bossFront = this->pos + (N * this->scale.x + 5);
-	
-	for (int i = 0; i < defendee; ++i)
+	if (!summonsList.empty())
 	{
-		float formingWallLength = diameter * i;
+		Vector3 N = (target->pos - this->pos).Normalized();
+		Vector3 NP = Vector3(-N.y, N.x, 0);
+		float diameter = summonsList.front()->GetScale().x * 2;
+		float wallLength = summonsList.size()/2 * diameter;
+		wallLength = -wallLength / 2;
 
-		summonsList[i]->Goto(bossFront + (NP * (wallLength + formingWallLength)));
-		//std::cout << (NP * (wallLength + formingWallLength)) << std::endl;
+		Vector3 bossFront;
+		bossFront.Set(
+			this->pos.x + N.x * (diameter + this->scale.x),
+			this->pos.y + N.y * (diameter + this->scale.y),
+			0);
+
+		for (int i = 0; i < summonsList.size()/2; ++i)
+		{
+			float formingWallLength = diameter * i;
+			summonsList[i]->Goto(bossFront + (NP * (wallLength + formingWallLength)));
+			if (summonsList[i]->IsDead())
+			{
+				summonsList.erase(summonsList.begin() + i);
+			}
+		}
+	}
+}
+
+void Summoner::Attack()
+{
+	if (!summonsList.empty())
+	{
+		Vector3 N = (target->pos - this->pos).Normalized();
+		Vector3 NP = Vector3(-N.y, N.x, 0);
+		float diameter = summonsList.front()->GetScale().x * 2;
+		float wallLength = summonsList.size() * diameter;
+		wallLength = -wallLength / 2;
+
+		Vector3 bossFront;
+		bossFront.Set(
+			this->pos.x + N.x * (diameter + this->scale.x),
+			this->pos.y + N.y * (diameter + this->scale.y),
+			0);
+
+		for (int i = 0; i < summonsList.size(); ++i)
+		{
+			float formingWallLength = diameter * i;
+			summonsList[i]->Goto(bossFront + (NP * (wallLength + formingWallLength)));
+			if (summonsList[i]->IsDead())
+			{
+				summonsList.erase(summonsList.begin() + i);
+			}
+		}
 	}
 }

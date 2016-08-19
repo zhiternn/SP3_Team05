@@ -6,7 +6,7 @@
 CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 {
 	//set weapon to STATE_1 default weapon
-	weapon = new DetlaffArc();
+	weapon = new SplitGun();
 }
 
 

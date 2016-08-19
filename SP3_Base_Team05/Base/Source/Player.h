@@ -6,7 +6,7 @@
 
 static const float MOVEMENT_SPEED = 80.0f;
 static const float MOVEMENT_LIMIT = 30.f;
-static const float DASH_COOLDOWN = 2.f;
+static const float DASH_COOLDOWN = 1.f;
 
 class Player : public Entity
 {

@@ -16,6 +16,7 @@ public:
 
 	void UpdateSummons(double dt);
 	void Defend();
+	void Attack();
 
 private:
 	float safetyThreshold;
