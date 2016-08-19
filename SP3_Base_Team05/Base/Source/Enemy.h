@@ -3,6 +3,7 @@
 
 #include "Vector3.h"
 #include "Entity.h"
+#include "Weapon.h"
 
 static const float REACH_CHECKER = 2.0f;
 
@@ -23,7 +24,10 @@ public:
 	float GetRate();
 	bool Reached(Vector3 pos);
 
+	void Shoot(Vector3 dir);
+
 	std::vector<Vector3> destinations;
+	Weapon *weapon;
 
 protected:
 	enum MOVEMENT_PRIORITY
@@ -46,7 +50,7 @@ protected:
 	Entity* target;
 	float speedLimit;
 	float movementSpeed;
-	float captureRatio;
+	float captureRatio;;
 };
 
 Enemy* FetchEnemy();

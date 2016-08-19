@@ -7,7 +7,7 @@
 #include "Player.h"
 #include "WeaponList.h"
 #include "ProjectileList.h"
-#include "Summoner.h"
+#include "Detlaff.h"
 
 #include <vector>
 
@@ -36,6 +36,10 @@ public:
 	void RenderSkybox();
 	void RenderSkyPlane();
 
+	float enemyFireDelay;
+	float hehexd;
+
+
 private:
 
 	void PlayerController(double dt);
@@ -46,6 +50,7 @@ private:
 	float m_worldWidth, m_worldHeight;
 	float m_orthoWidth, m_orthoHeight;
 
+
 	Mesh* meshList[GEO_DEFAULT_END];
 
 	Camera* mainCamera;
@@ -55,7 +60,7 @@ private:
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
 
-	Summoner* summoner;
+	CDetlaff* detlaff;
 };
 
 #endif
