@@ -6,7 +6,9 @@
 CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 {
 	//set weapon to STATE_1 default weapon
-	weapon = new SplitGun();
+	weapon = new SplitGun(360.f, 72);
+	weapon->AssignProjectile(new Bullet());
+	this->SetRate(0.f);
 }
 
 
@@ -14,9 +16,6 @@ CDetlaff::~CDetlaff()
 {
 	if (target)
 		delete target;
-
-	if (weapon)
-		delete weapon;
 }
 
 void CDetlaff::Update(double dt)
@@ -28,7 +27,6 @@ void CDetlaff::Update(double dt)
 	//Update States
 	if (this->GetHP() <= 0)
 	{
-		delete weapon;
 		switch (state)
 		{
 			case STATE_1:
@@ -36,7 +34,9 @@ void CDetlaff::Update(double dt)
 				//Spawn Stage 2 Boss
 				state = STATE_2;
 				this->health = 200;
-				//weapon = new MachineGun();
+				//Create the stage 2 splitgun
+				weapon = new SplitGun(45.f, 10);
+				weapon->AssignProjectile(new Bullet());
 				break;
 			}
 			case STATE_2:
@@ -44,6 +44,7 @@ void CDetlaff::Update(double dt)
 				//Spawn State 3 Boss
 				state = STATE_3;
 				this->health = 400;
+				this->SetRate(0.35f);
 				//weapon = new BIGGRENADABOMBHEHEXD()
 				break;
 			}

@@ -32,6 +32,7 @@
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\ProjectileList.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
+    <ClCompile Include="Source\SceneSnakeBoss.cpp" />
     <ClCompile Include="Source\SceneSummoner.cpp" />
     <ClCompile Include="Source\SceneDetlaff.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="Source\ProjectileList.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
+    <ClInclude Include="Source\SceneSnakeBoss.h" />
     <ClInclude Include="Source\SceneSummoner.h" />
     <ClInclude Include="Source\SceneDetlaff.h" />
     <ClInclude Include="Source\SceneText.h" />

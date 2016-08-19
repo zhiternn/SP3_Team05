@@ -25,6 +25,6 @@ public:
 	//BOSS Cooldown before firing
 private: 
 	Entity *target;
-	Weapon *weapon;
+	
 };
 

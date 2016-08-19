@@ -59,31 +59,40 @@ void SceneDetlaff::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 100;
+	m_orthoHeight = 300;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
 	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-	GameObject *go = FetchGO();
+	/*GameObject *go = FetchGO();
 	go->SetActive(true);
 	go->SetScale(20, 20, 20);
 	go->SetFront(1, 0, 0);
 	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 	go->SetType(GameObject::GO_ENVIRONMENT);
-	go->SetColliderType(Collider::COLLIDER_BOX);
+	go->SetColliderType(Collider::COLLIDER_BOX);*/
 
 	player = new Player();
 	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	summoner = new Summoner();
-	GameObject::goList.push_back(summoner);
-	summoner->SetTarget(player);
-	summoner->Init(Vector3(0, 0, 0));
+	detlaff = new CDetlaff();
+	GameObject::goList.push_back(detlaff);
+	detlaff->SetTarget(player);
+	detlaff->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0));
+	detlaff->SetScale(10, 10, 10);
+	
+	detlaff->SetType(GameObject::GO_ENTITY);
+	detlaff->SetActive(true);
+	detlaff->SetColliderType(Collider::COLLIDER_BALL);
+	detlaff->SetMass(999999);
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
+
+	enemyFireDelay = 2.0f;
+	hehexd = 0.f;
 }
 
 void SceneDetlaff::PlayerController(double dt)
@@ -162,6 +171,13 @@ void SceneDetlaff::PlayerController(double dt)
 	{
 		player->ChangeWeaponUp();
 	}
+
+	if (Controls::GetInstance().OnPress(Controls::KEY_M))
+	{
+		Vector3 mouseDir;
+		mouseDir = (player->pos - detlaff->pos).Normalized();
+		detlaff->Shoot(mouseDir);
+	}
 }
 
 void SceneDetlaff::Update(double dt)
@@ -192,6 +208,8 @@ void SceneDetlaff::Update(double dt)
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
+
+
 }
 
 void SceneDetlaff::Render()
@@ -325,20 +343,21 @@ void SceneDetlaff::RenderMain()
 
 	RenderWorld();
 
-	if (!summoner->destinations.empty())
+	/*if (!detlaff->destinations.empty())
 	{
 		modelStack.PushMatrix();
-		modelStack.Translate(summoner->destinations.front().x, summoner->destinations.front().y, 0);
+		modelStack.Translate(detlaff->destinations.front().x, detlaff->destinations.front().y, 0);
 		RenderMesh(meshList[GEO_CUBE], false);
 		modelStack.PopMatrix();
-	}
+	}*/
 
 	//RenderSkyPlane();
 }
 
 void SceneDetlaff::RenderWorld()
 {
-	{//Render Floor
+	{
+		//Render Floor
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 0);

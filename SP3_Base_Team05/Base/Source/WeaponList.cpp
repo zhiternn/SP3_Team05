@@ -5,7 +5,6 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
 	if (shootDelay <= 0.0f)
 	{
-		shootDelay = 1.0f; // per second
 		for (int i = 0; i < projectileCount; ++i)
 		{
 			Vector3 offset = Vector3(
@@ -25,9 +24,9 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 
 void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
+	std::cout << shootDelay << std::endl;
 	if (shootDelay <= 0.0f)
 	{
-		shootDelay = 1.0f; // per second
 		CProjectile* proj = FetchProjectile();
 		*proj = *projectileInfo;
 		proj->Init(pos, dir);
@@ -41,7 +40,7 @@ void SplitGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
 	if (shootDelay <= 0.0f)
 	{
-		shootDelay = 1.0f; // per second
+		shootDelay = 1.0f;
 		Mtx44 rotate;
 		float offsetAngle;
 		float initialAngle = -coneAngle / 2;
@@ -62,8 +61,20 @@ void SplitGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 
 			CProjectile* proj = FetchProjectile();
 			*proj = *projectileInfo;
+			proj->SetLifetime(2.0f);
+			proj->SetScale(Vector3(2.0f, 2.0f, 2.0f));
 			proj->Init(pos, rotate * dir);
 			proj->SetTeam(team);
 		}
 	}
 }
+
+void SplitGun::SetAngle(float angle)
+{
+	this->coneAngle = angle;
+}
+void SplitGun::SetCount(int count)
+{
+	this->projectileCount = count;
+}
+
