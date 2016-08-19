@@ -62,7 +62,7 @@ void SplitGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 		{
 			rotate.SetToRotation(initialAngle + offsetAngle * i, 0, 0, 1);
 			CProjectile* proj = FetchProjectile();
-			//*proj = *projectileInfo;
+			*proj = *projectileInfo;
 			std::cout << "Shoot" << std::endl;
 			proj->Init(pos, rotate * dir);
 			proj->SetTeam(team);

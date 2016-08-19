@@ -198,24 +198,23 @@ void SceneDetlaff::Update(double dt)
 		PlayerController(dt);
 	}
 
-	if (enemyFireDelay <= 0.f)
-	{
-		Vector3 mouseDir;
-		mouseDir = (mousePos_worldBased - player->pos).Normalized();
-		std::cout << "Shoot" << std::endl;
-		detlaff->Shoot(mouseDir);
-		enemyFireDelay = 2.f;
-	}
-	else
-	{
-		enemyFireDelay -= detlaff->weapon->GetFireRate() * dt;
-		/*Math::Clamp(enemyFireDelay, 0.f , 2.f);*/
-	}
+	//if (enemyFireDelay <= 0.f)
+	//{
+	//	Vector3 mouseDir;
+	//	mouseDir = (mousePos_worldBased - player->pos).Normalized();
+	//	std::cout << "Shoot" << std::endl;
+	//	detlaff->Shoot(mouseDir);
+	//	enemyFireDelay = 2.f;
+	//}
+	//else
+	//{
+	//	enemyFireDelay -= detlaff->weapon->GetFireRate() * dt;
+	//	/*Math::Clamp(enemyFireDelay, 0.f , 2.f);*/
+	//}
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
 
-	std::cout << enemyFireDelay << std::endl;
 
 }
 
