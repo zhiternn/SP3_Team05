@@ -16,6 +16,7 @@ void GolemHead::Init(Vector3 pos)
     destinationCountdown = REACH_CHECKER;
     speedLimit = 5.0f;
     movementSpeed = 1.0f;
+    health = 2500.f;
 
     captureRatio = 1.f;
 }

@@ -77,25 +77,15 @@ void SceneGolem::Init()
     player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
     GameObject::goList.push_back(player);
 
-    enemy = new SnakeHead();
-    GameObject::goList.push_back(enemy);
-    enemy->SetTarget(player);
-    enemy->SetType(GameObject::GO_ENTITY);
-    enemy->SetActive(true);
-    enemy->SetColliderType(Collider::COLLIDER_BALL);
-    enemy->SetScale(3, 3, 3);
-    enemy->SetMass(3);
-    enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
-
     golemhead = new GolemHead();
     GameObject::goList.push_back(golemhead);
     golemhead->SetTarget(player);
     golemhead->SetType(GameObject::GO_ENTITY);
     golemhead->SetActive(true);
     golemhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemhead->SetScale(3, 3, 3);
+    golemhead->SetScale(10, 10, 10);
     golemhead->SetMass(3);
-    golemhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 20.f, 0));
+    golemhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 100.f, 0));
 
     golemlhead = new GolemLeftHand();
     GameObject::goList.push_back(golemlhead);
@@ -103,9 +93,9 @@ void SceneGolem::Init()
     golemlhead->SetType(GameObject::GO_ENTITY);
     golemlhead->SetActive(true);
     golemlhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemlhead->SetScale(3, 3, 3);
+    golemlhead->SetScale(6, 6, 6);
     golemlhead->SetMass(3);
-    golemlhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 20.f, 0));
+    golemlhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 70.f, 0));
 
     golemrhead = new GolemRightHand();
     GameObject::goList.push_back(golemrhead);
@@ -113,14 +103,9 @@ void SceneGolem::Init()
     golemrhead->SetType(GameObject::GO_ENTITY);
     golemrhead->SetActive(true);
     golemrhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemrhead->SetScale(3, 3, 3);
+    golemrhead->SetScale(6, 6, 6);
     golemrhead->SetMass(3);
-    golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 20.f, 0));
-
-    summoner = new Summoner();
-    GameObject::goList.push_back(summoner);
-    summoner->SetTarget(player);
-    summoner->Init(Vector3(0, 0, 0));
+    golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 50.f, 0));
 
     mainCamera->Include(&(player->pos));
     mainCamera->Include(&mousePos_worldBased);
@@ -164,6 +149,34 @@ void SceneGolem::PlayerController(double dt)
         mouseDir = (mousePos_worldBased - player->pos).Normalized();
         player->Shoot(mouseDir);
     }
+    if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
+    {
+        CProjectile *proj_trap = new Trap();
+        proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
+        proj_trap->SetVelocity(0, 0, 0);
+        proj_trap->SetColliderType(Collider::COLLIDER_BOX);
+        player->weapon->AssignProjectile(proj_trap);
+
+        for (int i = 0; i < GameObject::goList.size(); i++)
+        {
+            if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
+            {
+                //Trap found in current map
+                break;
+            }
+            else
+            {
+                //push it into the list to check for next iteration
+                GameObject::goList.push_back(proj_trap);
+
+                Vector3 pos;
+                pos = player->pos.Normalized();
+                player->Shoot(pos);
+                break;
+            }
+        }
+    }
+
     //if (Controls::GetInstance().mouse_ScrollY < 1)
     if (Controls::GetInstance().OnPress(Controls::KEY_E))
     {
@@ -194,7 +207,6 @@ void SceneGolem::Update(double dt)
             0
             );
     }
-
     //Restrict the player from moving past the deadzone
     if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
     {
@@ -204,6 +216,30 @@ void SceneGolem::Update(double dt)
     mainCamera->Update(dt);
     mainCamera->Constrain(*player, mainCamera->target);
     UpdateGameObjects(dt);
+
+    if (golemhead->IsActive() == false)
+    {
+        golemrhead->SetActive(false);
+        golemlhead->SetActive(false);
+    }
+
+    //if (golemhead->GetHP() <= 1500)
+    //{
+    //    golemlhead->speedLimit = 55.f;
+    //    golemrhead->speedLimit = 55.f;
+    //}
+    //if (golemhead->GetHP() <= 500)
+    //{
+    //    golemlhead->speedLimit = 70.f;
+    //    golemrhead->speedLimit = 70.f;
+    //}
+    //if (golemhead->GetHP() <= 250)
+    //{
+    //    golemlhead->speedLimit = 180.f;
+    //    golemrhead->speedLimit = 180.f;
+    //    golemlhead->movementSpeed = 1800.f;
+    //    golemrhead->movementSpeed = 1800.f;
+    //}
 }
 
 void SceneGolem::Render()
@@ -337,35 +373,28 @@ void SceneGolem::RenderMain()
 
     RenderWorld();
 
-    float degree = Math::RadianToDegree(atan2(enemy->GetFront().y, enemy->GetFront().x));
-    modelStack.PushMatrix();
-    modelStack.Translate(enemy->pos.x, enemy->pos.y, enemy->pos.z);
-    modelStack.Rotate(degree - 90, 0, 0, 1);
-    modelStack.Translate(0, 3.0f, 0);
-    modelStack.Scale(1.0f, 1.0f, 1.0f);
-    RenderMesh(meshList[GEO_SPHERE], false);
-    modelStack.PopMatrix();
-
-    if (!summoner->destinations.empty())
-    {
-        modelStack.PushMatrix();
-        modelStack.Translate(summoner->destinations.front().x, summoner->destinations.front().y, 0);
-        RenderMesh(meshList[GEO_CUBE], false);
-        modelStack.PopMatrix();
-    }
 
     //RenderSkyPlane();
 }
 
 void SceneGolem::RenderWorld()
 {
-    {//Render Floor
-        modelStack.PushMatrix();
-        modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-        modelStack.Scale(m_worldWidth, m_worldHeight, 0);
-        RenderMesh(meshList[GEO_FLOOR], false);
-        modelStack.PopMatrix();
-    }
+    //for (int i = m_worldWidth * 0.5 - 100; i < m_worldWidth * 0.5 + 100; i+=10)
+    //{//Render Floor
+    //    for (int j = m_worldHeight * 0.5 - 100; j < m_worldHeight * 0.5 + 100; j+= 10)
+    //    {
+    //        modelStack.PushMatrix();
+    //        modelStack.Translate(i, j, 0);
+    //        modelStack.Scale(10, 10, 0);
+    //        RenderMesh(meshList[GEO_FLOOR], false);
+    //        modelStack.PopMatrix();
+    //    }
+    //}
+    modelStack.PushMatrix();
+    modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 0);
+    modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+    RenderMesh(meshList[GEO_FLOOR], false);
+    modelStack.PopMatrix();
 
     RenderGameObjects();
 
@@ -399,6 +428,12 @@ void SceneGolem::RenderHUD()
     ss3.precision(2);
     ss3 << "Weapon: " << player->weaponIter;
     RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
+
+
+    std::ostringstream ss4;
+    ss4.precision(2);
+    ss4 << "HP: " << golemhead->GetHP();
+    RenderTextOnScreen(meshList[GEO_TEXT], ss4.str(), Color(0, 1, 0), 3, 0, 15);
 }
 
 void SceneGolem::Exit()
