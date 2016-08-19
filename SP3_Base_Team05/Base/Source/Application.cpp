@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include "SceneText.h"
+#include "SceneSummoner.h"
 #include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
 #include "SceneDetlaff.h"
@@ -250,7 +251,10 @@ void Application::Run()
 {
 	Controls &control = Controls::GetInstance();
 
+
 	Scene* scene = new SceneDetlaff();
+
+
 
 	//Main Loop
 	scene->Init();
