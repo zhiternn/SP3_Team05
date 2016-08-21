@@ -251,10 +251,10 @@ void Application::Run()
 {
 	Controls &control = Controls::GetInstance();
 
-
-	Scene* scene = new SceneDetlaff();
-
-
+	Scene* scene = new SceneSummoner();
+	//Scene* scene = new SceneDetlaff();
+	//Scene* scene = new SceneGolem();
+	//Scene* scene = new SceneSnakeBoss();
 
 	//Main Loop
 	scene->Init();

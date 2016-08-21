@@ -1,4 +1,5 @@
 #include "Summoner.h"
+#include "Controls.h"
 
 using namespace std;
 
@@ -56,6 +57,16 @@ void Summoner::Update(double dt)
 	}
 	Defend();
 	Attack();
+	for (auto q : summonsList)
+	{
+		if (!q->isDefending)
+		{
+			if (Controls::GetInstance().OnHold(Controls::KEY_V))
+			{
+				q->Shoot(target->pos);
+			}
+		}
+	}
 	if (!Enemy::UpdateMovement(dt))
 	{
 		float distanceFromTarget = (target->pos - pos).LengthSquared();
@@ -133,10 +144,11 @@ void Summoner::Attack()
 			{
 				float combinedRadius = scale.x + target->GetScale().x;
 				float offset = combinedRadius * 5;
-				Vector3 offsetDir(
-					Math::RandFloatMinMax(-(target->pos.x - pos.x), target->pos.x - pos.x),
-					Math::RandFloatMinMax(-(target->pos.y - pos.y), target->pos.y - pos.y),
-					0);
+				//Vector3 offsetDir(
+				//	Math::RandFloatMinMax(-(target->pos.x - pos.x), target->pos.x - pos.x),
+				//	Math::RandFloatMinMax(-(target->pos.y - pos.y), target->pos.y - pos.y),
+				//	0);
+				Vector3 offsetDir(target->pos.x - pos.x, target->pos.y - pos.y, 0);
 
 				Vector3 destination = target->pos + offsetDir.Normalized() * offset;
 				q->Goto(destination);

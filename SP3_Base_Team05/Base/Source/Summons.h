@@ -13,7 +13,7 @@ public:
 	virtual void Init(Vector3 pos);
 	virtual void Update(double dt);
 	void Goto(Vector3 pos);
-	void Shoot();
+	void Shoot(Vector3 dir);
 
 	bool isDefending;
 

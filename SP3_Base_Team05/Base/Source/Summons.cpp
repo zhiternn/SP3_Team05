@@ -28,7 +28,7 @@ void Summons::Init(Vector3 pos)
 void Summons::Update(double dt)
 {
 	GameObject::Update(dt);
-
+	weapon->Update(dt);
 	if (vel.LengthSquared() > speedLimit * speedLimit)
 		vel = vel.Normalized() * speedLimit;
 }
@@ -38,7 +38,8 @@ void Summons::Goto(Vector3 pos)
 	this->vel += (pos - this->pos).Normalized() * movementSpeed;
 }
 
-void Summons::Shoot()
+void Summons::Shoot(Vector3 dir)
 {
-	weapon->Fire(this->pos, target->pos, team);
+	Vector3 playerPos = (dir - this->pos).Normalized();
+	weapon->Fire(this->pos, playerPos, team);
 }

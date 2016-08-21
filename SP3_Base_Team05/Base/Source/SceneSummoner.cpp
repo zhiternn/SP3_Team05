@@ -113,15 +113,14 @@ void SceneSummoner::PlayerController(double dt)
 	{
 		forceDir.x += 1;
 	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
-	{
-		player->Dash(forceDir, dt);
-	}
 	if (forceDir.IsZero() == false)
 	{
 		forceDir.Normalize();
 		player->Move(forceDir, dt);
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
+	{
+		player->Dash(forceDir, dt);
 	}
 	if (Controls::GetInstance().OnHold(Controls::MOUSE_LBUTTON))
 	{

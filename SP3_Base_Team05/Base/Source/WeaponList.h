@@ -7,7 +7,7 @@ class Shotgun : public Weapon
 {
 public:
 	Shotgun():projectileCount(5), spread(0.25f){
-		SetFireRate(1.5);
+		SetFireRate(5);
 	}
 	~Shotgun(){}
 
@@ -23,7 +23,7 @@ class MachineGun : public Weapon
 {
 public:
 	MachineGun(){
-		SetFireRate(5);
+		SetFireRate(10);
 	}
 	~MachineGun(){}
 
@@ -40,7 +40,7 @@ class SplitGun : public Weapon
 {
 public:
 	SplitGun() : coneAngle(45.0f), projectileCount(10) {
-		SetFireRate(1);
+		SetFireRate(5);
 		state = STATE_1;
 	}
 	//Overloaded SplitGun 
