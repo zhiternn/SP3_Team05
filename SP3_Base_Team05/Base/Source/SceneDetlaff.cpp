@@ -91,7 +91,7 @@ void SceneDetlaff::Init()
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 
-	enemyFireDelay = 2.0f;
+	enemyFireDelay = 3.0f;
 	hehexd = 0.f;
 }
 
@@ -208,6 +208,20 @@ void SceneDetlaff::Update(double dt)
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
+
+	enemyFireDelay -= dt;
+
+	std::cout << enemyFireDelay << std::endl;
+
+	if (enemyFireDelay <= 0.f)
+	{
+		enemyFireDelay = 2.f;
+
+		Vector3 mouseDir;
+		mouseDir = (player->pos - detlaff->pos).Normalized();
+		detlaff->Shoot(mouseDir);
+	}
+
 
 
 }

@@ -6,7 +6,7 @@
 CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 {
 	//set weapon to STATE_1 default weapon
-	weapon = new SplitGun(360.f, 72);
+	weapon = new SplitGun(360.f, 36);
 	weapon->AssignProjectile(new Bullet());
 	this->SetRate(0.f);
 }
@@ -21,7 +21,7 @@ CDetlaff::~CDetlaff()
 void CDetlaff::Update(double dt)
 {
 	GameObject::Update(dt);
-
+	weapon->Update(dt);
 	//< THIS BOSS WILL BE AN IMMOBILE JUGGERNAUT
 
 	//Update States
@@ -35,7 +35,7 @@ void CDetlaff::Update(double dt)
 				state = STATE_2;
 				this->health = 200;
 				//Create the stage 2 splitgun
-				weapon = new SplitGun(45.f, 10);
+				weapon = new SplitGun(45.f, 7);
 				weapon->AssignProjectile(new Bullet());
 				break;
 			}
