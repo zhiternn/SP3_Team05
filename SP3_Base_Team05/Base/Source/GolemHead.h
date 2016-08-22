@@ -26,6 +26,7 @@ public:
 
     virtual void Init(Vector3 pos);
     virtual void Update(double dt);
+    virtual void SetupMesh();
 
 private:
 

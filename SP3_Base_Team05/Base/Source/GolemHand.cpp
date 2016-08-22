@@ -1,5 +1,6 @@
 #include "GolemHand.h"
 #include "GolemHead.h"
+#include "MeshManager.h"
 
 GolemRightHand::GolemRightHand() :
 Enemy(),
@@ -66,6 +67,15 @@ void GolemRightHand::LinkTo(Entity* entity)
     link = entity;
 }
 
+void GolemRightHand::SetupMesh()
+{
+    float degree = Math::RadianToDegree(atan2(front.y, front.x));
+    modelStack.Translate(pos.x, pos.y, pos.z);
+    modelStack.Rotate(degree, 0, 0, 1);
+    modelStack.Scale(scale.x, scale.y, scale.z);
+    mesh = meshList[GEO_SPHERE];
+}
+
 GolemLeftHand::GolemLeftHand() :
 Enemy(),
 link(NULL)
@@ -120,4 +130,13 @@ void GolemLeftHand::Update(double dt)
 void GolemLeftHand::LinkTo(Entity* entity)
 {
     link = entity;
+}
+
+void GolemLeftHand::SetupMesh()
+{
+    float degree = Math::RadianToDegree(atan2(front.y, front.x));
+    modelStack.Translate(pos.x, pos.y, pos.z);
+    modelStack.Rotate(degree, 0, 0, 1);
+    modelStack.Scale(scale.x, scale.y, scale.z);
+    mesh = meshList[GEO_SPHERE];
 }

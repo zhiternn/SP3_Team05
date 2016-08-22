@@ -8,6 +8,15 @@ weapon(NULL)
 	inventory = new Inventory();
 	inventory->weapons.front()->AssignProjectile(inventory->bullets.front());
 	weapon = inventory->weapons.front();
+
+    shield = new Shield();
+    GameObject::goList.push_back(shield);
+    this->shield->SetActive(true);
+    this->shield->SetAliveState(true);
+    this->shield->SetColliderType(Collider::COLLIDER_BOX);
+    this->shield->SetScale(4, 4, 4);
+    this->shield->SetMass(3);
+    this->shield->SetVelocity(0, 0, 0);
 }
 
 Player::~Player()
@@ -83,13 +92,19 @@ void Player::Shoot(Vector3 dir)
 	this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
 }
 
-void Player::Shield(Vector3 dir)
+void Player::Shielding(Vector3 dir)
 {
     //weapon->Fire();
     Vector3 tempPos(pos.x + dir.x * (scale.x + 4), pos.y + dir.y * (scale.y + 4), 0);
-    this->weapon->Fire(tempPos, dir, CProjectile::TEAM_PLAYER);
-}
 
+    this->shield->SetActive(true);
+    this->shield->SetAliveState(true);
+    this->shield->SetColliderType(Collider::COLLIDER_BOX);
+    this->shield->SetScale(4, 4, 4);
+    this->shield->SetMass(3);
+
+    this->shield->Init(tempPos);
+}
 void Player::ChangeWeaponUp()
 {
 	weaponIter++;

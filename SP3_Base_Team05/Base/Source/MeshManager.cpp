@@ -57,4 +57,5 @@ void MeshManager::Init()
 	//meshList[GEO_PLAYER_BOTTOM]->textureArray[0] = LoadTGA("Image//player.tga");
 
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f);
+    meshList[GEO_FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
 }

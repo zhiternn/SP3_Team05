@@ -67,36 +67,37 @@ class Shield : public CProjectile
 {
 public:
     Shield() : CProjectile(PROJECTILE_TYPE::SHIELD) {
-        SetDMG(0);
-        SetLifetime(0.02);
-        SetProjectileSpeed(0);
-        SetScale(4, 4, 4);
-        SetCurrHealth(2000);
-        SetMaxHealth(2000);
-        SetActiveState(true);
-        SetAliveState(false);
+        CurrHealth = 2000;
+        MaxHealth = 2000;
+        proj_dmg = 0;
+        aliveState = true;
+        startShieldRegen = false;
+        proj_speed = 0;
+        proj_lifetime = 10;
     }//< Overloaded Constructor
     ~Shield(){}                                                          //< Destructor
 
+    virtual void Init(Vector3 pos);                                     //< Initialize
     virtual void Update(double dt);                                     //< Update
     virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Shotgun Shell
+    virtual void TakeDamage(unsigned amount);
 
     void regenerateShield(float currHP, double dt);                     //< Regenerates Shield Health
 
     // Getter
-    bool GetActiveState();                                              //< Sets Shield Active State
+    //bool GetActiveState();                                              //< Sets Shield Active State
     bool GetAliveState();                                               //< Sets Shield Alive State
     float GetCurrHealth();                                              //< Sets Shield Curr Health
     float GetMaxHealth();                                               //< Sets Shield Max Health
 
     // Setter
-    void SetActiveState(bool active);                                   //< Returns Shield Active State 
+    //void SetActiveState(bool active);                                   //< Returns Shield Active State 
     void SetAliveState(bool alive);                                     //< Returns Shield Alive State
     void SetCurrHealth(float curr);                                     //< Returns Shield Curr Health
     void SetMaxHealth(float max);                                       //< Returns Shield Max Health
 
 private:
-    bool activeState;
+    //bool activeState;
     bool aliveState;
     float CurrHealth;
     float MaxHealth;
