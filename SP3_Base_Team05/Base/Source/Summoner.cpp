@@ -33,14 +33,14 @@ void Summoner::Init(Vector3 pos)
 		Summons* summons = new Summons();
 		Vector3 offset(Math::RandFloatMinMax(0, 5), Math::RandFloatMinMax(0, 5), 0);
 		summons->Init(pos + offset);
-		summons->SetTarget(this);
+		summons->SetTarget(target);
 		summonsList.push_back(summons);
 		GameObject::goList.push_back(summons);
 	}
 	for (auto q : summonsList)
 	{
 		q->Init(this->pos);
-		q->SetTarget(this);
+		q->SetTarget(target);
 	}
 	captureRatio = 1.f;
 }
@@ -54,7 +54,7 @@ void Summoner::Update(double dt)
 		summonCooldownTimer = SUMMONING_COOLDOWN;
 		Summons* summons = new Summons();
 		summons->Init(this->pos);
-		summons->SetTarget(this);
+		summons->SetTarget(target);
 		summonsList.push_back(summons);
 		GameObject::goList.push_back(summons);
 	}
@@ -66,7 +66,7 @@ void Summoner::Update(double dt)
 		{
 			if (!q->isDefending && attacking)
 			{
-				q->Shoot(target->pos);
+				//q->Shoot(target->pos);
 			}
 		}
 	}
@@ -189,7 +189,10 @@ void Summoner::UpdateCooldowns(double dt)
 
 void Summoner::SetupMesh()
 {
+	float rotateAngle = Math::RadianToDegree(atan2f(this->pos.y - target->pos.y, this->pos.x - target->pos.x));
+
 	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Rotate(rotateAngle - 90, 0, 0, 1);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 
 	mesh = meshList[GEO_SUMMONER];

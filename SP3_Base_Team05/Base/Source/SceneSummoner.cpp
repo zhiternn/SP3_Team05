@@ -459,6 +459,16 @@ void SceneSummoner::RenderGameObjects()
 				RenderMesh(GameObject::goList[i]->mesh, false);
 
 			modelStack.PopMatrix();
+
+			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
+			if (entity)
+			{
+				modelStack.PushMatrix();
+				modelStack.Scale(entity->GetHP(), 1, 1);
+				modelStack.Translate(entity->pos.x, entity->pos.y, entity->pos.z);
+				RenderMesh(meshList[GEO_HEALTH], false);
+				modelStack.PopMatrix();
+			}
 		}
 	}
 }
