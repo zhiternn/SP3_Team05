@@ -78,6 +78,14 @@ void SnakeHead::Update(double dt)
 	}
 }
 
+void SnakeHead::HandleInteraction(GameObject* b, double dt)
+{
+	if (CheckCollision(b, dt))
+	{
+		CollisionResponse(b);
+	}
+}
+
 void SnakeHead::Action()
 {
 
@@ -112,5 +120,5 @@ void SnakeHead::SetupMesh()
 	modelStack.Translate(pos.x, pos.y, pos.z);
 	modelStack.Rotate(degree, 0, 0, 1);
 	modelStack.Scale(scale.x, scale.y, scale.z);
-	mesh = meshList[GEO_SPHERE];
+	this->mesh = meshList[GEO_SPHERE];
 }

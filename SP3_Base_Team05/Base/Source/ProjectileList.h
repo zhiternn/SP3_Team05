@@ -29,15 +29,17 @@ public:
 		SetLifetime(2);
 		SetProjectileSpeed(50.0f);
 		SetScale(1, 1, 1);
-		SetMass(1);
+		SetMass(50);
 	}
 	~Hook(){}
 
     virtual void Update(double dt);                                     //< Update Rope Stuff
 	virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Rope
+	void Set();
 
 private:
 	
+
 };
 
 
@@ -111,6 +113,7 @@ public:
 		SetLifetime(2);
 		SetProjectileSpeed(150.f);
 		SetScale(.5f, .5f, .5f);
+		SetMass(0.5f);
 	}					//< Overloaded Constructor
 	~Bullet(){};																					//< Destructor
 

@@ -44,17 +44,24 @@ void MeshManager::Init()
 
 	meshList[GEO_P_BULLET];
 	meshList[GEO_P_GRENADE];
-	meshList[GEO_P_ROPE];
 	meshList[GEO_P_SHIELD];
+
+	meshList[GEO_ROPE] = MeshBuilder::GenerateQuad("rope", Color(1, 1, 1), 1);
+	meshList[GEO_ROPE]->textureArray[0] = LoadTGA("Image//rope.tga");
 
 	meshList[GEO_SNAKE_HEAD];
 	meshList[GEO_SNAKE_BODY] = MeshBuilder::GenerateOBJ("snake_body", "Obj\\snake_body.obj");
 	meshList[GEO_SNAKE_BODY]->textureArray[0] = LoadTGA("Image//snake_body.tga");
 
 	meshList[GEO_PLAYER_TOP] = MeshBuilder::GenerateOBJ("player_top", "Obj//player_top.obj");
-	//meshList[GEO_PLAYER_TOP]->textureArray[0] = LoadTGA("Image//player.tga");
+	meshList[GEO_PLAYER_TOP]->textureArray[0] = LoadTGA("Image//player.tga");
+	//meshList[GEO_PLAYER_TOP]->textureArray[1] = LoadTGA("Image//player2.tga");
+	//meshList[GEO_PLAYER_TOP]->textureArray[2] = LoadTGA("Image//player3.tga");
 	meshList[GEO_PLAYER_BOTTOM] = MeshBuilder::GenerateOBJ("player_top", "Obj//player_bottom.obj");
-	//meshList[GEO_PLAYER_BOTTOM]->textureArray[0] = LoadTGA("Image//player.tga");
+	meshList[GEO_PLAYER_BOTTOM]->textureArray[0] = LoadTGA("Image//player.tga");
+	//meshList[GEO_PLAYER_BOTTOM]->textureArray[1] = LoadTGA("Image//player2.tga");
+	//meshList[GEO_PLAYER_BOTTOM]->textureArray[2] = LoadTGA("Image//player3.tga");
 
-	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f);
+	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f, 8.0f);
+	meshList[GEO_FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
 }

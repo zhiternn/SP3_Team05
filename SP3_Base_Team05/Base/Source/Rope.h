@@ -11,11 +11,13 @@ public:
 
 	virtual void Init(Vector3 pos, GameObject* target);
 	virtual void Update(double dt);
+	virtual void SetupMesh();
 	virtual void HandleInteraction(double dt);
 
 private:
 	GameObject* target;
 	float maxLength;
+	float lifetime;
 
 };
 

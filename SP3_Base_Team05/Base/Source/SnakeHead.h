@@ -13,6 +13,7 @@ public:
 
 	virtual void Init(Vector3 pos, unsigned bodyCount);
 	virtual void Update(double dt);
+	virtual void HandleInteraction(GameObject* b, double dt);
 	virtual void SetupMesh();
 
 private:

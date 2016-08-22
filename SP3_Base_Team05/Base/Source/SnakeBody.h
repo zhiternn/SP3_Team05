@@ -30,6 +30,8 @@ private:
 	SnakeBody* backLink;
 	Weapon* weapon;
 
+	//for animation
+	float pitchDegree;
 };
 
 #endif

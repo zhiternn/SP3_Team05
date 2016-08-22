@@ -8,6 +8,9 @@ void Hook::Update(double dt)
 
 void Hook::HandleInteraction(GameObject* b, double dt)
 {
+	if (this->team == b->GetTeam())
+		return;
+
 	if (CheckCollision(b, dt))
 	{
 		CollisionResponse(b);
@@ -32,6 +35,8 @@ TRAP
 */
 void Trap::HandleInteraction(GameObject *b, double dt)
 {
+	if (this->team == b->GetTeam())
+		return;
 }
 
 //void Trap::CalculateChance(Enemy *enemy)
@@ -77,6 +82,8 @@ void Shield::Update(double dt)
 
 void Shield::HandleInteraction(GameObject* b, double dt)
 {
+	if (this->team == b->GetTeam())
+		return;
     //If GameObject type is of GO_ENEMY
     if (b->GetType() == GameObject::GO_ENTITY)
     {
@@ -225,6 +232,9 @@ void Bullet::Update(double dt)
 
 void Bullet::HandleInteraction(GameObject *b, double dt)
 {
+	if (this->team == b->GetTeam())
+		return;
+
 	if (CheckCollision(b, dt))
 	{
 		CollisionResponse(b);

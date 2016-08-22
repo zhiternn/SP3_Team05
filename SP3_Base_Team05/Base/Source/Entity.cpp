@@ -12,11 +12,14 @@ Entity::~Entity()
 
 void Entity::TakeDamage(unsigned amount)
 {
-	health -= amount;
-	if (health < 0)
+	if (!isDead)
 	{
-		health = 0;
-		Die();
+		health -= amount;
+		if (health < 0)
+		{
+			health = 0;
+			Die();
+		}
 	}
 }
 

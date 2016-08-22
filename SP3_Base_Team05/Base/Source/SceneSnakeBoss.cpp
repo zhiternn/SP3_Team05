@@ -298,7 +298,7 @@ void SceneSnakeBoss::RenderWorld()
 {
 	{//Render Floor
 		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, -1);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
 		RenderMesh(meshList[GEO_FLOOR], false);
 		modelStack.PopMatrix();
@@ -384,7 +384,8 @@ void SceneSnakeBoss::UpdateGameObjects(double dt)
 				for (int j = 0; j < GameObject::goList.size(); ++j)
 				{
 					GameObject *go2 = GameObject::goList[j];
-					if (go2->IsActive() && go->GetTeam() != go2->GetTeam() && go2->GetType() != GameObject::GO_PROJECTILE)
+					if (go2->IsActive() && 
+						go2->GetType() != GameObject::GO_PROJECTILE)//only allow projectiles to check against GOs
 					{
 						go->HandleInteraction(go2, dt);
 					}
@@ -425,11 +426,9 @@ void SceneSnakeBoss::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
+	go->SetupMesh();
 	if (go->mesh)
-	{
-		go->SetupMesh();
 		RenderMesh(go->mesh, false);
-	}
 
 	modelStack.PopMatrix();
 }

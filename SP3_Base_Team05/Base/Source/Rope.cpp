@@ -1,4 +1,6 @@
 #include "Rope.h"
+#include "MeshManager.h"
+
 Rope::Rope():
 GameObject(GO_ENVIRONMENT),
 maxLength(20.0f),
@@ -42,6 +44,17 @@ void Rope::Update(double dt)
 void Rope::HandleInteraction(double dt)
 {
 	return;
+}
+
+void Rope::SetupMesh()
+{
+	float yawDegree = Math::RadianToDegree(atan2(front.y, front.x));
+	
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Rotate(yawDegree, 0, 0, 1);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+	modelStack.Translate(0.5f, 0, 0);
+	mesh = meshList[GEO_ROPE];
 }
 
 Rope* FetchRope()
