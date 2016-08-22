@@ -7,9 +7,9 @@
 #include "Player.h"
 #include "WeaponList.h"
 #include "ProjectileList.h"
-
 #include "GolemHead.h"
 #include "GolemHand.h"
+#include "Summoner.h"
 
 #include <vector>
 

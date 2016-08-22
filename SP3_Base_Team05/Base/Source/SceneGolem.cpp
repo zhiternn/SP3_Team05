@@ -54,16 +54,16 @@ void SceneGolem::Init()
     mainCamera = new Camera();
     mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
 
-    GameObject *go = FetchGO();
-    go->SetActive(true);
-    go->SetScale(20, 20, 20);
-    go->SetFront(1, 0, 0);
-    go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-    go->SetType(GameObject::GO_ENVIRONMENT);
-    go->SetColliderType(Collider::COLLIDER_BOX);
+    //GameObject *go = FetchGO();
+    //go->SetActive(true);
+    //go->SetScale(20, 20, 20);
+    //go->SetFront(1, 0, 0);
+    //go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+    //go->SetType(GameObject::GO_ENVIRONMENT);
+    //go->SetColliderType(Collider::COLLIDER_BOX);
 
     player = new Player();
-    player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+    player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
     GameObject::goList.push_back(player);
 
     golemhead = new GolemHead();
@@ -138,34 +138,12 @@ void SceneGolem::PlayerController(double dt)
         mouseDir = (mousePos_worldBased - player->pos).Normalized();
         player->Shoot(mouseDir);
     }
-    if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
+    if (Controls::GetInstance().OnHold(Controls::MOUSE_RBUTTON))
     {
-        CProjectile *proj_trap = new Trap();
-        proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
-        proj_trap->SetVelocity(0, 0, 0);
-        proj_trap->SetColliderType(Collider::COLLIDER_BOX);
-        player->weapon->AssignProjectile(proj_trap);
-
-        for (int i = 0; i < GameObject::goList.size(); i++)
-        {
-            if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
-            {
-                //Trap found in current map
-                break;
-            }
-            else
-            {
-                //push it into the list to check for next iteration
-                GameObject::goList.push_back(proj_trap);
-
-                Vector3 pos;
-                pos = player->pos.Normalized();
-                player->Shoot(pos);
-                break;
-            }
-        }
+        Vector3 mouseDir;
+        mouseDir = (mousePos_worldBased - player->pos).Normalized();
+        player->Shielding(mouseDir);
     }
-
     //if (Controls::GetInstance().mouse_ScrollY < 1)
     if (Controls::GetInstance().OnPress(Controls::KEY_E))
     {
@@ -175,6 +153,10 @@ void SceneGolem::PlayerController(double dt)
     if (Controls::GetInstance().OnPress(Controls::KEY_Q))
     {
         player->ChangeWeaponUp();
+    }
+    if (!Controls::GetInstance().OnHold(Controls::MOUSE_RBUTTON))
+    {
+        player->shield->SetActive(false);
     }
 }
 
@@ -196,6 +178,7 @@ void SceneGolem::Update(double dt)
             0
             );
     }
+
     //Restrict the player from moving past the deadzone
     if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
     {
@@ -205,30 +188,6 @@ void SceneGolem::Update(double dt)
     mainCamera->Update(dt);
     mainCamera->Constrain(*player, mainCamera->target);
     UpdateGameObjects(dt);
-
-    if (golemhead->IsActive() == false)
-    {
-        golemrhead->SetActive(false);
-        golemlhead->SetActive(false);
-    }
-
-    //if (golemhead->GetHP() <= 1500)
-    //{
-    //    golemlhead->speedLimit = 55.f;
-    //    golemrhead->speedLimit = 55.f;
-    //}
-    //if (golemhead->GetHP() <= 500)
-    //{
-    //    golemlhead->speedLimit = 70.f;
-    //    golemrhead->speedLimit = 70.f;
-    //}
-    //if (golemhead->GetHP() <= 250)
-    //{
-    //    golemlhead->speedLimit = 180.f;
-    //    golemrhead->speedLimit = 180.f;
-    //    golemlhead->movementSpeed = 1800.f;
-    //    golemrhead->movementSpeed = 1800.f;
-    //}
 }
 
 void SceneGolem::Render()
@@ -362,28 +321,40 @@ void SceneGolem::RenderMain()
 
     RenderWorld();
 
-
     //RenderSkyPlane();
 }
 
 void SceneGolem::RenderWorld()
 {
-    //for (int i = m_worldWidth * 0.5 - 100; i < m_worldWidth * 0.5 + 100; i+=10)
-    //{//Render Floor
-    //    for (int j = m_worldHeight * 0.5 - 100; j < m_worldHeight * 0.5 + 100; j+= 10)
-    //    {
-    //        modelStack.PushMatrix();
-    //        modelStack.Translate(i, j, 0);
-    //        modelStack.Scale(10, 10, 0);
-    //        RenderMesh(meshList[GEO_FLOOR], false);
-    //        modelStack.PopMatrix();
-    //    }
-    //}
-    modelStack.PushMatrix();
-    modelStack.Translate(m_worldWidth * 0.5, m_worldHeight * 0.5, 0);
-    modelStack.Scale(m_worldWidth, m_worldHeight, 0);
-    RenderMesh(meshList[GEO_FLOOR], false);
-    modelStack.PopMatrix();
+    {//Render Floor
+        modelStack.PushMatrix();
+        modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+        modelStack.Scale(m_worldWidth, m_worldHeight, 0);
+        RenderMesh(meshList[GEO_FLOOR], false);
+        modelStack.PopMatrix();
+    }
+
+    if (player && player->IsActive())
+    {
+        modelStack.PushMatrix();
+        modelStack.Translate(player->pos.x, player->pos.y, player->pos.z);
+        modelStack.Scale(player->GetScale().x, player->GetScale().y, player->GetScale().z);
+
+        modelStack.PushMatrix();
+        Vector3 toMouse = mousePos_worldBased - player->pos;
+        float toMouseAngle = Math::RadianToDegree(atan2(toMouse.y, toMouse.x));
+        modelStack.Rotate(toMouseAngle, 0, 0, 1);
+        RenderMesh(meshList[GEO_PLAYER_TOP], true);
+        modelStack.PopMatrix();
+
+        modelStack.PushMatrix();
+        float degree = Math::RadianToDegree(atan2(player->GetVelocity().y, player->GetVelocity().x));
+        modelStack.Rotate(degree, 0, 0, 1);
+        RenderMesh(meshList[GEO_PLAYER_BOTTOM], true);
+        modelStack.PopMatrix();
+
+        modelStack.PopMatrix();
+    }
 
     RenderGameObjects();
 
@@ -418,11 +389,15 @@ void SceneGolem::RenderHUD()
     ss3 << "Weapon: " << player->weaponIter;
     RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
 
-
     std::ostringstream ss4;
     ss4.precision(2);
-    ss4 << "HP: " << golemhead->GetHP();
+    ss4 << "Golem HP: " << golemhead->GetHP();
     RenderTextOnScreen(meshList[GEO_TEXT], ss4.str(), Color(0, 1, 0), 3, 0, 15);
+
+    std::ostringstream ss5;
+    ss5.precision(6);
+    ss5 << "Shield HP: " << player->shield->GetCurrHealth();
+    RenderTextOnScreen(meshList[GEO_TEXT], ss5.str(), Color(0, 1, 0), 3, 0, 18);
 }
 
 void SceneGolem::Exit()
@@ -490,43 +465,11 @@ void SceneGolem::RenderGO(GameObject* go)
 {
     modelStack.PushMatrix();
 
-    switch (go->GetType())
-    {
-    case GameObject::GO_ENVIRONMENT:
-    {
-        float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
+    go->SetupMesh();
 
-        modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-        modelStack.Rotate(degree, 0, 0, 1);
-        modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-        if (go->GetCollider().type == Collider::COLLIDER_BALL)
-            RenderMesh(meshList[GEO_SPHERE], false);
-        else
-            RenderMesh(meshList[GEO_CUBE], false);
-    }
-    break;
-    case GameObject::GO_PROJECTILE:
-    {
-        float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-        modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-        modelStack.Rotate(degree, 0, 0, 1);
-        modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-        RenderMesh(meshList[GEO_SPHERE], false);
-    }
-    break;
-    case GameObject::GO_ENTITY:
-    {
-        float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-        modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-        modelStack.Rotate(degree, 0, 0, 1);
-        modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-        RenderMesh(meshList[GEO_SPHERE], false);
-    }
-    break;
-
-    default:break;
-    }
+    if (go->mesh)
+        RenderMesh(go->mesh, false);
+    
 
     modelStack.PopMatrix();
 }

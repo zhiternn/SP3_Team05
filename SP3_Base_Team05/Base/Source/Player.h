@@ -24,7 +24,7 @@ public:
 	void Move(Vector3 dir, double dt);
 	void Dash(Vector3 dir, double dt);
 	void Shoot(Vector3 dir);
-    void Shield(Vector3 dir);
+    void Shielding(Vector3 dir);
 	void ChangeWeapon(int type);
 	void ChangeWeaponUp();
 	void ChangeWeaponDown();
@@ -44,6 +44,7 @@ public:
 	CProjectile *projectile;
 	float cooldownTimer = 0;
 	short weaponIter = 0;
+    Shield *shield;
 	short projectileIter = 0;
 	float maxHealth;
 
