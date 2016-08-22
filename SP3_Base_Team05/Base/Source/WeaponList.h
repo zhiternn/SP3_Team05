@@ -58,6 +58,13 @@ public:
 	}
 	~Splitgun(){}
 
+	//Overloaded Constructor
+	Splitgun(float angle, int count){
+		SetFireRate(1);
+		SetAngle(angle);
+		SetCount(count);
+	}
+
 	virtual void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
 	
 	//For weapon switching 

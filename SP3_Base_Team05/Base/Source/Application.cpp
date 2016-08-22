@@ -255,6 +255,7 @@ void Application::Run()
 	MeshManager &meshManager = MeshManager::GetInstance();
 	meshManager.Init();
 
+
 	Scene* scene = new SceneSnakeBoss();
 	//Scene* scene = new SceneSummoner();
 	//Scene* scene = new SceneDetlaff();
