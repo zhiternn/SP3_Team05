@@ -15,10 +15,6 @@ using std::vector;
 
 class SceneDetlaff : public SceneBase
 {
-	enum GEOMETRY_TYPE
-	{
-		NUM_GEOMETRY = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END
-	};
 public:
 	SceneDetlaff();
 	~SceneDetlaff();
@@ -49,9 +45,6 @@ private:
 
 	float m_worldWidth, m_worldHeight;
 	float m_orthoWidth, m_orthoHeight;
-
-
-	Mesh* meshList[GEO_DEFAULT_END];
 
 	Camera* mainCamera;
 

@@ -21,8 +21,9 @@ public:
 private:
 	float safetyThreshold;
 	float chaseThreshold;
-	std::vector<Summons*> summonsList;
 	float agressiveLevel;
+	float maxHealth; 
+	std::vector<Summons*> summonsList;
 
 };
 

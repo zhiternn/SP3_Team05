@@ -4,8 +4,8 @@
 #include "Entity.h"
 #include "Inventory.h"
 
-static const float MOVEMENT_SPEED = 80.0f;
-static const float MOVEMENT_LIMIT = 30.f;
+static const float MOVEMENT_LIMIT = 300.f;
+static const float DASH_DISTANCE = 50.f;
 static const float DASH_COOLDOWN = 1.f;
 
 class Player : public Entity
@@ -17,7 +17,9 @@ public:
 
 	// Functions
 	void Init(Vector3 pos, Vector3 scale, Vector3 front);
-	void Update(double dt);
+	virtual void Update(double dt);
+	virtual void HandleInteraction(GameObject* b, double dt);
+	virtual void SetupMesh();
 	
 	void Move(Vector3 dir, double dt);
 	void Dash(Vector3 dir, double dt);

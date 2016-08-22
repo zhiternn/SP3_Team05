@@ -1,4 +1,5 @@
 #include "Summoner.h"
+#include "Controls.h"
 
 using namespace std;
 
@@ -20,11 +21,12 @@ void Summoner::Init(Vector3 pos)
 	movementSpeed = 40.0f;
 	scale.Set(10, 10, 10);
 	health = 300;
+	maxHealth = health;
 	isDead = false;
-	agressiveLevel = 1 - ((float)health / 100.f);
-	safetyThreshold = this->GetScale().x * 5;
+	agressiveLevel = 1 - ((float)health / maxHealth);
+	safetyThreshold = this->GetScale().x * 7;
 	chaseThreshold = safetyThreshold * 1.5f;
-	for (int i = 0; i < 6; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
 		Summons* summons = new Summons();
 		Vector3 offset(Math::RandFloatMinMax(0, 5), Math::RandFloatMinMax(0, 5), 0);
@@ -45,8 +47,7 @@ void Summoner::Init(Vector3 pos)
 void Summoner::Update(double dt)
 {
 	GameObject::Update(dt);
-
-	if (summonsList.size() <= 6)
+	if (summonsList.size() < 5)
 	{
 		Summons* summons = new Summons();
 		summons->Init(this->pos);
@@ -55,7 +56,17 @@ void Summoner::Update(double dt)
 		GameObject::goList.push_back(summons);
 	}
 	Defend();
-	//Attack();
+	Attack();
+	for (auto q : summonsList)
+	{
+		if (!q->isDefending)
+		{
+			if (Controls::GetInstance().OnHold(Controls::KEY_V))
+			{
+				q->Shoot(target->pos);
+			}
+		}
+	}
 	if (!Enemy::UpdateMovement(dt))
 	{
 		float distanceFromTarget = (target->pos - pos).LengthSquared();
@@ -82,7 +93,7 @@ void Summoner::Update(double dt)
 void Summoner::TakeDamage(unsigned amount)
 {
 	Entity::TakeDamage(amount);
-	agressiveLevel = 1 - ((float)health / 100.f);
+	agressiveLevel = 1 - ((float)health / maxHealth);
 }
 
 void Summoner::CleaningUpMess()
@@ -115,14 +126,33 @@ void Summoner::Defend()
 
 		for (int i = 0; i < summonsList.size() * agressiveLevel; ++i)
 		{
-			cout << agressiveLevel << endl;
 			float formingWallLength = diameter * i;
 			summonsList[i]->Goto(bossFront + (NP * (wallLength + formingWallLength)));
+			summonsList[i]->isDefending = true;
 		}
 	}
 }
 
 void Summoner::Attack()
 {
+	CleaningUpMess();
+	if (!summonsList.empty())
+	{
+		for (auto q : summonsList)
+		{
+			if (!q->isDefending)
+			{
+				float combinedRadius = scale.x + target->GetScale().x;
+				float offset = combinedRadius * 5;
+				//Vector3 offsetDir(
+				//	Math::RandFloatMinMax(-(target->pos.x - pos.x), target->pos.x - pos.x),
+				//	Math::RandFloatMinMax(-(target->pos.y - pos.y), target->pos.y - pos.y),
+				//	0);
+				Vector3 offsetDir(target->pos.x - pos.x, target->pos.y - pos.y, 0);
 
+				Vector3 destination = target->pos + offsetDir.Normalized() * offset;
+				q->Goto(destination);
+			}
+		}
+	}
 }

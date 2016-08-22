@@ -1,27 +1,30 @@
 #include "ProjectileList.h"
+#include "Rope.h"
 
-void ShotgunShell::Update(double dt)
-{
-    CProjectile::Update(dt);
-}
-
-void ShotgunShell::HandleInteraction(GameObject* b, double dt)
-{
-    if (b->GetType() == GameObject::GO_PROJECTILE)
-    {
-        if (CheckCollision(b, dt))
-            b->SetActive(false);
-    }
-}
-
-
-void Rope::Update(double dt)
+void Hook::Update(double dt)
 {
 	CProjectile::Update(dt);
 }
 
-void Rope::HandleInteraction(GameObject* b, double dt)
+void Hook::HandleInteraction(GameObject* b, double dt)
 {
+	if (CheckCollision(b, dt))
+	{
+		CollisionResponse(b);
+		if (b->GetType() == GameObject::GO_ENTITY)
+		{
+			Entity* entity = dynamic_cast<Entity*>(b);
+			if (entity)
+			{
+				entity->TakeDamage(proj_dmg);
+
+				Rope* rope = FetchRope();
+				rope->Init(this->pos, b);
+			}
+		}
+
+		this->SetActive(false);
+	}
 }
 
 /*
@@ -29,29 +32,12 @@ TRAP
 */
 void Trap::HandleInteraction(GameObject *b, double dt)
 {
-	//If GameObject type is of GO_ENEMY
-	if (b->GetType() == GameObject::GO_ENTITY)
-	{
-		//Prevents them from moving
-		b->SetVelocity(0, 0, 0);
-		//Remove the trap once enemy is constrained
-		this->SetActive(false);
-
-		CalculateChance(dynamic_cast<Enemy*>(b));
-		if (Capture())
-		{
-			b->SetActive(false);
-			//Return a Higher Score to the player
-			// or maybe money
-		}
-
-	}
 }
 
-void Trap::CalculateChance(Enemy *enemy)
-{
-	captureChance = ((100 - enemy->GetHP()) * enemy->GetRate()) / 100;
-}
+//void Trap::CalculateChance(Enemy *enemy)
+//{
+//	captureChance = ((100 - enemy->GetHP()) * enemy->GetRate()) / 100;
+//}
 
 bool Trap::Capture()
 {
@@ -72,7 +58,6 @@ bool Trap::Capture()
 void Trap::Update(double dt)
 {
 	CProjectile::Update(dt);
-
 }
 
 
@@ -240,9 +225,88 @@ void Bullet::Update(double dt)
 
 void Bullet::HandleInteraction(GameObject *b, double dt)
 {
-	if (b->GetType() == GameObject::GO_PROJECTILE)
+	if (CheckCollision(b, dt))
 	{
-		if (CheckCollision(b, dt))
-			b->SetActive(false);
+		CollisionResponse(b);
+		if (b->GetType() == GameObject::GO_ENTITY)
+		{
+			Entity* entity = dynamic_cast<Entity*>(b);
+			if (entity)
+			{
+				entity->TakeDamage(proj_dmg);
+			}
+		}
+
+		this->SetActive(false);
+	}
+}
+
+Bullet* FetchBullet()
+{
+	std::vector<GameObject*>::iterator it;
+	for (it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
+	{
+		Bullet *proj = dynamic_cast<Bullet*>((*it));
+		if (proj && proj->IsActive() == false)
+		{
+			proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+			proj->SetActive(true);
+			return proj;
+		}
+	}
+
+	for (int i = 0; i < 10; ++i)
+	{
+		GameObject::goList.push_back(new Bullet());
+	}
+	Bullet *proj = dynamic_cast<Bullet*>(*(GameObject::goList.end() - 10));
+	if (proj)
+	{
+		proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+		proj->SetActive(true);
+		return proj;
+	}
+
+	{ //for safety measure
+		Bullet *proj = new Bullet();
+		proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+		proj->SetActive(true);
+		GameObject::goList.push_back(proj);
+		return proj;
+	}
+}
+
+Hook* FetchHook()
+{
+	std::vector<GameObject*>::iterator it;
+	for (it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
+	{
+		Hook *proj = dynamic_cast<Hook*>((*it));
+		if (proj && proj->IsActive() == false)
+		{
+			proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+			proj->SetActive(true);
+			return proj;
+		}
+	}
+
+	for (int i = 0; i < 10; ++i)
+	{
+		GameObject::goList.push_back(new Hook());
+	}
+	Hook *proj = dynamic_cast<Hook*>(*(GameObject::goList.end() - 10));
+	if (proj)
+	{
+		proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+		proj->SetActive(true);
+		return proj;
+	}
+
+	{ //for safety measure
+		Hook *proj = new Hook();
+		proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+		proj->SetActive(true);
+		GameObject::goList.push_back(proj);
+		return proj;
 	}
 }

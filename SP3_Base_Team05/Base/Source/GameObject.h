@@ -3,6 +3,7 @@
 
 #include "Vector3.h"
 #include "Collider.h"
+#include "Mesh.h"
 
 #include <vector>
 
@@ -34,6 +35,7 @@ public:
 
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
+	virtual void SetupMesh();
 
 	void ApplyForce(double dt, Vector3 direction, float magnitude = 0.0f);
 	float GetForce();
@@ -69,6 +71,7 @@ public:
 
 	Vector3 pos;
 	Collider collider;
+	Mesh* mesh;
 
 protected:
 	virtual bool CheckCollision(GameObject* b, double dt);

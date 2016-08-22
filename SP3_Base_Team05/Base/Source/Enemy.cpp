@@ -16,6 +16,7 @@ void Enemy::Init(Vector3 pos)
 {
 	this->pos = pos;
 	this->active = true;
+	this->isDead = false;
 	destinationCountdown = REACH_CHECKER;
 	type = GameObject::GO_ENTITY;
 	team = TEAM_ENEMY;
@@ -186,26 +187,8 @@ void Enemy::HandleInteraction(GameObject* b, double dt)
 		{
 			Vector3 newPath = FindNewPath(target->pos, b);
 			ChangeDestination(MOVETO_AVOID_ENVIRONMENT, newPath);
-
-			CollisionResponse(b);
-
-			{//testy stuff
-				static GameObject* hehe = NULL;
-				GameObject* go = FetchGO();
-				go->SetActive(true);
-				go->SetScale(5, 5, 5);
-
-				go->pos = newPath;
-
-				if (hehe)
-					hehe->SetActive(false);
-				hehe = go;
-			}
 		}
-	}
-}
 
-void Enemy::Shoot(Vector3 dir)
-{
-	this->weapon->Fire(this->pos, dir, CProjectile::TEAM_ENEMY);
+		CollisionResponse(b);
+	}
 }

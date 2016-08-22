@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "Controls.h"
-#include "MeshBuilder.h"
+#include "MeshManager.h"
 
 #include <sstream>
 
@@ -20,17 +20,6 @@ void SceneText::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
-
-	//Clears meshList
-	for (int i = GEO_DEFAULT_END; i < NUM_GEOMETRY; ++i)
-	{
-		meshList[i] = NULL;
-	}
-	//Loads default meshes
-	for (int i = 0; i < GEO_DEFAULT_END; ++i)
-	{
-		meshList[i] = SceneBase::meshList[i];
-	}
 	
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
@@ -373,12 +362,6 @@ void SceneText::Exit()
 		delete mainCamera;
 	if (player)
 		delete player;
-
-	for(int i = 0; i < NUM_GEOMETRY; ++i)
-	{
-		if(meshList[i])
-			delete meshList[i];
-	}
 
 	SceneBase::Exit();
 }

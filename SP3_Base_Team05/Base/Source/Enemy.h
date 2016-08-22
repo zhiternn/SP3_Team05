@@ -24,10 +24,7 @@ public:
 	float GetRate();
 	bool Reached(Vector3 pos);
 
-	void Shoot(Vector3 dir);
-
 	std::vector<Vector3> destinations;
-	Weapon *weapon;
 
 protected:
 	enum MOVEMENT_PRIORITY

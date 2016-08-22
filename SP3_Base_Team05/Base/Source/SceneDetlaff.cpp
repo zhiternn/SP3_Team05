@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "Controls.h"
-#include "MeshBuilder.h"
+#include "MeshManager.h"
 
 #include <sstream>
 
@@ -20,17 +20,6 @@ void SceneDetlaff::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
-
-	//Clears meshList
-	for (int i = GEO_DEFAULT_END; i < NUM_GEOMETRY; ++i)
-	{
-		meshList[i] = NULL;
-	}
-	//Loads default meshes
-	for (int i = 0; i < GEO_DEFAULT_END; ++i)
-	{
-		meshList[i] = SceneBase::meshList[i];
-	}
 
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
@@ -59,7 +48,7 @@ void SceneDetlaff::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 100;
+	m_orthoHeight = 300;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -81,7 +70,7 @@ void SceneDetlaff::Init()
 	GameObject::goList.push_back(detlaff);
 	detlaff->SetTarget(player);
 	detlaff->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0));
-	detlaff->SetScale(20, 20, 20);
+	detlaff->SetScale(10, 10, 10);
 	
 	detlaff->SetType(GameObject::GO_ENTITY);
 	detlaff->SetActive(true);
@@ -91,7 +80,7 @@ void SceneDetlaff::Init()
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 
-	enemyFireDelay = 2.0f;
+	enemyFireDelay = 3.0f;
 	hehexd = 0.f;
 }
 
@@ -171,6 +160,13 @@ void SceneDetlaff::PlayerController(double dt)
 	{
 		player->ChangeWeaponUp();
 	}
+
+	if (Controls::GetInstance().OnPress(Controls::KEY_M))
+	{
+		Vector3 mouseDir;
+		mouseDir = (player->pos - detlaff->pos).Normalized();
+		//detlaff->Shoot(mouseDir);
+	}
 }
 
 void SceneDetlaff::Update(double dt)
@@ -198,24 +194,22 @@ void SceneDetlaff::Update(double dt)
 		PlayerController(dt);
 	}
 
-	//if (enemyFireDelay <= 0.f)
-	//{
-	//	Vector3 mouseDir;
-	//	mouseDir = (mousePos_worldBased - player->pos).Normalized();
-	//	std::cout << "Shoot" << std::endl;
-	//	detlaff->Shoot(mouseDir);
-	//	enemyFireDelay = 2.f;
-	//}
-	//else
-	//{
-	//	enemyFireDelay -= detlaff->weapon->GetFireRate() * dt;
-	//	/*Math::Clamp(enemyFireDelay, 0.f , 2.f);*/
-	//}
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
 
+	enemyFireDelay -= dt;
 
+	std::cout << enemyFireDelay << std::endl;
+
+	if (enemyFireDelay <= 0.f)
+	{
+		enemyFireDelay = 2.f;
+
+		Vector3 mouseDir;
+		mouseDir = (player->pos - detlaff->pos).Normalized();
+		//detlaff->Shoot(mouseDir);
+	}
 }
 
 void SceneDetlaff::Render()
@@ -411,12 +405,6 @@ void SceneDetlaff::Exit()
 		delete mainCamera;
 	if (player)
 		delete player;
-
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
-	{
-		if (meshList[i])
-			delete meshList[i];
-	}
 
 	SceneBase::Exit();
 }

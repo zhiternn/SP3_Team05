@@ -7,14 +7,14 @@ class Shotgun : public Weapon
 {
 public:
 	Shotgun():projectileCount(5), spread(0.25f){
-		SetFireRate(1.5);
+		SetFireRate(5);
 	}
 	~Shotgun(){}
 
 	virtual	void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
-
-private:
 	float spread;
+private:
+	
 	int projectileCount;
 
 };
@@ -23,7 +23,7 @@ class MachineGun : public Weapon
 {
 public:
 	MachineGun(){
-		SetFireRate(5);
+		SetFireRate(10);
 	}
 	~MachineGun(){}
 
@@ -36,29 +36,13 @@ private:
 //< Wayne's Boss
 //< DETLAFF - BOSS WEAPONS
 
-class SplitGun : public Weapon
+class Splitgun : public Weapon
 {
 public:
-	SplitGun() : coneAngle(45.0f), projectileCount(10) {
+	Splitgun() : coneAngle(60.0f), projectileCount(3) {
 		SetFireRate(1);
-		state = STATE_1;
 	}
-	//Overloaded SplitGun 
-	SplitGun(float angle, int count)
-	{
-		this->SetAngle(angle);
-		this->SetCount(count);
-		SetFireRate(2);
-		state = STATE_2;
-	}
-	~SplitGun(){}
-
-	enum WEAPON_STATE
-	{
-		STATE_1,
-		STATE_2,
-		NUM_STATES
-	};
+	~Splitgun(){}
 
 	virtual void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
 	
@@ -69,8 +53,6 @@ public:
 private:
 	float coneAngle;
 	int projectileCount;
-	WEAPON_STATE state;
-
 };
 
 #endif // !WEAPONLIST_H

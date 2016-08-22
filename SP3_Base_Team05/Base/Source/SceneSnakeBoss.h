@@ -16,10 +16,6 @@ using std::vector;
 
 class SceneSnakeBoss : public SceneBase
 {
-	enum GEOMETRY_TYPE
-	{
-		NUM_GEOMETRY = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END
-	};
 public:
 	SceneSnakeBoss();
 	~SceneSnakeBoss();
@@ -46,8 +42,6 @@ private:
 
 	float m_worldWidth, m_worldHeight;
 	float m_orthoWidth, m_orthoHeight;
-
-	Mesh* meshList[GEO_DEFAULT_END];
 
 	Camera* mainCamera;
 

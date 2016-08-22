@@ -49,12 +49,20 @@ void Player::Update(double dt)
 	}
 }
 
+void Player::HandleInteraction(GameObject* b, double dt)
+{
+	if (b->GetType() == GameObject::GO_ENVIRONMENT)
+	{
+		GameObject::HandleInteraction(b, dt);
+	}
+}
+
 void Player::Move(Vector3 dir, double dt)
 {
 	if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
 	{
 		isMoving = true;
-		forceMagnitude = MOVEMENT_SPEED;
+		forceMagnitude = MOVEMENT_LIMIT;
 		this->ApplyForce(dt, dir, forceMagnitude);
 	}
 }
@@ -63,7 +71,7 @@ void Player::Dash(Vector3 dir, double dt)
 {
 	if (!isDashed && !dir.IsZero())
 	{
-		forceMagnitude = MOVEMENT_SPEED * 100.0f;
+		forceMagnitude = MOVEMENT_LIMIT * DASH_DISTANCE;
 		this->ApplyForce(dt, dir, forceMagnitude);
 		isDashed = true;
 		cooldownTimer = DASH_COOLDOWN;
@@ -125,4 +133,9 @@ bool Player::IsMoving()
 bool Player::IsDashed()
 {
 	return isDashed;
+}
+
+void Player::SetupMesh()
+{
+	mesh = NULL;
 }

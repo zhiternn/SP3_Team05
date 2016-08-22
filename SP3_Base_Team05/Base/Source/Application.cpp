@@ -17,6 +17,8 @@
 #include "SceneSnakeBoss.h"
 #include "SceneDetlaff.h"
 
+#include "MeshManager.h"
+
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
@@ -250,11 +252,13 @@ void Application::Init()
 void Application::Run()
 {
 	Controls &control = Controls::GetInstance();
+	MeshManager &meshManager = MeshManager::GetInstance();
+	meshManager.Init();
 
-
-	Scene* scene = new SceneDetlaff();
-
-
+	Scene* scene = new SceneSnakeBoss();
+	//Scene* scene = new SceneSummoner();
+	//Scene* scene = new SceneDetlaff();
+	//Scene* scene = new SceneGolem();
 
 	//Main Loop
 	scene->Init();

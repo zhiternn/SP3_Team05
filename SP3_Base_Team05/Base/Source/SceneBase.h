@@ -3,7 +3,6 @@
 
 #include "Scene.h"
 #include "Mtx44.h"
-#include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Particle.h"
@@ -12,7 +11,6 @@
 class SceneBase : public Scene
 {
 public:
-
 	SceneBase();
 	~SceneBase();
 
@@ -92,32 +90,6 @@ protected:
 
 		U_TOTAL,
 	};
-	enum GEOMETRY_TYPE_DEFAULT
-	{
-		GEO_AXES,
-		GEO_CROSSHAIR,
-		GEO_LIGHTBALL,
-		GEO_SPHERE,
-		GEO_QUAD,
-		GEO_CUBE,
-		GEO_RING,
-		GEO_CONE,
-		GEO_TEXT,
-		GEO_LIGHT_DEPTH_QUAD,
-
-		GEO_P_BULLET,
-		GEO_P_GRENADE,
-		GEO_P_ROPE,
-		GEO_P_SHIELD,
-
-		GEO_BOSS_SNAKE,
-		GEO_BOSS_BODY,
-
-		GEO_PLAYER,
-		GEO_FLOOR,
-
-		GEO_DEFAULT_END,
-	};
 	enum RENDER_PASS
 	{
 		RENDER_PASS_PRE,
@@ -142,11 +114,9 @@ protected:
 	RENDER_PASS m_renderPass;
 
 	unsigned m_vertexArrayID;
-	Mesh* meshList[GEO_DEFAULT_END];
 	unsigned m_programID;
 	unsigned m_parameters[U_TOTAL];
 
-	MS modelStack;
 	MS viewStack;
 	MS projectionStack;
 

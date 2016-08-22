@@ -7,8 +7,6 @@
 #include "Player.h"
 #include "WeaponList.h"
 #include "ProjectileList.h"
-#include "SnakeHead.h"
-#include "Summoner.h"
 
 #include "GolemHead.h"
 #include "GolemHand.h"
@@ -19,10 +17,6 @@ using std::vector;
 
 class SceneGolem : public SceneBase
 {
-    enum GEOMETRY_TYPE
-    {
-        NUM_GEOMETRY = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END
-    };
 public:
     SceneGolem();
     ~SceneGolem();
@@ -50,17 +44,12 @@ private:
     float m_worldWidth, m_worldHeight;
     float m_orthoWidth, m_orthoHeight;
 
-    Mesh* meshList[GEO_DEFAULT_END];
-
     Camera* mainCamera;
 
     Player* player;
 
     Vector3 mousePos_screenBased;
     Vector3 mousePos_worldBased;
-
-    SnakeHead* enemy;
-    Summoner* summoner;
 
     GolemHead* golemhead;
     GolemLeftHand* golemlhead;

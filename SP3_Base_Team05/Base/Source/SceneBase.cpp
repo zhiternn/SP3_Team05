@@ -2,14 +2,13 @@
 #include "GL\glew.h"
 
 #include "shader.hpp"
-#include "MeshBuilder.h"
 #include "Application.h"
 #include "Utility.h"
-#include "LoadTGA.h"
 #include "LoadHmap.h"
-#include <sstream>
-
 #include "Controls.h"
+#include "MeshManager.h"
+
+#include <sstream>
 
 SceneBase::SceneBase()
 {
@@ -169,38 +168,6 @@ void SceneBase::Init()
 	glUniform1f(m_parameters[U_FOG_ENABLED], 0);
 
 	m_lightDepthFBO.Init(1024, 1024);
-
-	for (int i = 0; i < GEO_DEFAULT_END; ++i)
-	{
-		meshList[i] = NULL;
-	}
-	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");
-	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
-	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
-	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1));
-	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
-	meshList[GEO_TEXT]->textureID = LoadTGA("Image//calibri.tga");
-	meshList[GEO_TEXT]->material.kAmbient.Set(1, 0, 0);
-	meshList[GEO_RING] = MeshBuilder::GenerateRing("ring", Color(1, 0, 1), 36, 1, 0.5f);
-	meshList[GEO_LIGHTBALL] = MeshBuilder::GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
-	meshList[GEO_SPHERE] = MeshBuilder::GenerateSphere("sphere", Color(1, 1, 1), 9, 18, 1.f);
-	meshList[GEO_CONE] = MeshBuilder::GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 1.f);
-
-	meshList[GEO_LIGHT_DEPTH_QUAD] = MeshBuilder::GenerateQuad("LIGHT_DEPTH_TEXTURE", Color(1, 1, 1), 1.f);
-	meshList[GEO_LIGHT_DEPTH_QUAD]->textureArray[0] = m_lightDepthFBO.GetTexture();
-
-	meshList[GEO_P_BULLET];
-	meshList[GEO_P_GRENADE];
-	meshList[GEO_P_ROPE];
-	meshList[GEO_P_SHIELD];
-
-	meshList[GEO_BOSS_SNAKE];
-	meshList[GEO_BOSS_BODY];
-
-	meshList[GEO_PLAYER];
-
-	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f);
-    meshList[GEO_FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
 
 	bLightEnabled = true;
 	isCulled = true;
@@ -573,12 +540,6 @@ void SceneBase::Render()
 
 void SceneBase::Exit()
 {
-	for (int i = 0; i < GEO_DEFAULT_END; ++i)
-	{
-		if (meshList[i])
-			delete meshList[i];
-	}
-
 	// Cleanup VBO
 	glDeleteProgram(m_gPassShaderID);
 	glDeleteProgram(m_programID);
