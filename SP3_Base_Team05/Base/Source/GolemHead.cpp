@@ -1,4 +1,5 @@
 #include "GolemHead.h"
+#include "MeshManager.h"
 
 GolemHead::GolemHead()
 /*link(NULL)*/
@@ -12,11 +13,12 @@ void GolemHead::Init(Vector3 pos)
     type = GameObject::GO_ENTITY;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BOX;
-    mass = 1000;
+    mass = 10000;
     destinationCountdown = REACH_CHECKER;
-    speedLimit = 5.0f;
-    movementSpeed = 1.0f;
+    speedLimit = 0.f;
+    movementSpeed = 0.f;
     health = 2500.f;
+    
 
     captureRatio = 1.f;
 }
@@ -33,4 +35,13 @@ void GolemHead::Update(double dt)
         front = vel.Normalized();
 
     // No Movement on Head
+}
+
+void GolemHead::SetupMesh()
+{
+    float degree = Math::RadianToDegree(atan2(front.y, front.x));
+    modelStack.Translate(pos.x, pos.y, pos.z);
+    modelStack.Rotate(degree, 0, 0, 1);
+    modelStack.Scale(scale.x, scale.y, scale.z);
+    mesh = meshList[GEO_CUBE];
 }

@@ -68,5 +68,8 @@ void MeshManager::Init()
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f, 8.0f);
 	meshList[GEO_FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
 
-	meshList[GEO_HEALTH] = MeshBuilder::GenerateQuad("health", Color(0, 0, 0), 1.f);
+
+	meshList[GEO_BORDER] = MeshBuilder::GenerateQuad("border", Color(0, 0, 0), 1.f);
+	meshList[GEO_HEALTH] = MeshBuilder::GenerateQuad("health", Color(0, 1, 0), 1.f);
+	meshList[GEO_DASH] = MeshBuilder::GenerateQuad("dash", Color(0, 0.3f, 0.7f), 1.f);
 }

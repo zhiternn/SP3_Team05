@@ -66,49 +66,77 @@ void Trap::Update(double dt)
 }
 
 
+void Shield::Init(Vector3 pos)
+{
+    this->pos = pos;
+    this->active = true;
+    type = GameObject::GO_PROJECTILE;
+    team = TEAM_PLAYER;
+    //SetDMG(0);
+    //SetLifetime(999);
+    //SetProjectileSpeed(0);
+    //SetScale(4, 4, 4);
+    //SetCurrHealth(2000);
+    //SetMaxHealth(2000);
+    //SetAliveState(false);
+
+    proj_dmg = 0;
+    aliveState = true;
+    CurrHealth = 2000;
+    MaxHealth = 2000;
+    startShieldRegen = false;
+    proj_speed = 0;
+    proj_lifetime = 10;
+    collider.type = Collider::COLLIDER_BOX;
+}
+
+
 void Shield::Update(double dt)
 {
-    CProjectile::Update(dt);
-    if (activeState == false)
-        SetLifetime(0);
-
-    if (CurrHealth <= 0)
-    {
-        SetLifetime(0);
-    }
-
-    regenerateShield(CurrHealth, dt);
+    GameObject::Update(dt);
 }
 
 void Shield::HandleInteraction(GameObject* b, double dt)
 {
 	if (this->team == b->GetTeam())
 		return;
-    //If GameObject type is of GO_ENEMY
-    if (b->GetType() == GameObject::GO_ENTITY)
+
+    if (CheckCollision(b, dt))
     {
-        ////Prevents them from moving
-        //b->SetVelocity(0, 0, 0);
+        //Entity* entity = dynamic_cast<Entity*>(b);
+        //if (entity)
+        //{
+        //    entity->HandleInteraction(b, dt);
+        //    //CollisionResponse(b);
+        //}
 
-        ////Remove the trap once enemy is constrained
-        //this->SetActive(false);
-
-        //CalculateChance(b);
-        CurrHealth -= 10;
-        if (CurrHealth <= 0)
+        CollisionResponse(b);
+        if (b->GetType() == GameObject::GO_ENTITY)
         {
-            SetLifetime(0);
-            SetActiveState(false);
+            Entity* entity = dynamic_cast<Entity*>(b);
+            if (entity)
+            {
+                entity->HandleInteraction(b, dt);
+            }
         }
     }
-
 }
 
 void Shield::regenerateShield(float currHP, double dt)
 {
-    if (activeState == false && CurrHealth < MaxHealth)
+    if (active == false && CurrHealth < MaxHealth)
     {
         CurrHealth += dt * 2;
+    }
+}
+
+void Shield::TakeDamage(unsigned amount)
+{
+    CurrHealth -= amount;
+    if (CurrHealth <= 0)
+    {
+        aliveState = false;
+        active = false;
     }
 }
 
@@ -144,20 +172,6 @@ float Shield::GetMaxHealth()
 /******************************************************************************/
 /*!
 \brief
-Returns Projectile Shield Active State
-
-\return
-Projectile Shield Active State
-*/
-/******************************************************************************/
-bool Shield::GetActiveState()
-{
-    return activeState;
-}
-
-/******************************************************************************/
-/*!
-\brief
 Returns Projectile Shield Alive State
 
 \return
@@ -167,20 +181,6 @@ Projectile Shield Alive State
 bool Shield::GetAliveState()
 {
     return aliveState;
-}
-
-/******************************************************************************/
-/*!
-\brief
-Setting the Projectile Shield Active State
-
-\param active
-The new active to replace the old one
-*/
-/******************************************************************************/
-void Shield::SetActiveState(bool active)
-{
-    activeState = active;
 }
 
 /******************************************************************************/

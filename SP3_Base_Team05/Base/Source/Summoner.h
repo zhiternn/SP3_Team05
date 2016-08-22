@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "Summons.h"
 
+static const float ATTACK_COOLDOWN = 1.5f;
 static const float SUMMONING_COOLDOWN = 3.f;
 static int AMOUNT_OF_SUMMONS = 7;
 
@@ -21,13 +22,17 @@ public:
 	void CleaningUpMess();
 	void Defend();
 	void Attack();
+	void UpdateCooldowns(double dt);
 
 private:
 	float safetyThreshold;
 	float chaseThreshold;
 	float agressiveLevel;
 	float maxHealth;
-	float cooldownTimer = 0;
+	float summonCooldownTimer = 0;
+	float attackCooldownTimer = 3;
+	bool attacking;
+
 	std::vector<Summons*> summonsList;
 
 };

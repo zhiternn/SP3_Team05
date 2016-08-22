@@ -3,6 +3,7 @@
 
 #include "Enemy.h"
 #include "WeaponList.h"
+#include "ProjectileList.h"
 
 class Summons : public Enemy
 {

@@ -9,7 +9,7 @@ Class to handle Boss Golem Hand
 /******************************************************************************/
 #ifndef GOLEMHAND_H
 #define GOLEMHAND_H
-
+ 
 #include "Enemy.h"
 
 /******************************************************************************/
@@ -28,6 +28,8 @@ public:
     virtual void Update(double dt);
 
     void LinkTo(Entity* entity);
+
+    virtual void SetupMesh();
 
 private:
     Entity* link;
@@ -50,6 +52,8 @@ public:
     virtual void Update(double dt);
 
     void LinkTo(Entity* entity);
+
+    virtual void SetupMesh();
 
 private:
     Entity* link;
