@@ -51,6 +51,9 @@ void MeshManager::Init()
 	meshList[GEO_SNAKE_BODY] = MeshBuilder::GenerateOBJ("snake_body", "Obj\\snake_body.obj");
 	meshList[GEO_SNAKE_BODY]->textureArray[0] = LoadTGA("Image//snake_body.tga");
 
+	meshList[GEO_SUMMONER] = MeshBuilder::GenerateCube("cube", Color(0, 1, 1));;
+	meshList[GEO_SUMMONS] = MeshBuilder::GenerateSphere("sphere", Color(1, 0, 0), 9, 18, 1.f);
+
 	meshList[GEO_PLAYER_TOP] = MeshBuilder::GenerateOBJ("player_top", "Obj//player_top.obj");
 	//meshList[GEO_PLAYER_TOP]->textureArray[0] = LoadTGA("Image//player.tga");
 	meshList[GEO_PLAYER_BOTTOM] = MeshBuilder::GenerateOBJ("player_top", "Obj//player_bottom.obj");
@@ -58,4 +61,5 @@ void MeshManager::Init()
 
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f);
     meshList[GEO_FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
+	meshList[GEO_HEALTH] = MeshBuilder::GenerateQuad("health", Color(0, 1, 0), 1.f);
 }

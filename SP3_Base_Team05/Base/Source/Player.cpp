@@ -34,6 +34,7 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	active = true;
 	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
+	health = 130;
 	mass = 1;
 	vel.SetZero();
 	isDashed = false;
@@ -55,6 +56,10 @@ void Player::Update(double dt)
 		{
 			isDashed = false;
 		}
+	}
+	if (health <= 0)
+	{
+		active = false;
 	}
 }
 
@@ -108,17 +113,17 @@ void Player::Shielding(Vector3 dir)
 void Player::ChangeWeaponUp()
 {
 	weaponIter++;
-	if (weaponIter == inventory->weapons.size())
+	if (weaponIter >= inventory->weapons.size())
 	{
 		weaponIter = 0;
 	}
 	weapon = inventory->weapons[weaponIter];
-	weapon->AssignProjectile(inventory->bullets.front());
+	weapon->AssignProjectile(inventory->bullets[projectileIter]);
 }
 
 void Player::ChangeWeaponDown()
 {
-	if (weaponIter == 0)
+	if (weaponIter <= 0)
 	{
 		weaponIter = inventory->weapons.size() - 1;
 	}
@@ -127,7 +132,31 @@ void Player::ChangeWeaponDown()
 		weaponIter--;
 	}
 	weapon = inventory->weapons[weaponIter];
-	weapon->AssignProjectile(inventory->bullets.front());
+	weapon->AssignProjectile(inventory->bullets[projectileIter]);
+}
+
+void Player::ChangeProjectileUp()
+{
+	projectileIter++;
+	if (projectileIter >= inventory->bullets.size())
+	{
+		projectileIter = 0;
+	}
+	projectile = inventory->bullets[projectileIter];
+	weapon->AssignProjectile(projectile);
+}
+void Player::ChangeProjectileDown()
+{
+	if (projectileIter <= 0)
+	{
+		projectileIter = inventory->bullets.size() - 1;
+	}
+	else
+	{
+		projectileIter--;
+	}
+	projectile = inventory->bullets[projectileIter];
+	weapon->AssignProjectile(projectile);
 }
 
 void Player::SetMoving(bool isMoving)

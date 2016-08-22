@@ -71,11 +71,6 @@ void SceneSummoner::Init()
 	summoner->SetTarget(player);
 	summoner->Init(Vector3(m_worldWidth * 0.5f + 5, m_worldHeight * 0.5f, 0));
 
-	//summons = new Summons();
-	//GameObject::goList.push_back(summons);
-	//summons->SetTarget(summoner);
-	//summons->Init(Vector3(0, 0, 0));
-
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 }
@@ -117,15 +112,25 @@ void SceneSummoner::PlayerController(double dt)
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
-	//if (Controls::GetInstance().mouse_ScrollY < 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+
+	if (Controls::GetInstance().mouse_ScrollY < 0)
 	{
 		player->ChangeWeaponDown();
+		Controls::GetInstance().mouse_ScrollY = 0;
 	}
-	//if (Controls::GetInstance().mouse_ScrollY > 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	if (Controls::GetInstance().mouse_ScrollY > 0)
+
 	{
 		player->ChangeWeaponUp();
+		Controls::GetInstance().mouse_ScrollY = 0;
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+	{
+		player->ChangeProjectileUp();
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	{
+		player->ChangeProjectileDown();
 	}
 }
 
@@ -311,6 +316,28 @@ void SceneSummoner::RenderWorld()
 		modelStack.PopMatrix();
 	}
 
+	if (player && player->IsActive())
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(player->pos.x, player->pos.y, player->pos.z);
+		modelStack.Scale(player->GetScale().x, player->GetScale().y, player->GetScale().z);
+
+		modelStack.PushMatrix();
+		Vector3 toMouse = mousePos_worldBased - player->pos;
+		float toMouseAngle = Math::RadianToDegree(atan2(toMouse.y, toMouse.x));
+		modelStack.Rotate(toMouseAngle, 0, 0, 1);
+		RenderMesh(meshList[GEO_PLAYER_TOP], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		float degree = Math::RadianToDegree(atan2(player->GetVelocity().y, player->GetVelocity().x));
+		modelStack.Rotate(degree, 0, 0, 1);
+		RenderMesh(meshList[GEO_PLAYER_BOTTOM], true);
+		modelStack.PopMatrix();
+
+		modelStack.PopMatrix();
+	}
+
 	RenderGameObjects();
 
 }
@@ -327,22 +354,31 @@ void SceneSummoner::RenderHUD()
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
+
+	ss.str("");
+	ss.precision(4);
+	ss << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
+	
+	ss.str("");
+	ss.precision(2);
+	ss << "Dash cooldown: " << player->cooldownTimer;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
 
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+	ss.str("");
+	ss.precision(1);
+	ss << "Weapon: " << player->weaponIter;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
 
-	std::ostringstream ss2;
-	ss2.precision(2);
-	ss2 << "Dash cooldown: " << player->cooldownTimer;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 3, 0, 9);
+	ss.str("");
+	ss << "Projectile: " << player->projectileIter;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
 
-	std::ostringstream ss3;
-	ss3.precision(2);
-	ss3 << "Weapon: " << player->weaponIter;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
+	ss.str("");
+	ss << "HP: ";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 54);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 7, 55.5f, player->GetHP() / 5, false);
 }
 
 void SceneSummoner::Exit()
@@ -406,56 +442,19 @@ void SceneSummoner::UpdateGameObjects(double dt)
 	}
 }
 
-void SceneSummoner::RenderGO(GameObject* go)
-{
-	modelStack.PushMatrix();
-
-	switch (go->GetType())
-	{
-	case GameObject::GO_ENVIRONMENT:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		if (go->GetCollider().type == Collider::COLLIDER_BALL)
-			RenderMesh(meshList[GEO_SPHERE], false);
-		else
-			RenderMesh(meshList[GEO_CUBE], false);
-	}
-	break;
-	case GameObject::GO_PROJECTILE:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-	break;
-	case GameObject::GO_ENTITY:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-	break;
-
-	default:break;
-	}
-
-	modelStack.PopMatrix();
-}
-
 void SceneSummoner::RenderGameObjects()
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
 		if (GameObject::goList[i]->IsActive())
-			RenderGO(GameObject::goList[i]);
+		{
+			modelStack.PushMatrix();
+
+			GameObject::goList[i]->SetupMesh();
+			if (GameObject::goList[i]->mesh)
+				RenderMesh(GameObject::goList[i]->mesh, false);
+
+			modelStack.PopMatrix();
+		}
 	}
 }
