@@ -14,6 +14,7 @@
 #include "SceneText.h"
 #include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
+#include "MeshManager.h"
 
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
@@ -248,8 +249,10 @@ void Application::Init()
 void Application::Run()
 {
 	Controls &control = Controls::GetInstance();
+	MeshManager &meshManager = MeshManager::GetInstance();
+	meshManager.Init();
 
-	Scene* scene = new SceneText();
+	Scene* scene = new SceneSnakeBoss();
 
 	//Main Loop
 	scene->Init();
