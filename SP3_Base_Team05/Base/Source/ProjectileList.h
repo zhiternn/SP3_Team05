@@ -25,7 +25,7 @@ class Hook : public CProjectile
 {
 public:
 	Hook() :CProjectile(PROJECTILE_TYPE::HOOK){
-		SetDMG(10);
+		SetDMG(0);
 		SetLifetime(2);
 		SetProjectileSpeed(50.0f);
 		SetScale(1, 1, 1);

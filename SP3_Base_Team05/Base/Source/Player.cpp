@@ -25,6 +25,7 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	active = true;
 	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
+	health = 130;
 	mass = 1;
 	vel.SetZero();
 	isDashed = false;

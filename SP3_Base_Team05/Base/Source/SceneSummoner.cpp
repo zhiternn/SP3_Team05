@@ -354,24 +354,31 @@ void SceneSummoner::RenderHUD()
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
+
+	ss.str("");
+	ss.precision(4);
+	ss << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
+	
+	ss.str("");
+	ss.precision(2);
+	ss << "Dash cooldown: " << player->cooldownTimer;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
 
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+	ss.str("");
+	ss.precision(1);
+	ss << "Weapon: " << player->weaponIter;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
 
-	std::ostringstream ss2;
-	ss2.precision(2);
-	ss2 << "Dash cooldown: " << player->cooldownTimer;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 3, 0, 9);
+	ss.str("");
+	ss << "Projectile: " << player->projectileIter;
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
 
-	std::ostringstream ss3;
-	ss3.precision(2);
-	ss3 << "Weapon: " << player->weaponIter;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
-
-	RenderUI(meshList[GEO_HEALTH], 2, 40, 55, player->GetHP() / 10, false);
+	ss.str("");
+	ss << "HP: ";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 54);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 7, 55.5f, player->GetHP() / 5, false);
 }
 
 void SceneSummoner::Exit()

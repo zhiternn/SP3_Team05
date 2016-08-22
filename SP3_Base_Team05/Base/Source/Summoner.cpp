@@ -24,6 +24,7 @@ void Summoner::Init(Vector3 pos)
 	health = 300;
 	maxHealth = health;
 	isDead = false;
+	attacking = false;
 	agressiveLevel = 1 - ((float)health / maxHealth);
 	safetyThreshold = this->GetScale().x * 7;
 	chaseThreshold = safetyThreshold * 1.5f;
@@ -41,20 +42,16 @@ void Summoner::Init(Vector3 pos)
 		q->Init(this->pos);
 		q->SetTarget(this);
 	}
-
 	captureRatio = 1.f;
 }
 
 void Summoner::Update(double dt)
 {
 	GameObject::Update(dt);
-	if (cooldownTimer > 0)
+	UpdateCooldowns(dt);
+	if (summonsList.size() < AMOUNT_OF_SUMMONS && summonCooldownTimer <= 0)
 	{
-		cooldownTimer -= dt;
-	}
-	if (summonsList.size() < AMOUNT_OF_SUMMONS && cooldownTimer <= 0)
-	{
-		cooldownTimer = SUMMONING_COOLDOWN;
+		summonCooldownTimer = SUMMONING_COOLDOWN;
 		Summons* summons = new Summons();
 		summons->Init(this->pos);
 		summons->SetTarget(this);
@@ -67,12 +64,9 @@ void Summoner::Update(double dt)
 		Attack();
 		for (auto q : summonsList)
 		{
-			if (!q->isDefending)
+			if (!q->isDefending && attacking)
 			{
-				if (Controls::GetInstance().OnHold(Controls::KEY_V))
-				{
-					q->Shoot(target->pos);
-				}
+				q->Shoot(target->pos);
 			}
 		}
 	}
@@ -165,6 +159,30 @@ void Summoner::Attack()
 				Vector3 destination = target->pos + offsetDir.Normalized() * offset;
 				summonsList[i]->Goto(destination + (NP * (wallLength + formingWallLength)));
 			}
+		}
+	}
+}
+
+void Summoner::UpdateCooldowns(double dt)
+{
+	if (summonCooldownTimer > 0)
+	{
+		summonCooldownTimer -= dt;
+	}
+	if (attackCooldownTimer > 0 && !attacking)
+	{
+		attackCooldownTimer -= dt;
+	}
+	if (attackCooldownTimer <= 0)
+	{
+		attacking = true;
+	}
+	if (attacking)
+	{
+		attackCooldownTimer += dt;
+		if (attackCooldownTimer >= ATTACK_COOLDOWN)
+		{
+			attacking = false;
 		}
 	}
 }
