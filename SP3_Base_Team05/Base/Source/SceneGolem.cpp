@@ -187,6 +187,13 @@ void SceneGolem::PlayerController(double dt)
     {
         player->ChangeWeaponUp();
     }
+
+    if (Controls::GetInstance().OnHold(Controls::MOUSE_RBUTTON))
+    {
+        Vector3 mouseDir;
+        mouseDir = (mousePos_worldBased - player->pos).Normalized();
+        player->Shield(mouseDir);
+    }
 }
 
 void SceneGolem::Update(double dt)
