@@ -7,6 +7,7 @@ Inventory::Inventory()
 	weapons.push_back(new Splitgun());
 
 	bullets.push_back(new Bullet());
+	bullets.push_back(new Hook());
 }
 
 Inventory::~Inventory()

@@ -28,18 +28,23 @@ public:
 	void ChangeWeapon(int type);
 	void ChangeWeaponUp();
 	void ChangeWeaponDown();
+	void ChangeProjectileUp();
+	void ChangeProjectileDown();
 
 	// Setters
 	void SetMoving(bool isMoving);
 	void SetDashed(bool isDashed);
 
-	// Issers 
+	// Issers
 	bool IsMoving();
 	bool IsDashed();
+
 	Inventory *inventory;
 	Weapon *weapon;
+	CProjectile *projectile;
 	float cooldownTimer = 0;
 	short weaponIter = 0;
+	short projectileIter = 0;
 
 private:
 	bool isMoving;

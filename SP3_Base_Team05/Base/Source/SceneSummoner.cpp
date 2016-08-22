@@ -112,15 +112,25 @@ void SceneSummoner::PlayerController(double dt)
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
-	//if (Controls::GetInstance().mouse_ScrollY < 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+
+	if (Controls::GetInstance().mouse_ScrollY < 0)
 	{
 		player->ChangeWeaponDown();
+		Controls::GetInstance().mouse_ScrollY = 0;
 	}
-	//if (Controls::GetInstance().mouse_ScrollY > 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	if (Controls::GetInstance().mouse_ScrollY > 0)
+
 	{
 		player->ChangeWeaponUp();
+		Controls::GetInstance().mouse_ScrollY = 0;
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+	{
+		player->ChangeProjectileUp();
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	{
+		player->ChangeProjectileDown();
 	}
 }
 
@@ -360,6 +370,8 @@ void SceneSummoner::RenderHUD()
 	ss3.precision(2);
 	ss3 << "Weapon: " << player->weaponIter;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
+
+	RenderUI(meshList[GEO_HEALTH], 2, 40, 55, player->GetHP() / 10, false);
 }
 
 void SceneSummoner::Exit()

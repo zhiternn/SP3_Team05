@@ -4,6 +4,9 @@
 #include "Enemy.h"
 #include "Summons.h"
 
+static const float SUMMONING_COOLDOWN = 3.f;
+static int AMOUNT_OF_SUMMONS = 7;
+
 class Summoner : public Enemy
 {
 public:
@@ -23,7 +26,8 @@ private:
 	float safetyThreshold;
 	float chaseThreshold;
 	float agressiveLevel;
-	float maxHealth; 
+	float maxHealth;
+	float cooldownTimer = 0;
 	std::vector<Summons*> summonsList;
 
 };

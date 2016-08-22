@@ -34,7 +34,6 @@ public:
 	void RenderSkyPlane();
 
 private:
-
 	void PlayerController(double dt);
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();
