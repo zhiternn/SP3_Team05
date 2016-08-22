@@ -1,11 +1,13 @@
 #include "SnakeBody.h"
 #include "ProjectileList.h"
 #include "MeshManager.h"
+#include "SnakeHead.h"
 
 SnakeBody::SnakeBody():
 pitchDegree(0.0f),
 Enemy(),
-backLink(NULL)
+backLink(NULL),
+weapon(NULL)
 {
 }
 
@@ -13,6 +15,8 @@ SnakeBody::~SnakeBody()
 {
 	if (backLink)
 		delete backLink;
+	if (weapon)
+		delete weapon;
 }
 
 void SnakeBody::Init(Vector3 pos, float speed, float speedLimit)
@@ -21,20 +25,29 @@ void SnakeBody::Init(Vector3 pos, float speed, float speedLimit)
 	movementSpeed = speed;
 	this->speedLimit = speedLimit;
 	collider.type = Collider::COLLIDER_BALL;
+	health = 300;
 
-	weapon = new Splitgun();
-	weapon->AssignProjectile(new Bullet());
+	if (weapon)
+	{
+		if (weapon->GetProjInfo())
+			delete weapon->GetProjInfo();
+		delete weapon;
+	}
+
+	weapon = new Splitgun(70, 3, 1);
+	weapon->AssignProjectile(new Bullet(10, 8, 80, 2, 1));
 }
 
 void SnakeBody::Update(double dt)
 {
 	GameObject::Update(dt);
+
+	if (vel.IsZero() == false)
+		front = vel.Normalized();
+
 	if (!isDead)
 	{
 		weapon->Update(dt);
-
-		if (vel.IsZero() == false)
-			front = vel.Normalized();
 
 		if (vel.LengthSquared() > speedLimit * speedLimit)
 		{
@@ -49,9 +62,33 @@ void SnakeBody::Update(double dt)
 				Reconnect();
 		}
 	}
+	else
+	{
+		if (target)
+		{
+			if (target->pos != pos)
+				vel += (target->pos - pos).Normalized() * movementSpeed * 0.1f;
+		}
+	}
 
 	//for animation
 	pitchDegree += vel.LengthSquared() * dt;//Math::Wrap(pitchDegree + vel.LengthSquared() * (float)dt, 0.0f, 360.0f);
+}
+
+void SnakeBody::HandleInteraction(GameObject* b, double dt)
+{
+	if (CheckCollision(b, dt))
+	{
+		SnakeHead* head = dynamic_cast<SnakeHead*>(b);
+		if (head)
+		{
+			head->HandleInteraction(this, dt);
+		}
+		else
+		{
+			CollisionResponse(b);
+		}
+	}
 }
 
 void SnakeBody::Die()
@@ -81,9 +118,11 @@ void SnakeBody::Goto(Vector3 pos)
 
 void SnakeBody::Reconnect()
 {
-	if (backLink && backLink->GetBackLink())
+	if (backLink->GetBackLink())
 	{
-		backLink = backLink->GetBackLink();
+		SnakeBody* link = backLink->GetBackLink();
+		backLink->LinkBackTo(NULL);
+		backLink = link;
 	}
 }
 

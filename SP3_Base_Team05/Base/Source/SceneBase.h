@@ -99,6 +99,7 @@ protected:
 	virtual void RenderText(Mesh* mesh, std::string text, Color color);
 	virtual void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	virtual void RenderMesh(Mesh *mesh, bool enableLight);
+	virtual void RenderUI(Mesh* mesh, float size, float x, float y, float scaleX, bool enableLight);
 
 	void SetupLights();
 	void SetHUD(const bool HUDmode, float fromX = 0.0f, float toX = 80.0f, float fromY = 0.0f, float toY = 60.0f, float fromZ = -10.0f, float toZ = 10.0f);

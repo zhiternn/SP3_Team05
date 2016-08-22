@@ -18,6 +18,7 @@ Player::~Player()
 
 void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 {
+	damageBuffer = DAMAGE_BUFFER;
 	this->scale.Set(scale.x, scale.y, scale.z);
 	this->pos.Set(pos.x, pos.y, pos.z);
 	this->front.Set(front.x, front.y, front.z);
@@ -28,6 +29,7 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	mass = 1;
 	vel.SetZero();
 	isDashed = false;
+	isDead = false;
 }
 
 void Player::Update(double dt)
@@ -47,6 +49,13 @@ void Player::Update(double dt)
 			isDashed = false;
 		}
 	}
+	if (health <= 0)
+	{
+		active = false;
+	}
+
+	if (damageBuffer > 0)
+		damageBuffer -= dt;
 }
 
 void Player::HandleInteraction(GameObject* b, double dt)
@@ -93,17 +102,17 @@ void Player::Shield(Vector3 dir)
 void Player::ChangeWeaponUp()
 {
 	weaponIter++;
-	if (weaponIter == inventory->weapons.size())
+	if (weaponIter >= inventory->weapons.size())
 	{
 		weaponIter = 0;
 	}
 	weapon = inventory->weapons[weaponIter];
-	weapon->AssignProjectile(inventory->bullets.front());
+	weapon->AssignProjectile(inventory->bullets[projectileIter]);
 }
 
 void Player::ChangeWeaponDown()
 {
-	if (weaponIter == 0)
+	if (weaponIter <= 0)
 	{
 		weaponIter = inventory->weapons.size() - 1;
 	}
@@ -112,7 +121,31 @@ void Player::ChangeWeaponDown()
 		weaponIter--;
 	}
 	weapon = inventory->weapons[weaponIter];
-	weapon->AssignProjectile(inventory->bullets.front());
+	weapon->AssignProjectile(inventory->bullets[projectileIter]);
+}
+
+void Player::ChangeProjectileUp()
+{
+	projectileIter++;
+	if (projectileIter >= inventory->bullets.size())
+	{
+		projectileIter = 0;
+	}
+	projectile = inventory->bullets[projectileIter];
+	weapon->AssignProjectile(projectile);
+}
+void Player::ChangeProjectileDown()
+{
+	if (projectileIter <= 0)
+	{
+		projectileIter = inventory->bullets.size() - 1;
+	}
+	else
+	{
+		projectileIter--;
+	}
+	projectile = inventory->bullets[projectileIter];
+	weapon->AssignProjectile(projectile);
 }
 
 void Player::SetMoving(bool isMoving)
@@ -138,4 +171,13 @@ bool Player::IsDashed()
 void Player::SetupMesh()
 {
 	mesh = NULL;
+}
+
+void Player::TakeDamage(int amount)
+{
+	if (damageBuffer <= 0.0f)
+	{
+		damageBuffer = DAMAGE_BUFFER;
+		Entity::TakeDamage(amount);
+	}
 }

@@ -1,5 +1,6 @@
 #include "Summoner.h"
 #include "Controls.h"
+#include "MeshManager.h"
 
 using namespace std;
 
@@ -26,7 +27,7 @@ void Summoner::Init(Vector3 pos)
 	agressiveLevel = 1 - ((float)health / maxHealth);
 	safetyThreshold = this->GetScale().x * 7;
 	chaseThreshold = safetyThreshold * 1.5f;
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < AMOUNT_OF_SUMMONS; ++i)
 	{
 		Summons* summons = new Summons();
 		Vector3 offset(Math::RandFloatMinMax(0, 5), Math::RandFloatMinMax(0, 5), 0);
@@ -47,23 +48,31 @@ void Summoner::Init(Vector3 pos)
 void Summoner::Update(double dt)
 {
 	GameObject::Update(dt);
-	if (summonsList.size() < 5)
+	if (cooldownTimer > 0)
 	{
+		cooldownTimer -= dt;
+	}
+	if (summonsList.size() < AMOUNT_OF_SUMMONS && cooldownTimer <= 0)
+	{
+		cooldownTimer = SUMMONING_COOLDOWN;
 		Summons* summons = new Summons();
 		summons->Init(this->pos);
 		summons->SetTarget(this);
 		summonsList.push_back(summons);
 		GameObject::goList.push_back(summons);
 	}
-	Defend();
-	Attack();
-	for (auto q : summonsList)
+	if (!summonsList.empty())
 	{
-		if (!q->isDefending)
+		Defend();
+		Attack();
+		for (auto q : summonsList)
 		{
-			if (Controls::GetInstance().OnHold(Controls::KEY_V))
+			if (!q->isDefending)
 			{
-				q->Shoot(target->pos);
+				if (Controls::GetInstance().OnHold(Controls::KEY_V))
+				{
+					q->Shoot(target->pos);
+				}
 			}
 		}
 	}
@@ -138,21 +147,32 @@ void Summoner::Attack()
 	CleaningUpMess();
 	if (!summonsList.empty())
 	{
-		for (auto q : summonsList)
-		{
-			if (!q->isDefending)
-			{
-				float combinedRadius = scale.x + target->GetScale().x;
-				float offset = combinedRadius * 5;
-				//Vector3 offsetDir(
-				//	Math::RandFloatMinMax(-(target->pos.x - pos.x), target->pos.x - pos.x),
-				//	Math::RandFloatMinMax(-(target->pos.y - pos.y), target->pos.y - pos.y),
-				//	0);
-				Vector3 offsetDir(target->pos.x - pos.x, target->pos.y - pos.y, 0);
+		Vector3 N = (target->pos - this->pos).Normalized();
+		Vector3 NP = Vector3(-N.y, N.x, 0);
+		float diameter = summonsList.front()->GetScale().x * 2;
+		float combinedRadius = scale.x + target->GetScale().x;
+		float offset = combinedRadius * 5;
 
+		for (int i = 0; i < summonsList.size(); ++i)
+		{
+			if (!summonsList[i]->isDefending)
+			{
+				float wallLength = ((summonsList.size()) - 1) * diameter;
+				wallLength = -wallLength * 0.5f;
+				float formingWallLength = diameter * i;
+
+				Vector3 offsetDir(target->pos.x - pos.x, target->pos.y - pos.y, 0);
 				Vector3 destination = target->pos + offsetDir.Normalized() * offset;
-				q->Goto(destination);
+				summonsList[i]->Goto(destination + (NP * (wallLength + formingWallLength)));
 			}
 		}
 	}
+}
+
+void Summoner::SetupMesh()
+{
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+
+	mesh = meshList[GEO_SUMMONER];
 }

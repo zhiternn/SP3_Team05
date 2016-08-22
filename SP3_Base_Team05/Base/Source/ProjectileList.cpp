@@ -22,7 +22,7 @@ void Hook::HandleInteraction(GameObject* b, double dt)
 				entity->TakeDamage(proj_dmg);
 
 				Rope* rope = FetchRope();
-				rope->Init(this->pos, b);
+				rope->Init(this->pos, b, this->ropeLifetime);
 			}
 		}
 

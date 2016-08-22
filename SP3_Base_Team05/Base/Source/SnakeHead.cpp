@@ -1,6 +1,7 @@
 #include "SnakeHead.h"
 #include "Controls.h"
 #include "MeshManager.h"
+#include "Player.h"
 
 SnakeHead::SnakeHead():
 backLink(NULL)
@@ -17,16 +18,20 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 {
 	Enemy::Init(pos);
 	scale;
+	maxBodyCount = bodyCount;
 	speedLimit = 20.0f;
 	movementSpeed = 40.0f;
 	health;
 	captureRatio;
+	actionTimer = ATTACK_TIMER_MAX;
+	health = 2000;
 
 	if (bodyCount > 0)
 	{
 		SnakeBody* body = new SnakeBody();
 		body->SetScale(4, 4, 4);
-		body->Init(pos, 10, 15);
+		body->SetTarget(this);
+		body->Init(pos, movementSpeed * 0.25f, speedLimit * 0.75f);
 		GameObject::goList.push_back(body);
 		backLink = body;
 
@@ -35,7 +40,8 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 		{
 			SnakeBody* body2 = new SnakeBody();
 			body2->SetScale(4, 4, 4);
-			body2->Init(pos, 10, 15);
+			body2->SetTarget(this);
+			body2->Init(pos, movementSpeed * 0.25f, speedLimit * 0.75f);
 			GameObject::goList.push_back(body2);
 			prev->LinkBackTo(body2);
 			prev = body2;
@@ -49,7 +55,7 @@ void SnakeHead::Update(double dt)
 	if (vel.IsZero() == false)
 		front = vel.Normalized();
 
-	if (!Enemy::UpdateMovement(dt))
+	if (!UpdateMovement(dt))
 	{
 		if (target)
 		{
@@ -62,19 +68,31 @@ void SnakeHead::Update(double dt)
 			ChangeDestination(MOVETO_TARGET, destination);
 		}
 	}
-
 	if (backLink)
 	{
 		if (!backLink->IsDead())
 			Pull(backLink);
 		else
+		{
 			Reconnect();
+		}
 	}
 
-	if (Controls::GetInstance().OnPress(Controls::KEY_L))
+	actionTimer -= dt;
+	if (actionTimer <= 0.0f)
 	{
-		if (backLink)
-			backLink->Fire(target);
+		actionTimer = Math::RandFloatMinMax(ATTACK_TIMER_MIN, ATTACK_TIMER_MAX);
+		Action();
+	}
+
+	static bool hehe = false;
+
+	if (health <= 1000 && hehe == false)
+		hehe = true;
+
+	if (hehe)
+	{
+		Upgrade();
 	}
 }
 
@@ -83,12 +101,26 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 	if (CheckCollision(b, dt))
 	{
 		CollisionResponse(b);
+
+		Player* player = dynamic_cast<Player*>(b);
+		if (player)
+		{
+			player->TakeDamage(ATTACK_RAM_DAMAGE);
+		}
+		SnakeBody* body = dynamic_cast<SnakeBody*>(b);
+		if (body && body->IsDead())
+		{
+			SnakeBody* last = GetLast();
+			last->LinkBackTo(body);
+			body->Init(pos, movementSpeed * 0.25f, speedLimit * 0.75f);
+		}
 	}
 }
 
 void SnakeHead::Action()
 {
-
+	if (backLink)
+		backLink->Fire(target);
 }
 
 void SnakeHead::Die()
@@ -97,11 +129,57 @@ void SnakeHead::Die()
 	active = false;
 }
 
+bool SnakeHead::UpdateMovement(double dt)
+{
+	if (destinationCountdown > 0)
+		destinationCountdown -= dt;
+	if (destinations.size() > 0)
+	{
+		if (Reached(destinations.back()))
+		{
+			destinations.pop_back();
+		}
+		else if (destinationCountdown <= 0)
+		{
+			destinationCountdown = REACH_CHECKER;
+			destinations.pop_back();
+		}
+
+		else
+		{
+			Vector3 dir = (destinations.back() - pos).Normalized();
+
+			vel += dir * movementSpeed * dt;
+
+			float limit = speedLimit * ((float)GetBodyCount() / (float)maxBodyCount);
+			if (vel.LengthSquared() > limit * limit)
+			{
+				vel = vel.Normalized() * limit;
+			}
+		}
+
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void SnakeHead::Upgrade()
+{
+	//this->movementSpeed = 80;
+	//this->speedLimit = 160;
+	//this->mass = 10.0f;
+}
+
 void SnakeHead::Reconnect()
 {
-	if (backLink)
+	if (backLink->GetBackLink())
 	{
-		backLink = backLink->GetBackLink();
+		SnakeBody* link = backLink->GetBackLink();
+		backLink->LinkBackTo(NULL);
+		backLink = link;
 	}
 }
 
@@ -112,6 +190,40 @@ void SnakeHead::Pull(SnakeBody* body)
 	{
 		body->Goto(point);
 	}
+}
+
+SnakeBody* SnakeHead::GetLast()
+{
+	if (backLink)
+	{
+		SnakeBody* last = backLink;
+		while (last->GetBackLink() != NULL)
+		{
+			last = last->GetBackLink();
+		}
+		return last;
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+int SnakeHead::GetBodyCount()
+{
+	if (backLink)
+	{
+		int count = 1;
+		SnakeBody* last = backLink;
+		while (last->GetBackLink() != NULL)
+		{
+			last = last->GetBackLink();
+			count++;
+		}
+		return count;
+	}
+	else
+		return 0;
 }
 
 void SnakeHead::SetupMesh()

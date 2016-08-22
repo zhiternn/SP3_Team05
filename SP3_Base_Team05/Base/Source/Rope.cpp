@@ -4,7 +4,8 @@
 Rope::Rope():
 GameObject(GO_ENVIRONMENT),
 maxLength(20.0f),
-target(NULL)
+target(NULL),
+lifetime(5.0f)
 {
 }
 
@@ -14,10 +15,12 @@ Rope::~Rope()
 		delete target;
 }
 
-void Rope::Init(Vector3 pos, GameObject* target)
+void Rope::Init(Vector3 pos, GameObject* target, float lifeTime)
 {
+	type = GameObject::GO_ENVIRONMENT;
 	this->pos = pos;
 	this->target = target;
+	lifetime = lifeTime;
 	collider.type = Collider::COLLIDER_NONE;
 }
 
@@ -25,7 +28,10 @@ void Rope::Update(double dt)
 {
 	if (!target)
 		return;
-
+	lifetime -= dt;
+	
+	if (lifetime <= 0)
+		active = false;
 	if (target->pos != pos)
 	{
 		front = target->pos - pos;
@@ -50,7 +56,7 @@ void Rope::SetupMesh()
 {
 	float yawDegree = Math::RadianToDegree(atan2(front.y, front.x));
 	
-	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Translate(pos.x, pos.y, pos.z + 0.01f);
 	modelStack.Rotate(yawDegree, 0, 0, 1);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	modelStack.Translate(0.5f, 0, 0);

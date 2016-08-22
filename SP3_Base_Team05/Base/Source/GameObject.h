@@ -7,6 +7,8 @@
 
 #include <vector>
 
+static const float GAME_SPEED_LIMIT = 50.0f;
+
 class GameObject
 {
 public:

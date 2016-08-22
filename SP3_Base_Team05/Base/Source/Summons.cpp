@@ -1,4 +1,5 @@
 #include "Summons.h"
+#include "MeshManager.h"
 
 Summons::Summons()
 {
@@ -18,7 +19,7 @@ void Summons::Init(Vector3 pos)
 	speedLimit = 30.f;
 	movementSpeed = 30.f;
 	scale.Set(5, 5, 5);
-	health = 10;
+	health = 50;
 	isDead = false;
 	isDefending = false;
 	weapon = new MachineGun();
@@ -42,4 +43,12 @@ void Summons::Shoot(Vector3 dir)
 {
 	Vector3 playerPos = (dir - this->pos).Normalized();
 	weapon->Fire(this->pos, playerPos, team);
+}
+
+void Summons::SetupMesh()
+{
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+
+	mesh = meshList[GEO_SUMMONS];
 }

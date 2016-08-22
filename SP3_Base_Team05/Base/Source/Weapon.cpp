@@ -9,8 +9,8 @@ shootDelay(0)
 
 Weapon::~Weapon()
 {
-	if (projectileInfo)
-		delete projectileInfo;
+	//if (projectileInfo)
+	//	delete projectileInfo;
 }
 
 void Weapon::Update(double dt)
@@ -34,4 +34,12 @@ float Weapon::GetFireRate()
 void Weapon::SetFireRate(float fireRate)
 {
 	this->fireRate = fireRate;
+}
+
+CProjectile* Weapon::GetProjInfo()
+{
+	if (projectileInfo != NULL)
+		return projectileInfo;
+	else
+		return NULL;
 }

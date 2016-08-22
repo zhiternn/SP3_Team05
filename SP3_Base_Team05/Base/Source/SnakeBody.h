@@ -12,6 +12,7 @@ public:
 
 	virtual void Init(Vector3 pos, float speed, float speedLimit);
 	virtual void Update(double dt);
+	virtual void HandleInteraction(GameObject* b, double dt);
 	virtual void SetupMesh();
 	virtual void Die();
 

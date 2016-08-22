@@ -102,15 +102,14 @@ void SceneSnakeBoss::PlayerController(double dt)
 	{
 		forceDir.x += 1;
 	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
-	{
-		player->Dash(forceDir, dt);
-	}
 	if (forceDir.IsZero() == false)
 	{
 		forceDir.Normalize();
 		player->Move(forceDir, dt);
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
+	{
+		player->Dash(forceDir, dt);
 	}
 	if (Controls::GetInstance().OnHold(Controls::MOUSE_LBUTTON))
 	{
@@ -118,15 +117,25 @@ void SceneSnakeBoss::PlayerController(double dt)
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
-	//if (Controls::GetInstance().mouse_ScrollY < 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+
+	if (Controls::GetInstance().mouse_ScrollY < 0)
 	{
 		player->ChangeWeaponDown();
+		Controls::GetInstance().mouse_ScrollY = 0;
 	}
-	//if (Controls::GetInstance().mouse_ScrollY > 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	if (Controls::GetInstance().mouse_ScrollY > 0)
+
 	{
 		player->ChangeWeaponUp();
+		Controls::GetInstance().mouse_ScrollY = 0;
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+	{
+		player->ChangeProjectileUp();
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	{
+		player->ChangeProjectileDown();
 	}
 }
 
@@ -298,7 +307,7 @@ void SceneSnakeBoss::RenderWorld()
 {
 	{//Render Floor
 		modelStack.PushMatrix();
-		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, -1);
+		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
 		RenderMesh(meshList[GEO_FLOOR], false);
 		modelStack.PopMatrix();
@@ -358,6 +367,8 @@ void SceneSnakeBoss::RenderHUD()
 	ss3.precision(2);
 	ss3 << "Weapon: " << player->weaponIter;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
+
+	RenderUI(meshList[GEO_HEALTH], 2, 40, 55, player->GetHP() / 10, false);
 }
 
 void SceneSnakeBoss::Exit()

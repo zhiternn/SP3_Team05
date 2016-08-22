@@ -7,6 +7,7 @@
 static const float MOVEMENT_LIMIT = 300.f;
 static const float DASH_DISTANCE = 50.f;
 static const float DASH_COOLDOWN = 1.f;
+static const float DAMAGE_BUFFER = 0.1f;
 
 class Player : public Entity
 {
@@ -20,6 +21,7 @@ public:
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
 	virtual void SetupMesh();
+	virtual void TakeDamage(int amount);
 	
 	void Move(Vector3 dir, double dt);
 	void Dash(Vector3 dir, double dt);
@@ -28,20 +30,26 @@ public:
 	void ChangeWeapon(int type);
 	void ChangeWeaponUp();
 	void ChangeWeaponDown();
+	void ChangeProjectileUp();
+	void ChangeProjectileDown();
 
 	// Setters
 	void SetMoving(bool isMoving);
 	void SetDashed(bool isDashed);
 
-	// Issers 
+	// Issers
 	bool IsMoving();
 	bool IsDashed();
+
 	Inventory *inventory;
 	Weapon *weapon;
+	CProjectile *projectile;
 	float cooldownTimer = 0;
 	short weaponIter = 0;
+	short projectileIter = 0;
 
 private:
+	float damageBuffer;
 	bool isMoving;
 	bool isDashed;
 	float forceMagnitude = 0;

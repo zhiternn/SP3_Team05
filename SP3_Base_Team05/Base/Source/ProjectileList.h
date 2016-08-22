@@ -30,6 +30,16 @@ public:
 		SetProjectileSpeed(50.0f);
 		SetScale(1, 1, 1);
 		SetMass(50);
+		ropeLifetime = 5.0f;
+	}
+	Hook(int dmg, float ropeLifetime = 5.0f, float lifeTime = 2.0f, float projSpeed = 50.0f, float size = 1.5f, float mass = 10.0f) :CProjectile(PROJECTILE_TYPE::HOOK)
+	{
+		SetDMG(dmg);
+		SetLifetime(lifeTime);
+		SetProjectileSpeed(projSpeed);
+		SetScale(size, size, size);
+		SetMass(mass);
+		this->ropeLifetime = ropeLifetime;
 	}
 	~Hook(){}
 
@@ -38,7 +48,7 @@ public:
 	void Set();
 
 private:
-	
+	float ropeLifetime;
 
 };
 
@@ -114,6 +124,14 @@ public:
 		SetProjectileSpeed(150.f);
 		SetScale(.5f, .5f, .5f);
 		SetMass(0.5f);
+	}
+	Bullet(int dmg, float lifeTime = 2.0f, float projSpeed = 150.0f, float size = 1.0f, float mass = 30.0f) :CProjectile(PROJECTILE_TYPE::BULLET)
+	{
+		SetDMG(dmg);
+		SetLifetime(2);
+		SetProjectileSpeed(projSpeed);
+		SetScale(size, size, size);
+		SetMass(mass);
 	}					//< Overloaded Constructor
 	~Bullet(){};																					//< Destructor
 
