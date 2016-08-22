@@ -360,11 +360,6 @@ void SceneSummoner::RenderHUD()
 	ss.precision(4);
 	ss << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
-	
-	ss.str("");
-	ss.precision(2);
-	ss << "Dash cooldown: " << player->cooldownTimer;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
 
 	ss.str("");
 	ss.precision(1);
@@ -376,9 +371,17 @@ void SceneSummoner::RenderHUD()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
 
 	ss.str("");
-	ss << "HP: ";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 54);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 7, 55.5f, player->GetHP() / 5, false);
+	ss << "HP";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
+	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 5) + 11, 55.5f, player->maxHealth / 5, false);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
+
+	ss.str("");
+	ss.precision(2);
+	ss << "Dash";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
+	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
+	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
 }
 
 void SceneSummoner::Exit()

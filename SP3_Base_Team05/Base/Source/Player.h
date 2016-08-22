@@ -45,6 +45,7 @@ public:
 	float cooldownTimer = 0;
 	short weaponIter = 0;
 	short projectileIter = 0;
+	float maxHealth;
 
 private:
 	bool isMoving;
