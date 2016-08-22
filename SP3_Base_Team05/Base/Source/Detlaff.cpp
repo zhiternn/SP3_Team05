@@ -6,7 +6,7 @@
 CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 {
 	//set weapon to STATE_1 default weapon
-	weapon = new Splitgun();
+	weapon = new Splitgun(360.f, 36);
 	weapon->AssignProjectile(new Bullet());
 	this->SetRate(0.f);
 }
@@ -35,7 +35,7 @@ void CDetlaff::Update(double dt)
 				state = STATE_2;
 				this->health = 200;
 				//Create the stage 2 splitgun
-				weapon = new Splitgun();
+				weapon = new Splitgun(45.0f, 6);
 				weapon->AssignProjectile(new Bullet());
 				break;
 			}

@@ -56,7 +56,11 @@ void MeshManager::Init()
 	meshList[GEO_SUMMONER] = MeshBuilder::GenerateOBJ("summoner", "Obj\\summoner.obj");
 	meshList[GEO_SUMMONER]->textureArray[0] = LoadTGA("Image//summoner.tga");
 	meshList[GEO_SUMMONS] = MeshBuilder::GenerateOBJ("summoner", "Obj\\summons.obj");
-	//meshList[GEO_SUMMONS]->textureArray[0] = LoadTGA("Image//summons.tga");
+
+	meshList[GEO_DETLAFF_1] = MeshBuilder::GenerateQuad("Detlaff_1", Color(1, 1, 1), 1.f);
+	meshList[GEO_DETLAFF_1]->textureArray[0] = LoadTGA("Image//Detlaff_TGA//detlaff_stage1.tga");
+	meshList[GEO_DETLAFF_2] = MeshBuilder::GenerateCube("cube", Color(0, 1, 1));
+	meshList[GEO_DETLAFF_3] = MeshBuilder::GenerateCube("cube", Color(0, 1, 1));
 
 	meshList[GEO_PLAYER_TOP] = MeshBuilder::GenerateOBJ("player_top", "Obj//player_top.obj");
 	meshList[GEO_PLAYER_TOP]->textureArray[0] = LoadTGA("Image//player.tga");

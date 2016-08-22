@@ -62,6 +62,7 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 }
 
 //< DETLAFF WEAPONS
+
 void Splitgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
 	if (shootDelay <= 0.0f)
