@@ -200,15 +200,13 @@ void SceneDetlaff::Update(double dt)
 
 	enemyFireDelay -= dt;
 
-	std::cout << enemyFireDelay << std::endl;
-
 	if (enemyFireDelay <= 0.f)
 	{
 		enemyFireDelay = 2.f;
 
 		Vector3 mouseDir;
 		mouseDir = (player->pos - detlaff->pos).Normalized();
-		//detlaff->Shoot(mouseDir);
+		detlaff->Shoot(mouseDir);
 	}
 }
 
