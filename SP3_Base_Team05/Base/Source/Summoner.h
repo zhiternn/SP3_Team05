@@ -12,14 +12,17 @@ public:
 
 	virtual void Init(Vector3 pos);
 	virtual void Update(double dt);
-	virtual void HandleInteraction(GameObject* b, double dt);
+	virtual void TakeDamage(unsigned amount);
 
-	void UpdateSummons(double dt);
+	void CleaningUpMess();
 	void Defend();
+	void Attack();
 
 private:
 	float safetyThreshold;
 	float chaseThreshold;
+	float agressiveLevel;
+	float maxHealth; 
 	std::vector<Summons*> summonsList;
 
 };

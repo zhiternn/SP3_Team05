@@ -109,5 +109,6 @@ void SnakeBody::SetupMesh()
 	modelStack.Rotate(yawDegree, 0, 0, 1);
 	modelStack.Rotate(pitchDegree, right.x, right.y, right.z);
 	modelStack.Scale(scale.x, scale.y, scale.z);
+
 	mesh = meshList[GEO_SNAKE_BODY];
 }

@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "Controls.h"
-#include "MeshBuilder.h"
+#include "MeshManager.h"
 
 #include <sstream>
 
@@ -20,17 +20,6 @@ void SceneSummoner::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
-
-	//Clears meshList
-	for (int i = GEO_DEFAULT_END; i < NUM_GEOMETRY; ++i)
-	{
-		meshList[i] = NULL;
-	}
-	//Loads default meshes
-	for (int i = 0; i < GEO_DEFAULT_END; ++i)
-	{
-		meshList[i] = SceneBase::meshList[i];
-	}
 
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
@@ -59,7 +48,7 @@ void SceneSummoner::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 100;
+	m_orthoHeight = 150;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -113,15 +102,14 @@ void SceneSummoner::PlayerController(double dt)
 	{
 		forceDir.x += 1;
 	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
-	{
-		player->Dash(forceDir, dt);
-	}
 	if (forceDir.IsZero() == false)
 	{
 		forceDir.Normalize();
 		player->Move(forceDir, dt);
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
+	{
+		player->Dash(forceDir, dt);
 	}
 	if (Controls::GetInstance().OnHold(Controls::MOUSE_LBUTTON))
 	{
@@ -363,12 +351,6 @@ void SceneSummoner::Exit()
 		delete mainCamera;
 	if (player)
 		delete player;
-
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
-	{
-		if (meshList[i])
-			delete meshList[i];
-	}
 
 	SceneBase::Exit();
 }

@@ -7,7 +7,7 @@
 #include "Player.h"
 #include "WeaponList.h"
 #include "ProjectileList.h"
-#include "Summoner.h"
+#include "Detlaff.h"
 
 #include <vector>
 
@@ -15,10 +15,6 @@ using std::vector;
 
 class SceneDetlaff : public SceneBase
 {
-	enum GEOMETRY_TYPE
-	{
-		NUM_GEOMETRY = GEOMETRY_TYPE_DEFAULT::GEO_DEFAULT_END
-	};
 public:
 	SceneDetlaff();
 	~SceneDetlaff();
@@ -36,6 +32,10 @@ public:
 	void RenderSkybox();
 	void RenderSkyPlane();
 
+	float enemyFireDelay;
+	float hehexd;
+
+
 private:
 
 	void PlayerController(double dt);
@@ -46,8 +46,6 @@ private:
 	float m_worldWidth, m_worldHeight;
 	float m_orthoWidth, m_orthoHeight;
 
-	Mesh* meshList[GEO_DEFAULT_END];
-
 	Camera* mainCamera;
 
 	Player* player;
@@ -55,7 +53,7 @@ private:
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
 
-	Summoner* summoner;
+	CDetlaff* detlaff;
 };
 
 #endif

@@ -7,6 +7,19 @@ Mesh* MeshManager::_meshList[GEO_DEFAULT_END];
 
 MeshManager::MeshManager()
 {
+}
+
+MeshManager::~MeshManager()
+{
+	for (int i = 0; i < GEO_DEFAULT_END; ++i)
+	{
+		if (meshList[i])
+			delete meshList[i];
+	}
+}
+
+void MeshManager::Init()
+{
 	for (int i = 0; i < GEO_DEFAULT_END; ++i)
 	{
 		if (meshList[i])
@@ -44,17 +57,4 @@ MeshManager::MeshManager()
 	//meshList[GEO_PLAYER_BOTTOM]->textureArray[0] = LoadTGA("Image//player.tga");
 
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f);
-}
-
-MeshManager::~MeshManager()
-{
-	for (int i = 0; i < GEO_DEFAULT_END; ++i)
-	{
-		if (meshList[i])
-			delete meshList[i];
-	}
-}
-
-void MeshManager::Init()
-{
 }

@@ -32,7 +32,6 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			*proj = *projectileInfo;
 			proj->Init(pos, dir + offset);
 			proj->SetTeam(team);
-			
 		}
 	}
 }
@@ -42,7 +41,6 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 	if (shootDelay <= 0.0f)
 	{
 		shootDelay = 1.0f; // per second
-		
 		CProjectile* proj;
 
 		switch (projectileInfo->GetProjType())
@@ -102,8 +100,20 @@ void Splitgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			}
 			
 			*proj = *projectileInfo;
+			proj->SetLifetime(2.0f);
+			proj->SetScale(Vector3(2.0f, 2.0f, 2.0f));
 			proj->Init(pos, rotate * dir);
 			proj->SetTeam(team);
 		}
 	}
 }
+
+void Splitgun::SetAngle(float angle)
+{
+	this->coneAngle = angle;
+}
+void Splitgun::SetCount(int count)
+{
+	this->projectileCount = count;
+}
+

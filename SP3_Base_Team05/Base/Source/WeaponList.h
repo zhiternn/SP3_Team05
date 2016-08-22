@@ -7,7 +7,7 @@ class Shotgun : public Weapon
 {
 public:
 	Shotgun():projectileCount(5), spread(0.25f){
-		SetFireRate(1.5);
+		SetFireRate(5);
 	}
 	~Shotgun(){}
 
@@ -23,7 +23,7 @@ class MachineGun : public Weapon
 {
 public:
 	MachineGun(){
-		SetFireRate(5);
+		SetFireRate(10);
 	}
 	~MachineGun(){}
 
@@ -45,11 +45,14 @@ public:
 	~Splitgun(){}
 
 	virtual void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
+	
+	//For weapon switching 
+	void SetAngle(float angle);
+	void SetCount(int count);
 
 private:
 	float coneAngle;
 	int projectileCount;
-
 };
 
 #endif // !WEAPONLIST_H

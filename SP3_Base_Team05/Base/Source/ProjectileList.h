@@ -55,7 +55,7 @@ public:
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject *b, double dt);
 
-	void CalculateChance(Enemy *enemy);
+	//void CalculateChance(Enemy *enemy);
 
 	bool Capture();
 private:

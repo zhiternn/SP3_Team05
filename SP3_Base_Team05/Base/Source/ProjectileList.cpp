@@ -34,10 +34,10 @@ void Trap::HandleInteraction(GameObject *b, double dt)
 {
 }
 
-void Trap::CalculateChance(Enemy *enemy)
-{
-	captureChance = ((100 - enemy->GetHP()) * enemy->GetRate()) / 100;
-}
+//void Trap::CalculateChance(Enemy *enemy)
+//{
+//	captureChance = ((100 - enemy->GetHP()) * enemy->GetRate()) / 100;
+//}
 
 bool Trap::Capture()
 {

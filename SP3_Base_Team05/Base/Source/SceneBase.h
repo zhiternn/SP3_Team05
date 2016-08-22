@@ -3,7 +3,6 @@
 
 #include "Scene.h"
 #include "Mtx44.h"
-#include "Mesh.h"
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Particle.h"

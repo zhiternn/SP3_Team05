@@ -12,6 +12,7 @@ public:
 	virtual void HandleInteraction(GameObject *b, double dt);
 
 	void FireOnTarget(Entity *target);
+	void Shoot(Vector3 dir);
 
 	enum BOSS_STATE
 	{
@@ -25,6 +26,7 @@ public:
 	//BOSS Cooldown before firing
 private: 
 	Entity *target;
-	Weapon *weapon;
+	Weapon* weapon;
+	
 };
 

@@ -3,6 +3,7 @@
 
 #include "Vector3.h"
 #include "Entity.h"
+#include "Weapon.h"
 
 static const float REACH_CHECKER = 2.0f;
 
@@ -46,7 +47,7 @@ protected:
 	Entity* target;
 	float speedLimit;
 	float movementSpeed;
-	float captureRatio;
+	float captureRatio;;
 };
 
 Enemy* FetchEnemy();

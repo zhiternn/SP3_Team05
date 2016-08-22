@@ -2,7 +2,7 @@
 
 #include "Application.h"
 #include "Controls.h"
-#include "MeshBuilder.h"
+#include "MeshManager.h"
 
 #include <sstream>
 
@@ -20,17 +20,6 @@ void SceneSnakeBoss::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
-
-	//Clears meshList
-	for (int i = GEO_DEFAULT_END; i < NUM_GEOMETRY; ++i)
-	{
-		meshList[i] = NULL;
-	}
-	//Loads default meshes
-	for (int i = 0; i < GEO_DEFAULT_END; ++i)
-	{
-		meshList[i] = SceneBase::meshList[i];
-	}
 
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
@@ -59,7 +48,7 @@ void SceneSnakeBoss::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 300;
+	m_orthoHeight = 100;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -85,7 +74,7 @@ void SceneSnakeBoss::Init()
 	enemy->SetColliderType(Collider::COLLIDER_BALL);
 	enemy->SetScale(6, 6, 6);
 	enemy->SetMass(3);
-	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0));
+	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), 10);
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
@@ -302,15 +291,6 @@ void SceneSnakeBoss::RenderMain()
 
 	RenderWorld();
 
-	float degree = Math::RadianToDegree(atan2(enemy->GetFront().y, enemy->GetFront().x));
-	modelStack.PushMatrix();
-	modelStack.Translate(enemy->pos.x, enemy->pos.y, enemy->pos.z);
-	modelStack.Rotate(degree - 90, 0, 0, 1);
-	modelStack.Translate(0, 3.0f, 0);
-	modelStack.Scale(1.0f, 1.0f, 1.0f);
-	RenderMesh(meshList[GEO_SPHERE], false);
-	modelStack.PopMatrix();
-
 	//RenderSkyPlane();
 }
 
@@ -321,6 +301,28 @@ void SceneSnakeBoss::RenderWorld()
 		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
 		RenderMesh(meshList[GEO_FLOOR], false);
+		modelStack.PopMatrix();
+	}
+
+	if (player && player->IsActive())
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(player->pos.x, player->pos.y, player->pos.z);
+		modelStack.Scale(player->GetScale().x, player->GetScale().y, player->GetScale().z);
+
+		modelStack.PushMatrix();
+		Vector3 toMouse = mousePos_worldBased - player->pos;
+		float toMouseAngle = Math::RadianToDegree(atan2(toMouse.y, toMouse.x));
+		modelStack.Rotate(toMouseAngle, 0, 0, 1);
+		RenderMesh(meshList[GEO_PLAYER_TOP], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		float degree = Math::RadianToDegree(atan2(player->GetVelocity().y, player->GetVelocity().x));
+		modelStack.Rotate(degree, 0, 0, 1);
+		RenderMesh(meshList[GEO_PLAYER_BOTTOM], true);
+		modelStack.PopMatrix();
+
 		modelStack.PopMatrix();
 	}
 
@@ -364,12 +366,6 @@ void SceneSnakeBoss::Exit()
 		delete mainCamera;
 	if (player)
 		delete player;
-
-	for (int i = 0; i < NUM_GEOMETRY; ++i)
-	{
-		if (meshList[i])
-			delete meshList[i];
-	}
 
 	SceneBase::Exit();
 }
@@ -429,42 +425,10 @@ void SceneSnakeBoss::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
-	switch (go->GetType())
+	if (go->mesh)
 	{
-	case GameObject::GO_ENVIRONMENT:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		if (go->GetCollider().type == Collider::COLLIDER_BALL)
-			RenderMesh(meshList[GEO_SPHERE], false);
-		else
-			RenderMesh(meshList[GEO_CUBE], false);
-	}
-	break;
-	case GameObject::GO_PROJECTILE:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-	break;
-	case GameObject::GO_ENTITY:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-	break;
-
-	default:break;
+		go->SetupMesh();
+		RenderMesh(go->mesh, false);
 	}
 
 	modelStack.PopMatrix();

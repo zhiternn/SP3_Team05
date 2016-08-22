@@ -12,8 +12,11 @@
 #include <stdlib.h>
 
 #include "SceneText.h"
+#include "SceneSummoner.h"
 #include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
+#include "SceneDetlaff.h"
+
 #include "MeshManager.h"
 
 GLFWwindow* m_window;
@@ -253,6 +256,9 @@ void Application::Run()
 	meshManager.Init();
 
 	Scene* scene = new SceneSnakeBoss();
+	//Scene* scene = new SceneSummoner();
+	//Scene* scene = new SceneDetlaff();
+	//Scene* scene = new SceneGolem();
 
 	//Main Loop
 	scene->Init();

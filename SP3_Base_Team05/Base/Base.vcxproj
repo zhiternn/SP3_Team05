@@ -20,6 +20,8 @@
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Entity.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
+    <ClCompile Include="Source\GolemHand.cpp" />
+    <ClCompile Include="Source\GolemHead.cpp" />
     <ClCompile Include="Source\Inventory.cpp" />
     <ClCompile Include="Source\LoadHmap.cpp" />
     <ClCompile Include="Source\LoadOBJ.cpp" />
@@ -27,11 +29,15 @@
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
+    <ClCompile Include="Source\MeshManager.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
     <ClCompile Include="Source\ProjectileList.cpp" />
+    <ClCompile Include="Source\Rope.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
+    <ClCompile Include="Source\SceneGolem.cpp" />
+    <ClCompile Include="Source\SceneSnakeBoss.cpp" />
     <ClCompile Include="Source\SceneSummoner.cpp" />
     <ClCompile Include="Source\SceneDetlaff.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
@@ -57,7 +63,10 @@
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\GameObject.h" />
+    <ClInclude Include="Source\GolemHand.h" />
+    <ClInclude Include="Source\GolemHead.h" />
     <ClInclude Include="Source\Inventory.h" />
+    <ClInclude Include="Source\MeshManager.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
@@ -69,8 +78,11 @@
     <ClInclude Include="Source\Particle.h" />
     <ClInclude Include="Source\Projectile.h" />
     <ClInclude Include="Source\ProjectileList.h" />
+    <ClInclude Include="Source\Rope.h" />
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
+    <ClInclude Include="Source\SceneGolem.h" />
+    <ClInclude Include="Source\SceneSnakeBoss.h" />
     <ClInclude Include="Source\SceneSummoner.h" />
     <ClInclude Include="Source\SceneDetlaff.h" />
     <ClInclude Include="Source\SceneText.h" />

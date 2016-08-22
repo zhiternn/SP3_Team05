@@ -63,13 +63,8 @@ void SceneText::Init()
 	go->SetColliderType(Collider::COLLIDER_BOX);
 
 	player = new Player();
-	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
-
-	summoner = new Summoner();
-	GameObject::goList.push_back(summoner);
-	summoner->SetTarget(player);
-	summoner->Init(Vector3(0,0, 0));
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
@@ -313,14 +308,6 @@ void SceneText::RenderMain()
 	glUniform1i(m_parameters[U_SHADOW_MAP], 8);
 
 	RenderWorld();
-
-	if (!summoner->destinations.empty())
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(summoner->destinations.front().x, summoner->destinations.front().y, 0);
-		RenderMesh(meshList[GEO_CUBE], false);
-		modelStack.PopMatrix();
-	}
 	
 	//RenderSkyPlane();
 }

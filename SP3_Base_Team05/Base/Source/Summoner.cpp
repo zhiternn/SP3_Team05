@@ -1,4 +1,7 @@
 #include "Summoner.h"
+#include "Controls.h"
+
+using namespace std;
 
 Summoner::Summoner()
 {
@@ -14,10 +17,14 @@ void Summoner::Init(Vector3 pos)
 	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
-	speedLimit = 20;
-	movementSpeed = 20.0f;
+	speedLimit = 30.0f;
+	movementSpeed = 40.0f;
 	scale.Set(10, 10, 10);
-	safetyThreshold = this->GetScale().x * 5;
+	health = 300;
+	maxHealth = health;
+	isDead = false;
+	agressiveLevel = 1 - ((float)health / maxHealth);
+	safetyThreshold = this->GetScale().x * 7;
 	chaseThreshold = safetyThreshold * 1.5f;
 	for (int i = 0; i < 5; ++i)
 	{
@@ -40,7 +47,26 @@ void Summoner::Init(Vector3 pos)
 void Summoner::Update(double dt)
 {
 	GameObject::Update(dt);
+	if (summonsList.size() < 5)
+	{
+		Summons* summons = new Summons();
+		summons->Init(this->pos);
+		summons->SetTarget(this);
+		summonsList.push_back(summons);
+		GameObject::goList.push_back(summons);
+	}
 	Defend();
+	Attack();
+	for (auto q : summonsList)
+	{
+		if (!q->isDefending)
+		{
+			if (Controls::GetInstance().OnHold(Controls::KEY_V))
+			{
+				q->Shoot(target->pos);
+			}
+		}
+	}
 	if (!Enemy::UpdateMovement(dt))
 	{
 		float distanceFromTarget = (target->pos - pos).LengthSquared();
@@ -49,6 +75,7 @@ void Summoner::Update(double dt)
 		{
 			if (target)
 			{
+				this->front.Set(target->GetPosition().x * (this->scale.x), target->GetPosition().y * (this->scale.y), 0);
 				float offset = Math::RandFloatMinMax(safetyThreshold, chaseThreshold);
 				Vector3 offsetDir = target->pos - pos;
 
@@ -63,35 +90,69 @@ void Summoner::Update(double dt)
 	}
 }
 
-void Summoner::HandleInteraction(GameObject* b, double dt)
+void Summoner::TakeDamage(unsigned amount)
 {
-
+	Entity::TakeDamage(amount);
+	agressiveLevel = 1 - ((float)health / maxHealth);
 }
 
-void Summoner::UpdateSummons(double dt)
+void Summoner::CleaningUpMess()
 {
-	//for (auto q : summonsList)
-	//{
-	//	q->
-	//}
+	for (int i = 0; i < summonsList.size(); ++i)
+	{
+		if (summonsList[i]->IsDead())
+		{
+			summonsList.erase(summonsList.begin() + i);
+		}
+	}
 }
 
 void Summoner::Defend()
 {
-	int defendee = 5;
-	Vector3 N = (target->pos - this->pos).Normalized();
-	Vector3 NP = Vector3(-N.y, N.x, 0);
-	float diameter = 5 * 2;
-	float wallLength = defendee * diameter;
-	wallLength = -wallLength / 2;
-
-	Vector3 bossFront = this->pos + (N * this->scale.x + 5);
-	
-	for (int i = 0; i < defendee; ++i)
+	CleaningUpMess();
+	if (!summonsList.empty())
 	{
-		float formingWallLength = diameter * i;
+		Vector3 N = (target->pos - this->pos).Normalized();
+		Vector3 NP = Vector3(-N.y, N.x, 0);
+		float diameter = summonsList.front()->GetScale().x * 2;
+		float wallLength = ((summonsList.size() * agressiveLevel) - 1) * diameter;
+		wallLength = -wallLength * 0.5f;
 
-		summonsList[i]->Goto(bossFront + (NP * (wallLength + formingWallLength)));
-		//std::cout << (NP * (wallLength + formingWallLength)) << std::endl;
+		Vector3 bossFront;
+		bossFront.Set(
+			this->pos.x + N.x * (diameter + this->scale.x),
+			this->pos.y + N.y * (diameter + this->scale.y),
+			0);
+
+		for (int i = 0; i < summonsList.size() * agressiveLevel; ++i)
+		{
+			float formingWallLength = diameter * i;
+			summonsList[i]->Goto(bossFront + (NP * (wallLength + formingWallLength)));
+			summonsList[i]->isDefending = true;
+		}
+	}
+}
+
+void Summoner::Attack()
+{
+	CleaningUpMess();
+	if (!summonsList.empty())
+	{
+		for (auto q : summonsList)
+		{
+			if (!q->isDefending)
+			{
+				float combinedRadius = scale.x + target->GetScale().x;
+				float offset = combinedRadius * 5;
+				//Vector3 offsetDir(
+				//	Math::RandFloatMinMax(-(target->pos.x - pos.x), target->pos.x - pos.x),
+				//	Math::RandFloatMinMax(-(target->pos.y - pos.y), target->pos.y - pos.y),
+				//	0);
+				Vector3 offsetDir(target->pos.x - pos.x, target->pos.y - pos.y, 0);
+
+				Vector3 destination = target->pos + offsetDir.Normalized() * offset;
+				q->Goto(destination);
+			}
+		}
 	}
 }
