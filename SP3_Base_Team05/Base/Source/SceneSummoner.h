@@ -38,7 +38,6 @@ private:
 	void PlayerController(double dt);
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();
-	void RenderGO(GameObject* go);
 
 	float m_worldWidth, m_worldHeight;
 	float m_orthoWidth, m_orthoHeight;
@@ -51,7 +50,6 @@ private:
 	Vector3 mousePos_worldBased;
 
 	Summoner* summoner;
-	//Summons* summons;
 };
 
 #endif

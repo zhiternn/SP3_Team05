@@ -1,5 +1,6 @@
 #include "Summoner.h"
 #include "Controls.h"
+#include "MeshManager.h"
 
 using namespace std;
 
@@ -155,4 +156,12 @@ void Summoner::Attack()
 			}
 		}
 	}
+}
+
+void Summoner::SetupMesh()
+{
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+
+	mesh = meshList[GEO_SPHERE];
 }
