@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "MeshManager.h"
 
 std::vector<GameObject*> GameObject::goList;
 
@@ -9,7 +10,8 @@ pos(0, 0, 0),
 vel(0, 0, 0),
 active(false),
 mass(1.0f),
-front(1, 0, 0)
+front(1, 0, 0),
+mesh(NULL)
 {
 	team = TEAM_NEUTRAL;
 	collider.type = Collider::COLLIDER_NONE;
@@ -367,6 +369,15 @@ void GameObject::SetTeam(TEAM_TYPE team)
 	this->team = team;
 }
 
+void GameObject::SetupMesh()
+{
+	float degree = Math::RadianToDegree(atan2(front.y, front.x));
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Rotate(degree, 0, 0, 1);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+	mesh = meshList[GEO_CUBE];
+}
+
 /*
 TEMPLATE FOR COLLISION CHECK OVERLOADING
 
@@ -419,6 +430,4 @@ void GameObject::CollisionResponse(GameObject* b)
 			break;
 	}
 }
-
-
 */

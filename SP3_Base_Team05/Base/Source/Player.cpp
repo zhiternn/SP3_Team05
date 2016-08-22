@@ -49,6 +49,14 @@ void Player::Update(double dt)
 	}
 }
 
+void Player::HandleInteraction(GameObject* b, double dt)
+{
+	if (b->GetType() == GameObject::GO_ENVIRONMENT)
+	{
+		GameObject::HandleInteraction(b, dt);
+	}
+}
+
 void Player::Move(Vector3 dir, double dt)
 {
 	if (vel.LengthSquared() < (MOVEMENT_LIMIT)* (MOVEMENT_LIMIT))
@@ -125,4 +133,9 @@ bool Player::IsMoving()
 bool Player::IsDashed()
 {
 	return isDashed;
+}
+
+void Player::SetupMesh()
+{
+	mesh = NULL;
 }

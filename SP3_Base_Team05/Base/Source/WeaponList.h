@@ -12,9 +12,9 @@ public:
 	~Shotgun(){}
 
 	virtual	void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
-
-private:
 	float spread;
+private:
+	
 	int projectileCount;
 
 };
@@ -36,13 +36,13 @@ private:
 //< Wayne's Boss
 //< DETLAFF - BOSS WEAPONS
 
-class SplitGun : public Weapon
+class Splitgun : public Weapon
 {
 public:
-	SplitGun() : coneAngle(45.0f), projectileCount(2) {
+	Splitgun() : coneAngle(60.0f), projectileCount(3) {
 		SetFireRate(1);
 	}
-	~SplitGun(){}
+	~Splitgun(){}
 
 	virtual void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
 

@@ -9,6 +9,7 @@ Class to create Projectiles
 /******************************************************************************/
 #include "Projectile.h"
 #include "Entity.h"
+#include "ProjectileList.h"
 
 /******************************************************************************/
 /*!
@@ -67,7 +68,7 @@ float CProjectile::GetProjectileSpeed()
 	return proj_speed;
 }
 
-CProjectile::PROJECTILE_TYPE CProjectile::GetType()
+CProjectile::PROJECTILE_TYPE CProjectile::GetProjType()
 {
 	return proj_type;
 }
@@ -105,7 +106,7 @@ void CProjectile::SetProjectileSpeed(float speed)
 	this->proj_speed = speed;
 }
 
-void CProjectile::SetType(PROJECTILE_TYPE type)
+void CProjectile::SetProjType(PROJECTILE_TYPE type)
 {
 	this->proj_type = type;
 }
@@ -135,19 +136,7 @@ void CProjectile::Update(double dt)
 	if (proj_lifetime <= 0)
 	{
 		active = false;
-		if (this->proj_type == (CProjectile::TRAP))
-		{
-			for (int i = 0; i < GameObject::goList.size(); i++)
-			{
-				if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
-				{
-					GameObject::goList.erase(GameObject::goList.begin() + i);
-				}
-			}
-		}
 	}
-		
-
 }
 
 /******************************************************************************/
@@ -171,39 +160,4 @@ void CProjectile::HandleInteraction(GameObject* b, double dt)
 		}
 		this->active = false;
 	}
-}
-
-CProjectile* FetchProjectile()
-{
-   std::vector<GameObject*>::iterator it;
-   for (it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
-   {
-       CProjectile *proj = dynamic_cast<CProjectile*>((*it));
-	   if (proj && proj->IsActive() == false)
-       {
-			proj->GameObject::SetType(GameObject::GO_PROJECTILE);
-			proj->SetActive(true);
-			return proj;
-       }
-   }
-
-   for (int i = 0; i < 10; ++i)
-   {
-       GameObject::goList.push_back(new CProjectile());
-   }
-   CProjectile *proj = dynamic_cast<CProjectile*>(*(GameObject::goList.end() - 10));
-   if (proj)
-   {
-	   proj->GameObject::SetType(GameObject::GO_PROJECTILE);
-       proj->SetActive(true);
-       return proj;
-   }
-    
-   { //for safety measure
-       CProjectile *proj = new CProjectile();
-	   proj->GameObject::SetType(GameObject::GO_PROJECTILE);
-       proj->SetActive(true);
-       GameObject::goList.push_back(proj);
-       return proj;
-   }
 }

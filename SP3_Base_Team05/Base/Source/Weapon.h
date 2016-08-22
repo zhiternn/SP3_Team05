@@ -11,7 +11,7 @@ Generic Class for Weapons (Abstract Class)
 #define WEAPON_H
 
 #include "Vector3.h"
-#include "Projectile.h"
+#include "ProjectileList.h"
 
 /******************************************************************************/
 /*!

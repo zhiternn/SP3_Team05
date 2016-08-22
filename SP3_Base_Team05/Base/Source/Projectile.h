@@ -26,30 +26,30 @@ public:
 	{
 		BULLET,
 		SHIELD,
-		ROPE,
+		HOOK,
 		TRAP,
 		RAY,
 
 		MAX,
 	};
 
-	CProjectile(PROJECTILE_TYPE type = PROJECTILE_TYPE::BULLET);    //< Default Constructor
-	~CProjectile();													//< Destructor
+	CProjectile(PROJECTILE_TYPE type = PROJECTILE_TYPE::HOOK);    //< Default Constructor
+	virtual ~CProjectile();													//< Destructor
 
 	void Init(Vector3 pos, Vector3 dir);
-	virtual void Update(double dt);									//< Abstract Update
-	virtual void HandleInteraction(GameObject* b, double dt);		//< Handling Interactions
+	virtual void Update(double dt) = 0;									//< Abstract Update
+	virtual void HandleInteraction(GameObject* b, double dt) = 0;		//< Handling Interactions
 
 	float GetDMG();													//< Returns Projectile Damage
 	float GetLifetime();											//< Returns Projectile Lifetime								//< Returns Projectile Type
-	PROJECTILE_TYPE GetType();
+	PROJECTILE_TYPE GetProjType();
 	float GetProjectileSpeed();
 	
 	//< Setters
 	void SetDMG(float damage);										//< Set Projectile Damage
 	void SetLifetime(float lifetime);								//< Set Projectile Lifetime
 	void SetProjectileSpeed(float speed);
-	void SetType(PROJECTILE_TYPE type);
+	void SetProjType(PROJECTILE_TYPE type);
 
 
 protected:
@@ -61,7 +61,5 @@ protected:
 	PROJECTILE_TYPE proj_type;										//< Projectile Type
 
 };
-
-CProjectile* FetchProjectile();
 
 #endif /* PROJECTILE_H */

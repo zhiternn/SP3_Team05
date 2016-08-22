@@ -16,14 +16,19 @@ void Entity::TakeDamage(unsigned amount)
 	if (health < 0)
 	{
 		health = 0;
-		isDead = true;
-		active = false;
+		Die();
 	}
 }
 
 bool Entity::IsDead()
 {
 	return isDead;
+}
+
+void Entity::Die()
+{
+	this->isDead = true;
+	this->active = false;
 }
 
 unsigned int Entity::GetHP()

@@ -14,23 +14,15 @@ Weapon::~Weapon()
 
 void Weapon::Update(double dt)
 {
-	if (shootDelay >= 0)
+	if (shootDelay > 0.0f)
 	{
 		shootDelay -= fireRate * dt;
-	}
-	else
-	{
-		shootDelay = 1.0f; // per second
 	}
 }
 
 void Weapon::AssignProjectile(CProjectile* proj)
 {
-	if (projectileInfo)
-		delete projectileInfo;
-
-	projectileInfo = new CProjectile();
-	*projectileInfo = *proj;
+	projectileInfo = proj;
 }
 
 float Weapon::GetFireRate()

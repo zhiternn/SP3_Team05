@@ -20,36 +20,18 @@ Class ProjectileList.h:
 \brief	Creates Projectiles for the game
 */
 /******************************************************************************/
-class ShotgunShell : public CProjectile
+
+class Hook : public CProjectile
 {
 public:
-    ShotgunShell() :CProjectile(PROJECTILE_TYPE::BULLET){
-        SetDMG(5);
-        SetLifetime(2);
-        SetProjectileSpeed(50.0f);
-        SetScale(1, 1, 1);
-        SetMass(1);
-    }
-    ~ShotgunShell(){}
-
-    virtual void Update(double dt);                                     //< Update Shotgun Shell Stuff 
-    virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Shotgun Shell
-
-private:
-
-};
-
-class Rope : public CProjectile
-{
-public:
-	Rope():CProjectile(PROJECTILE_TYPE::ROPE){
-		SetDMG(0);
+	Hook() :CProjectile(PROJECTILE_TYPE::HOOK){
+		SetDMG(10);
 		SetLifetime(2);
-		SetProjectileSpeed(1.0f);
+		SetProjectileSpeed(50.0f);
 		SetScale(1, 1, 1);
 		SetMass(1);
 	}
-	~Rope(){}
+	~Hook(){}
 
     virtual void Update(double dt);                                     //< Update Rope Stuff
 	virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Rope
@@ -126,8 +108,8 @@ class Bullet : public CProjectile
 public:
 	Bullet():CProjectile(PROJECTILE_TYPE::BULLET){
 		SetDMG(10);
-		SetLifetime(30);
-		SetProjectileSpeed(200.f);
+		SetLifetime(2);
+		SetProjectileSpeed(150.f);
 		SetScale(.5f, .5f, .5f);
 	}					//< Overloaded Constructor
 	~Bullet(){};																					//< Destructor
@@ -135,5 +117,8 @@ public:
 	virtual void Update(double dt);																//< Update
 	virtual void HandleInteraction(GameObject* b, double dt);									//< Handles Interaction for Bullet
 };
+
+Bullet* FetchBullet();
+Hook* FetchHook();
 
 #endif // !PROJECTILELIST_H
