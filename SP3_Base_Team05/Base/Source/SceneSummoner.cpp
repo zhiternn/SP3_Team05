@@ -365,6 +365,7 @@ void SceneSummoner::RenderHUD()
 	ss.precision(1);
 	ss << "Weapon: " << player->weaponIter;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
 
 	ss.str("");
 	ss << "Projectile: " << player->projectileIter;

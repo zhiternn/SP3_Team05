@@ -21,7 +21,7 @@ void Summoner::Init(Vector3 pos)
 	speedLimit = 30.0f;
 	movementSpeed = 40.0f;
 	scale.Set(10, 10, 10);
-	health = 300;
+	health = 500;
 	maxHealth = health;
 	isDead = false;
 	attacking = false;
