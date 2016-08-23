@@ -37,6 +37,7 @@
     <ClCompile Include="Source\Rope.cpp" />
     <ClCompile Include="Source\SceneBase.cpp" />
     <ClCompile Include="Source\SceneGolem.cpp" />
+    <ClCompile Include="Source\SceneManager.cpp" />
     <ClCompile Include="Source\SceneSnakeBoss.cpp" />
     <ClCompile Include="Source\SceneSummoner.cpp" />
     <ClCompile Include="Source\SceneDetlaff.cpp" />
@@ -82,6 +83,7 @@
     <ClInclude Include="Source\Scene.h" />
     <ClInclude Include="Source\SceneBase.h" />
     <ClInclude Include="Source\SceneGolem.h" />
+    <ClInclude Include="Source\SceneManager.h" />
     <ClInclude Include="Source\SceneSnakeBoss.h" />
     <ClInclude Include="Source\SceneSummoner.h" />
     <ClInclude Include="Source\SceneDetlaff.h" />

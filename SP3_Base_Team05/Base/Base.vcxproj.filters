@@ -141,8 +141,8 @@
     <ClCompile Include="Source\SceneGolem.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\ForceField.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Source\SceneManager.cpp">
+      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -281,8 +281,8 @@
     <ClInclude Include="Source\GolemHead.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\ForceField.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Source\SceneManager.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
