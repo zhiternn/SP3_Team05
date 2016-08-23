@@ -6,7 +6,7 @@
 CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 {
 	//set weapon to STATE_1 default weapon
-	weapon = new Splitgun();
+	weapon = new Splitgun(360.f, 36);
 	weapon->AssignProjectile(new Bullet());
 	this->SetRate(0.f);
 }
@@ -35,7 +35,7 @@ void CDetlaff::Update(double dt)
 				state = STATE_2;
 				this->health = 200;
 				//Create the stage 2 splitgun
-				weapon = new Splitgun();
+				weapon = new Splitgun(45.0f, 12);
 				weapon->AssignProjectile(new Bullet());
 				break;
 			}
@@ -43,9 +43,11 @@ void CDetlaff::Update(double dt)
 			{
 				//Spawn State 3 Boss
 				state = STATE_3;
-				this->health = 400;
+				this->health = 100;
 				this->SetRate(0.35f);
-				//weapon = new BIGGRENADABOMBHEHEXD()
+				weapon = new Splitgun(90.f, 12);
+				weapon->AssignProjectile(new Hook());
+				weapon->GetProjInfo()->SetProjectileSpeed(100.0f);
 				break;
 			}
 		}

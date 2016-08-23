@@ -48,7 +48,7 @@ void SceneDetlaff::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 300;
+	m_orthoHeight = 150;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -71,8 +71,6 @@ void SceneDetlaff::Init()
 	detlaff->SetTarget(player);
 	detlaff->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0));
 	detlaff->SetScale(10, 10, 10);
-	
-	detlaff->SetType(GameObject::GO_ENTITY);
 	detlaff->SetActive(true);
 	detlaff->SetColliderType(Collider::COLLIDER_BALL);
 	detlaff->SetMass(999999);
@@ -80,8 +78,7 @@ void SceneDetlaff::Init()
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 
-	enemyFireDelay = 3.0f;
-	hehexd = 0.f;
+	enemyFireDelay = 1.0f;
 }
 
 void SceneDetlaff::PlayerController(double dt)
@@ -200,15 +197,13 @@ void SceneDetlaff::Update(double dt)
 
 	enemyFireDelay -= dt;
 
-	std::cout << enemyFireDelay << std::endl;
-
 	if (enemyFireDelay <= 0.f)
 	{
-		enemyFireDelay = 2.f;
+		enemyFireDelay = 1.f;
 
 		Vector3 mouseDir;
 		mouseDir = (player->pos - detlaff->pos).Normalized();
-		//detlaff->Shoot(mouseDir);
+		detlaff->Shoot(mouseDir);
 	}
 }
 
@@ -365,6 +360,28 @@ void SceneDetlaff::RenderWorld()
 		modelStack.PopMatrix();
 	}
 
+	if (player && player->IsActive())
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(player->pos.x, player->pos.y, player->pos.z);
+		modelStack.Scale(player->GetScale().x, player->GetScale().y, player->GetScale().z);
+
+		modelStack.PushMatrix();
+		Vector3 toMouse = mousePos_worldBased - player->pos;
+		float toMouseAngle = Math::RadianToDegree(atan2(toMouse.y, toMouse.x));
+		modelStack.Rotate(toMouseAngle, 0, 0, 1);
+		RenderMesh(meshList[GEO_PLAYER_TOP], true);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		float degree = Math::RadianToDegree(atan2(player->GetVelocity().y, player->GetVelocity().x));
+		modelStack.Rotate(degree, 0, 0, 1);
+		RenderMesh(meshList[GEO_PLAYER_BOTTOM], true);
+		modelStack.PopMatrix();
+
+		modelStack.PopMatrix();
+	}
+
 	RenderGameObjects();
 
 }
@@ -397,6 +414,19 @@ void SceneDetlaff::RenderHUD()
 	ss3.precision(2);
 	ss3 << "Weapon: " << player->weaponIter;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
+
+	ss.str("");
+	ss << "HP";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
+	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 5) + 11, 55.5f, player->maxHealth / 5, false);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
+
+	ss.str("");
+	ss.precision(2);
+	ss << "Dash";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
+	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
+	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
 }
 
 void SceneDetlaff::Exit()
@@ -464,7 +494,7 @@ void SceneDetlaff::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
-	switch (go->GetType())
+	/*switch (go->GetType())
 	{
 	case GameObject::GO_ENVIRONMENT:
 	{
@@ -500,6 +530,12 @@ void SceneDetlaff::RenderGO(GameObject* go)
 	break;
 
 	default:break;
+	}*/
+
+	if (go->mesh)
+	{
+		go->SetupMesh();
+		RenderMesh(go->mesh, false);
 	}
 
 	modelStack.PopMatrix();
@@ -510,6 +546,14 @@ void SceneDetlaff::RenderGameObjects()
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
 		if (GameObject::goList[i]->IsActive())
-			RenderGO(GameObject::goList[i]);
+		{
+			modelStack.PushMatrix();
+
+			GameObject::goList[i]->SetupMesh();
+			if (GameObject::goList[i]->mesh)
+				RenderMesh(GameObject::goList[i]->mesh, false);
+
+			modelStack.PopMatrix();
+		}
 	}
 }
