@@ -191,21 +191,21 @@ void SceneGolem::Update(double dt)
 
     if (golemhead->GetHP() <= 500)
     {
-        golemrhead->SetSpeedLimit(110);
+        golemrhead->SetSpeedLimit(90);
         golemrhead->SetMovementSpeed(5500);
-        golemlhead->SetSpeedLimit(110);
+        golemlhead->SetSpeedLimit(90);
         golemlhead->SetMovementSpeed(5500);
     }
-    else if (golemhead->GetHP() <= 2500)
+    else if (golemhead->GetHP() <= 1500)
     {
-        golemrhead->SetSpeedLimit(80);
+        golemrhead->SetSpeedLimit(70);
         golemrhead->SetMovementSpeed(2300);
-        golemlhead->SetSpeedLimit(80);
+        golemlhead->SetSpeedLimit(70);
         golemlhead->SetMovementSpeed(2300);
 
         golemlhead;
     }
-    else if (golemhead->GetHP() <= 4000)
+    else if (golemhead->GetHP() <= 3000)
     {
         golemrhead->SetSpeedLimit(60);
         golemrhead->SetMovementSpeed(1700);
@@ -394,6 +394,7 @@ void SceneGolem::RenderHUD()
 {
     // Render the crosshair
     modelStack.PushMatrix();
+    modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
     modelStack.Scale(10, 10, 10);
     RenderMesh(meshList[GEO_CROSSHAIR], false);
     modelStack.PopMatrix();

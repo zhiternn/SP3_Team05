@@ -20,7 +20,7 @@ void GolemRightHand::Init(Vector3 pos)
     type = GameObject::GO_ENTITY;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BALL;
-    mass = 9;
+    mass = 4;
     destinationCountdown = 5.f;
     speedLimit = 45.f;
     movementSpeed = 800.f;
@@ -67,6 +67,7 @@ void GolemRightHand::SetupMesh()
     float degree = Math::RadianToDegree(atan2(front.y, front.x));
     modelStack.Translate(pos.x, pos.y, pos.z);
     modelStack.Rotate(degree, 0, 0, 1);
+    modelStack.Rotate(60, 0, 1, 0);
     modelStack.Scale(scale.x, scale.y, scale.z);
     mesh = meshList[GEO_GOLEMHAND];
 }
@@ -103,7 +104,7 @@ void GolemLeftHand::Init(Vector3 pos)
     type = GameObject::GO_ENTITY;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BALL;
-    mass = 9;
+    mass = 4;
     destinationCountdown = 5.f;
     speedLimit = 45.f;
     movementSpeed = 800.f;
@@ -154,6 +155,7 @@ void GolemLeftHand::SetupMesh()
     float degree = Math::RadianToDegree(atan2(front.y, front.x));
     modelStack.Translate(pos.x, pos.y, pos.z);
     modelStack.Rotate(degree, 0, 0, 1);
+    modelStack.Rotate(60, 0, 1, 0);
     modelStack.Scale(scale.x, scale.y, scale.z);
     mesh = meshList[GEO_GOLEMHAND];
 }

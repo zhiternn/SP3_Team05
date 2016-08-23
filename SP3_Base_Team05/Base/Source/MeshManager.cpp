@@ -28,7 +28,8 @@ void MeshManager::Init()
 		meshList[i] = NULL;
 	}
 	meshList[GEO_AXES] = MeshBuilder::GenerateAxes("reference");
-	meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateCrossHair("crosshair");
+    meshList[GEO_CROSSHAIR] = MeshBuilder::GenerateQuad("crosshair", Color(0, 0, 0), 1.f);
+    meshList[GEO_CROSSHAIR]->textureArray[0] = LoadTGA("Image//target.tga");
 	meshList[GEO_QUAD] = MeshBuilder::GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	meshList[GEO_CUBE] = MeshBuilder::GenerateCube("cube", Color(1, 1, 1));
 	meshList[GEO_TEXT] = MeshBuilder::GenerateText("text", 16, 16);
@@ -93,8 +94,15 @@ void MeshManager::Init()
 	meshList[GEO_WEAPON_SPLITGUN] = MeshBuilder::GenerateQuad("splitgun", Color(0, 0, 0), 1.f);
 	meshList[GEO_WEAPON_SPLITGUN]->textureArray[0] = LoadTGA("Image//splitgun.tga");
 
-    meshList[GEO_GOLEMHEAD] = MeshBuilder::GenerateSphere("GEO_GOLEMHEAD", Color(1, 1, 1), 9, 18, 1.f);
+    meshList[GEO_GOLEMHEAD] = MeshBuilder::GenerateOBJ("GEO_GOLEMHEAD", "Obj//golemhead.obj");
     meshList[GEO_GOLEMHEAD]->textureArray[0] = LoadTGA("Image//golemhead.tga");
-    meshList[GEO_GOLEMHAND] = MeshBuilder::GenerateSphere("GEO_GOLEMHAND", Color(1, 1, 1), 9, 18, 1.f);
-    meshList[GEO_GOLEMHAND]->textureArray[0] = LoadTGA("Image//golemhand.tga");
+    meshList[GEO_GOLEMHAND] = MeshBuilder::GenerateOBJ("GEO_GOLEMHAND", "Obj//golemhead.obj");
+    meshList[GEO_GOLEMHAND]->textureArray[0] = LoadTGA("Image//fist.tga");
+
+    //menu
+    meshList[GEO_MENU_CURSOR] = MeshBuilder::GenerateQuad("GEO_MENU_CURSOR", Color(0, 0, 0), 1.f);
+    meshList[GEO_MENU_CURSOR]->textureArray[0] = LoadTGA("Image//menucursor.tga");
+
+    meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("GEO_MENU_BACKGROUND", Color(0, 0, 0), 1.f);
+    meshList[GEO_MENU_BACKGROUND]->textureArray[0] = LoadTGA("Image//background.tga");
 }

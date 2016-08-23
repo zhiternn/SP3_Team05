@@ -18,8 +18,8 @@ void GolemHead::Init(Vector3 pos)
     destinationCountdown = REACH_CHECKER;
     speedLimit = 10.f;
     movementSpeed = 150.f;
-    health = 6000.f;
-    maxhealth = 6000.f;
+    health = 4000.f;
+    maxhealth = 4000.f;
     isDead = false;
     regendelay = 0;
     golemGun = new Splitgun(360.f, 18);
@@ -67,18 +67,21 @@ void GolemHead::Update(double dt)
     if (health < (maxhealth) * 0.75)
         golemGun->SetFireRate(0.2f);
     if (health < (maxhealth)* 0.50)
-        golemGun->SetFireRate(0.3f);
+        golemGun->SetFireRate(0.35f);
     if (health < (maxhealth) * 0.1)
-        golemGun->SetFireRate(0.5f);
+        golemGun->SetFireRate(0.4f);
 
     if (regendelay >= 10)
     {
         if (health < (maxhealth * 0.25))
-            health += 20;
+            health += 17;
         else if (health < (maxhealth * 0.5))
             health += 15;
         else if (health < maxhealth)
             health += 10;
+
+        if (health >= maxhealth)
+            health = maxhealth;
 
         regendelay = 0;
     }
