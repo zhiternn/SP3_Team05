@@ -11,6 +11,9 @@ Class to handle Boss Golem Hand
 #define GOLEMHAND_H
  
 #include "Enemy.h"
+#include "WeaponList.h"
+
+static const int ATTACK_COLLIDE_DAMAGE = 5;
 
 /******************************************************************************/
 /*!
@@ -27,12 +30,10 @@ public:
     virtual void Init(Vector3 pos);
     virtual void Update(double dt);
 
-    void LinkTo(Entity* entity);
-
     virtual void SetupMesh();
+    virtual void HandleInteraction(GameObject* b, double dt);
 
 private:
-    Entity* link;
     float stopdelay;
 };
 
@@ -51,12 +52,11 @@ public:
     virtual void Init(Vector3 pos);
     virtual void Update(double dt);
 
-    void LinkTo(Entity* entity);
-
     virtual void SetupMesh();
+    virtual void HandleInteraction(GameObject* b, double dt);
 
 private:
-    Entity* link;
+    float state;
 };
 
 #endif /* GOLEMHAND_H */

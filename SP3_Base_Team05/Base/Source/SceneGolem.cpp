@@ -72,8 +72,8 @@ void SceneGolem::Init()
     golemhead->SetType(GameObject::GO_ENTITY);
     golemhead->SetActive(true);
     golemhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemhead->SetScale(10, 10, 10);
-    golemhead->SetMass(3);
+    golemhead->SetScale(12, 12, 12);
+    golemhead->SetMass(999);
     golemhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 100.f, 0));
 
     golemlhead = new GolemLeftHand();
@@ -188,6 +188,36 @@ void SceneGolem::Update(double dt)
     mainCamera->Update(dt);
     mainCamera->Constrain(*player, mainCamera->target);
     UpdateGameObjects(dt);
+
+    if (golemhead->GetHP() <= 500)
+    {
+        golemrhead->SetSpeedLimit(90);
+        golemrhead->SetMovementSpeed(5500);
+        golemlhead->SetSpeedLimit(90);
+        golemlhead->SetMovementSpeed(5500);
+    }
+    else if (golemhead->GetHP() <= 1500)
+    {
+        golemrhead->SetSpeedLimit(70);
+        golemrhead->SetMovementSpeed(2300);
+        golemlhead->SetSpeedLimit(70);
+        golemlhead->SetMovementSpeed(2300);
+
+        golemlhead;
+    }
+    else if (golemhead->GetHP() <= 3000)
+    {
+        golemrhead->SetSpeedLimit(60);
+        golemrhead->SetMovementSpeed(1700);
+        golemlhead->SetSpeedLimit(60);
+        golemlhead->SetMovementSpeed(1700);
+    }
+    
+    if (golemhead->GetHP() <= 0)
+    {
+        golemrhead->SetActive(false);
+        golemlhead->SetActive(false);
+    }
 }
 
 void SceneGolem::Render()
@@ -364,6 +394,7 @@ void SceneGolem::RenderHUD()
 {
     // Render the crosshair
     modelStack.PushMatrix();
+    modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
     modelStack.Scale(10, 10, 10);
     RenderMesh(meshList[GEO_CROSSHAIR], false);
     modelStack.PopMatrix();
@@ -398,6 +429,19 @@ void SceneGolem::RenderHUD()
     ss5.precision(6);
     ss5 << "Shield HP: " << player->shield->GetCurrHealth();
     RenderTextOnScreen(meshList[GEO_TEXT], ss5.str(), Color(0, 1, 0), 3, 0, 18);
+
+    ss.str("");
+    ss << "HP";
+    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
+    RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 5) + 11, 55.5f, player->maxHealth / 5, false);
+    RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
+
+    ss.str("");
+    ss.precision(2);
+    ss << "Dash";
+    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
+    RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
+    RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
 }
 
 void SceneGolem::Exit()

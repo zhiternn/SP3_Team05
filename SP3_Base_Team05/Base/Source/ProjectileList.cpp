@@ -3,6 +3,7 @@
 #include "Trap.h"
 #include "MeshManager.h"
 
+
 void Hook::Update(double dt)
 {
 	CProjectile::Update(dt);
