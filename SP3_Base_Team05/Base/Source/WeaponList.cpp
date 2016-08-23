@@ -101,7 +101,7 @@ void Splitgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			
 			*proj = *projectileInfo;
 			proj->SetLifetime(2.0f);
-			proj->SetScale(Vector3(2.0f, 2.0f, 2.0f));
+			proj->SetScale(2.0f, 2.0f, 2.0f);
 			proj->Init(pos, rotate * dir);
 			proj->SetTeam(team);
 		}
