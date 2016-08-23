@@ -53,26 +53,25 @@ private:
 };
 
 
-class Trap : public CProjectile
+class TrapProjectile : public CProjectile
 {
 public:
-	Trap():CProjectile(PROJECTILE_TYPE::TRAP){
-		SetDMG(10);
-		SetLifetime(30);
-		SetProjectileSpeed(0);
+	TrapProjectile() :CProjectile(PROJECTILE_TYPE::TRAP){
+		SetDMG(0);
+		SetLifetime(2);
+		SetProjectileSpeed(50.0f);
 		SetScale(1, 1, 1);
+		SetMass(50);
+		trapLifeTIme = 5.f;
 	}
-	~Trap(){}
+	~TrapProjectile(){}
 
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject *b, double dt);
 
-	//void CalculateChance(Enemy *enemy);
-
-	bool Capture();
 private:
+	float trapLifeTIme;
 
-	float captureChance;
 };
 
 class Shield : public CProjectile
@@ -143,5 +142,6 @@ public:
 
 Bullet* FetchBullet();
 Hook* FetchHook();
+TrapProjectile* FetchTrapProjectile();
 
 #endif // !PROJECTILELIST_H

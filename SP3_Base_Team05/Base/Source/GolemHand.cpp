@@ -1,10 +1,10 @@
 #include "GolemHand.h"
 #include "GolemHead.h"
 #include "MeshManager.h"
+#include "Player.h"
 
 GolemRightHand::GolemRightHand() :
-Enemy(),
-link(NULL)
+Enemy()
 {
 }
 
@@ -21,7 +21,7 @@ void GolemRightHand::Init(Vector3 pos)
 	entityType = Entity::ENTITY_BOSS_BODY;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BALL;
-    mass = 100;
+    mass = 4;
     destinationCountdown = 5.f;
     speedLimit = 45.f;
     movementSpeed = 800.f;
@@ -63,23 +63,32 @@ void GolemRightHand::Update(double dt)
     }
 }
 
-void GolemRightHand::LinkTo(Entity* entity)
-{
-    link = entity;
-}
-
 void GolemRightHand::SetupMesh()
 {
     float degree = Math::RadianToDegree(atan2(front.y, front.x));
     modelStack.Translate(pos.x, pos.y, pos.z);
     modelStack.Rotate(degree, 0, 0, 1);
+    modelStack.Rotate(60, 0, 1, 0);
     modelStack.Scale(scale.x, scale.y, scale.z);
-    mesh = meshList[GEO_SPHERE];
+    mesh = meshList[GEO_GOLEMHAND];
+}
+
+void GolemRightHand::HandleInteraction(GameObject* b, double dt)
+{
+    if (CheckCollision(b, dt))
+    {
+        CollisionResponse(b);
+
+        Player* player = dynamic_cast<Player*>(b);
+        if (player)
+        {
+            player->TakeDamage(ATTACK_COLLIDE_DAMAGE);
+        }
+    }
 }
 
 GolemLeftHand::GolemLeftHand() :
-Enemy(),
-link(NULL)
+Enemy()
 {
 }
 
@@ -96,12 +105,13 @@ void GolemLeftHand::Init(Vector3 pos)
     type = GameObject::GO_ENTITY;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BALL;
-    mass = 100;
+    mass = 4;
     destinationCountdown = 5.f;
     speedLimit = 45.f;
     movementSpeed = 800.f;
 
     captureRatio = 1.f;
+    state = 0;
 }
 
 void GolemLeftHand::Update(double dt)
@@ -122,15 +132,23 @@ void GolemLeftHand::Update(double dt)
             {
                 destination = (target->pos - 40) + offsetDir.Normalized();
                 ChangeDestination(MOVETO_TARGET, destination);
+                state == 2;
+            }
+
+            if (state == 2)
+            {
+                Vector3 destination = (target->pos - 50) + offsetDir.Normalized();
+                ChangeDestination(MOVETO_TARGET, destination);
+                if (Reached(destination))
+                {
+                    destination = (target->pos + 40) + offsetDir.Normalized();
+                    ChangeDestination(MOVETO_TARGET, destination);
+                }
+                state = 1;
             }
 
         }
     }
-}
-
-void GolemLeftHand::LinkTo(Entity* entity)
-{
-    link = entity;
 }
 
 void GolemLeftHand::SetupMesh()
@@ -138,6 +156,21 @@ void GolemLeftHand::SetupMesh()
     float degree = Math::RadianToDegree(atan2(front.y, front.x));
     modelStack.Translate(pos.x, pos.y, pos.z);
     modelStack.Rotate(degree, 0, 0, 1);
+    modelStack.Rotate(60, 0, 1, 0);
     modelStack.Scale(scale.x, scale.y, scale.z);
-    mesh = meshList[GEO_SPHERE];
+    mesh = meshList[GEO_GOLEMHAND];
+}
+
+void GolemLeftHand::HandleInteraction(GameObject* b, double dt)
+{
+    if (CheckCollision(b, dt))
+    {
+        CollisionResponse(b);
+
+        Player* player = dynamic_cast<Player*>(b);
+        if (player)
+        {
+            player->TakeDamage(ATTACK_COLLIDE_DAMAGE);
+        }
+    }
 }

@@ -27,6 +27,9 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 				proj = FetchHook();
 				*static_cast<Hook*>(proj) = *static_cast<Hook*>(projectileInfo);
 				break;
+			case CProjectile::TRAP:
+				proj = FetchTrapProjectile();
+				break;
 
 			default:break;
 			}
@@ -51,6 +54,9 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			break;
 		case CProjectile::HOOK:
 			proj = FetchHook();
+			break;
+		case CProjectile::TRAP:
+			proj = FetchTrapProjectile();
 			break;
 
 		default:break;
@@ -94,6 +100,9 @@ void Splitgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 				break;
 			case CProjectile::HOOK:
 				proj = FetchHook();
+				break;
+			case CProjectile::TRAP:
+				proj = FetchTrapProjectile();
 				break;
 
 			default:break;

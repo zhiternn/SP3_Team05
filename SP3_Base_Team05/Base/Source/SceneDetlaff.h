@@ -8,10 +8,12 @@
 #include "WeaponList.h"
 #include "ProjectileList.h"
 #include "Detlaff.h"
+#include "SceneManager.h"
 
 #include <vector>
 
 using std::vector;
+class SceneManager;
 
 class SceneDetlaff : public SceneBase
 {
@@ -54,6 +56,8 @@ private:
 	Vector3 mousePos_worldBased;
 
 	CDetlaff* detlaff;
+
+	SceneManager* man;
 };
 
 #endif

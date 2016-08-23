@@ -14,6 +14,8 @@ public:
 	void FireOnTarget(Entity *target);
 	void Shoot(Vector3 dir);
 
+	virtual void SetupMesh();
+
 	enum BOSS_STATE
 	{
 		STATE_1,
@@ -27,6 +29,7 @@ public:
 private: 
 	Entity *target;
 	Weapon* weapon;
+	Weapon* weapon_extra;
 	
 };
 

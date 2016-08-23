@@ -152,6 +152,7 @@ void Player::ChangeProjectileUp()
 	projectile = inventory->bullets[projectileIter];
 	weapon->AssignProjectile(projectile);
 }
+
 void Player::ChangeProjectileDown()
 {
 	if (projectileIter <= 0)

@@ -15,7 +15,6 @@ public:
 	Player();
 	~Player();
 
-
 	// Functions
 	void Init(Vector3 pos, Vector3 scale, Vector3 front);
 	virtual void Update(double dt);

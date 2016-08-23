@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Controls.h"
 #include "MeshManager.h"
+#include "SceneGolem.h"
 
 #include <sstream>
 
@@ -48,7 +49,7 @@ void SceneDetlaff::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 150;
+	m_orthoHeight = 100;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -121,7 +122,7 @@ void SceneDetlaff::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
 	{
-		CProjectile *proj_trap = new Trap();
+		CProjectile *proj_trap = new TrapProjectile();
 		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
 		proj_trap->SetVelocity(0, 0, 0);
 		proj_trap->SetColliderType(Collider::COLLIDER_BOX);
@@ -157,12 +158,9 @@ void SceneDetlaff::PlayerController(double dt)
 	{
 		player->ChangeWeaponUp();
 	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_M))
+	if (Controls::GetInstance().OnPress(Controls::KEY_B))
 	{
-		Vector3 mouseDir;
-		mouseDir = (player->pos - detlaff->pos).Normalized();
-		//detlaff->Shoot(mouseDir);
+		man->ChangeScene(1);
 	}
 }
 
@@ -389,10 +387,11 @@ void SceneDetlaff::RenderWorld()
 void SceneDetlaff::RenderHUD()
 {
 	// Render the crosshair
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[GEO_CROSSHAIR], false);
-	modelStack.PopMatrix();
+    modelStack.PushMatrix();
+    modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
+    modelStack.Scale(10, 10, 10);
+    RenderMesh(meshList[GEO_CROSSHAIR], false);
+    modelStack.PopMatrix();
 
 	//On screen text
 	std::ostringstream ss;
@@ -494,49 +493,9 @@ void SceneDetlaff::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
-	/*switch (go->GetType())
-	{
-	case GameObject::GO_ENVIRONMENT:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		if (go->GetCollider().type == Collider::COLLIDER_BALL)
-			RenderMesh(meshList[GEO_SPHERE], false);
-		else
-			RenderMesh(meshList[GEO_CUBE], false);
-	}
-	break;
-	case GameObject::GO_PROJECTILE:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-	break;
-	case GameObject::GO_ENTITY:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-	break;
-
-	default:break;
-	}*/
-
+	go->SetupMesh();
 	if (go->mesh)
-	{
-		go->SetupMesh();
 		RenderMesh(go->mesh, false);
-	}
 
 	modelStack.PopMatrix();
 }

@@ -16,10 +16,13 @@
 #include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
 #include "SceneDetlaff.h"
+#include "MainMenu.h"
 
 #include "MeshManager.h"
 
 GLFWwindow* m_window;
+int Application::m_window_width = 800;
+int Application::m_window_height = 600;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0,
@@ -43,6 +46,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 void resize_callback(GLFWwindow* window, int w, int h)
 {
 	glViewport(0, 0, w, h);
+	Application::GetInstance().SetWindowWidth(w);
+	Application::GetInstance().SetWindowHeight(h);
 }
 
 void mouseWheel_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -109,6 +114,14 @@ void Application::SetCursorPos(double xPos, double yPos)
 void Application::GetCursorPos(double &xpos, double &ypos)
 {
 	glfwGetCursorPos(m_window, &xpos, &ypos);
+}
+void Application::SetWindowWidth(int w)
+{
+	m_window_width = w;
+}
+void Application::SetWindowHeight(int h)
+{
+	m_window_height = h;
 }
 int Application::GetWindowWidth()
 {
@@ -247,21 +260,30 @@ void Application::Init()
 
 	//Load media
 	LoadMedia();
+	
 }
 
 void Application::Run()
 {
 	Controls &control = Controls::GetInstance();
 	MeshManager &meshManager = MeshManager::GetInstance();
+	SceneManager &sm = SceneManager::GetInstance();
+
 	meshManager.Init();
 
-	Scene* scene = new SceneSnakeBoss();
+	//Scene* scene = new SceneSnakeBoss();
 	//Scene* scene = new SceneSummoner();
+	sm.SetScene(new SceneSnakeBoss());
 	//Scene* scene = new SceneDetlaff();
 	//Scene* scene = new SceneGolem();
+    //Scene* scene = new MainMenu();
 
 	//Main Loop
-	scene->Init();
+
+	sm.GetScene()->Init();
+
+	//scene->Init();
+    HideCursor();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !Controls::GetInstance().OnPress(Controls::KEY_ESC))
@@ -275,7 +297,7 @@ void Application::Run()
 			//GetMouseUpdate();
 			control.UpdateInputs();
 			//scene->Update(m_dElapsedTime);
-			scene->Update(m_dElapsedTime);
+			sm.GetScene()->Update(m_dElapsedTime);
 			m_dAccumulatedTime_ThreadOne = 0.0;
 		}
 		if (m_dAccumulatedTime_ThreadTwo > 1.0)
@@ -284,7 +306,7 @@ void Application::Run()
 			m_dAccumulatedTime_ThreadTwo = 0.0;
 		}
 		//scene->Render();
-		scene->Render();
+		sm.GetScene()->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...

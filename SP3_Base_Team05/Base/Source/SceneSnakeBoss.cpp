@@ -341,14 +341,14 @@ void SceneSnakeBoss::RenderWorld()
 
 void SceneSnakeBoss::RenderHUD()
 {
-	// Render the crosshair
-	//modelStack.PushMatrix();
-	//modelStack.Scale(10, 10, 10);
-	//RenderMesh(meshList[GEO_CROSSHAIR], false);
-	//modelStack.PopMatrix();
-
 	//Render Minimap
 	RenderMinimap();
+
+    modelStack.PushMatrix();
+    modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
+    modelStack.Scale(10, 10, 10);
+    RenderMesh(meshList[GEO_CROSSHAIR], false);
+    modelStack.PopMatrix();
 
 	//On screen text
 	std::ostringstream ss;

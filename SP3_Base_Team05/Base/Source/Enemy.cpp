@@ -192,3 +192,19 @@ void Enemy::HandleInteraction(GameObject* b, double dt)
 		CollisionResponse(b);
 	}
 }
+void Enemy::SetSpeedLimit(float speed)
+{
+    this->speedLimit = speed;
+}
+void Enemy::SetMovementSpeed(float speed)
+{
+    this->movementSpeed = speed;
+}
+float Enemy::GetSpeedLimit()
+{
+    return this->speedLimit;
+}
+float Enemy::GetMovementSpeed()
+{
+    return this->movementSpeed;
+}
