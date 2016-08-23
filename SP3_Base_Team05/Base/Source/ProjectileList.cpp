@@ -1,6 +1,11 @@
 #include "ProjectileList.h"
 #include "Rope.h"
 
+#include "ForceField.h"
+
+#include "MeshManager.h"
+
+
 void Hook::Update(double dt)
 {
 	CProjectile::Update(dt);
@@ -37,27 +42,31 @@ void Trap::HandleInteraction(GameObject *b, double dt)
 {
 	if (this->team == b->GetTeam())
 		return;
+
+	if (CheckCollision(b, dt))
+	{
+		CollisionResponse(b);
+		if (b->GetType() == GameObject::GO_ENTITY)
+		{
+			Entity* entity = dynamic_cast<Entity*>(b);
+			if (entity)
+			{
+				entity->TakeDamage(proj_dmg);
+
+				ForceField *field;
+				field->Init(this->pos, b, this->fieldDuration);
+				field->Update(dt);
+			}
+		}
+
+		this->SetActive(false);
+	}
 }
 
-//void Trap::CalculateChance(Enemy *enemy)
-//{
-//	captureChance = ((100 - enemy->GetHP()) * enemy->GetRate()) / 100;
-//}
 
 bool Trap::Capture()
 {
-	float lucky7 = Math::RandFloatMinMax(0, 1.f);
-
-	if (lucky7 > this->captureChance)
-	{
-		//unlucky 7 top kek
-		return false;
-	}
-	else
-	{
-		//actually lucky 7 massive kek
-		return true;
-	}
+	return false;
 }
 
 void Trap::Update(double dt)
@@ -249,6 +258,28 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 
 		this->SetActive(false);
 	}
+}
+
+void Bullet::SetupMesh()
+{
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+
+	switch (this->team)
+	{
+	case TEAM_ENEMY:
+		meshList[GEO_BULLET]->material.kAmbient.Set(0.5f, 0.1f, 0.1f);
+		break;
+	case TEAM_PLAYER:
+		meshList[GEO_BULLET]->material.kAmbient.Set(0.1f, 0.1f, 0.5f);
+		break;
+
+	default: // team neutral
+		meshList[GEO_BULLET]->material.kAmbient.Set(0.3f, 0.3f, 0.3f);
+		break;
+	}
+
+	mesh = meshList[GEO_BULLET];
 }
 
 Bullet* FetchBullet()

@@ -25,6 +25,8 @@ public:
 	bool Reached(Vector3 pos);
 
 	std::vector<Vector3> destinations;
+	float speedLimit;
+	float movementSpeed;
 
     void SetSpeedLimit(float speed);
     void SetMovementSpeed(float speed);
@@ -50,8 +52,6 @@ protected:
 	float destinationCountdown;
 
 	Entity* target;
-	float speedLimit;
-	float movementSpeed;
 	float captureRatio;;
 };
 

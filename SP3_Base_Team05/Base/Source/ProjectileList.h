@@ -61,6 +61,7 @@ public:
 		SetLifetime(30);
 		SetProjectileSpeed(0);
 		SetScale(1, 1, 1);
+		fieldDuration = 5.0f;
 	}
 	~Trap(){}
 
@@ -72,7 +73,7 @@ public:
 	bool Capture();
 private:
 
-	float captureChance;
+	float fieldDuration;
 };
 
 class Shield : public CProjectile
@@ -138,6 +139,7 @@ public:
 
 	virtual void Update(double dt);																//< Update
 	virtual void HandleInteraction(GameObject* b, double dt);									//< Handles Interaction for Bullet
+	virtual void SetupMesh();
 };
 
 Bullet* FetchBullet();

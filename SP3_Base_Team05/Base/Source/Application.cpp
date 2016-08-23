@@ -256,9 +256,9 @@ void Application::Run()
 	meshManager.Init();
 
 
-	Scene* scene = new SceneSnakeBoss();
+	//Scene* scene = new SceneSnakeBoss();
 	//Scene* scene = new SceneSummoner();
-	//Scene* scene = new SceneDetlaff();
+	Scene* scene = new SceneDetlaff();
 	//Scene* scene = new SceneGolem();
 
 	//Main Loop
