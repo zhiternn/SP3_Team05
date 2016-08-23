@@ -449,7 +449,7 @@ void SceneSnakeBoss::RenderGO(GameObject* go)
 
 	go->SetupMesh();
 	if (go->mesh)
-		RenderMesh(go->mesh, false);
+		RenderMesh(go->mesh, true);
 
 	modelStack.PopMatrix();
 }

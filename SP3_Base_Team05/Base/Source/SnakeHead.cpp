@@ -17,14 +17,14 @@ SnakeHead::~SnakeHead()
 void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 {
 	Enemy::Init(pos);
-	scale;
-	maxBodyCount = bodyCount;
-	speedLimit = 20.0f;
-	movementSpeed = 40.0f;
-	health;
-	captureRatio;
+	//scale;
+	this->maxBodyCount = bodyCount;
+	this->speedLimit = 20.0f;
+	this->movementSpeed = 40.0f;
+	//health;
+	//captureRatio;
 	actionTimer = ATTACK_TIMER_MAX;
-	health = 2000;
+	health = 1010;
 
 	if (bodyCount > 0)
 	{
@@ -55,44 +55,47 @@ void SnakeHead::Update(double dt)
 	if (vel.IsZero() == false)
 		front = vel.Normalized();
 
-	if (!UpdateMovement(dt))
+	if (!isDead)
 	{
-		if (target)
+		if (!UpdateMovement(dt))
 		{
-			float combinedRadius = scale.x + target->GetScale().x;
-			float offset = Math::RandFloatMinMax(combinedRadius * 3, combinedRadius * 4);
-			Vector3 offsetDir = target->pos - pos;
-			offsetDir.Set(-offsetDir.y, offsetDir.x, offsetDir.z);
+			if (target)
+			{
+				float combinedRadius = scale.x + target->GetScale().x;
+				float offset = Math::RandFloatMinMax(combinedRadius * 3, combinedRadius * 4);
+				Vector3 offsetDir = target->pos - pos;
+				offsetDir.Set(-offsetDir.y, offsetDir.x, offsetDir.z);
 
-			Vector3 destination = target->pos + offsetDir.Normalized() * offset;
-			ChangeDestination(MOVETO_TARGET, destination);
+				Vector3 destination = target->pos + offsetDir.Normalized() * offset;
+				ChangeDestination(MOVETO_TARGET, destination);
+			}
 		}
-	}
-	if (backLink)
-	{
-		if (!backLink->IsDead())
-			Pull(backLink);
-		else
+		if (backLink)
 		{
-			Reconnect();
+			if (!backLink->IsDead())
+				Pull(backLink);
+			else
+			{
+				Reconnect();
+			}
 		}
-	}
 
-	actionTimer -= dt;
-	if (actionTimer <= 0.0f)
-	{
-		actionTimer = Math::RandFloatMinMax(ATTACK_TIMER_MIN, ATTACK_TIMER_MAX);
-		Action();
-	}
+		actionTimer -= dt;
+		if (actionTimer <= 0.0f)
+		{
+			actionTimer = Math::RandFloatMinMax(ATTACK_TIMER_MIN, ATTACK_TIMER_MAX);
+			Action();
+		}
 
-	static bool hehe = false;
+		static bool hehe = false;
 
-	if (health <= 1000 && hehe == false)
-		hehe = true;
+		if (health <= 1000 && hehe == false)
+			hehe = true;
 
-	if (hehe)
-	{
-		Upgrade();
+		if (hehe)
+		{
+			Upgrade();
+		}
 	}
 }
 
@@ -127,6 +130,18 @@ void SnakeHead::Die()
 {
 	isDead = true;
 	active = false;
+
+	if (backLink)
+	{
+		SnakeBody* body = backLink;
+		body->Die();
+
+		while (body->GetBackLink() != NULL)
+		{
+			body = body->GetBackLink();
+			body->Die();
+		}
+	}
 }
 
 bool SnakeHead::UpdateMovement(double dt)
@@ -168,9 +183,24 @@ bool SnakeHead::UpdateMovement(double dt)
 
 void SnakeHead::Upgrade()
 {
-	//this->movementSpeed = 80;
-	//this->speedLimit = 160;
-	//this->mass = 10.0f;
+	//this->movementSpeed = 20.f;
+	//this->speedLimit = 40.0f;
+
+	//if (backLink)
+	//{
+	//	SnakeBody* body = backLink;
+
+	//	body->movementSpeed = this->movementSpeed * 0.25f;
+	//	body->speedLimit = this->speedLimit * 0.75f;
+
+	//	while (body->GetBackLink() != NULL)
+	//	{
+	//		body = body->GetBackLink();
+
+	//		body->movementSpeed = this->movementSpeed * 0.25f;
+	//		body->speedLimit = this->speedLimit * 0.75f;
+	//	}
+	//}
 }
 
 void SnakeHead::Reconnect()
@@ -218,6 +248,10 @@ int SnakeHead::GetBodyCount()
 		while (last->GetBackLink() != NULL)
 		{
 			last = last->GetBackLink();
+
+			if (last == last->GetBackLink())
+				break;
+
 			count++;
 		}
 		return count;
@@ -232,5 +266,5 @@ void SnakeHead::SetupMesh()
 	modelStack.Translate(pos.x, pos.y, pos.z);
 	modelStack.Rotate(degree, 0, 0, 1);
 	modelStack.Scale(scale.x, scale.y, scale.z);
-	this->mesh = meshList[GEO_SPHERE];
+	this->mesh = meshList[GEO_SNAKE_HEAD];
 }

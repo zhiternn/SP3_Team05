@@ -64,7 +64,7 @@ void SnakeBody::Update(double dt)
 	}
 	else
 	{
-		if (target)
+		if (target && !target->IsDead())
 		{
 			if (target->pos != pos)
 				vel += (target->pos - pos).Normalized() * movementSpeed * 0.1f;

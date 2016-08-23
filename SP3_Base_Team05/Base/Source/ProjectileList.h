@@ -139,6 +139,7 @@ public:
 
 	virtual void Update(double dt);																//< Update
 	virtual void HandleInteraction(GameObject* b, double dt);									//< Handles Interaction for Bullet
+	virtual void SetupMesh();
 };
 
 Bullet* FetchBullet();

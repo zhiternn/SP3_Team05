@@ -1,6 +1,10 @@
 #include "ProjectileList.h"
 #include "Rope.h"
+
 #include "ForceField.h"
+
+#include "MeshManager.h"
+
 
 void Hook::Update(double dt)
 {
@@ -254,6 +258,28 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 
 		this->SetActive(false);
 	}
+}
+
+void Bullet::SetupMesh()
+{
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+
+	switch (this->team)
+	{
+	case TEAM_ENEMY:
+		meshList[GEO_BULLET]->material.kAmbient.Set(0.5f, 0.1f, 0.1f);
+		break;
+	case TEAM_PLAYER:
+		meshList[GEO_BULLET]->material.kAmbient.Set(0.1f, 0.1f, 0.5f);
+		break;
+
+	default: // team neutral
+		meshList[GEO_BULLET]->material.kAmbient.Set(0.3f, 0.3f, 0.3f);
+		break;
+	}
+
+	mesh = meshList[GEO_BULLET];
 }
 
 Bullet* FetchBullet()

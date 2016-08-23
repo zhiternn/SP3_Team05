@@ -20,7 +20,7 @@ void Summoner::Init(Vector3 pos)
 	mass = 1;
 	speedLimit = 30.0f;
 	movementSpeed = 40.0f;
-	scale.Set(10, 10, 10);
+	scale.Set(15, 15, 15);
 	health = 500;
 	maxHealth = health;
 	isDead = false;
