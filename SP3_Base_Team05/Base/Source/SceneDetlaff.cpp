@@ -48,7 +48,7 @@ void SceneDetlaff::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 150;
+	m_orthoHeight = 100;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -156,13 +156,6 @@ void SceneDetlaff::PlayerController(double dt)
 	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
 	{
 		player->ChangeWeaponUp();
-	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_M))
-	{
-		Vector3 mouseDir;
-		mouseDir = (player->pos - detlaff->pos).Normalized();
-		//detlaff->Shoot(mouseDir);
 	}
 }
 
@@ -494,49 +487,9 @@ void SceneDetlaff::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
-	/*switch (go->GetType())
-	{
-	case GameObject::GO_ENVIRONMENT:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		if (go->GetCollider().type == Collider::COLLIDER_BALL)
-			RenderMesh(meshList[GEO_SPHERE], false);
-		else
-			RenderMesh(meshList[GEO_CUBE], false);
-	}
-	break;
-	case GameObject::GO_PROJECTILE:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-	break;
-	case GameObject::GO_ENTITY:
-	{
-		float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
-		modelStack.Translate(go->GetPosition().x, go->GetPosition().y, go->GetPosition().z);
-		modelStack.Rotate(degree, 0, 0, 1);
-		modelStack.Scale(go->GetScale().x, go->GetScale().y, go->GetScale().z);
-		RenderMesh(meshList[GEO_SPHERE], false);
-	}
-	break;
-
-	default:break;
-	}*/
-
+	go->SetupMesh();
 	if (go->mesh)
-	{
-		go->SetupMesh();
 		RenderMesh(go->mesh, false);
-	}
 
 	modelStack.PopMatrix();
 }

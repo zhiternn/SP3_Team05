@@ -1,5 +1,6 @@
 #include "ProjectileList.h"
 #include "Rope.h"
+#include "ForceField.h"
 
 void Hook::Update(double dt)
 {
@@ -37,27 +38,31 @@ void Trap::HandleInteraction(GameObject *b, double dt)
 {
 	if (this->team == b->GetTeam())
 		return;
+
+	if (CheckCollision(b, dt))
+	{
+		CollisionResponse(b);
+		if (b->GetType() == GameObject::GO_ENTITY)
+		{
+			Entity* entity = dynamic_cast<Entity*>(b);
+			if (entity)
+			{
+				entity->TakeDamage(proj_dmg);
+
+				ForceField *field;
+				field->Init(this->pos, b, this->fieldDuration);
+				field->Update(dt);
+			}
+		}
+
+		this->SetActive(false);
+	}
 }
 
-//void Trap::CalculateChance(Enemy *enemy)
-//{
-//	captureChance = ((100 - enemy->GetHP()) * enemy->GetRate()) / 100;
-//}
 
 bool Trap::Capture()
 {
-	float lucky7 = Math::RandFloatMinMax(0, 1.f);
-
-	if (lucky7 > this->captureChance)
-	{
-		//unlucky 7 top kek
-		return false;
-	}
-	else
-	{
-		//actually lucky 7 massive kek
-		return true;
-	}
+	return false;
 }
 
 void Trap::Update(double dt)

@@ -49,12 +49,14 @@ void MeshManager::Init()
 	meshList[GEO_ROPE] = MeshBuilder::GenerateQuad("rope", Color(1, 1, 1), 1);
 	meshList[GEO_ROPE]->textureArray[0] = LoadTGA("Image//rope.tga");
 
+	meshList[GEO_FIELD] = MeshBuilder::GenerateSphere("Forcefield", Color(1, 1, 1), 9, 18, 1.f);
+
 	meshList[GEO_SNAKE_HEAD];
 	meshList[GEO_SNAKE_BODY] = MeshBuilder::GenerateOBJ("snake_body", "Obj\\snake_body.obj");
 	meshList[GEO_SNAKE_BODY]->textureArray[0] = LoadTGA("Image//snake_body.tga");
 
 	meshList[GEO_SUMMONER] = MeshBuilder::GenerateOBJ("summoner", "Obj\\summoner.obj");
-	meshList[GEO_SUMMONER]->textureArray[0] = LoadTGA("Image//summoner.tga");
+	//meshList[GEO_SUMMONER]->textureArray[0] = LoadTGA("Image//summoner.tga");
 	meshList[GEO_SUMMONS] = MeshBuilder::GenerateOBJ("summoner", "Obj\\summons.obj");
 
 	meshList[GEO_DETLAFF_1] = MeshBuilder::GenerateQuad("Detlaff_1", Color(1, 1, 1), 1.f);
