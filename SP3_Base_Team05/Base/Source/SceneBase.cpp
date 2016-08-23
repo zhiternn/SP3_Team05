@@ -120,7 +120,7 @@ void SceneBase::Init()
 	lights[0].cosCutoff = cos(Math::DegreeToRadian(45));
 	lights[0].cosInner = cos(Math::DegreeToRadian(30));
 	lights[0].exponent = 3.f;
-	lights[0].spotDirection.Set(0.2f, -0.2f, -1.f);
+	lights[0].spotDirection.Set(0.2f, -0.2f, 1.f);
 
 	lights[1].type = Light::LIGHT_POINT;
 	lights[1].position.Set(1, 1, 0);
