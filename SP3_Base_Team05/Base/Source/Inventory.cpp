@@ -8,6 +8,7 @@ Inventory::Inventory()
 
 	bullets.push_back(new Bullet());
 	bullets.push_back(new Hook());
+	bullets.push_back(new TrapProjectile());
 }
 
 Inventory::~Inventory()

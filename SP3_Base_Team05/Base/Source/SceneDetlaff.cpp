@@ -121,7 +121,7 @@ void SceneDetlaff::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
 	{
-		CProjectile *proj_trap = new Trap();
+		CProjectile *proj_trap = new TrapProjectile();
 		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
 		proj_trap->SetVelocity(0, 0, 0);
 		proj_trap->SetColliderType(Collider::COLLIDER_BOX);

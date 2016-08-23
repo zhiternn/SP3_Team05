@@ -362,27 +362,47 @@ void SceneSummoner::RenderHUD()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
 
 	ss.str("");
-	ss.precision(1);
-	ss << "Weapon: " << player->weaponIter;
+	ss << "Weapon: ";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
+	switch (player->weaponIter)
+	{
+	case 0:
+		RenderUI(meshList[GEO_WEAPON_SHOTGUN], 7, 25, 58.5f, 1, false);
+		break;
+	case 1:
+		RenderUI(meshList[GEO_WEAPON_MACHINEGUN], 7, 25, 58.5f, 1, false);
+		break;
+	case 2:
+		RenderUI(meshList[GEO_WEAPON_SPLITGUN], 7, 25, 58.5f, 1, false);
+		break;
+	}
 
 	ss.str("");
-	ss << "Projectile: " << player->projectileIter;
+	ss << "Bullet: ";
+	switch (player->projectileIter)
+	{
+	case 0:
+		ss << "Normal";
+		break;
+	case 1:
+		ss << "Hook";
+		break;
+	}
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
 
 	ss.str("");
+	ss.precision(1);
 	ss << "HP";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
-	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 5) + 11, 55.5f, player->maxHealth / 5, false);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
+	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 10) + 11, 55.5f, player->maxHealth / 10, false);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 55.5f, player->GetHP() / 10, false);
 
 	ss.str("");
 	ss.precision(2);
 	ss << "Dash";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
-	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
+	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * player->maxHealth / 10) + 11, 52.5f, DASH_COOLDOWN * player->maxHealth / 10, false);
+	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10, false);
 }
 
 void SceneSummoner::Exit()
@@ -459,13 +479,12 @@ void SceneSummoner::RenderGameObjects()
 				RenderMesh(GameObject::goList[i]->mesh, false);
 
 			modelStack.PopMatrix();
-
-			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
-			if (entity)
+			Enemy* entity = dynamic_cast<Enemy*>(GameObject::goList[i]);
+			if (entity && !entity->IsDead())
 			{
 				modelStack.PushMatrix();
-				modelStack.Scale(entity->GetHP(), 1, 1);
-				modelStack.Translate(entity->pos.x, entity->pos.y, entity->pos.z);
+				modelStack.Translate(entity->pos.x, entity->pos.y, 5);
+				modelStack.Scale(entity->GetHP() / 5, 3, 1);
 				RenderMesh(meshList[GEO_HEALTH], false);
 				modelStack.PopMatrix();
 			}

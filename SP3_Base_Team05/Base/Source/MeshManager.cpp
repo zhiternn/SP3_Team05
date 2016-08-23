@@ -51,6 +51,7 @@ void MeshManager::Init()
 
 	meshList[GEO_ROPE] = MeshBuilder::GenerateQuad("rope", Color(1, 1, 1), 1);
 	meshList[GEO_ROPE]->textureArray[0] = LoadTGA("Image//rope.tga");
+	meshList[GEO_TRAP] = MeshBuilder::GenerateSphere("trap", Color(1, 0, 0), 9, 18, 1.f);
 
 	meshList[GEO_SNAKE_HEAD] = MeshBuilder::GenerateOBJ("snake_head", "Obj\\snake_head.obj");
 	meshList[GEO_SNAKE_HEAD]->textureArray[0] = LoadTGA("Image//snake_head.tga");

@@ -2,8 +2,6 @@
 #include "Controls.h"
 #include "MeshManager.h"
 
-using namespace std;
-
 Summoner::Summoner()
 {
 }
@@ -18,8 +16,8 @@ void Summoner::Init(Vector3 pos)
 	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
-	speedLimit = 30.0f;
-	movementSpeed = 40.0f;
+	speedLimit = 50.f;
+	movementSpeed = 50.0f;
 	scale.Set(15, 15, 15);
 	health = 500;
 	maxHealth = health;
@@ -30,7 +28,7 @@ void Summoner::Init(Vector3 pos)
 	chaseThreshold = safetyThreshold * 1.5f;
 	for (int i = 0; i < AMOUNT_OF_SUMMONS; ++i)
 	{
-		Summons* summons = new Summons();
+		Summons* summons = FetchSummons();
 		Vector3 offset(Math::RandFloatMinMax(0, 5), Math::RandFloatMinMax(0, 5), 0);
 		summons->Init(pos + offset);
 		summons->SetTarget(target);
@@ -52,12 +50,26 @@ void Summoner::Update(double dt)
 	if (summonsList.size() < AMOUNT_OF_SUMMONS && summonCooldownTimer <= 0)
 	{
 		summonCooldownTimer = SUMMONING_COOLDOWN;
-		Summons* summons = new Summons();
+		Summons* summons = FetchSummons();
 		summons->Init(this->pos);
 		summons->SetTarget(target);
 		summonsList.push_back(summons);
 		GameObject::goList.push_back(summons);
 	}
+	if (this->health < maxHealth)
+	{
+		static float healthregenCooldown = 0;
+		healthregenCooldown += dt;
+		if (healthregenCooldown >= 1)
+		{
+			healthregenCooldown = 0.0f;
+			if (health + HEALTH_REGEN_PERSEC > maxHealth)
+				health = maxHealth;
+			else
+				health += HEALTH_REGEN_PERSEC;
+		}
+	}
+	std::cout << health << std::endl;
 	if (!summonsList.empty())
 	{
 		Defend();
@@ -196,4 +208,39 @@ void Summoner::SetupMesh()
 	modelStack.Scale(scale.x, scale.y, scale.z);
 
 	mesh = meshList[GEO_SUMMONER];
+}
+
+Summons* FetchSummons()
+{
+	std::vector<GameObject*>::iterator it;
+	for (it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
+	{
+		Summons *summons = dynamic_cast<Summons*>((*it));
+		if (summons && summons->IsActive() == false)
+		{
+			summons->GameObject::SetType(GameObject::GO_ENTITY);
+			summons->SetActive(true);
+			return summons;
+		}
+	}
+
+	for (int i = 0; i < 10; ++i)
+	{
+		GameObject::goList.push_back(new Summons());
+	}
+	Summons *summons = dynamic_cast<Summons*>(*(GameObject::goList.end() - 10));
+	if (summons)
+	{
+		summons->GameObject::SetType(GameObject::GO_ENTITY);
+		summons->SetActive(true);
+		return summons;
+	}
+
+   { //for safety measure
+	   Summons *summons = new Summons();
+	   summons->GameObject::SetType(GameObject::GO_ENTITY);
+	   summons->SetActive(true);
+	   GameObject::goList.push_back(summons);
+	   return summons;
+   }
 }
