@@ -11,6 +11,7 @@ Class to handle Boss Golem Head
 #define GOLEMHEAD_H
 
 #include "Enemy.h"
+#include "WeaponList.h"
 
 /******************************************************************************/
 /*!
@@ -27,9 +28,14 @@ public:
     virtual void Init(Vector3 pos);
     virtual void Update(double dt);
     virtual void SetupMesh();
+    virtual void HandleInteraction(GameObject* b, double dt);
+
+    void GolemShoot(Vector3 dir);
 
 private:
-
+    float maxhealth;
+    float regendelay;
+    Weapon* golemGun;
 };
 
 #endif /* GOLEMHEAD_H */

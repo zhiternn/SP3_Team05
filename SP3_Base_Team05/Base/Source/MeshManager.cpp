@@ -84,4 +84,9 @@ void MeshManager::Init()
 	meshList[GEO_WEAPON_SHOTGUN]->textureArray[0] = LoadTGA("Image//shotgun.tga");
 	meshList[GEO_WEAPON_SPLITGUN] = MeshBuilder::GenerateQuad("splitgun", Color(0, 0, 0), 1.f);
 	meshList[GEO_WEAPON_SPLITGUN]->textureArray[0] = LoadTGA("Image//splitgun.tga");
+
+    meshList[GEO_GOLEMHEAD] = MeshBuilder::GenerateSphere("GEO_GOLEMHEAD", Color(1, 1, 1), 9, 18, 1.f);
+    meshList[GEO_GOLEMHEAD]->textureArray[0] = LoadTGA("Image//golemhead.tga");
+    meshList[GEO_GOLEMHAND] = MeshBuilder::GenerateSphere("GEO_GOLEMHAND", Color(1, 1, 1), 9, 18, 1.f);
+    meshList[GEO_GOLEMHAND]->textureArray[0] = LoadTGA("Image//golemhand.tga");
 }
