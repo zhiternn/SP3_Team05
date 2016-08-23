@@ -58,10 +58,10 @@ class TrapProjectile : public CProjectile
 public:
 	TrapProjectile() :CProjectile(PROJECTILE_TYPE::TRAP){
 		SetDMG(0);
-		SetLifetime(2);
-		SetProjectileSpeed(50.0f);
+		SetLifetime(10);
+		SetProjectileSpeed(100.0f);
 		SetScale(1, 1, 1);
-		SetMass(50);
+		SetMass(0);
 		trapLifeTIme = 5.f;
 	}
 	~TrapProjectile(){}

@@ -29,6 +29,7 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 				break;
 			case CProjectile::TRAP:
 				proj = FetchTrapProjectile();
+				*static_cast<TrapProjectile*>(proj) = *static_cast<TrapProjectile*>(projectileInfo);
 				break;
 
 			default:break;

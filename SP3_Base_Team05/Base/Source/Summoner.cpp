@@ -70,7 +70,6 @@ void Summoner::Update(double dt)
 				health += HEALTH_REGEN_PERSEC;
 		}
 	}
-	std::cout << health << std::endl;
 	if (!summonsList.empty())
 	{
 		Defend();

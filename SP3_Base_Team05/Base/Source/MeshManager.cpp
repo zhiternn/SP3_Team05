@@ -118,9 +118,9 @@ void MeshManager::InitSceneSnake()
 
 void MeshManager::InitSceneSummoner()
 {
-	//meshList[GEO_SUMMONER] = MeshBuilder::GenerateOBJ("summoner", "Obj\\summoner.obj");
-	//meshList[GEO_SUMMONER]->textureArray[0] = LoadTGA("Image//summoner.tga");
-	//meshList[GEO_SUMMONS] = MeshBuilder::GenerateOBJ("summoner", "Obj\\summons.obj");
+	meshList[GEO_SUMMONER] = MeshBuilder::GenerateOBJ("summoner", "Obj\\summoner.obj");
+	meshList[GEO_SUMMONER]->textureArray[0] = LoadTGA("Image//summoner.tga");
+	meshList[GEO_SUMMONS] = MeshBuilder::GenerateOBJ("summoner", "Obj\\summons.obj");
 }
 
 void MeshManager::InitSceneGolem()

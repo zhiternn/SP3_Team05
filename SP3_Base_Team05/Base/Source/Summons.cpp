@@ -18,7 +18,6 @@ void Summons::Init(Vector3 pos)
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	speedLimit = 50.f;
-	movementSpeed = 50.f;
 	scale.Set(5, 5, 5);
 	health = 50;
 	isDead = false;
@@ -37,7 +36,7 @@ void Summons::Update(double dt)
 
 void Summons::Goto(Vector3 pos)
 {
-	this->vel += (pos - this->pos).Normalized() * movementSpeed;
+	this->vel += (pos - this->pos).Normalized() * speedLimit;
 }
 
 void Summons::Shoot(Vector3 dir)

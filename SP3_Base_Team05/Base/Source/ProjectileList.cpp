@@ -55,7 +55,7 @@ void TrapProjectile::HandleInteraction(GameObject *b, double dt)
 				entity->TakeDamage(proj_dmg);
 				
 				Trap* trap = FetchTrap();
-				trap->Init(this->pos, b, this->trapLifeTIme);
+				trap->Init(b->pos, b);
 			}
 		}
 		this->SetActive(false);
