@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Controls.h"
 #include "MeshManager.h"
+#include "SceneGolem.h"
 
 #include <sstream>
 
@@ -156,6 +157,10 @@ void SceneDetlaff::PlayerController(double dt)
 	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
 	{
 		player->ChangeWeaponUp();
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_B))
+	{
+		man->ChangeScene(1);
 	}
 }
 

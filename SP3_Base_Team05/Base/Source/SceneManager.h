@@ -1,21 +1,25 @@
 #pragma once
 #include "Scene.h"
+#include "SceneDetlaff.h"
+#include "SceneGolem.h"
+#include "SceneSnakeBoss.h"
+#include "SceneSummoner.h"
+
 class SceneManager
 {
-
-private:
-	Scene *currentScene;
+	
 public:
 	SceneManager();
 	~SceneManager();
 	
-	Scene* GetCurrentScene();
+	Scene* currentScene;
+	static SceneManager& GetInstance()
+	{
+		static SceneManager sm;
+		return sm;
+	}
+	void ChangeScene(int num);
 	void SetScene(Scene *scene);
-
-	//Cleanup Scene
-	void Clean();
-
-	//Initialises the Scene
-	void Init();
+	Scene* GetScene();
 };
 

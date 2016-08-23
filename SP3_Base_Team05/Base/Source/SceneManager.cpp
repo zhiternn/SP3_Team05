@@ -1,41 +1,56 @@
 #include "SceneManager.h"
-#include "SceneDetlaff.h"
 
 SceneManager::SceneManager()
 {
-	currentScene = NULL;
 }
 
 
 SceneManager::~SceneManager()
 {
-	if (currentScene)
-	{
-		delete currentScene;
-		currentScene = NULL;
-	}
-		
+	
 }
-
-Scene* SceneManager::GetCurrentScene()
+//Clean Scene
+void SceneManager::ChangeScene(int num)
 {
-	return this->currentScene;
+	if (currentScene != NULL)
+	{
+		currentScene->Exit();
+		delete currentScene;
+	}
+
+	switch (num)
+	{
+	case 1:
+	{
+		currentScene = new SceneGolem();
+		break;
+	}
+	case 2:
+	{
+		currentScene = new SceneSnakeBoss();
+		break;
+	}
+	case 3:
+	{
+		currentScene = new SceneSummoner();
+		break;
+	}
+	case 4:
+	{
+		currentScene = new SceneDetlaff();
+		break;
+	}
+	}
+	
+	currentScene->Init();
 }
 
 void SceneManager::SetScene(Scene* scene)
 {
-	currentScene = scene;
+	this->currentScene = scene;
 }
 
-//Clean Scene
-void SceneManager::Clean()
+Scene* SceneManager::GetScene()
 {
-	currentScene->Exit();
-	delete currentScene;
-}
-
-//Initializes the Scene
-void SceneManager::Init()
-{
-	currentScene->Init();
+	return this->currentScene;
 }

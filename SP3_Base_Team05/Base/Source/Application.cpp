@@ -247,22 +247,25 @@ void Application::Init()
 
 	//Load media
 	LoadMedia();
+	
 }
 
 void Application::Run()
 {
 	Controls &control = Controls::GetInstance();
 	MeshManager &meshManager = MeshManager::GetInstance();
+	SceneManager &sm = SceneManager::GetInstance();
+
 	meshManager.Init();
 
 
 	//Scene* scene = new SceneSnakeBoss();
 	//Scene* scene = new SceneSummoner();
-	Scene* scene = new SceneDetlaff();
+	sm.SetScene(new SceneDetlaff());
 	//Scene* scene = new SceneGolem();
 
 	//Main Loop
-	scene->Init();
+	sm.GetScene()->Init();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !Controls::GetInstance().OnPress(Controls::KEY_ESC))
@@ -276,7 +279,7 @@ void Application::Run()
 			//GetMouseUpdate();
 			control.UpdateInputs();
 			//scene->Update(m_dElapsedTime);
-			scene->Update(m_dElapsedTime);
+			sm.GetScene()->Update(m_dElapsedTime);
 			m_dAccumulatedTime_ThreadOne = 0.0;
 		}
 		if (m_dAccumulatedTime_ThreadTwo > 1.0)
@@ -285,7 +288,7 @@ void Application::Run()
 			m_dAccumulatedTime_ThreadTwo = 0.0;
 		}
 		//scene->Render();
-		scene->Render();
+		sm.GetScene()->Render();
 		//Swap buffers
 		glfwSwapBuffers(m_window);
 		//Get and organize events, like keyboard and mouse input, window resizing, etc...

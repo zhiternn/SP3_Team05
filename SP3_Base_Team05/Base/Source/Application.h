@@ -6,6 +6,7 @@ using namespace irrklang;
 
 #include "Vector3.h"
 #include "timer.h"
+#include "SceneManager.h"
 
 class Application
 {
@@ -58,6 +59,7 @@ private:
 	double m_dElapsedTime;
 	double m_dAccumulatedTime_ThreadOne;
 	double m_dAccumulatedTime_ThreadTwo;
+	SceneManager sm;
 };
 
 #endif
