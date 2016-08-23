@@ -35,7 +35,7 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	active = true;
 	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
-	health = 130;
+	health = 100;
 	maxHealth = health;
 	mass = 1;
 	vel.SetZero();
@@ -151,6 +151,7 @@ void Player::ChangeProjectileUp()
 	projectile = inventory->bullets[projectileIter];
 	weapon->AssignProjectile(projectile);
 }
+
 void Player::ChangeProjectileDown()
 {
 	if (projectileIter <= 0)

@@ -1,8 +1,6 @@
 #include "ProjectileList.h"
 #include "Rope.h"
-
-#include "ForceField.h"
-
+#include "Trap.h"
 #include "MeshManager.h"
 
 
@@ -35,10 +33,12 @@ void Hook::HandleInteraction(GameObject* b, double dt)
 	}
 }
 
-/*
-TRAP
-*/
-void Trap::HandleInteraction(GameObject *b, double dt)
+void TrapProjectile::Update(double dt)
+{
+	CProjectile::Update(dt);
+}
+
+void TrapProjectile::HandleInteraction(GameObject *b, double dt)
 {
 	if (this->team == b->GetTeam())
 		return;
@@ -52,28 +52,14 @@ void Trap::HandleInteraction(GameObject *b, double dt)
 			if (entity)
 			{
 				entity->TakeDamage(proj_dmg);
-
-				ForceField *field;
-				field->Init(this->pos, b, this->fieldDuration);
-				field->Update(dt);
+				
+				Trap* trap = FetchTrap();
+				trap->Init(this->pos, b, this->trapLifeTIme);
 			}
 		}
-
 		this->SetActive(false);
 	}
 }
-
-
-bool Trap::Capture()
-{
-	return false;
-}
-
-void Trap::Update(double dt)
-{
-	CProjectile::Update(dt);
-}
-
 
 void Shield::Init(Vector3 pos)
 {
@@ -98,7 +84,6 @@ void Shield::Init(Vector3 pos)
     proj_lifetime = 10;
     collider.type = Collider::COLLIDER_BOX;
 }
-
 
 void Shield::Update(double dt)
 {
@@ -345,6 +330,41 @@ Hook* FetchHook()
 
 	{ //for safety measure
 		Hook *proj = new Hook();
+		proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+		proj->SetActive(true);
+		GameObject::goList.push_back(proj);
+		return proj;
+	}
+}
+
+TrapProjectile* FetchTrapProjectile()
+{
+	std::vector<GameObject*>::iterator it;
+	for (it = GameObject::goList.begin(); it != GameObject::goList.end(); ++it)
+	{
+		TrapProjectile *proj = dynamic_cast<TrapProjectile*>((*it));
+		if (proj && proj->IsActive() == false)
+		{
+			proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+			proj->SetActive(true);
+			return proj;
+		}
+	}
+
+	for (int i = 0; i < 10; ++i)
+	{
+		GameObject::goList.push_back(new TrapProjectile());
+	}
+	TrapProjectile *proj = dynamic_cast<TrapProjectile*>(*(GameObject::goList.end() - 10));
+	if (proj)
+	{
+		proj->GameObject::SetType(GameObject::GO_PROJECTILE);
+		proj->SetActive(true);
+		return proj;
+	}
+
+	{ //for safety measure
+		TrapProjectile *proj = new TrapProjectile();
 		proj->GameObject::SetType(GameObject::GO_PROJECTILE);
 		proj->SetActive(true);
 		GameObject::goList.push_back(proj);

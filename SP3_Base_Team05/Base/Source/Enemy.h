@@ -28,6 +28,11 @@ public:
 	float speedLimit;
 	float movementSpeed;
 
+    void SetSpeedLimit(float speed);
+    void SetMovementSpeed(float speed);
+    float GetSpeedLimit();
+    float GetMovementSpeed();
+
 protected:
 	enum MOVEMENT_PRIORITY
 	{

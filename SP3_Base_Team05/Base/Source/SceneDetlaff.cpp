@@ -122,7 +122,7 @@ void SceneDetlaff::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
 	{
-		CProjectile *proj_trap = new Trap();
+		CProjectile *proj_trap = new TrapProjectile();
 		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
 		proj_trap->SetVelocity(0, 0, 0);
 		proj_trap->SetColliderType(Collider::COLLIDER_BOX);
@@ -387,10 +387,11 @@ void SceneDetlaff::RenderWorld()
 void SceneDetlaff::RenderHUD()
 {
 	// Render the crosshair
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[GEO_CROSSHAIR], false);
-	modelStack.PopMatrix();
+    modelStack.PushMatrix();
+    modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
+    modelStack.Scale(10, 10, 10);
+    RenderMesh(meshList[GEO_CROSSHAIR], false);
+    modelStack.PopMatrix();
 
 	//On screen text
 	std::ostringstream ss;

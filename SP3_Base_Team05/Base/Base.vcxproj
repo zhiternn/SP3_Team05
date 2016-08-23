@@ -49,6 +49,7 @@
     <ClCompile Include="Source\Summoner.cpp" />
     <ClCompile Include="Source\Summons.cpp" />
     <ClCompile Include="Source\TileMap.cpp" />
+    <ClCompile Include="Source\Trap.cpp" />
     <ClCompile Include="Source\Utility.cpp" />
     <ClCompile Include="Source\Weapon.cpp" />
     <ClCompile Include="Source\WeaponList.cpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="Source\Summoner.h" />
     <ClInclude Include="Source\Summons.h" />
     <ClInclude Include="Source\TileMap.h" />
+    <ClInclude Include="Source\Trap.h" />
     <ClInclude Include="Source\Utility.h" />
     <ClInclude Include="Source\Vertex.h" />
     <ClInclude Include="Source\Weapon.h" />

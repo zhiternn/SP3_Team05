@@ -16,6 +16,7 @@
 #include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
 #include "SceneDetlaff.h"
+#include "MainMenu.h"
 
 #include "MeshManager.h"
 
@@ -260,12 +261,23 @@ void Application::Run()
 
 
 	//Scene* scene = new SceneSnakeBoss();
+
 	//Scene* scene = new SceneSummoner();
-	sm.SetScene(new SceneDetlaff());
+
+	//sm.SetScene(new SceneDetlaff());
+
+	Scene* scene = new SceneSummoner();
+	//Scene* scene = new SceneDetlaff();
+
 	//Scene* scene = new SceneGolem();
+    //Scene* scene = new MainMenu();
 
 	//Main Loop
-	sm.GetScene()->Init();
+
+	//sm.GetScene()->Init();
+
+	scene->Init();
+    HideCursor();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
 	while (!glfwWindowShouldClose(m_window) && !Controls::GetInstance().OnPress(Controls::KEY_ESC))

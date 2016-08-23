@@ -16,8 +16,8 @@ void Summons::Init(Vector3 pos)
 	type = GameObject::GO_ENTITY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
-	speedLimit = 30.f;
-	movementSpeed = 30.f;
+	speedLimit = 50.f;
+	movementSpeed = 50.f;
 	scale.Set(5, 5, 5);
 	health = 50;
 	isDead = false;
