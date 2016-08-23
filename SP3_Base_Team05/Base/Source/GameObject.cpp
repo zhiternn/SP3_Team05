@@ -185,6 +185,9 @@ void GameObject::CollisionResponse(GameObject* b)
 	{
 	case Collider::COLLIDER_BALL:
 	{//BALL TO BALL
+		if (this->pos == b->pos)
+			return;
+
 		Vector3 N = (this->pos - b->pos).Normalized();
 
 		Vector3 u1N = this->vel.Dot(N) * N;

@@ -74,7 +74,7 @@ void SceneSnakeBoss::Init()
 	enemy->SetColliderType(Collider::COLLIDER_BALL);
 	enemy->SetScale(6, 6, 6);
 	enemy->SetMass(3);
-	enemy->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), 10);
+	enemy->Init(Vector3(m_worldWidth*0.1f, m_worldHeight*0.1f, 0), 20);
 
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
@@ -342,10 +342,13 @@ void SceneSnakeBoss::RenderWorld()
 void SceneSnakeBoss::RenderHUD()
 {
 	// Render the crosshair
-	modelStack.PushMatrix();
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[GEO_CROSSHAIR], false);
-	modelStack.PopMatrix();
+	//modelStack.PushMatrix();
+	//modelStack.Scale(10, 10, 10);
+	//RenderMesh(meshList[GEO_CROSSHAIR], false);
+	//modelStack.PopMatrix();
+
+	//Render Minimap
+	RenderMinimap();
 
 	//On screen text
 	std::ostringstream ss;
@@ -370,15 +373,78 @@ void SceneSnakeBoss::RenderHUD()
 	ss.str("");
 	ss << "HP";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
-	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 5) + 11, 55.5f, player->maxHealth / 5, false);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
+	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 10) + 11, 55.5f, player->maxHealth / 10, false);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 55.5f, player->GetHP() / 10, false);
 
 	ss.str("");
 	ss.precision(2);
 	ss << "Dash";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
-	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
+	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * (player->maxHealth / 10)) + 11, 52.5f, DASH_COOLDOWN * (player->maxHealth / 10), false);
+	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10)) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10), false);
+}
+
+void SceneSnakeBoss::RenderMinimap()
+{
+	modelStack.PushMatrix();
+	modelStack.Translate(70, 50, 0);
+	modelStack.Scale(15, 15, 15);
+
+	glEnable(GL_STENCIL_TEST);
+
+	// Draw floor
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0xFF); // Write to stencil buffer
+	glDepthMask(GL_FALSE); // Don't write to depth buffer
+	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+
+	RenderMesh(meshList[GEO_MINIMAP], false);
+	
+	// Draw cube reflection
+	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+	glStencilMask(0x00); // Don't write anything to stencil buffer
+	glDepthMask(GL_TRUE); // Write to depth buffer
+
+	for (int i = 0; i < GameObject::goList.size(); ++i)
+	{
+		if (GameObject::goList[i]->IsActive())
+		{
+			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
+			if (entity && entity->IsActive())
+			{
+				modelStack.PushMatrix();
+				Vector3 pos = entity->pos;
+				pos.x *= 80 / m_worldWidth;
+				pos.y *= 60 / m_worldHeight;
+				Vector3 scale = entity->GetScale();
+				scale.x *= 80 / m_worldWidth;
+				scale.y *= 60 / m_worldHeight;
+				modelStack.Translate(pos.x, pos.y, pos.z);
+				modelStack.Scale(scale.x, scale.y, scale.z);
+
+				switch (entity->GetEntityType())
+				{
+				case Entity::ENTITY_BOSS_MAIN:
+					RenderMesh(meshList[GEO_FLOOR], false);
+					break;
+				case Entity::ENTITY_BOSS_BODY:
+					RenderMesh(meshList[GEO_FLOOR], false);
+					break;
+				case Entity::ENTITY_PLAYER:
+					RenderMesh(meshList[GEO_FLOOR], false);
+					break;
+				default:break;
+				}
+
+				modelStack.PopMatrix();
+			}
+		}
+	}
+
+	glDisable(GL_STENCIL_TEST);
+
+	modelStack.PopMatrix();
 }
 
 void SceneSnakeBoss::Exit()

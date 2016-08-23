@@ -11,6 +11,7 @@ void GolemHead::Init(Vector3 pos)
     this->pos = pos;
     active = true;
     type = GameObject::GO_ENTITY;
+	entityType = Entity::ENTITY_BOSS_MAIN;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BOX;
     mass = 10000;

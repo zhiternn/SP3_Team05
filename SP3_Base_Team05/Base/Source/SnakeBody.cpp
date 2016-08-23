@@ -22,10 +22,11 @@ SnakeBody::~SnakeBody()
 void SnakeBody::Init(Vector3 pos, float speed, float speedLimit)
 {
 	Enemy::Init(pos);
+	entityType = Entity::ENTITY_BOSS_BODY;
 	movementSpeed = speed;
 	this->speedLimit = speedLimit;
 	collider.type = Collider::COLLIDER_BALL;
-	health = 300;
+	health = 50;
 
 	if (weapon)
 	{
@@ -67,7 +68,14 @@ void SnakeBody::Update(double dt)
 		if (target && !target->IsDead())
 		{
 			if (target->pos != pos)
+			{
 				vel += (target->pos - pos).Normalized() * movementSpeed * 0.1f;
+
+				float halfLimit = speedLimit * 0.5f;
+				if (vel.LengthSquared() > halfLimit * halfLimit)
+					vel = vel.Normalized() * halfLimit;
+			}
+
 		}
 	}
 
@@ -128,7 +136,8 @@ void SnakeBody::Reconnect()
 
 void SnakeBody::Fire(Entity* target)
 {
-	weapon->Fire(this->pos, target->pos - this->pos, team);
+	if (weapon)
+		weapon->Fire(this->pos, target->pos - this->pos, team);
 
 	if (backLink)
 		backLink->Fire(target);
@@ -146,6 +155,11 @@ void SnakeBody::SetupMesh()
 	modelStack.Translate(pos.x, pos.y, pos.z);
 	modelStack.Rotate(-pitchDegree, right.x, right.y, right.z);
 	modelStack.Scale(scale.x, scale.y, scale.z);
+
+	if (isDead)
+		meshList[GEO_SNAKE_BODY]->material.kAmbient.Set(0.3f, 0.0f, 0.0f);
+	else
+		meshList[GEO_SNAKE_BODY]->material.kAmbient.Set(0.3f, 0.3f, 0.3f);
 
 	mesh = meshList[GEO_SNAKE_BODY];
 }

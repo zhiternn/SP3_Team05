@@ -20,26 +20,37 @@ enum GEOMETRY_TYPE_DEFAULT
 	GEO_TEXT,
 	GEO_LIGHT_DEPTH_QUAD,
 
+	//Player stuff
+	GEO_PLAYER_TOP,
+	GEO_PLAYER_BOTTOM,
+
+	//Projectile stuff
 	GEO_BULLET,
 	GEO_GRENADE,
 	GEO_SHIELD,
-
 	GEO_ROPE,
 
-	GEO_SNAKE_HEAD,
-	GEO_SNAKE_BODY,
+	//Environment
+	GEO_FLOOR,
 
+	//SceneGolem
+
+	//SceneSummoner
 	GEO_SUMMONER,
 	GEO_SUMMONS,
 
+	//SceneSnake
+	GEO_SNAKE_HEAD,
+	GEO_SNAKE_BODY,
+	GEO_SCENESNAKE_WALLS,
+
+	//SceneDetlaff
 	GEO_DETLAFF_1,
 	GEO_DETLAFF_2,
 	GEO_DETLAFF_3,
-
-	GEO_PLAYER_TOP,
-	GEO_PLAYER_BOTTOM,
-	GEO_FLOOR,
-
+	
+	//UI
+	GEO_MINIMAP,
 	GEO_BORDER,
 	GEO_HEALTH,
 	GEO_DASH,
@@ -69,6 +80,11 @@ public:
 
 protected:
 	MeshManager();
+
+	void InitSceneDetlaff();
+	void InitSceneSnake();
+	void InitSceneSummoner();
+	void InitSceneGolem();
 
 };
 

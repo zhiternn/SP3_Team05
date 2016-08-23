@@ -16,6 +16,7 @@ void Summoner::Init(Vector3 pos)
 {
 	Enemy::Init(pos);
 	type = GameObject::GO_ENTITY;
+	entityType = Entity::ENTITY_BOSS_MAIN;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	speedLimit = 30.0f;

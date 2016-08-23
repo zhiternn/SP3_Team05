@@ -7,7 +7,7 @@
 static const float MOVEMENT_LIMIT = 300.f;
 static const float DASH_DISTANCE = 50.f;
 static const float DASH_COOLDOWN = 1.f;
-static const float DAMAGE_BUFFER = 0.1f;
+static const float DAMAGE_BUFFER = 0.5f;
 
 class Player : public Entity
 {

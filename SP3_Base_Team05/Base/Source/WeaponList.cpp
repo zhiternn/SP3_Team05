@@ -21,15 +21,16 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			{
 			case CProjectile::BULLET:
 				proj = FetchBullet();
+				*static_cast<Bullet*>(proj) = *static_cast<Bullet*>(projectileInfo);
 				break;
 			case CProjectile::HOOK:
 				proj = FetchHook();
+				*static_cast<Hook*>(proj) = *static_cast<Hook*>(projectileInfo);
 				break;
 
 			default:break;
 			}
 
-			*proj = *projectileInfo;
 			proj->Init(pos, dir + offset);
 			proj->SetTeam(team);
 		}
@@ -60,8 +61,6 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 		proj->SetTeam(team);
 	}
 }
-
-//< DETLAFF WEAPONS
 
 void Splitgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {

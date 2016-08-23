@@ -1,6 +1,7 @@
 #include "Entity.h"
 
-Entity::Entity():
+Entity::Entity(ENTITY_TYPE type) :
+entityType(type),
 GameObject(GameObject::GO_ENTITY),
 health(100)
 {
@@ -35,6 +36,12 @@ void Entity::Die()
 }
 
 unsigned int Entity::GetHP()
+
 {
 	return this->health;
+}
+
+Entity::ENTITY_TYPE Entity::GetEntityType()
+{
+	return entityType;
 }
