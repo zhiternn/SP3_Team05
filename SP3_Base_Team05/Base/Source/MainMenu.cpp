@@ -16,7 +16,8 @@ Rendering Main Menu
 #include <sstream>
 
 MainMenu::MainMenu() :
-mainCamera(NULL)
+mainCamera(NULL),
+sm(SceneManager::GetInstance())
 {
 }
 
@@ -39,8 +40,6 @@ void MainMenu::Init()
 
     mainCamera = new Camera();
     mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
-    sm = new SceneManager();
 
     state = MENU_MAIN;
 }
@@ -102,7 +101,8 @@ void MainMenu::Render()
     case MainMenu::MENU_MAIN:
         MainMenuPage();
         break;
-    case MainMenu::MENU_PLAY: /*state = MENU_INSTRUCTIONS;*/sm->ChangeScene(1);
+    case MainMenu::MENU_PLAY: 
+		sm.ChangeScene(1);
         break;
     case MainMenu::MENU_LOADLEVEL: 
         break;

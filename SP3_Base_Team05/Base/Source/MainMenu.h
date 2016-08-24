@@ -59,7 +59,7 @@ private:
     Vector3 mousePos_worldBased;
 
     MENU_STATE state;
-    SceneManager *sm;
+    SceneManager &sm;
 
     float delaytime;
 

@@ -120,9 +120,9 @@ void MeshManager::InitSceneSummoner()
 void MeshManager::InitSceneGolem()
 {
     meshList[GEO_GOLEMHEAD] = MeshBuilder::GenerateOBJ("GEO_GOLEMHEAD", "Obj//golemhead.obj");
-    meshList[GEO_GOLEMHEAD]->textureArray[0] = LoadTGA("Image//golemhead.tga");
+    //meshList[GEO_GOLEMHEAD]->textureArray[0] = LoadTGA("Image//golemhead.tga");
     meshList[GEO_GOLEMHAND] = MeshBuilder::GenerateOBJ("GEO_GOLEMHAND", "Obj//golemhead.obj");
-    meshList[GEO_GOLEMHAND]->textureArray[0] = LoadTGA("Image//fist.tga");
+    //meshList[GEO_GOLEMHAND]->textureArray[0] = LoadTGA("Image//fist.tga");
 }
 
 void MeshManager::InitMainMenu()
