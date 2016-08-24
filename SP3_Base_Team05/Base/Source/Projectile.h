@@ -28,12 +28,11 @@ public:
 		SHIELD,
 		HOOK,
 		TRAP,
-		RAY,
 
 		MAX,
 	};
 
-	CProjectile(PROJECTILE_TYPE type = PROJECTILE_TYPE::HOOK);    //< Default Constructor
+	CProjectile(PROJECTILE_TYPE type = PROJECTILE_TYPE::BULLET);    //< Default Constructor
 	virtual ~CProjectile();													//< Destructor
 
 	void Init(Vector3 pos, Vector3 dir);
@@ -51,14 +50,13 @@ public:
 	void SetProjectileSpeed(float speed);
 	void SetProjType(PROJECTILE_TYPE type);
 
+	PROJECTILE_TYPE proj_type;
 
 protected:
 	//< Variables
 	float proj_dmg;													//< Projectile Damage
 	float proj_lifetime;											//< Projectile Lifetime
 	float proj_speed;
-
-	PROJECTILE_TYPE proj_type;										//< Projectile Type
 
 };
 

@@ -46,18 +46,15 @@ void TrapProjectile::HandleInteraction(GameObject *b, double dt)
 
 	if (CheckCollision(b, dt))
 	{
-		CollisionResponse(b);
-		if (b->GetType() == GameObject::GO_ENTITY)
+		Enemy* enemy = dynamic_cast<Enemy*>(b);
+		if (enemy)
 		{
-			Entity* entity = dynamic_cast<Entity*>(b);
-			if (entity)
-			{
-				entity->TakeDamage(proj_dmg);
-				
-				Trap* trap = FetchTrap();
-				trap->Init(b->pos, b);
-			}
+			enemy->TakeDamage(proj_dmg);
+			
+			Trap* trap = FetchTrap();
+			trap->Init(enemy->pos);
 		}
+
 		this->SetActive(false);
 	}
 }

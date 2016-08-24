@@ -71,7 +71,7 @@ Rope* FetchRope()
 		Rope *rope = dynamic_cast<Rope*>((*it));
 		if (rope && rope->IsActive() == false)
 		{
-			rope->GameObject::SetType(GameObject::GO_ENTITY);
+			rope->GameObject::SetType(GameObject::GO_ENVIRONMENT);
 			rope->SetActive(true);
 			return rope;
 		}
@@ -84,14 +84,14 @@ Rope* FetchRope()
 	Rope *rope = dynamic_cast<Rope*>(*(GameObject::goList.end() - 10));
 	if (rope)
 	{
-		rope->GameObject::SetType(GameObject::GO_ENTITY);
+		rope->GameObject::SetType(GameObject::GO_ENVIRONMENT);
 		rope->SetActive(true);
 		return rope;
 	}
 
    { //for safety measure
 	   Rope *rope = new Rope();
-	   rope->GameObject::SetType(GameObject::GO_ENTITY);
+	   rope->GameObject::SetType(GameObject::GO_ENVIRONMENT);
 	   rope->SetActive(true);
 	   GameObject::goList.push_back(rope);
 	   return rope;

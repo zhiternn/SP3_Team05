@@ -27,7 +27,6 @@ void GolemRightHand::Init(Vector3 pos)
     movementSpeed = 800.f;
     health = 999999;
 
-    captureRatio = 1.f;
     stopdelay = 0.1f;
 }
 
@@ -110,7 +109,6 @@ void GolemLeftHand::Init(Vector3 pos)
     speedLimit = 45.f;
     movementSpeed = 800.f;
 
-    captureRatio = 1.f;
     state = 0;
 }
 

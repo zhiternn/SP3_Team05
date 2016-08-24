@@ -271,9 +271,10 @@ void Application::Run()
 
 	meshManager.Init();
 
-	//Scene* scene = new SceneSnakeBoss();
-	//Scene* scene = new SceneSummoner();
-	sm.SetScene(new SceneSnakeBoss());
+	//sm.SetScene(new SceneSnakeBoss());
+	sm.SetScene(new SceneSummoner());
+	//sm.SetScene(new SceneDetlaff());
+	//sm.SetScene(new SceneGolem());
 	//Scene* scene = new SceneDetlaff();
 	//Scene* scene = new SceneGolem();
     //Scene* scene = new MainMenu();

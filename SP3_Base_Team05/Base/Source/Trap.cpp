@@ -1,45 +1,54 @@
 #include "Trap.h"
 #include "MeshManager.h"
+#include "Enemy.h"
 
 Trap::Trap() :
 GameObject(GO_ENVIRONMENT),
-radius(20.0f),
-target(NULL)
+radius(20.0f)
 {
 }
 
 Trap::~Trap()
 {
-	if (target)
-		delete target;
 }
 
-void Trap::Init(Vector3 pos, GameObject* target)
+void Trap::Init(Vector3 pos)
 {
 	type = GameObject::GO_ENVIRONMENT;
 	this->pos = pos;
-	this->target = target;
+	this->mass = 0;
 	lifetime = 1.0f;
-	scale.Set(radius, radius, 2);
+	scale.Set(radius, radius, radius);
 	collider.type = Collider::COLLIDER_NONE;
 }
 
 void Trap::Update(double dt)
 {
-	if (!target)
-		return;
 	lifetime -= dt;
 
 	if (lifetime <= 0)
 		active = false;
-
-	if (CheckCollision(target, dt))
-		lifetime = 1;
 }
 
-void Trap::HandleInteraction(double dt)
+void Trap::HandleInteraction(GameObject* b, double dt)
 {
-	return;
+	Enemy *enemy = dynamic_cast<Enemy*>(b);
+	if (CheckCollision(b, dt))
+	{
+		if (enemy)
+		{
+			enemy->captureRate += dt;
+			std::cout << enemy->captureRate << std::endl;
+			lifetime = 1.0f;
+		}
+	}
+	else
+	{
+		if (enemy)
+		{
+			enemy->captureRate = 0;
+		}
+	}
 }
 
 void Trap::SetupMesh()
@@ -57,7 +66,7 @@ Trap* FetchTrap()
 		Trap *trap = dynamic_cast<Trap*>((*it));
 		if (trap && trap->IsActive() == false)
 		{
-			trap->GameObject::SetType(GameObject::GO_ENTITY);
+			trap->GameObject::SetType(GameObject::GO_ENVIRONMENT);
 			trap->SetActive(true);
 			return trap;
 		}
@@ -70,14 +79,14 @@ Trap* FetchTrap()
 	Trap *trap = dynamic_cast<Trap*>(*(GameObject::goList.end() - 10));
 	if (trap)
 	{
-		trap->GameObject::SetType(GameObject::GO_ENTITY);
+		trap->GameObject::SetType(GameObject::GO_ENVIRONMENT);
 		trap->SetActive(true);
 		return trap;
 	}
 
    { //for safety measure
 	   Trap *trap = new Trap();
-	   trap->GameObject::SetType(GameObject::GO_ENTITY);
+	   trap->GameObject::SetType(GameObject::GO_ENVIRONMENT);
 	   trap->SetActive(true);
 	   GameObject::goList.push_back(trap);
 	   return trap;
