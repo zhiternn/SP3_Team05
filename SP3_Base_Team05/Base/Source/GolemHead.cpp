@@ -26,8 +26,6 @@ void GolemHead::Init(Vector3 pos)
     golemGun = new Splitgun(360.f, 18);
     golemGun->AssignProjectile(new Hook());
     golemGun->SetFireRate(0.1f);
-
-    captureRatio = 1.f;
 }
 
 GolemHead::~GolemHead()

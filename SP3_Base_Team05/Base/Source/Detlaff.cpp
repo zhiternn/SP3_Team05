@@ -12,7 +12,7 @@ CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 	weapon->AssignProjectile(new Bullet());
 	weapon_extra = NULL;
 	health = 100;
-	this->SetRate(0.f);
+//	this->SetRate(0.f);
 }
 
 
@@ -52,7 +52,6 @@ void CDetlaff::Update(double dt)
 				//Spawn State 3 Boss
 				state = STATE_3;
 				this->health = 500;
-				this->SetRate(0.35f);
 				weapon = new Splitgun(90.f, 12);
 				weapon->AssignProjectile(new Hook());
 				weapon->GetProjInfo()->SetProjectileSpeed(100.0f);

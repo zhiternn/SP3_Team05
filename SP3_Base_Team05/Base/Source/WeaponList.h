@@ -8,6 +8,7 @@ class Shotgun : public Weapon
 public:
 	Shotgun():projectileCount(5), spread(0.25f){
 		SetFireRate(5);
+		weapon_type = Weapon::W_SHOTGUN;
 	}
 	Shotgun(int projCount, float spread, float fireRate)
 	{
@@ -29,6 +30,7 @@ class MachineGun : public Weapon
 public:
 	MachineGun(){
 		SetFireRate(10);
+		weapon_type = Weapon::W_MACHINEGUN;
 	}
 	MachineGun(float firerate){
 		SetFireRate(firerate);
@@ -49,6 +51,7 @@ class Splitgun : public Weapon
 public:
 	Splitgun() : coneAngle(60.0f), projectileCount(3) {
 		SetFireRate(1);
+		weapon_type = Weapon::W_SPLITGUN;
 	}
 	Splitgun(float coneAngle, int projCount, float fireRate)
 	{

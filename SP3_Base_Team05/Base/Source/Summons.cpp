@@ -37,6 +37,10 @@ void Summons::Update(double dt)
 void Summons::Goto(Vector3 pos)
 {
 	this->vel += (pos - this->pos).Normalized() * speedLimit;
+	if (Reached(pos))
+	{
+		this->vel * 0.9f;
+	}
 }
 
 void Summons::Shoot(Vector3 dir)

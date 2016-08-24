@@ -24,7 +24,6 @@ public:
 	float GetRate();
 	bool Reached(Vector3 pos);
 
-	std::vector<Vector3> destinations;
 	float speedLimit;
 	float movementSpeed;
 
@@ -32,6 +31,8 @@ public:
     void SetMovementSpeed(float speed);
     float GetSpeedLimit();
     float GetMovementSpeed();
+
+	float captureRate;
 
 protected:
 	enum MOVEMENT_PRIORITY
@@ -47,12 +48,10 @@ protected:
 	bool UpdateMovement(double dt);//returns false if out of waypoints
 	Vector3 FindNewPath(Vector3 destination, GameObject* obstacle);
 
-	// moved to public for testing
-	//std::vector<Vector3> destinations;
+	std::vector<Vector3> destinations;
 	float destinationCountdown;
-
 	Entity* target;
-	float captureRatio;;
+
 };
 
 Enemy* FetchEnemy();

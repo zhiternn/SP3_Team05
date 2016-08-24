@@ -15,6 +15,7 @@
 
 using std::vector;
 
+class SceneManager;
 class SceneGolem : public SceneBase
 {
 public:

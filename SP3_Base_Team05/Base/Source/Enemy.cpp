@@ -20,6 +20,7 @@ void Enemy::Init(Vector3 pos)
 	destinationCountdown = REACH_CHECKER;
 	type = GameObject::GO_ENTITY;
 	team = TEAM_ENEMY;
+	captureRate = 0;
 }
 
 void Enemy::Update(double dt)
@@ -30,6 +31,10 @@ void Enemy::Update(double dt)
 
 	if (!UpdateMovement(dt))
 	{//if fail to update (zero destination left)
+	}
+	if (captureRate >= 10)
+	{
+		std::cout << "CAUGHT" << std::endl;
 	}
 }
 
@@ -162,21 +167,9 @@ Enemy* FetchEnemy()
    }
 }
 
-void Enemy::SetRate(float rate)
-{
-	//Clamp the captureRatio
-	Math::Clamp(rate, 0.f, 1.f);
-	captureRatio = rate;
-}
-
 void Enemy::SetTarget(Entity* target)
 {
 	this->target = target;
-}
-
-float Enemy::GetRate()
-{
-	return this->captureRatio;
 }
 
 void Enemy::HandleInteraction(GameObject* b, double dt)
