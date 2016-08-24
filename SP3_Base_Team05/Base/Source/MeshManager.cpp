@@ -82,17 +82,11 @@ void MeshManager::Init()
 	meshList[GEO_WEAPON_SPLITGUN] = MeshBuilder::GenerateQuad("splitgun", Color(0, 0, 0), 1.f);
 	meshList[GEO_WEAPON_SPLITGUN]->textureArray[0] = LoadTGA("Image//splitgun.tga");
 
-	//menu
-	meshList[GEO_MENU_CURSOR] = MeshBuilder::GenerateQuad("GEO_MENU_CURSOR", Color(0, 0, 0), 1.f);
-	meshList[GEO_MENU_CURSOR]->textureArray[0] = LoadTGA("Image//menucursor.tga");
-
-	meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("GEO_MENU_BACKGROUND", Color(0, 0, 0), 1.f);
-	meshList[GEO_MENU_BACKGROUND]->textureArray[0] = LoadTGA("Image//background.tga");
-
 	InitSceneSnake();
 	InitSceneDetlaff();
 	InitSceneSummoner();
 	InitSceneGolem();
+    InitMainMenu();
 }
 
 void MeshManager::InitSceneDetlaff()
@@ -125,8 +119,28 @@ void MeshManager::InitSceneSummoner()
 
 void MeshManager::InitSceneGolem()
 {
-    //meshList[GEO_GOLEMHEAD] = MeshBuilder::GenerateOBJ("GEO_GOLEMHEAD", "Obj//golemhead.obj");
-    //meshList[GEO_GOLEMHEAD]->textureArray[0] = LoadTGA("Image//golemhead.tga");
-    //meshList[GEO_GOLEMHAND] = MeshBuilder::GenerateOBJ("GEO_GOLEMHAND", "Obj//golemhead.obj");
-    //meshList[GEO_GOLEMHAND]->textureArray[0] = LoadTGA("Image//fist.tga");
+    meshList[GEO_GOLEMHEAD] = MeshBuilder::GenerateOBJ("GEO_GOLEMHEAD", "Obj//golemhead.obj");
+    meshList[GEO_GOLEMHEAD]->textureArray[0] = LoadTGA("Image//golemhead.tga");
+    meshList[GEO_GOLEMHAND] = MeshBuilder::GenerateOBJ("GEO_GOLEMHAND", "Obj//golemhead.obj");
+    meshList[GEO_GOLEMHAND]->textureArray[0] = LoadTGA("Image//fist.tga");
+}
+
+void MeshManager::InitMainMenu()
+{
+    //menu
+    meshList[GEO_MENU_CURSOR] = MeshBuilder::GenerateQuad("GEO_MENU_CURSOR", Color(0, 0, 0), 1.f);
+    meshList[GEO_MENU_CURSOR]->textureArray[0] = LoadTGA("Image//menucursor.tga");
+
+    meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("GEO_MENU_BACKGROUND", Color(0, 0, 0), 1.f);
+    meshList[GEO_MENU_BACKGROUND]->textureArray[0] = LoadTGA("Image//background.tga");
+
+    meshList[GEO_MENU_CHOICEBOX] = MeshBuilder::GenerateQuad("GEO_MENU_CHOICEBOX", Color(0, 0, 0), 1.f);
+    meshList[GEO_MENU_CHOICEBOX]->textureArray[0] = LoadTGA("Image//choicebox.tga");
+
+    meshList[GEO_MENU_SELECTION] = MeshBuilder::GenerateQuad("GEO_MENU_SELECTION", Color(0, 0, 0), 1.f);
+    meshList[GEO_MENU_SELECTION]->textureArray[0] = LoadTGA("Image//selected.tga");
+
+    meshList[GEO_MENU_FRAME] = MeshBuilder::GenerateQuad("GEO_MENU_FRAME", Color(0, 0, 0), 1.f);
+    meshList[GEO_MENU_FRAME]->textureArray[0] = LoadTGA("Image//framemetal.tga");
+    
 }
