@@ -162,7 +162,7 @@ void SceneSnakeBoss::Update(double dt)
 	}
 
 	//Restrict the player from moving past the deadzone
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
+	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
 		PlayerController(dt);
 	}

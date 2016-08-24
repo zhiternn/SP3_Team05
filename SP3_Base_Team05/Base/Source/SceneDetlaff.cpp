@@ -7,6 +7,8 @@
 
 #include <sstream>
 
+#define ENEMY_FIRE_COOLDOWN 2;
+
 SceneDetlaff::SceneDetlaff() :
 player(NULL),
 mainCamera(NULL),
@@ -53,7 +55,7 @@ void SceneDetlaff::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 100;
+	m_orthoHeight = 150;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -83,7 +85,7 @@ void SceneDetlaff::Init()
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 
-	enemyFireDelay = 1.0f;
+	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
 
 }
 
@@ -197,7 +199,7 @@ void SceneDetlaff::Update(double dt)
 
 	if (enemyFireDelay <= 0.f)
 	{
-		enemyFireDelay = 1.f;
+		enemyFireDelay = ENEMY_FIRE_COOLDOWN;
 
 		Vector3 mouseDir;
 		mouseDir = (player->pos - detlaff->pos).Normalized();
@@ -205,7 +207,7 @@ void SceneDetlaff::Update(double dt)
 	}
 
 	//Restrict the player from moving past the deadzone
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
+	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
 		PlayerController(dt);
 	}
