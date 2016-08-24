@@ -14,6 +14,7 @@ void Summoner::Init(Vector3 pos)
 {
 	Enemy::Init(pos);
 	type = GameObject::GO_ENTITY;
+	entityType = Entity::ENTITY_BOSS_MAIN;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	speedLimit = 50.f;
@@ -69,7 +70,6 @@ void Summoner::Update(double dt)
 				health += HEALTH_REGEN_PERSEC;
 		}
 	}
-	std::cout << health << std::endl;
 	if (!summonsList.empty())
 	{
 		Defend();

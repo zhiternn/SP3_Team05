@@ -34,6 +34,7 @@ void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
 	team = TEAM_PLAYER;
 	active = true;
 	type = GameObject::GO_ENTITY;
+	entityType = Entity::ENTITY_PLAYER;
 	collider.type = Collider::COLLIDER_BALL;
 	health = 100;
 	maxHealth = health;

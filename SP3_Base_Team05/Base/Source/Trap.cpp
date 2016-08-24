@@ -4,8 +4,7 @@
 Trap::Trap() :
 GameObject(GO_ENVIRONMENT),
 radius(20.0f),
-target(NULL),
-lifetime(5.0f)
+target(NULL)
 {
 }
 
@@ -15,13 +14,13 @@ Trap::~Trap()
 		delete target;
 }
 
-void Trap::Init(Vector3 pos, GameObject* target, float lifeTime)
+void Trap::Init(Vector3 pos, GameObject* target)
 {
 	type = GameObject::GO_ENVIRONMENT;
 	this->pos = pos;
 	this->target = target;
-	lifetime = lifeTime;
-	scale.Set(radius, radius, radius);
+	lifetime = 1.0f;
+	scale.Set(radius, radius, 2);
 	collider.type = Collider::COLLIDER_NONE;
 }
 
@@ -30,10 +29,12 @@ void Trap::Update(double dt)
 	if (!target)
 		return;
 	lifetime -= dt;
+
 	if (lifetime <= 0)
 		active = false;
 
-	std::cout << lifetime << std::endl;
+	if (CheckCollision(target, dt))
+		lifetime = 1;
 }
 
 void Trap::HandleInteraction(double dt)

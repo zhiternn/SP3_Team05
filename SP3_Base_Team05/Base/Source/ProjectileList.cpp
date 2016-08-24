@@ -2,6 +2,7 @@
 #include "Rope.h"
 #include "Trap.h"
 #include "MeshManager.h"
+#include "Player.h"
 
 
 void Hook::Update(double dt)
@@ -54,7 +55,7 @@ void TrapProjectile::HandleInteraction(GameObject *b, double dt)
 				entity->TakeDamage(proj_dmg);
 				
 				Trap* trap = FetchTrap();
-				trap->Init(this->pos, b, this->trapLifeTIme);
+				trap->Init(b->pos, b);
 			}
 		}
 		this->SetActive(false);
@@ -234,10 +235,13 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 		CollisionResponse(b);
 		if (b->GetType() == GameObject::GO_ENTITY)
 		{
-			Entity* entity = dynamic_cast<Entity*>(b);
-			if (entity)
+			Player* player = dynamic_cast<Player*>(b);
+			if (player)
+				player->TakeDamage(proj_dmg);
+			else
 			{
-				entity->TakeDamage(proj_dmg);
+				Enemy* enemy = dynamic_cast<Enemy*>(b);
+				enemy->TakeDamage(proj_dmg);
 			}
 		}
 

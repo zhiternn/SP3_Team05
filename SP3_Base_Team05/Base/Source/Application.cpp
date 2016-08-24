@@ -21,6 +21,8 @@
 #include "MeshManager.h"
 
 GLFWwindow* m_window;
+int Application::m_window_width = 800;
+int Application::m_window_height = 600;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0,
@@ -44,6 +46,8 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 void resize_callback(GLFWwindow* window, int w, int h)
 {
 	glViewport(0, 0, w, h);
+	Application::GetInstance().SetWindowWidth(w);
+	Application::GetInstance().SetWindowHeight(h);
 }
 
 void mouseWheel_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -110,6 +114,14 @@ void Application::SetCursorPos(double xPos, double yPos)
 void Application::GetCursorPos(double &xpos, double &ypos)
 {
 	glfwGetCursorPos(m_window, &xpos, &ypos);
+}
+void Application::SetWindowWidth(int w)
+{
+	m_window_width = w;
+}
+void Application::SetWindowHeight(int h)
+{
+	m_window_height = h;
 }
 int Application::GetWindowWidth()
 {
@@ -259,16 +271,15 @@ void Application::Run()
 
 	meshManager.Init();
 
-
 	//Scene* scene = new SceneSnakeBoss();
-
 	//Scene* scene = new SceneSummoner();
+
 
 	sm.SetScene(new SceneDetlaff());
 
 	//Scene* scene = new SceneSummoner();
-	//Scene* scene = new SceneDetlaff();
 
+	//Scene* scene = new SceneDetlaff();
 	//Scene* scene = new SceneGolem();
     //Scene* scene = new MainMenu();
 

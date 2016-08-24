@@ -6,6 +6,7 @@
 
 CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 {
+	entityType = Entity::ENTITY_BOSS_MAIN;
 	//set weapon to STATE_1 default weapon
 	weapon = new Splitgun(360.f, 36);
 	weapon->AssignProjectile(new Bullet());

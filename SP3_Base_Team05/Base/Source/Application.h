@@ -26,6 +26,8 @@ public:
 	static void GetCursorPos(double &xpos, double &ypos);
 	static int GetWindowWidth();
 	static int GetWindowHeight();
+	static void SetWindowWidth(int w);
+	static void SetWindowHeight(int h);
 
 	void GetMouseUpdate();
 	//Declare variables to store the last and current mouse position
@@ -52,8 +54,8 @@ private:
 	~Application();
 
 	// Declare the window width and height as constant integer
-	const static int m_window_width = 800;
-	const static int m_window_height = 600;
+	static int m_window_width;
+	static int m_window_height;
 	//Declare a window object
 	StopWatch m_timer;
 	double m_dElapsedTime;

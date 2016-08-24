@@ -17,6 +17,7 @@ SnakeHead::~SnakeHead()
 void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 {
 	Enemy::Init(pos);
+	entityType = Entity::ENTITY_BOSS_MAIN;
 	//scale;
 	this->maxBodyCount = bodyCount;
 	this->speedLimit = 20.0f;
@@ -24,7 +25,7 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 	//health;
 	//captureRatio;
 	actionTimer = ATTACK_TIMER_MAX;
-	health = 1010;
+	health = 2000;
 
 	if (bodyCount > 0)
 	{
@@ -74,7 +75,7 @@ void SnakeHead::Update(double dt)
 		{
 			if (!backLink->IsDead())
 				Pull(backLink);
-			else
+			else if(backLink->GetBackLink())
 			{
 				Reconnect();
 			}
@@ -103,20 +104,23 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 {
 	if (CheckCollision(b, dt))
 	{
-		CollisionResponse(b);
-
 		Player* player = dynamic_cast<Player*>(b);
 		if (player)
 		{
 			player->TakeDamage(ATTACK_RAM_DAMAGE);
 		}
 		SnakeBody* body = dynamic_cast<SnakeBody*>(b);
-		if (body && body->IsDead())
+		if (body)
 		{
-			SnakeBody* last = GetLast();
-			last->LinkBackTo(body);
-			body->Init(pos, movementSpeed * 0.25f, speedLimit * 0.75f);
+			if (body->IsDead())
+			{
+				SnakeBody* last = GetLast();
+				last->LinkBackTo(body);
+				body->Init(pos, movementSpeed * 0.25f, speedLimit * 0.75f);
+			}
 		}
+
+		CollisionResponse(b);
 	}
 }
 
@@ -205,12 +209,9 @@ void SnakeHead::Upgrade()
 
 void SnakeHead::Reconnect()
 {
-	if (backLink->GetBackLink())
-	{
-		SnakeBody* link = backLink->GetBackLink();
-		backLink->LinkBackTo(NULL);
-		backLink = link;
-	}
+	SnakeBody* link = backLink->GetBackLink();
+	backLink->LinkBackTo(NULL);
+	backLink = link;
 }
 
 void SnakeHead::Pull(SnakeBody* body)
@@ -229,6 +230,9 @@ SnakeBody* SnakeHead::GetLast()
 		SnakeBody* last = backLink;
 		while (last->GetBackLink() != NULL)
 		{
+			if (last == last->GetBackLink())
+				break;
+
 			last = last->GetBackLink();
 		}
 		return last;
@@ -249,11 +253,16 @@ int SnakeHead::GetBodyCount()
 		{
 			last = last->GetBackLink();
 
-			if (last == last->GetBackLink())
-				break;
+			{//for safety
+				if (count > maxBodyCount)
+					break;
+				if (last == last->GetBackLink())
+					break;
+			}
 
 			count++;
 		}
+
 		return count;
 	}
 	else

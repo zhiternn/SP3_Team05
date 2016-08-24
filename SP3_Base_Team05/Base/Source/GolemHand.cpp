@@ -18,6 +18,7 @@ void GolemRightHand::Init(Vector3 pos)
     this->pos = pos;
     active = true;
     type = GameObject::GO_ENTITY;
+	entityType = Entity::ENTITY_BOSS_BODY;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BALL;
     mass = 4;

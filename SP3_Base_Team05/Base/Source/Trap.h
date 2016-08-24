@@ -9,7 +9,7 @@ public:
 	Trap();
 	~Trap();
 
-	virtual void Init(Vector3 pos, GameObject* target, float lifeTime);
+	virtual void Init(Vector3 pos, GameObject* target);
 	virtual void Update(double dt);
 	virtual void SetupMesh();
 	virtual void HandleInteraction(double dt);
