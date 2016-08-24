@@ -21,6 +21,9 @@ void SceneSummoner::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
+	//Clear the List from previous Scene
+	GameObject::goList.clear();
+
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	//meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));

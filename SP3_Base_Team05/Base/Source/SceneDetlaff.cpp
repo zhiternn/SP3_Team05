@@ -23,6 +23,9 @@ void SceneDetlaff::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
+	//Clear the list from previous scene
+	GameObject::goList.clear();
+
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
 	//meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
@@ -496,9 +499,12 @@ void SceneDetlaff::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
-	go->SetupMesh();
-	if (go->mesh)
-		RenderMesh(go->mesh, false);
+	if (go)
+	{
+		go->SetupMesh();
+		if (go->mesh)
+			RenderMesh(go->mesh, false);
+	}
 
 	modelStack.PopMatrix();
 }
