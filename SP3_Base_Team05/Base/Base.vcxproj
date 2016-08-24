@@ -28,6 +28,7 @@
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\MainMenu.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\MeshManager.cpp" />
@@ -70,6 +71,7 @@
     <ClInclude Include="Source\GolemHand.h" />
     <ClInclude Include="Source\GolemHead.h" />
     <ClInclude Include="Source\Inventory.h" />
+    <ClInclude Include="Source\MainMenu.h" />
     <ClInclude Include="Source\MeshManager.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Light.h" />

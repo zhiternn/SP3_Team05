@@ -102,9 +102,9 @@ void MainMenu::Render()
     case MainMenu::MENU_MAIN:
         MainMenuPage();
         break;
-    case MainMenu::MENU_PLAY: state = MENU_INSTRUCTIONS; /*MENU_LOADLEVEL*/;
+    case MainMenu::MENU_PLAY: /*state = MENU_INSTRUCTIONS;*/sm->ChangeScene(1);
         break;
-    case MainMenu::MENU_LOADLEVEL: //sm->ChangeScene(1);
+    case MainMenu::MENU_LOADLEVEL: 
         break;
     case MainMenu::MENU_INSTRUCTIONS: InstructionPage();
         break;
