@@ -264,9 +264,9 @@ void Application::Run()
 
 	//Scene* scene = new SceneSummoner();
 
-	//sm.SetScene(new SceneDetlaff());
+	sm.SetScene(new SceneDetlaff());
 
-	Scene* scene = new SceneSummoner();
+	//Scene* scene = new SceneSummoner();
 	//Scene* scene = new SceneDetlaff();
 
 	//Scene* scene = new SceneGolem();
@@ -274,9 +274,9 @@ void Application::Run()
 
 	//Main Loop
 
-	//sm.GetScene()->Init();
+	sm.GetScene()->Init();
 
-	scene->Init();
+	//scene->Init();
     HideCursor();
 
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame

@@ -20,7 +20,7 @@ void SceneGolem::Init()
 {
     SceneBase::Init();
     Math::InitRNG();
-
+	GameObject::goList.clear();
     //meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
     //meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
     //meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
@@ -507,12 +507,16 @@ void SceneGolem::UpdateGameObjects(double dt)
 
 void SceneGolem::RenderGO(GameObject* go)
 {
-    modelStack.PushMatrix();
+	modelStack.PushMatrix();
 
-    go->SetupMesh();
+	if (go)
+	{
+		go->SetupMesh();
 
-    if (go->mesh)
-        RenderMesh(go->mesh, false);
+	    if (go->mesh)
+		   RenderMesh(go->mesh, false);
+	}
+    
     
 
     modelStack.PopMatrix();

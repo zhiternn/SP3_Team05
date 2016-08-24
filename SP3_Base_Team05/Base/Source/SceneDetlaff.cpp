@@ -9,7 +9,8 @@
 
 SceneDetlaff::SceneDetlaff() :
 player(NULL),
-mainCamera(NULL)
+mainCamera(NULL),
+manager(SceneManager::GetInstance())
 {
 }
 
@@ -80,6 +81,7 @@ void SceneDetlaff::Init()
 	mainCamera->Include(&mousePos_worldBased);
 
 	enemyFireDelay = 1.0f;
+
 }
 
 void SceneDetlaff::PlayerController(double dt)
@@ -160,7 +162,7 @@ void SceneDetlaff::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::KEY_B))
 	{
-		man->ChangeScene(1);
+		manager.ChangeScene(1);
 	}
 }
 
@@ -183,11 +185,6 @@ void SceneDetlaff::Update(double dt)
 			);
 	}
 
-	//Restrict the player from moving past the deadzone
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
-	{
-		PlayerController(dt);
-	}
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -202,6 +199,12 @@ void SceneDetlaff::Update(double dt)
 		Vector3 mouseDir;
 		mouseDir = (player->pos - detlaff->pos).Normalized();
 		detlaff->Shoot(mouseDir);
+	}
+
+	//Restrict the player from moving past the deadzone
+	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
+	{
+		PlayerController(dt);
 	}
 }
 
