@@ -23,7 +23,7 @@ public:
 
 	void Include(Vector3* pos);
 
-	bool Deadzone(Vector3 *p, Vector3 cameraTarget);
+	bool Deadzone(Vector3 *p, Vector3 cameraTarget, float ortho);
 
 	std::vector<Vector3*>entityList;
 

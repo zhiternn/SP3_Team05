@@ -1,6 +1,6 @@
 #include "SceneManager.h"
 
-SceneManager::SceneManager()
+SceneManager::SceneManager() : currentScene(NULL)
 {
 }
 
@@ -14,8 +14,7 @@ void SceneManager::ChangeScene(int num)
 {
 	if (currentScene != NULL)
 	{
-		currentScene->Exit();
-		delete currentScene;
+		Clean();
 	}
 
 	switch (num)
@@ -23,26 +22,31 @@ void SceneManager::ChangeScene(int num)
 	case 1:
 	{
 		currentScene = new SceneGolem();
+	
 		break;
 	}
 	case 2:
 	{
 		currentScene = new SceneSnakeBoss();
+
 		break;
 	}
 	case 3:
 	{
 		currentScene = new SceneSummoner();
+
 		break;
 	}
 	case 4:
 	{
 		currentScene = new SceneDetlaff();
+
 		break;
 	}
 	}
 	
 	currentScene->Init();
+	currentScene->Render();
 }
 
 void SceneManager::SetScene(Scene* scene)
@@ -53,4 +57,15 @@ void SceneManager::SetScene(Scene* scene)
 Scene* SceneManager::GetScene()
 {
 	return this->currentScene;
+}
+
+void SceneManager::Init()
+{
+	currentScene->Init();
+}
+
+void SceneManager::Clean()
+{
+	currentScene->Exit();
+	delete currentScene;
 }

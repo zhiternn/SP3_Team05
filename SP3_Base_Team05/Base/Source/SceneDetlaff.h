@@ -57,7 +57,7 @@ private:
 
 	CDetlaff* detlaff;
 
-	SceneManager* man;
+	SceneManager &manager;
 };
 
 #endif

@@ -273,7 +273,12 @@ void Application::Run()
 
 	//Scene* scene = new SceneSnakeBoss();
 	//Scene* scene = new SceneSummoner();
-	sm.SetScene(new SceneSnakeBoss());
+
+
+	sm.SetScene(new SceneDetlaff());
+
+	//Scene* scene = new SceneSummoner();
+
 	//Scene* scene = new SceneDetlaff();
 	//Scene* scene = new SceneGolem();
     //Scene* scene = new MainMenu();

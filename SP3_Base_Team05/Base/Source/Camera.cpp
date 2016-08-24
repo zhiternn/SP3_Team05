@@ -63,7 +63,7 @@ Vector3 Camera::GetPosition()
 {
 	return this->position;
 }
-bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
+bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget, float ortho)
 {
 	//Create a deadzone
 	Vector3 upperRight;
@@ -71,13 +71,14 @@ bool Camera::Deadzone(Vector3 *pos, Vector3 cameraTarget)
 	//They call me the mother of hardcoding hehe xd
 	//Set the upperRight and bottomLeft Bounds
 	
+	ortho /= 100;
 
-	upperRight.x = cameraTarget.x + 63;
-	upperRight.y = cameraTarget.y + 47;
+	upperRight.x = cameraTarget.x + (63 * ortho);
+	upperRight.y = cameraTarget.y + (47 * ortho);
 
 
-	bottomLeft.x = cameraTarget.x - 63;
-	bottomLeft.y = cameraTarget.y - 47;
+	bottomLeft.x = cameraTarget.x - (63 * ortho);
+	bottomLeft.y = cameraTarget.y - (47 * ortho);
 
 	//Position check
 	if (pos->x < upperRight.x && pos->x > bottomLeft.x)
