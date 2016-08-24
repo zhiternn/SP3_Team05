@@ -8,7 +8,8 @@
 
 SceneSummoner::SceneSummoner() :
 player(NULL),
-mainCamera(NULL)
+mainCamera(NULL),
+manager(SceneManager::GetInstance())
 {
 }
 

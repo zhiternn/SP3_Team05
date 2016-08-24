@@ -52,6 +52,8 @@ private:
 	Vector3 mousePos_worldBased;
 
 	SnakeHead* enemy;
+
+	SceneManager &manager;
 };
 
 #endif

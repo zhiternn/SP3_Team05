@@ -3,7 +3,7 @@
 #include "Application.h"
 #include "Controls.h"
 #include "MeshManager.h"
-#include "SceneGolem.h"
+
 
 #include <sstream>
 

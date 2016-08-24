@@ -54,6 +54,8 @@ private:
     GolemHead* golemhead;
     GolemLeftHand* golemlhead;
     GolemRightHand* golemrhead;
+
+	SceneManager &manager;
 };
 
 #endif

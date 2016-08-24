@@ -9,6 +9,7 @@
 #include "ProjectileList.h"
 #include "Summoner.h"
 #include "Summons.h"
+#include "SceneManager.h"
 
 #include <vector>
 
@@ -49,6 +50,8 @@ private:
 	Vector3 mousePos_worldBased;
 
 	Summoner* summoner;
+
+	SceneManager &manager;
 };
 
 #endif
