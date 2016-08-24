@@ -9,11 +9,13 @@
 #include "ProjectileList.h"
 #include "SnakeHead.h"
 #include "Summoner.h"
+#include "SceneManager.h"
 
 #include <vector>
 
 using std::vector;
 
+class SceneManager;
 class SceneSnakeBoss : public SceneBase
 {
 public:
@@ -52,6 +54,8 @@ private:
 	Vector3 mousePos_worldBased;
 
 	SnakeHead* enemy;
+
+	SceneManager &manager;
 };
 
 #endif

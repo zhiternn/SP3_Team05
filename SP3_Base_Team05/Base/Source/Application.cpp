@@ -275,9 +275,6 @@ void Application::Run()
 	sm.SetScene(new SceneSummoner());
 	//sm.SetScene(new SceneDetlaff());
 	//sm.SetScene(new SceneGolem());
-	//Scene* scene = new SceneDetlaff();
-	//Scene* scene = new SceneGolem();
-    //Scene* scene = new MainMenu();
 
 	//Main Loop
 

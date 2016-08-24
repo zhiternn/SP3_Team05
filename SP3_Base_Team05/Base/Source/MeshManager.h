@@ -66,8 +66,12 @@ enum GEOMETRY_TYPE_DEFAULT
 	GEO_WEAPON_SHOTGUN,
 	GEO_WEAPON_SPLITGUN,
 
+    // MENU THINGS
     GEO_MENU_CURSOR,
     GEO_MENU_BACKGROUND,
+    GEO_MENU_CHOICEBOX,
+    GEO_MENU_SELECTION,
+    GEO_MENU_FRAME,
 
 	GEO_DEFAULT_END,
 };
@@ -95,6 +99,7 @@ protected:
 	void InitSceneSnake();
 	void InitSceneSummoner();
 	void InitSceneGolem();
+    void InitMainMenu();
 
 };
 
