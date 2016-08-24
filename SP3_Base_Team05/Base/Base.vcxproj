@@ -20,6 +20,7 @@
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Entity.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
+    <ClCompile Include="Source\Gamepad.cpp" />
     <ClCompile Include="Source\GolemHand.cpp" />
     <ClCompile Include="Source\GolemHead.cpp" />
     <ClCompile Include="Source\Inventory.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\GameObject.h" />
+    <ClInclude Include="Source\Gamepad.h" />
     <ClInclude Include="Source\GolemHand.h" />
     <ClInclude Include="Source\GolemHead.h" />
     <ClInclude Include="Source\Inventory.h" />
