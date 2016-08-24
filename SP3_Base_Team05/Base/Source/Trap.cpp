@@ -17,13 +17,16 @@ void Trap::Init(Vector3 pos)
 	type = GameObject::GO_ENVIRONMENT;
 	this->pos = pos;
 	this->mass = 0;
+	this->vel.SetZero();
 	lifetime = 1.0f;
-	scale.Set(radius, radius, radius);
-	collider.type = Collider::COLLIDER_NONE;
+	scale.Set(radius, radius, 2);
+	collider.type = Collider::COLLIDER_BALL;
+	collider.isTrigger = true;
 }
 
 void Trap::Update(double dt)
 {
+	GameObject::Update(dt);
 	lifetime -= dt;
 
 	if (lifetime <= 0)
@@ -33,21 +36,17 @@ void Trap::Update(double dt)
 void Trap::HandleInteraction(GameObject* b, double dt)
 {
 	Enemy *enemy = dynamic_cast<Enemy*>(b);
-	if (CheckCollision(b, dt))
+	if (!enemy)
+		return;
+
+	float combinedRadius = this->scale.x + b->GetScale().x;
+	float distanceBetween = (this->pos - b->pos + b->GetVelocity() * (float)dt).LengthSquared();
+	if (distanceBetween <= combinedRadius * combinedRadius)
 	{
-		if (enemy)
-		{
-			enemy->captureRate += dt;
-			std::cout << enemy->captureRate << std::endl;
-			lifetime = 1.0f;
-		}
-	}
-	else
-	{
-		if (enemy)
-		{
-			enemy->captureRate = 0;
-		}
+		enemy->SetVelocity(0);
+		enemy->Capturing(dt);
+		std::cout << enemy->captureRate << std::endl;
+		this->lifetime = 1.0f;
 	}
 }
 

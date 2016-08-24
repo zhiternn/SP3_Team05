@@ -6,6 +6,7 @@
 #include "Weapon.h"
 
 static const float REACH_CHECKER = 2.0f;
+static const float CAPTURE_GOAL = 5.f;
 
 class Enemy : public Entity
 {
@@ -16,6 +17,8 @@ public:
 	virtual void Init(Vector3 pos);
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
+	virtual void Capturing(float rate);
+	virtual void Captured();
 
 	//Setters
 	void SetTarget(Entity* target);
@@ -52,6 +55,8 @@ protected:
 	float destinationCountdown;
 	Entity* target;
 
+	//float captureRate;
+	bool isCaptured;
 };
 
 Enemy* FetchEnemy();

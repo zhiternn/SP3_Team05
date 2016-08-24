@@ -46,6 +46,7 @@ void TrapProjectile::HandleInteraction(GameObject *b, double dt)
 
 	if (CheckCollision(b, dt))
 	{
+		CollisionResponse(b);
 		Enemy* enemy = dynamic_cast<Enemy*>(b);
 		if (enemy)
 		{
