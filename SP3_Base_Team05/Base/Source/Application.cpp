@@ -272,8 +272,8 @@ void Application::Run()
 	meshManager.Init();
 
 	//sm.SetScene(new SceneSnakeBoss());
-	sm.SetScene(new SceneSummoner());
-	//sm.SetScene(new SceneDetlaff());
+	//sm.SetScene(new SceneSummoner());
+	sm.SetScene(new SceneDetlaff());
 	//sm.SetScene(new SceneGolem());
 
 	//Main Loop

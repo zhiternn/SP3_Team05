@@ -80,7 +80,7 @@ bool Gamepad::IsConnected()
 	//Get Current Gamepad State
 	DWORD Result = XInputGetState(m_GamepadIndex, &m_State);
 
-	if (Result == ERROR_SEVERITY_SUCCESS)
+	if (Result == ERROR_SUCCESS)
 	{
 		//Gamepad is Connected
 		return true;
@@ -233,7 +233,6 @@ if (LeftTrigger() > 0.0f)
 	// The trigger has been pressed (even slightest tap)...
 }
 */
-
 
 //Controller Vibration
 void Gamepad::Rumble(float LeftMotor, float RightMotor)

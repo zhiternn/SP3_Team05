@@ -35,12 +35,12 @@ public:
 	void RenderSkyPlane();
 
 	float enemyFireDelay;
-	float hehexd;
 
 
 private:
 
 	void PlayerController(double dt);
+	void GetGamePadInput(double dt);
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();
 	void RenderGO(GameObject* go);
@@ -54,6 +54,10 @@ private:
 
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
+
+	Vector3 controllerStick_Pos;
+	Vector3 controllerStick_WorldPos;
+	Vector3 stickDir;
 
 	CDetlaff* detlaff;
 
