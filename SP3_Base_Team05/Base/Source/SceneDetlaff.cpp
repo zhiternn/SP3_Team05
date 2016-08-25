@@ -482,12 +482,12 @@ void SceneDetlaff::RenderWorld()
 
 void SceneDetlaff::RenderHUD()
 {
-	//Render the crosshair
-	modelStack.PushMatrix();
-	modelStack.Translate(controllerStick_WorldPos.x, controllerStick_WorldPos.y, 6);
-	modelStack.Scale(10, 10, 10);
-	RenderMesh(meshList[GEO_CROSSHAIR], false);
-	modelStack.PopMatrix();
+	////Render the crosshair
+	//modelStack.PushMatrix();
+	//modelStack.Translate(controllerStick_WorldPos.x, controllerStick_WorldPos.y, 6);
+	//modelStack.Scale(10, 10, 10);
+	//RenderMesh(meshList[GEO_CROSSHAIR], false);
+	//modelStack.PopMatrix();
 
 	//On screen text
 	std::ostringstream ss;
