@@ -238,7 +238,7 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 				player->TakeDamage(proj_dmg);
 			else
 			{
-				Enemy* enemy = dynamic_cast<Enemy*>(b);
+				Enemy* enemy = static_cast<Enemy*>(b);
 				enemy->TakeDamage(proj_dmg);
 			}
 		}

@@ -94,6 +94,7 @@
     <ClInclude Include="Source\SceneDetlaff.h" />
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
+    <ClInclude Include="Source\Shield.h" />
     <ClInclude Include="Source\SnakeBody.h" />
     <ClInclude Include="Source\SnakeHead.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />

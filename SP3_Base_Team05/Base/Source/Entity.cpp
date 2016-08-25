@@ -36,12 +36,21 @@ void Entity::Die()
 }
 
 unsigned int Entity::GetHP()
-
 {
 	return this->health;
+}
+
+void Entity::SetHP(short int HP)
+{
+	this->health = HP;
 }
 
 Entity::ENTITY_TYPE Entity::GetEntityType()
 {
 	return entityType;
+}
+
+void Entity::SetEntityType(ENTITY_TYPE type)
+{
+	this->entityType = type;
 }

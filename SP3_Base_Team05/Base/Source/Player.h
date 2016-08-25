@@ -18,9 +18,9 @@ public:
 	// Functions
 	void Init(Vector3 pos, Vector3 scale, Vector3 front);
 	virtual void Update(double dt);
-	virtual void HandleInteraction(GameObject* b, double dt);
 	virtual void SetupMesh();
 	virtual void TakeDamage(int amount);
+	virtual void HandleInteraction(GameObject* b, double dt);
 	
 	void Move(Vector3 dir, double dt);
 	void Dash(Vector3 dir, double dt);
