@@ -86,7 +86,7 @@ void SceneGolem::Init()
     golemlhead->SetType(GameObject::GO_ENTITY);
     golemlhead->SetActive(true);
     golemlhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemlhead->SetScale(6, 6, 6);
+    golemlhead->SetScale(8, 8, 8);
     golemlhead->SetMass(3);
     golemlhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 70.f, 0));
 
@@ -96,7 +96,7 @@ void SceneGolem::Init()
     golemrhead->SetType(GameObject::GO_ENTITY);
     golemrhead->SetActive(true);
     golemrhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemrhead->SetScale(6, 6, 6);
+    golemrhead->SetScale(8, 8, 8);
     golemrhead->SetMass(3);
     golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 50.f, 0));
 
@@ -195,26 +195,30 @@ void SceneGolem::Update(double dt)
 
     if (golemhead->GetHP() <= 500)
     {
-        golemrhead->SetSpeedLimit(90);
+        golemrhead->SetSpeedLimit(100);
         golemrhead->SetMovementSpeed(5500);
-        golemlhead->SetSpeedLimit(90);
+        golemrhead->SetMass(99);
+        golemlhead->SetSpeedLimit(100);
         golemlhead->SetMovementSpeed(5500);
+        golemlhead->SetMass(99);
     }
     else if (golemhead->GetHP() <= 1500)
     {
         golemrhead->SetSpeedLimit(70);
         golemrhead->SetMovementSpeed(2300);
+        golemrhead->SetMass(10);
         golemlhead->SetSpeedLimit(70);
         golemlhead->SetMovementSpeed(2300);
-
-        golemlhead;
+        golemlhead->SetMass(10);
     }
     else if (golemhead->GetHP() <= 3000)
     {
         golemrhead->SetSpeedLimit(60);
         golemrhead->SetMovementSpeed(1700);
+        golemrhead->SetMass(4);
         golemlhead->SetSpeedLimit(60);
         golemlhead->SetMovementSpeed(1700);
+        golemlhead->SetMass(4);
     }
     
     if (golemhead->GetHP() <= 0)
@@ -396,10 +400,17 @@ void SceneGolem::RenderWorld()
 
 void SceneGolem::RenderHUD()
 {
+	//Render Minimap
+	modelStack.PushMatrix();
+	modelStack.Translate(70, 50, 0);
+	modelStack.Scale(18, 18, 1);
+	RenderMinimap(1.0f);
+	modelStack.PopMatrix();
+
     // Render the crosshair
     modelStack.PushMatrix();
     modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-    modelStack.Scale(10, 10, 10);
+    modelStack.Scale(5, 5, 5);
     RenderMesh(meshList[GEO_CROSSHAIR], false);
     modelStack.PopMatrix();
 
@@ -447,6 +458,70 @@ void SceneGolem::RenderHUD()
     RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
     RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
 }
+
+void SceneGolem::RenderMinimap(float zoom)
+{
+	glEnable(GL_STENCIL_TEST);
+
+	// Draw floor
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0xFF); // Write to stencil buffer
+	glDepthMask(GL_FALSE); // Don't write to depth buffer
+	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+
+	RenderMesh(meshList[GEO_MINIMAP], false);
+
+	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+	glStencilMask(0x00); // Don't write anything to stencil buffer
+	glDepthMask(GL_TRUE); // Write to depth buffer
+
+	for (int i = 0; i < GameObject::goList.size(); ++i)
+	{
+		if (GameObject::goList[i]->IsActive())
+		{
+			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
+			if (entity && entity->IsActive())
+			{
+				modelStack.PushMatrix();
+				Vector3 pos = entity->pos;
+				pos.x -= player->pos.x;// Move to player pos
+				pos.y -= player->pos.y;// Move to player pos
+				//sphere space == radius = 1
+				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
+				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
+				Vector3 scale = entity->GetScale();
+				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
+				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
+				modelStack.Translate(pos.x, pos.y, pos.z);
+				modelStack.Scale(scale.x, scale.y, scale.z);
+
+				switch (entity->GetEntityType())
+				{
+				case Entity::ENTITY_BOSS_MAIN:
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+					break;
+				case Entity::ENTITY_BOSS_BODY:
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+					break;
+				case Entity::ENTITY_PLAYER:
+					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+					break;
+				default:break;
+				}
+
+				modelStack.PopMatrix();
+			}
+		}
+	}
+
+	glDisable(GL_STENCIL_TEST);
+
+	glLineWidth(5.0f);
+	RenderMesh(meshList[GEO_MINIMAP_BORDER], false);
+	glLineWidth(1.0f);
+}
+
 
 void SceneGolem::Exit()
 {

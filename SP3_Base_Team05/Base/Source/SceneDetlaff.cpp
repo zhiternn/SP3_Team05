@@ -495,6 +495,13 @@ void SceneDetlaff::RenderWorld()
 
 void SceneDetlaff::RenderHUD()
 {
+	//Render Minimap
+	modelStack.PushMatrix();
+	modelStack.Translate(70, 50, 0);
+	modelStack.Scale(18, 18, 1);
+	RenderMinimap(1.0f);
+	modelStack.PopMatrix();
+
 	////Render the crosshair
 	//modelStack.PushMatrix();
 	//modelStack.Translate(controllerStick_WorldPos.x, controllerStick_WorldPos.y, 6);
@@ -535,6 +542,69 @@ void SceneDetlaff::RenderHUD()
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
 	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
 	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
+}
+
+void SceneDetlaff::RenderMinimap(float zoom)
+{
+	glEnable(GL_STENCIL_TEST);
+
+	// Draw floor
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0xFF); // Write to stencil buffer
+	glDepthMask(GL_FALSE); // Don't write to depth buffer
+	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+
+	RenderMesh(meshList[GEO_MINIMAP], false);
+
+	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+	glStencilMask(0x00); // Don't write anything to stencil buffer
+	glDepthMask(GL_TRUE); // Write to depth buffer
+
+	for (int i = 0; i < GameObject::goList.size(); ++i)
+	{
+		if (GameObject::goList[i]->IsActive())
+		{
+			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
+			if (entity && entity->IsActive())
+			{
+				modelStack.PushMatrix();
+				Vector3 pos = entity->pos;
+				pos.x -= player->pos.x;// Move to player pos
+				pos.y -= player->pos.y;// Move to player pos
+				//sphere space == radius = 1
+				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
+				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
+				Vector3 scale = entity->GetScale();
+				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
+				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
+				modelStack.Translate(pos.x, pos.y, pos.z);
+				modelStack.Scale(scale.x, scale.y, scale.z);
+
+				switch (entity->GetEntityType())
+				{
+				case Entity::ENTITY_BOSS_MAIN:
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+					break;
+				case Entity::ENTITY_BOSS_BODY:
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+					break;
+				case Entity::ENTITY_PLAYER:
+					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+					break;
+				default:break;
+				}
+
+				modelStack.PopMatrix();
+			}
+		}
+	}
+
+	glDisable(GL_STENCIL_TEST);
+
+	glLineWidth(5.0f);
+	RenderMesh(meshList[GEO_MINIMAP_BORDER], false);
+	glLineWidth(1.0f);
 }
 
 void SceneDetlaff::Exit()

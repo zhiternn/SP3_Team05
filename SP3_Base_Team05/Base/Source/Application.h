@@ -35,15 +35,19 @@ public:
 
 	// The sound engine
 	ISoundEngine* theSoundEngine;
-	ISoundSource* bgm_lullaby;
-	ISound* sound_Footstep;
-	ISoundSource* sound_jumpLanding;
-	ISoundSource* sound_gunshot;
-	ISoundSource* sound_hookshot;
-	ISoundSource* sound_rocketshot;
-	ISoundSource* sound_bulletImpact;
-	ISoundSource* sound_rocketImpact;
-	ISoundSource* sound_ballBounce;
+    ISoundSource* bgm_menu;
+    ISoundSource* menu_hover;
+    ISoundSource* menu_click;
+
+	//ISoundSource* bgm_lullaby;
+	//ISound* sound_Footstep;
+	//ISoundSource* sound_jumpLanding;
+	//ISoundSource* sound_gunshot;
+	//ISoundSource* sound_hookshot;
+	//ISoundSource* sound_rocketshot;
+	//ISoundSource* sound_bulletImpact;
+	//ISoundSource* sound_rocketImpact;
+	//ISoundSource* sound_ballBounce;
 
 	void LoadMedia();
 	void StopSound();
