@@ -8,7 +8,8 @@
 
 SceneSummoner::SceneSummoner() :
 player(NULL),
-mainCamera(NULL)
+mainCamera(NULL),
+manager(SceneManager::GetInstance())
 {
 }
 
@@ -20,6 +21,9 @@ void SceneSummoner::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
+
+	//Clear the List from previous Scene
+	GameObject::goList.clear();
 
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
@@ -48,7 +52,7 @@ void SceneSummoner::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 150;
+	m_orthoHeight = 300;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -119,7 +123,6 @@ void SceneSummoner::PlayerController(double dt)
 		Controls::GetInstance().mouse_ScrollY = 0;
 	}
 	if (Controls::GetInstance().mouse_ScrollY > 0)
-
 	{
 		player->ChangeWeaponUp();
 		Controls::GetInstance().mouse_ScrollY = 0;
@@ -154,7 +157,7 @@ void SceneSummoner::Update(double dt)
 	}
 
 	//Restrict the player from moving past the deadzone
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
+	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
 		PlayerController(dt);
 	}
@@ -295,14 +298,6 @@ void SceneSummoner::RenderMain()
 
 	RenderWorld();
 
-	if (!summoner->destinations.empty())
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(summoner->destinations.front().x, summoner->destinations.front().y, 0);
-		RenderMesh(meshList[GEO_CUBE], false);
-		modelStack.PopMatrix();
-	}
-
 	//RenderSkyPlane();
 }
 
@@ -365,28 +360,31 @@ void SceneSummoner::RenderHUD()
 	ss.str("");
 	ss << "Weapon: ";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
-	switch (player->weaponIter)
+	switch (player->weapon->weapon_type)
 	{
-	case 0:
+	case Weapon::W_SHOTGUN:
 		RenderUI(meshList[GEO_WEAPON_SHOTGUN], 7, 25, 58.5f, 1, false);
 		break;
-	case 1:
+	case Weapon::W_MACHINEGUN:
 		RenderUI(meshList[GEO_WEAPON_MACHINEGUN], 7, 25, 58.5f, 1, false);
 		break;
-	case 2:
+	case Weapon::W_SPLITGUN:
 		RenderUI(meshList[GEO_WEAPON_SPLITGUN], 7, 25, 58.5f, 1, false);
 		break;
 	}
 
 	ss.str("");
 	ss << "Bullet: ";
-	switch (player->projectileIter)
+	switch (player->projectile->GetProjType())
 	{
-	case 0:
+	case CProjectile::BULLET:
 		ss << "Normal";
 		break;
-	case 1:
+	case CProjectile::HOOK:
 		ss << "Hook";
+		break;
+	case CProjectile::TRAP:
+		ss << "Trap";
 		break;
 	}
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);

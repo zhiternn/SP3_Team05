@@ -21,5 +21,8 @@ public:
 	void ChangeScene(int num);
 	void SetScene(Scene *scene);
 	Scene* GetScene();
+
+	void Init();
+	void Clean();
 };
 

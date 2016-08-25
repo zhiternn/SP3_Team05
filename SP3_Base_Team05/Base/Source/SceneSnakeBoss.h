@@ -7,11 +7,13 @@
 #include "Player.h"
 #include "WeaponList.h"
 #include "ProjectileList.h"
+#include "SceneManager.h"
 
 #include <vector>
 
 using std::vector;
 
+class SceneManager;
 class SceneSnakeBoss : public SceneBase
 {
 public:
@@ -48,6 +50,8 @@ private:
 
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
+
+	SceneManager &manager;
 };
 
 #endif

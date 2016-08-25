@@ -9,7 +9,8 @@
 
 SceneSnakeBoss::SceneSnakeBoss() :
 player(NULL),
-mainCamera(NULL)
+mainCamera(NULL),
+manager(SceneManager::GetInstance())
 {
 }
 
@@ -21,6 +22,9 @@ void SceneSnakeBoss::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
+	
+	//Clear the list from previous scene
+	GameObject::goList.clear();
 
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
@@ -159,7 +163,7 @@ void SceneSnakeBoss::Update(double dt)
 	}
 
 	//Restrict the player from moving past the deadzone
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
+	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
 		PlayerController(dt);
 	}
@@ -513,9 +517,12 @@ void SceneSnakeBoss::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
-	go->SetupMesh();
-	if (go->mesh)
-		RenderMesh(go->mesh, true);
+	if (go)
+	{
+		go->SetupMesh();
+		if (go->mesh)
+			RenderMesh(go->mesh, true);
+	}
 
 	modelStack.PopMatrix();
 }

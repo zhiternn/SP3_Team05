@@ -20,6 +20,7 @@
     <ClCompile Include="Source\Enemy.cpp" />
     <ClCompile Include="Source\Entity.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
+    <ClCompile Include="Source\Gamepad.cpp" />
     <ClCompile Include="Source\GolemHand.cpp" />
     <ClCompile Include="Source\GolemHead.cpp" />
     <ClCompile Include="Source\Inventory.cpp" />
@@ -27,6 +28,7 @@
     <ClCompile Include="Source\LoadOBJ.cpp" />
     <ClCompile Include="Source\LoadTGA.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\MainMenu.cpp" />
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\MeshManager.cpp" />
@@ -43,7 +45,6 @@
     <ClCompile Include="Source\SceneDetlaff.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
-    <ClCompile Include="Source\Snake.cpp" />
     <ClCompile Include="Source\SnakeBody.cpp" />
     <ClCompile Include="Source\SnakeHead.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
@@ -66,9 +67,11 @@
     <ClInclude Include="Source\Enemy.h" />
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\GameObject.h" />
+    <ClInclude Include="Source\Gamepad.h" />
     <ClInclude Include="Source\GolemHand.h" />
     <ClInclude Include="Source\GolemHead.h" />
     <ClInclude Include="Source\Inventory.h" />
+    <ClInclude Include="Source\MainMenu.h" />
     <ClInclude Include="Source\MeshManager.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Light.h" />
@@ -92,7 +95,6 @@
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Shield.h" />
-    <ClInclude Include="Source\Snake.h" />
     <ClInclude Include="Source\SnakeBody.h" />
     <ClInclude Include="Source\SnakeHead.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />

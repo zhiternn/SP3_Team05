@@ -1,6 +1,6 @@
 #include "SceneManager.h"
 
-SceneManager::SceneManager()
+SceneManager::SceneManager() : currentScene(NULL)
 {
 }
 
@@ -12,10 +12,10 @@ SceneManager::~SceneManager()
 //Clean Scene
 void SceneManager::ChangeScene(int num)
 {
+
 	if (currentScene != NULL)
 	{
-		currentScene->Exit();
-		delete currentScene;
+		Clean();
 	}
 
 	switch (num)
@@ -43,6 +43,7 @@ void SceneManager::ChangeScene(int num)
 	}
 	
 	currentScene->Init();
+	currentScene->Render();
 }
 
 void SceneManager::SetScene(Scene* scene)
@@ -53,4 +54,15 @@ void SceneManager::SetScene(Scene* scene)
 Scene* SceneManager::GetScene()
 {
 	return this->currentScene;
+}
+
+void SceneManager::Init()
+{
+	currentScene->Init();
+}
+
+void SceneManager::Clean()
+{
+	currentScene->Exit();
+	//delete currentScene;
 }

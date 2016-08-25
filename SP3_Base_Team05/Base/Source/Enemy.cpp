@@ -17,9 +17,11 @@ void Enemy::Init(Vector3 pos)
 	this->pos = pos;
 	this->active = true;
 	this->isDead = false;
+	this->isCaptured = false;
 	destinationCountdown = REACH_CHECKER;
 	type = GameObject::GO_ENTITY;
 	team = TEAM_ENEMY;
+	captureRate = 0;
 }
 
 void Enemy::Update(double dt)
@@ -30,6 +32,10 @@ void Enemy::Update(double dt)
 
 	if (!UpdateMovement(dt))
 	{//if fail to update (zero destination left)
+	}
+	if (captureRate >= 10)
+	{
+		std::cout << "CAUGHT" << std::endl;
 	}
 }
 
@@ -162,21 +168,9 @@ Enemy* FetchEnemy()
    }
 }
 
-void Enemy::SetRate(float rate)
-{
-	//Clamp the captureRatio
-	Math::Clamp(rate, 0.f, 1.f);
-	captureRatio = rate;
-}
-
 void Enemy::SetTarget(Entity* target)
 {
 	this->target = target;
-}
-
-float Enemy::GetRate()
-{
-	return this->captureRatio;
 }
 
 void Enemy::HandleInteraction(GameObject* b, double dt)
@@ -196,15 +190,37 @@ void Enemy::SetSpeedLimit(float speed)
 {
     this->speedLimit = speed;
 }
+
 void Enemy::SetMovementSpeed(float speed)
 {
     this->movementSpeed = speed;
 }
+
 float Enemy::GetSpeedLimit()
 {
     return this->speedLimit;
 }
+
 float Enemy::GetMovementSpeed()
 {
     return this->movementSpeed;
+}
+
+void Enemy::Capturing(float rate)
+{
+	if (!isCaptured)
+	{
+		captureRate += rate;
+		if (captureRate >= CAPTURE_GOAL)
+		{
+			isCaptured = true;
+			Captured();
+		}
+	}
+}
+
+void Enemy::Captured()
+{
+	this->active = false;
+	// do the pokemon things
 }

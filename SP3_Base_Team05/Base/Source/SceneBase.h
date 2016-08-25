@@ -7,6 +7,7 @@
 #include "Light.h"
 #include "Particle.h"
 #include "DepthFBO.h"
+#include "Gamepad.h"
 
 
 
@@ -130,6 +131,8 @@ protected:
 	bool isWireFrame;
 
 	float fps;
+
+	Gamepad *GamePad;
 };
 
 #endif

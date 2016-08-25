@@ -3,13 +3,16 @@
 #include "Application.h"
 #include "Controls.h"
 #include "MeshManager.h"
-#include "SceneGolem.h"
+
 
 #include <sstream>
 
+#define ENEMY_FIRE_COOLDOWN 2;
+
 SceneDetlaff::SceneDetlaff() :
 player(NULL),
-mainCamera(NULL)
+mainCamera(NULL),
+manager(SceneManager::GetInstance())
 {
 }
 
@@ -21,6 +24,9 @@ void SceneDetlaff::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
+
+	//Clear the list from previous scene
+	GameObject::goList.clear();
 
 	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
 	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
@@ -49,7 +55,7 @@ void SceneDetlaff::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//World Space View
-	m_orthoHeight = 100;
+	m_orthoHeight = 150;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
@@ -79,7 +85,8 @@ void SceneDetlaff::Init()
 	mainCamera->Include(&(player->pos));
 	mainCamera->Include(&mousePos_worldBased);
 
-	enemyFireDelay = 1.0f;
+	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
+
 }
 
 void SceneDetlaff::PlayerController(double dt)
@@ -160,7 +167,7 @@ void SceneDetlaff::PlayerController(double dt)
 	}
 	if (Controls::GetInstance().OnPress(Controls::KEY_B))
 	{
-		man->ChangeScene(1);
+		manager.ChangeScene(1);
 	}
 }
 
@@ -183,11 +190,6 @@ void SceneDetlaff::Update(double dt)
 			);
 	}
 
-	//Restrict the player from moving past the deadzone
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition()))
-	{
-		PlayerController(dt);
-	}
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -197,11 +199,17 @@ void SceneDetlaff::Update(double dt)
 
 	if (enemyFireDelay <= 0.f)
 	{
-		enemyFireDelay = 1.f;
+		enemyFireDelay = ENEMY_FIRE_COOLDOWN;
 
 		Vector3 mouseDir;
 		mouseDir = (player->pos - detlaff->pos).Normalized();
 		detlaff->Shoot(mouseDir);
+	}
+
+	//Restrict the player from moving past the deadzone
+	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
+	{
+		PlayerController(dt);
 	}
 }
 
@@ -493,9 +501,12 @@ void SceneDetlaff::RenderGO(GameObject* go)
 {
 	modelStack.PushMatrix();
 
-	go->SetupMesh();
-	if (go->mesh)
-		RenderMesh(go->mesh, false);
+	if (go)
+	{
+		go->SetupMesh();
+		if (go->mesh)
+			RenderMesh(go->mesh, false);
+	}
 
 	modelStack.PopMatrix();
 }

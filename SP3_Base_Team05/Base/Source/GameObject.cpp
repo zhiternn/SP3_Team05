@@ -178,6 +178,8 @@ float GameObject::CheckCollision2(GameObject* b)
 
 void GameObject::CollisionResponse(GameObject* b)
 {
+	if (this->collider.isTrigger || b->GetCollider().isTrigger)
+		return;
 	if (this->collider.type != Collider::COLLIDER_BALL)
 		return;
 
