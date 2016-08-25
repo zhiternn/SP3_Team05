@@ -29,7 +29,7 @@ public:
 		SetLifetime(2);
 		SetProjectileSpeed(50.0f);
 		SetScale(1, 1, 1);
-		SetMass(50);
+		SetMass(0);
 		ropeLifetime = 5.0f;
 	}
 	Hook(int dmg, float ropeLifetime = 5.0f, float lifeTime = 2.0f, float projSpeed = 50.0f, float size = 1.5f, float mass = 10.0f) :CProjectile(PROJECTILE_TYPE::HOOK)

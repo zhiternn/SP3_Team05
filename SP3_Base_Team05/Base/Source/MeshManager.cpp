@@ -68,8 +68,12 @@ void MeshManager::Init()
 	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f, 8.0f);
 	meshList[GEO_FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
 
-	meshList[GEO_MINIMAP] = MeshBuilder::GenerateCircle("floor", Color(0.4f, 0.4f, 0.4f));
-	meshList[GEO_MINIMAP]->textureArray[0] = LoadTGA("Image//floor.tga");
+	meshList[GEO_MINIMAP] = MeshBuilder::GenerateCircle("minimap_background", Color(0.4f, 0.4f, 0.4f));
+	meshList[GEO_MINIMAP]->textureArray[0] = LoadTGA("Image//minimap_background.tga");
+	meshList[GEO_MINIMAP_BORDER] = MeshBuilder::GenerateCircleOutline("minimap_background_outline", Color(0.4f, 0.4f, 0.4f));
+	meshList[GEO_MINIMAP_PLAYER_ICON] = MeshBuilder::GenerateCircle("player", Color(0.1f, 0.9f, 0.1f), 2);
+	meshList[GEO_MINIMAP_BOSS_MAIN_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(1.0f, 0.0f, 0.0f), 2);
+	meshList[GEO_MINIMAP_BOSS_BODY_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(0.5f, 0.1f, 0.1f), 2);
 
 	meshList[GEO_BORDER] = MeshBuilder::GenerateQuad("border", Color(0, 0, 0), 1.f);
 	meshList[GEO_HEALTH] = MeshBuilder::GenerateQuad("health", Color(0, 1, 0), 1.f);
