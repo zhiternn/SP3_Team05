@@ -467,32 +467,7 @@ void SceneDetlaff::UpdateGameObjects(double dt)
 				}
 			}
 
-			{//Handles out of bounds
-				//Check Horizontally against edges
-				if ((go->GetPosition().x + go->GetScale().x > m_worldWidth && go->GetVelocity().x > 0) ||
-					(go->GetPosition().x - go->GetScale().x < 0 && go->GetVelocity().x < 0))
-				{
-					go->SetVelocity(-go->GetVelocity().x, go->GetVelocity().y, go->GetVelocity().z);
-				}
-				//remove if it cant be seen completely
-				else if (go->GetPosition().x - go->GetScale().x > m_worldWidth ||
-					go->GetPosition().x + go->GetScale().x < 0)
-				{
-					go->SetActive(false);
-				}
-				//Check Vertically against edges
-				if ((go->GetPosition().y + go->GetScale().y > m_worldHeight && go->GetVelocity().y > 0) ||
-					(go->GetPosition().y - go->GetScale().y < 0 && go->GetVelocity().y < 0))
-				{
-					go->SetVelocity(go->GetVelocity().x, -go->GetVelocity().y, go->GetVelocity().z);
-				}
-				//remove if it cant be seen completely
-				else if (go->GetPosition().y - go->GetScale().y > m_worldWidth ||
-					go->GetPosition().y + go->GetScale().y < 0)
-				{
-					go->SetActive(false);
-				}
-			}
+			go->HandleOutOfBounds(0, m_worldWidth, 0, m_worldHeight);
 		}
 	}
 }
