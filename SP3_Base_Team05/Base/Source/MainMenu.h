@@ -6,6 +6,8 @@
 #include "GameObject.h"
 #include "SceneManager.h"
 
+#include "ButtonPosition.h"
+
 #include <vector>
 
 using std::vector;
@@ -44,9 +46,19 @@ public:
     void HelpPage();
     void OptionsPage();
     void CreditsPage();
+    void LevelSelectPage();
 
     void confirmExit();
     void standardLayout();
+
+    void RenderPlayButton();
+    void RenderOptionButton();
+    void RenderCreditButton();
+    void RenderExitButton();
+
+    void MusicBGMButton();
+    void MusicVFXButton();
+    void ControllerButton();
 
 private:
 
@@ -61,14 +73,22 @@ private:
     MENU_STATE state;
     SceneManager &sm;
 
-    float delaytime;
+    bool isHover, isClicked;
+    float continuetime;
 
-    float helpBtnspd;
-    float optBtnspd;
-    float credBtnspd;
+    ButtonPosition b_Play;
+    ButtonPosition b_Continue;
+    ButtonPosition b_Option;
+    ButtonPosition b_Credit;
+    ButtonPosition b_Exit;
+    ButtonPosition b_Back;
+    ButtonPosition b_Yes;
+    ButtonPosition b_No;
 
-    float loadDown;
-    float loadUp;
+    ButtonPosition b_On;
+    ButtonPosition b_Off;
+
+    bool MusicOn, SoundOn, ControllerOn;
 };
 
 #endif

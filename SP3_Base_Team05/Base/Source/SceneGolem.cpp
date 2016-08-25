@@ -85,7 +85,7 @@ void SceneGolem::Init()
     golemlhead->SetType(GameObject::GO_ENTITY);
     golemlhead->SetActive(true);
     golemlhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemlhead->SetScale(6, 6, 6);
+    golemlhead->SetScale(8, 8, 8);
     golemlhead->SetMass(3);
     golemlhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 70.f, 0));
 
@@ -95,7 +95,7 @@ void SceneGolem::Init()
     golemrhead->SetType(GameObject::GO_ENTITY);
     golemrhead->SetActive(true);
     golemrhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemrhead->SetScale(6, 6, 6);
+    golemrhead->SetScale(8, 8, 8);
     golemrhead->SetMass(3);
     golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 50.f, 0));
 
@@ -194,26 +194,30 @@ void SceneGolem::Update(double dt)
 
     if (golemhead->GetHP() <= 500)
     {
-        golemrhead->SetSpeedLimit(90);
+        golemrhead->SetSpeedLimit(100);
         golemrhead->SetMovementSpeed(5500);
-        golemlhead->SetSpeedLimit(90);
+        golemrhead->SetMass(99);
+        golemlhead->SetSpeedLimit(100);
         golemlhead->SetMovementSpeed(5500);
+        golemlhead->SetMass(99);
     }
     else if (golemhead->GetHP() <= 1500)
     {
         golemrhead->SetSpeedLimit(70);
         golemrhead->SetMovementSpeed(2300);
+        golemrhead->SetMass(10);
         golemlhead->SetSpeedLimit(70);
         golemlhead->SetMovementSpeed(2300);
-
-        golemlhead;
+        golemlhead->SetMass(10);
     }
     else if (golemhead->GetHP() <= 3000)
     {
         golemrhead->SetSpeedLimit(60);
         golemrhead->SetMovementSpeed(1700);
+        golemrhead->SetMass(4);
         golemlhead->SetSpeedLimit(60);
         golemlhead->SetMovementSpeed(1700);
+        golemlhead->SetMass(4);
     }
     
     if (golemhead->GetHP() <= 0)
