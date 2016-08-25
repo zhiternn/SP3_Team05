@@ -23,19 +23,18 @@ public:
 	//Setters
 	void SetTarget(Entity* target);
 	void SetRate(float rate);
+	void SetSpeedLimit(float speed);
+	void SetMovementSpeed(float speed);
+	void SetCaptureRate(float captureRate);
+	void SetIsCaptured(bool isCaptured);
+
 	//Getters
 	float GetRate();
 	bool Reached(Vector3 pos);
-
-	float speedLimit;
-	float movementSpeed;
-
-    void SetSpeedLimit(float speed);
-    void SetMovementSpeed(float speed);
-    float GetSpeedLimit();
-    float GetMovementSpeed();
-
-	float captureRate;
+	float GetSpeedLimit();
+	float GetMovementSpeed();
+	float GetCaptureRate();
+	bool IsCaptured();
 
 protected:
 	enum MOVEMENT_PRIORITY
@@ -55,7 +54,10 @@ protected:
 	float destinationCountdown;
 	Entity* target;
 
-	//float captureRate;
+	float speedLimit;
+	float movementSpeed;
+
+	float captureRate;
 	bool isCaptured;
 };
 

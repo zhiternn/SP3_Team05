@@ -43,9 +43,10 @@ void Trap::HandleInteraction(GameObject* b, double dt)
 	float distanceBetween = (this->pos - b->pos + b->GetVelocity() * (float)dt).LengthSquared();
 	if (distanceBetween <= combinedRadius * combinedRadius)
 	{
-		enemy->SetVelocity(0);
+		if (enemy->GetVelocity().Length() >= (enemy->GetSpeedLimit() / 2))
+			enemy->SetVelocity(enemy->GetVelocity() * 0.9f);
+
 		enemy->Capturing(dt);
-		std::cout << enemy->captureRate << std::endl;
 		this->lifetime = 1.0f;
 	}
 }
