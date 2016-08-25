@@ -25,17 +25,35 @@
     <Filter Include="Source Files\Boss">
       <UniqueIdentifier>{4a6a3ad6-f4e3-41a8-88db-1935b0850e80}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Boss\Detlaff">
+      <UniqueIdentifier>{8d2a601a-a3db-4b1e-981a-5301edd51cf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Boss\Golem">
+      <UniqueIdentifier>{77717045-ecea-4864-a1a2-a8bb7bc8db21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Boss\Snake">
+      <UniqueIdentifier>{30616496-a9af-4792-b77b-8762f41b9862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Boss\Summoner">
+      <UniqueIdentifier>{34c53e45-a987-4038-8fb4-3b0e87ce94c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Boss\Detlaff">
+      <UniqueIdentifier>{4cefb90f-b557-4aea-bca7-1bd54ad248e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Boss\Golem">
+      <UniqueIdentifier>{98bdcc70-8949-4b54-8e4f-dbd86f1f6d62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Boss\Snake">
+      <UniqueIdentifier>{06a6163f-84d1-48dc-8026-b7ee5c740dde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Boss\Summoner">
+      <UniqueIdentifier>{0359a0b6-8ac2-444c-a2f0-fec3379ec7fb}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Controller">
       <UniqueIdentifier>{9b68904c-977a-4fe9-9adf-fcaedc0a9c5e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Controller">
       <UniqueIdentifier>{9f953b40-9593-48af-9f6b-53433486b02e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Environment">
-      <UniqueIdentifier>{a2cd3948-b018-4408-a9f3-eed5acc4bfc9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Environment">
-      <UniqueIdentifier>{1d89e558-5585-4287-afc3-d261cc624463}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -132,17 +150,41 @@
     <ClCompile Include="Source\MeshManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Rope.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\SceneGolem.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneManager.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Snake.cpp">
-      <Filter>Source Files\Scenes</Filter>
+    <ClCompile Include="Source\Trap.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGolem.cpp">
       <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Detlaff.cpp">
+      <Filter>Source Files\Boss\Detlaff</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GolemHead.cpp">
+      <Filter>Source Files\Boss\Golem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\GolemHand.cpp">
+      <Filter>Source Files\Boss\Golem</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SnakeBody.cpp">
+      <Filter>Source Files\Boss\Snake</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SnakeHead.cpp">
+      <Filter>Source Files\Boss\Snake</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Summons.cpp">
+      <Filter>Source Files\Boss\Summoner</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Summoner.cpp">
+      <Filter>Source Files\Boss\Summoner</Filter>
     </ClCompile>
     <ClCompile Include="Source\Gamepad.cpp">
       <Filter>Source Files\Controller</Filter>
@@ -150,56 +192,8 @@
     <ClCompile Include="Source\MainMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Detlaff.cpp">
-      <Filter>Source Files\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GolemHand.cpp">
-      <Filter>Source Files\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GolemHead.cpp">
-      <Filter>Source Files\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Summoner.cpp">
-      <Filter>Source Files\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Summons.cpp">
-      <Filter>Source Files\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SnakeHead.cpp">
-      <Filter>Source Files\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SnakeBody.cpp">
-      <Filter>Source Files\Boss</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Rope.cpp">
-      <Filter>Source Files\Environment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Trap.cpp">
-      <Filter>Source Files\Environment</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Detlaff.cpp">
+    <ClCompile Include="Source\ButtonPosition.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GolemHand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\GolemHead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SnakeBody.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SnakeHead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Summoner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Summons.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneGolem.cpp">
-      <Filter>Source Files\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,9 +266,6 @@
     <ClInclude Include="Source\Projectile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Shield.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -314,8 +305,35 @@
     <ClInclude Include="Source\MeshManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Rope.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\SceneManager.h">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Trap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Detlaff.h">
+      <Filter>Header Files\Boss\Detlaff</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GolemHand.h">
+      <Filter>Header Files\Boss\Golem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\GolemHead.h">
+      <Filter>Header Files\Boss\Golem</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SnakeBody.h">
+      <Filter>Header Files\Boss\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SnakeHead.h">
+      <Filter>Header Files\Boss\Snake</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Summoner.h">
+      <Filter>Header Files\Boss\Summoner</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Summons.h">
+      <Filter>Header Files\Boss\Summoner</Filter>
     </ClInclude>
     <ClInclude Include="Source\Gamepad.h">
       <Filter>Header Files\Controller</Filter>
@@ -323,46 +341,7 @@
     <ClInclude Include="Source\MainMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\GolemHead.h">
-      <Filter>Header Files\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\GolemHand.h">
-      <Filter>Header Files\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Detlaff.h">
-      <Filter>Header Files\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SnakeBody.h">
-      <Filter>Header Files\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SnakeHead.h">
-      <Filter>Header Files\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Summoner.h">
-      <Filter>Header Files\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Summons.h">
-      <Filter>Header Files\Boss</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Rope.h">
-      <Filter>Header Files\Environment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Trap.h">
-      <Filter>Header Files\Environment</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Detlaff.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SnakeBody.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SnakeHead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Summoner.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Summons.h">
+    <ClInclude Include="Source\ButtonPosition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

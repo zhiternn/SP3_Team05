@@ -172,6 +172,8 @@ void SceneBase::Init()
 	bLightEnabled = true;
 	isCulled = true;
 	isWireFrame = false;
+
+	GamePad = Gamepad(1);
 }
 
 void SceneBase::Update(double dt)

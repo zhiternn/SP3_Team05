@@ -134,15 +134,9 @@ int Application::GetWindowHeight()
 
 Application::Application() :
 theSoundEngine(NULL),
-bgm_lullaby(NULL),
-sound_Footstep(NULL),
-sound_jumpLanding(NULL),
-sound_gunshot(NULL),
-sound_hookshot(NULL),
-sound_rocketshot(NULL),
-sound_bulletImpact(NULL),
-sound_rocketImpact(NULL),
-sound_ballBounce(NULL)
+bgm_menu(NULL),
+menu_hover(NULL),
+menu_click(NULL)
 {
 }
 
@@ -150,31 +144,15 @@ Application::~Application()
 {
 	if (theSoundEngine != NULL)
 		theSoundEngine->drop();
-	//if (bgm_lullaby != NULL)
-	//	bgm_lullaby->drop();
-	//if (sound_Footstep != NULL)
-	//	sound_Footstep->drop();
-	//if (sound_jumpLanding != NULL)
-	//	sound_jumpLanding->drop();
-	//if (sound_gunshot != NULL)
-	//	sound_gunshot->drop();
-	//if (sound_hookshot != NULL)
-	//	sound_hookshot->drop();
-	//if (sound_rocketshot != NULL)
-	//	sound_rocketshot->drop();
-	//if (sound_bulletImpact != NULL)
-	//	sound_bulletImpact->drop();
-	//if (sound_rocketImpact != NULL)
-	//	sound_rocketImpact->drop();
-	//if (sound_ballBounce != NULL)
-	//	sound_ballBounce->drop();
 }
 
 void Application::LoadMedia()
 {
-	//Application::GetInstance().bgm_lullaby = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//bgm_lullaby.wav");
-	//Application::GetInstance().bgm_lullaby->setDefaultVolume(0.4);
-	//Application::GetInstance().theSoundEngine->play2D(bgm_lullaby);
+	Application::GetInstance().bgm_menu = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//bgm_menu.mp3");
+	//Application::GetInstance().bgm_menu->setDefaultVolume(0.5);
+
+    Application::GetInstance().menu_hover = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//sound_onhover.wav");
+    Application::GetInstance().menu_click = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//sound_onclick.wav");
 
 	//Application::GetInstance().sound_Footstep = Application::GetInstance().theSoundEngine->play2D("media//footsteps.wav", true, true, true);
 	//Application::GetInstance().sound_jumpLanding = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//jump_Landing.flac");
@@ -272,8 +250,10 @@ void Application::Run()
 
 	//sm.SetScene(new SceneSnakeBoss());
 	sm.SetScene(new SceneSnakeBoss());
+	//sm.SetScene(new SceneSummoner());
 	//sm.SetScene(new SceneDetlaff());
 	//sm.SetScene(new SceneGolem());
+    sm.SetScene(new MainMenu());
 
 	//Main Loop
 

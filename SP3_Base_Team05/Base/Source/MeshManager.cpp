@@ -124,13 +124,10 @@ void MeshManager::InitSceneSummoner()
 
 void MeshManager::InitSceneGolem()
 {
-    meshList[GEO_GOLEMHEAD] = MeshBuilder::GenerateOBJ("GEO_GOLEMHEAD", "Obj//golemhead.obj");
-    //meshList[GEO_GOLEMHEAD]->textureArray[0] = LoadTGA("Image//golemhead.tga");
-    meshList[GEO_GOLEMHAND] = MeshBuilder::GenerateOBJ("GEO_GOLEMHAND", "Obj//golemhead.obj");
-    //meshList[GEO_GOLEMHAND]->textureArray[0] = LoadTGA("Image//fist.tga");
-
-	meshList[GEO_GOLEMHEAD] = MeshBuilder::GenerateSphere("Forcefield", Color(1, 1, 1), 9, 18, 1.f);
-	meshList[GEO_GOLEMHAND] = MeshBuilder::GenerateSphere("Forcefield", Color(1, 1, 1), 9, 18, 1.f);
+    meshList[GEO_GOLEMHEAD] = MeshBuilder::GenerateOBJ("GEO_GOLEMHEAD", "Obj//golemheadhand.obj");
+    meshList[GEO_GOLEMHEAD]->textureArray[0] = LoadTGA("Image//outUV.tga");
+    meshList[GEO_GOLEMHAND] = MeshBuilder::GenerateOBJ("GEO_GOLEMHAND", "Obj//golemheadhand.obj");
+    meshList[GEO_GOLEMHAND]->textureArray[0] = LoadTGA("Image//outUV2.tga");
 }
 
 void MeshManager::InitMainMenu()
@@ -150,4 +147,7 @@ void MeshManager::InitMainMenu()
 
     meshList[GEO_MENU_FRAME] = MeshBuilder::GenerateQuad("GEO_MENU_FRAME", Color(0, 0, 0), 1.f);
     meshList[GEO_MENU_FRAME]->textureArray[0] = LoadTGA("Image//framemetal.tga");
+
+    meshList[GEO_MENU_LVLSELECT] = MeshBuilder::GenerateQuad("GEO_MENU_LVLSELECT", Color(0, 0, 0), 1.f);
+    meshList[GEO_MENU_LVLSELECT]->textureArray[0] = LoadTGA("Image//levelselectbg.tga");
 }

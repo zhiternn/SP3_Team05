@@ -132,7 +132,8 @@ protected:
 
 	float fps;
 
-	Gamepad *GamePad;
+	//Create the Gamepad object
+	Gamepad GamePad;
 };
 
 #endif
