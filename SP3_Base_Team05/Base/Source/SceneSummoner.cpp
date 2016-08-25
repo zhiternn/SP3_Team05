@@ -8,7 +8,8 @@
 
 SceneSummoner::SceneSummoner() :
 player(NULL),
-mainCamera(NULL)
+mainCamera(NULL),
+manager(SceneManager::GetInstance())
 {
 }
 
@@ -122,7 +123,6 @@ void SceneSummoner::PlayerController(double dt)
 		Controls::GetInstance().mouse_ScrollY = 0;
 	}
 	if (Controls::GetInstance().mouse_ScrollY > 0)
-
 	{
 		player->ChangeWeaponUp();
 		Controls::GetInstance().mouse_ScrollY = 0;
@@ -298,14 +298,6 @@ void SceneSummoner::RenderMain()
 
 	RenderWorld();
 
-	if (!summoner->destinations.empty())
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(summoner->destinations.front().x, summoner->destinations.front().y, 0);
-		RenderMesh(meshList[GEO_CUBE], false);
-		modelStack.PopMatrix();
-	}
-
 	//RenderSkyPlane();
 }
 
@@ -368,28 +360,31 @@ void SceneSummoner::RenderHUD()
 	ss.str("");
 	ss << "Weapon: ";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
-	switch (player->weaponIter)
+	switch (player->weapon->weapon_type)
 	{
-	case 0:
+	case Weapon::W_SHOTGUN:
 		RenderUI(meshList[GEO_WEAPON_SHOTGUN], 7, 25, 58.5f, 1, false);
 		break;
-	case 1:
+	case Weapon::W_MACHINEGUN:
 		RenderUI(meshList[GEO_WEAPON_MACHINEGUN], 7, 25, 58.5f, 1, false);
 		break;
-	case 2:
+	case Weapon::W_SPLITGUN:
 		RenderUI(meshList[GEO_WEAPON_SPLITGUN], 7, 25, 58.5f, 1, false);
 		break;
 	}
 
 	ss.str("");
 	ss << "Bullet: ";
-	switch (player->projectileIter)
+	switch (player->projectile->GetProjType())
 	{
-	case 0:
+	case CProjectile::BULLET:
 		ss << "Normal";
 		break;
-	case 1:
+	case CProjectile::HOOK:
 		ss << "Hook";
+		break;
+	case CProjectile::TRAP:
+		ss << "Trap";
 		break;
 	}
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
@@ -440,32 +435,7 @@ void SceneSummoner::UpdateGameObjects(double dt)
 				}
 			}
 
-			{//Handles out of bounds
-				//Check Horizontally against edges
-				if ((go->GetPosition().x + go->GetScale().x > m_worldWidth && go->GetVelocity().x > 0) ||
-					(go->GetPosition().x - go->GetScale().x < 0 && go->GetVelocity().x < 0))
-				{
-					go->SetVelocity(-go->GetVelocity().x, go->GetVelocity().y, go->GetVelocity().z);
-				}
-				//remove if it cant be seen completely
-				else if (go->GetPosition().x - go->GetScale().x > m_worldWidth ||
-					go->GetPosition().x + go->GetScale().x < 0)
-				{
-					go->SetActive(false);
-				}
-				//Check Vertically against edges
-				if ((go->GetPosition().y + go->GetScale().y > m_worldHeight && go->GetVelocity().y > 0) ||
-					(go->GetPosition().y - go->GetScale().y < 0 && go->GetVelocity().y < 0))
-				{
-					go->SetVelocity(go->GetVelocity().x, -go->GetVelocity().y, go->GetVelocity().z);
-				}
-				//remove if it cant be seen completely
-				else if (go->GetPosition().y - go->GetScale().y > m_worldWidth ||
-					go->GetPosition().y + go->GetScale().y < 0)
-				{
-					go->SetActive(false);
-				}
-			}
+			go->HandleOutOfBounds(0, m_worldWidth, 0, m_worldHeight);
 		}
 	}
 }

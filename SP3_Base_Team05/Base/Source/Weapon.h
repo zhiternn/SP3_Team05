@@ -22,6 +22,15 @@ Class Weapon.h:
 class Weapon
 {
 public:
+	enum WEAPON_TYPE
+	{
+		W_SHOTGUN,
+		W_MACHINEGUN,
+		W_SPLITGUN,
+
+		W_END,
+	};
+
 	virtual ~Weapon();
 	void Update(double dt);
 	virtual void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team = CProjectile::TEAM_NEUTRAL) = 0;
@@ -33,6 +42,7 @@ public:
 	// Setters
 	void SetFireRate(float fireRate);
 	void AssignProjectile(CProjectile* proj);
+	WEAPON_TYPE weapon_type;
 
 protected:
 	Weapon();

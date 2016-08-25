@@ -19,10 +19,13 @@ public:
 
 	virtual void TakeDamage(unsigned amount);
 	virtual void Die();
+	void SetHP(short int HP);
 
 	bool IsDead();
 	unsigned int GetHP();
 	ENTITY_TYPE GetEntityType();
+
+	void SetEntityType(ENTITY_TYPE type);
 
 protected:
 	ENTITY_TYPE entityType;

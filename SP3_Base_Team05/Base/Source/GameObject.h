@@ -37,9 +37,10 @@ public:
 
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
+	virtual void HandleOutOfBounds(float minX, float maxX, float minY, float maxY);
 	virtual void SetupMesh();
 
-	void ApplyForce(double dt, Vector3 direction, float magnitude = 0.0f);
+	void ApplyForce(Vector3 direction, float magnitude = 0.0f);
 	float GetForce();
 
 	void TakeDamage(unsigned int dmg);

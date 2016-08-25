@@ -28,14 +28,14 @@ void GameObject::Update(double dt)
 	pos += vel * (float)dt;
 }
 
-void GameObject::ApplyForce(double dt, Vector3 direction, float magnitude)
+void GameObject::ApplyForce(Vector3 direction, float magnitude)
 {
 	if (magnitude != 0)
 	{
 		if (!direction.IsZero())
 			direction = direction.Normalized() * magnitude;
 	}
-	vel += (direction / mass) * dt;
+	vel += (direction / mass);
 }
 
 float GameObject::GetForce()
@@ -178,6 +178,8 @@ float GameObject::CheckCollision2(GameObject* b)
 
 void GameObject::CollisionResponse(GameObject* b)
 {
+	if (this->collider.isTrigger || b->GetCollider().isTrigger)
+		return;
 	if (this->collider.type != Collider::COLLIDER_BALL)
 		return;
 
@@ -372,6 +374,39 @@ void GameObject::SetTeam(TEAM_TYPE team)
 	this->team = team;
 }
 
+void GameObject::HandleOutOfBounds(float minX, float maxX, float minY, float maxY)
+{
+	//Checks against minX
+		if (this->GetPosition().x - this->GetScale().x < minX && this->GetVelocity().x < 0)
+		{
+			float difference = minX - (this->GetPosition().x - this->GetScale().x);
+			this->pos.x += difference;
+			this->SetVelocity(-this->GetVelocity().x, this->GetVelocity().y, this->GetVelocity().z);
+		}
+	//Checks against maxX
+		else if (this->GetPosition().x + this->GetScale().x > maxX && this->GetVelocity().x > 0)
+		{
+			float difference = (this->GetPosition().x + this->GetScale().x) - maxX;
+			this->pos.x -= difference;
+			this->SetVelocity(-this->GetVelocity().x, this->GetVelocity().y, this->GetVelocity().z);
+		}
+	//Checks against minY
+		if (this->GetPosition().y - this->GetScale().y < minY && this->GetVelocity().y < 0)
+		{
+			float difference = minY - (this->GetPosition().y - this->GetScale().y);
+			this->pos.y += difference;
+			this->SetVelocity(this->GetVelocity().x, -this->GetVelocity().y, this->GetVelocity().z);
+		}
+	//Checks against maxY
+		else if (this->GetPosition().y + this->GetScale().y > maxY && this->GetVelocity().y > 0)
+		{
+			float difference = (this->GetPosition().y + this->GetScale().y) - maxY;
+			this->pos.y -= difference;
+			this->SetVelocity(this->GetVelocity().x, -this->GetVelocity().y, this->GetVelocity().z);
+		}
+	
+}
+
 void GameObject::SetupMesh()
 {
 	float degree = Math::RadianToDegree(atan2(front.y, front.x));
@@ -380,57 +415,3 @@ void GameObject::SetupMesh()
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	mesh = meshList[GEO_CUBE];
 }
-
-/*
-TEMPLATE FOR COLLISION CHECK OVERLOADING
-
-This is an example for Player Projectile
-This allows player bullets to skip checking against other projectiles
-
-
-void GameObject::CollisionResponse(GameObject* b)
-{
-	//this is for skipping checks
-	if( b->type == PLAYER_PROJECTILE ||
-		b->type == ENEMY_PROJECTILE 
-		)
-		{
-			return;
-		}
-
-	//This is for if you want default physics check
-	GameObject::CollisionCheck(b);
-}
-
-
-*/
-
-/*
-TEMPLATE FOR COLLISION RESPONSE OVERLOADING
-
-This is an example for Player Projectile
-
-
-void GameObject::CollisionResponse(GameObject* b)
-{
-	//This is for if you want default physics response
-	GameObject::CollisionResponse(b); 
-
-	//remove this player projectile
-	this->active = false; 
-
-	//this is for special interactions
-	switch(b->type) 
-	{
-		case SNAKE_HEAD:
-				b->HP -= 10;//deals damage if it hits boss
-			break;
-		case SNAKE_BODY:
-				b->HP -= 5;//deals half damage to body
-			break;
-
-		default:
-			break;
-	}
-}
-*/

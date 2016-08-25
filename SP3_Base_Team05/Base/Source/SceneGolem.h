@@ -15,6 +15,7 @@
 
 using std::vector;
 
+class SceneManager;
 class SceneGolem : public SceneBase
 {
 public:
@@ -54,6 +55,8 @@ private:
     GolemHead* golemhead;
     GolemLeftHand* golemlhead;
     GolemRightHand* golemrhead;
+
+	SceneManager &manager;
 };
 
 #endif

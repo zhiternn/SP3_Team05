@@ -2,7 +2,8 @@
 #include "Controls.h"
 #include "MeshManager.h"
 
-Summoner::Summoner()
+Summoner::Summoner():
+Enemy()
 {
 }
 
@@ -13,9 +14,9 @@ Summoner::~Summoner()
 void Summoner::Init(Vector3 pos)
 {
 	Enemy::Init(pos);
-	type = GameObject::GO_ENTITY;
-	entityType = Entity::ENTITY_BOSS_MAIN;
 	collider.type = Collider::COLLIDER_BALL;
+	Entity::entityType = Entity::ENTITY_BOSS_MAIN;
+	active = true;
 	mass = 1;
 	speedLimit = 50.f;
 	movementSpeed = 50.0f;
@@ -30,8 +31,7 @@ void Summoner::Init(Vector3 pos)
 	for (int i = 0; i < AMOUNT_OF_SUMMONS; ++i)
 	{
 		Summons* summons = FetchSummons();
-		Vector3 offset(Math::RandFloatMinMax(0, 5), Math::RandFloatMinMax(0, 5), 0);
-		summons->Init(pos + offset);
+		summons->Init(pos);
 		summons->SetTarget(target);
 		summonsList.push_back(summons);
 		GameObject::goList.push_back(summons);
@@ -41,22 +41,21 @@ void Summoner::Init(Vector3 pos)
 		q->Init(this->pos);
 		q->SetTarget(target);
 	}
-	captureRatio = 1.f;
 }
 
 void Summoner::Update(double dt)
 {
 	GameObject::Update(dt);
 	UpdateCooldowns(dt);
-	if (summonsList.size() < AMOUNT_OF_SUMMONS && summonCooldownTimer <= 0)
-	{
-		summonCooldownTimer = SUMMONING_COOLDOWN;
-		Summons* summons = FetchSummons();
-		summons->Init(this->pos);
-		summons->SetTarget(target);
-		summonsList.push_back(summons);
-		GameObject::goList.push_back(summons);
-	}
+	//if (summonsList.size() < AMOUNT_OF_SUMMONS && summonCooldownTimer <= 0)
+	//{
+	//	summonCooldownTimer = SUMMONING_COOLDOWN;
+	//	Summons* summons = FetchSummons();
+	//	summons->Init(this->pos);
+	//	summons->SetTarget(target);
+	//	summonsList.push_back(summons);
+	//	GameObject::goList.push_back(summons);
+	//}
 	if (this->health < maxHealth)
 	{
 		static float healthregenCooldown = 0;
@@ -100,7 +99,7 @@ void Summoner::Update(double dt)
 		}
 		else
 		{
-			vel.SetZero();
+			vel = vel * 0.9f;
 		}
 	}
 }
@@ -109,6 +108,17 @@ void Summoner::TakeDamage(unsigned amount)
 {
 	Entity::TakeDamage(amount);
 	agressiveLevel = 1 - ((float)health / maxHealth);
+}
+
+void Summoner::SetupMesh()
+{
+	float rotateAngle = Math::RadianToDegree(atan2f(this->pos.y - target->pos.y, this->pos.x - target->pos.x));
+
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Rotate(rotateAngle - 90, 0, 0, 1);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+
+	mesh = meshList[GEO_SUMMONER];
 }
 
 void Summoner::CleaningUpMess()
@@ -197,17 +207,6 @@ void Summoner::UpdateCooldowns(double dt)
 			attacking = false;
 		}
 	}
-}
-
-void Summoner::SetupMesh()
-{
-	float rotateAngle = Math::RadianToDegree(atan2f(this->pos.y - target->pos.y, this->pos.x - target->pos.x));
-
-	modelStack.Translate(pos.x, pos.y, pos.z);
-	modelStack.Rotate(rotateAngle - 90, 0, 0, 1);
-	modelStack.Scale(scale.x, scale.y, scale.z);
-
-	mesh = meshList[GEO_SUMMONER];
 }
 
 Summons* FetchSummons()

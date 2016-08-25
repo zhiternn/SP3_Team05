@@ -10,10 +10,12 @@
 #include "Summoner.h"
 #include "Summons.h"
 
+
 #include <vector>
 
 using std::vector;
 
+class SceneManager;
 class SceneSummoner : public SceneBase
 {
 public:
@@ -49,6 +51,8 @@ private:
 	Vector3 mousePos_worldBased;
 
 	Summoner* summoner;
+
+	SceneManager &manager;
 };
 
 #endif

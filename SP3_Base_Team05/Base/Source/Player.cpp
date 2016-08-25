@@ -8,6 +8,7 @@ weapon(NULL)
 	inventory = new Inventory();
 	inventory->weapons.front()->AssignProjectile(inventory->bullets.front());
 	weapon = inventory->weapons.front();
+	projectile = inventory->bullets.front();
 
     shield = new Shield();
     GameObject::goList.push_back(shield);
@@ -84,7 +85,7 @@ void Player::Move(Vector3 dir, double dt)
 	{
 		isMoving = true;
 		forceMagnitude = MOVEMENT_LIMIT;
-		this->ApplyForce(dt, dir, forceMagnitude);
+		this->ApplyForce(dir, forceMagnitude * dt);
 	}
 }
 
@@ -93,7 +94,7 @@ void Player::Dash(Vector3 dir, double dt)
 	if (!isDashed && !dir.IsZero())
 	{
 		forceMagnitude = MOVEMENT_LIMIT * DASH_DISTANCE;
-		this->ApplyForce(dt, dir, forceMagnitude);
+		this->ApplyForce(dir, forceMagnitude * dt);
 		isDashed = true;
 		cooldownTimer = DASH_COOLDOWN;
 	}
