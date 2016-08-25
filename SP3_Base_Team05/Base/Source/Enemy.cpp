@@ -33,10 +33,6 @@ void Enemy::Update(double dt)
 	if (!UpdateMovement(dt))
 	{//if fail to update (zero destination left)
 	}
-	if (captureRate >= 10)
-	{
-		std::cout << "CAUGHT" << std::endl;
-	}
 }
 
 bool Enemy::UpdateMovement(double dt)
@@ -206,6 +202,26 @@ float Enemy::GetMovementSpeed()
     return this->movementSpeed;
 }
 
+void Enemy::SetCaptureRate(float captureRate)
+{
+	this->captureRate = captureRate;
+}
+
+float Enemy::GetCaptureRate()
+{
+	return captureRate;
+}
+
+void Enemy::SetIsCaptured(bool isCaptured)
+{
+	this->isCaptured = isCaptured;
+}
+
+bool Enemy::IsCaptured()
+{
+	return isCaptured;
+}
+
 void Enemy::Capturing(float rate)
 {
 	if (!isCaptured)
@@ -213,7 +229,6 @@ void Enemy::Capturing(float rate)
 		captureRate += rate;
 		if (captureRate >= CAPTURE_GOAL)
 		{
-			isCaptured = true;
 			Captured();
 		}
 	}
@@ -221,6 +236,7 @@ void Enemy::Capturing(float rate)
 
 void Enemy::Captured()
 {
+	this->isCaptured = true;
 	this->active = false;
 	// do the pokemon things
 }
