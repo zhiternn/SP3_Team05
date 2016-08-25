@@ -8,6 +8,7 @@
 #include <sstream>
 
 #define ENEMY_FIRE_COOLDOWN 2;
+#define ENEMY_MOVE_DELAY 15;
 
 SceneDetlaff::SceneDetlaff() :
 player(NULL),
@@ -93,6 +94,7 @@ void SceneDetlaff::Init()
 	}
 
 	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
+	enemyMovementDelay = ENEMY_MOVE_DELAY;
 
 
 }
@@ -185,7 +187,6 @@ void SceneDetlaff::GetGamePadInput(double dt)
 	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
 	player->SetFront(lookDir);
 	
-
 	//Update Gamepad
 	GamePad.Update();
 	
@@ -212,7 +213,7 @@ void SceneDetlaff::GetGamePadInput(double dt)
 	}
 
 	//= Dash
-	if (GamePad.LeftTrigger() > 0.2f)
+	if (GamePad.RightTrigger() > 0.2f)
 	{
 		player->Dash(forceDir, dt);
 	}
@@ -266,7 +267,7 @@ void SceneDetlaff::Update(double dt)
 			);
 	}
 
-	controllerStick_Pos.Set((GamePad.Right_Stick_X() * 40) + player->pos.x, (GamePad.Right_Stick_Y() * 40) + player->pos.y, 0);
+	controllerStick_Pos.Set((GamePad.Right_Stick_X() * 100) + player->pos.x, (GamePad.Right_Stick_Y() * 100) + player->pos.y, 0);
 	controllerStick_WorldPos.Set(
 		GamePad.Right_Stick_X() + mainCamera->target.x - (m_orthoWidth * 0.5f),
 		GamePad.Right_Stick_Y() + mainCamera->target.y - (m_orthoHeight * 0.5f),
@@ -277,6 +278,7 @@ void SceneDetlaff::Update(double dt)
 	UpdateGameObjects(dt);
 
 	enemyFireDelay -= dt;
+	enemyMovementDelay -= dt;
 
 	if (enemyFireDelay <= 0.f)
 	{
@@ -287,16 +289,27 @@ void SceneDetlaff::Update(double dt)
 		detlaff->Shoot(mouseDir);
 	}
 
+	if (enemyMovementDelay <= 0.f)
+	{
+		enemyMovementDelay = ENEMY_MOVE_DELAY;
+
+		detlaff->Teleport(m_worldWidth, m_worldHeight);
+	}
+
+	
 	//Restrict the player from moving past the deadzone
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
-		//PlayerController(dt);
-
 		//Check if Gamepad is connected for controller input
 		if (GamePad.IsConnected())
 		{
-			//Handle Movement 
+			//Handle Controller Input 
 			GetGamePadInput(dt);
+		}
+		else
+		{
+			//Handle Keyboard and Mouse input
+			PlayerController(dt);
 		}
 	}
 }

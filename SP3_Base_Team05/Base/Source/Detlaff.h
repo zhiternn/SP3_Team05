@@ -13,6 +13,7 @@ public:
 
 	void FireOnTarget(Entity *target);
 	void Shoot(Vector3 dir);
+	void Teleport(float ww, float wh);
 
 	virtual void SetupMesh();
 
