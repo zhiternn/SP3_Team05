@@ -251,8 +251,9 @@ void Application::Run()
 
 	//sm.SetScene(new SceneSnakeBoss());
 	//sm.SetScene(new SceneSummoner());
-	sm.SetScene(new SceneDetlaff());
+	//sm.SetScene(new SceneDetlaff());
 	//sm.SetScene(new SceneGolem());
+    sm.SetScene(new MainMenu());
 
 	//Main Loop
 
