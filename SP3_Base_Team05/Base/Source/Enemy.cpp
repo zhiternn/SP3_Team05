@@ -227,7 +227,7 @@ void Enemy::Capturing(float rate)
 	if (!isCaptured)
 	{
 		captureRate += rate;
-		if (captureRate >= CAPTURE_GOAL)
+		if (captureRate >= health)
 		{
 			Captured();
 		}

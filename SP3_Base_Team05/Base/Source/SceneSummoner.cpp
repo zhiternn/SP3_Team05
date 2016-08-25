@@ -523,13 +523,21 @@ void SceneSummoner::RenderGameObjects()
 				RenderMesh(GameObject::goList[i]->mesh, false);
 
 			modelStack.PopMatrix();
-			Enemy* entity = dynamic_cast<Enemy*>(GameObject::goList[i]);
-			if (entity && !entity->IsDead())
+			Enemy* enemy = dynamic_cast<Enemy*>(GameObject::goList[i]);
+			if (enemy)
 			{
+				if (!enemy->IsDead())
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x, 50);
+					modelStack.Scale(enemy->GetHP() / 5, 3, 1);
+					RenderMesh(meshList[GEO_HEALTH], false);
+					modelStack.PopMatrix();
+				}
 				modelStack.PushMatrix();
-				modelStack.Translate(entity->pos.x, entity->pos.y, 5);
-				modelStack.Scale(entity->GetHP() / 5, 3, 1);
-				RenderMesh(meshList[GEO_HEALTH], false);
+				modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 5, 50);
+				modelStack.Scale(enemy->GetCaptureRate() * 5, 3, 1);
+				RenderMesh(meshList[GEO_CAPTURE], false);
 				modelStack.PopMatrix();
 			}
 		}
