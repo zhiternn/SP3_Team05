@@ -33,6 +33,8 @@ void GolemRightHand::Init(Vector3 pos)
 void GolemRightHand::Update(double dt)
 {
     GameObject::Update(dt);
+    if (vel.IsZero() == false)
+        front = vel.Normalized();
 
     if (!Enemy::UpdateMovement(dt))
     {
@@ -66,6 +68,7 @@ void GolemRightHand::SetupMesh()
 {
     float degree = Math::RadianToDegree(atan2(front.y, front.x));
     modelStack.Translate(pos.x, pos.y, pos.z);
+    modelStack.Rotate(270, 0, 0, 1);
     modelStack.Rotate(degree, 0, 0, 1);
     modelStack.Rotate(60, 0, 1, 0);
     modelStack.Scale(scale.x, scale.y, scale.z);
@@ -115,6 +118,9 @@ void GolemLeftHand::Init(Vector3 pos)
 void GolemLeftHand::Update(double dt)
 {
     GameObject::Update(dt);
+    if (vel.IsZero() == false)
+        front = vel.Normalized();
+
     if (!Enemy::UpdateMovement(dt))
     {
         if (target)
@@ -153,6 +159,7 @@ void GolemLeftHand::SetupMesh()
 {
     float degree = Math::RadianToDegree(atan2(front.y, front.x));
     modelStack.Translate(pos.x, pos.y, pos.z);
+    modelStack.Rotate(270, 0, 0, 1);
     modelStack.Rotate(degree, 0, 0, 1);
     modelStack.Rotate(60, 0, 1, 0);
     modelStack.Scale(scale.x, scale.y, scale.z);

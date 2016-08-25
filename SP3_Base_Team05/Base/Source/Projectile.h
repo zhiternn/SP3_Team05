@@ -38,6 +38,7 @@ public:
 	void Init(Vector3 pos, Vector3 dir);
 	virtual void Update(double dt) = 0;									//< Abstract Update
 	virtual void HandleInteraction(GameObject* b, double dt) = 0;		//< Handling Interactions
+	virtual void HandleOutOfBounds(float minX, float maxX, float minY, float maxY);
 
 	float GetDMG();													//< Returns Projectile Damage
 	float GetLifetime();											//< Returns Projectile Lifetime								//< Returns Projectile Type

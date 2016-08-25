@@ -48,6 +48,13 @@ void SnakeHead::Update(double dt)
 	if (this->vel.LengthSquared() > movementLimit * movementLimit)
 		this->vel = this->vel.Normalized() * movementLimit;
 
+	actionRate -= dt;
+	if (actionRate <= 0.0f)
+	{
+		actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN, ACTION_TIMER_MAX);
+		Action();
+	}
+
 	{//Move Body
 		Enemy* prev = this;
 
@@ -68,11 +75,6 @@ void SnakeHead::Update(double dt)
 				it = bodyList.erase(it);
 			}
 		}
-	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_L))
-	{
-		Shoot();
 	}
 }
 

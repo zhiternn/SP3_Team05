@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Button.cpp" />
+    <ClCompile Include="Source\ButtonPosition.cpp" />
     <ClCompile Include="Source\Camera.cpp" />
     <ClCompile Include="Source\Controls.cpp" />
     <ClCompile Include="Source\DepthFBO.cpp" />
@@ -59,6 +60,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\Button.h" />
+    <ClInclude Include="Source\ButtonPosition.h" />
     <ClInclude Include="Source\Camera.h" />
     <ClInclude Include="Source\Collider.h" />
     <ClInclude Include="Source\Controls.h" />

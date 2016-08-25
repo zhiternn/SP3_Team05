@@ -83,9 +83,17 @@ void SceneDetlaff::Init()
 	detlaff->SetMass(999999);
 
 	mainCamera->Include(&(player->pos));
-	mainCamera->Include(&mousePos_worldBased);
+	if (!GamePad.IsConnected())
+	{
+		mainCamera->Include(&mousePos_worldBased);
+	}
+	else
+	{
+		mainCamera->Include(&controllerStick_Pos);
+	}
 
 	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
+
 
 }
 
@@ -127,33 +135,33 @@ void SceneDetlaff::PlayerController(double dt)
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
-	{
-		CProjectile *proj_trap = new TrapProjectile();
-		proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
-		proj_trap->SetVelocity(0, 0, 0);
-		proj_trap->SetColliderType(Collider::COLLIDER_BOX);
-		player->weapon->AssignProjectile(proj_trap);
+	//if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
+	//{
+	//	CProjectile *proj_trap = new TrapProjectile();
+	//	proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
+	//	proj_trap->SetVelocity(0, 0, 0);
+	//	proj_trap->SetColliderType(Collider::COLLIDER_BOX);
+	//	player->weapon->AssignProjectile(proj_trap);
 
-		for (int i = 0; i < GameObject::goList.size(); i++)
-		{
-			if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
-			{
-				//Trap found in current map
-				break;
-			}
-			else
-			{
-				//push it into the list to check for next iteration
-				GameObject::goList.push_back(proj_trap);
+	//	for (int i = 0; i < GameObject::goList.size(); i++)
+	//	{
+	//		if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
+	//		{
+	//			//Trap found in current map
+	//			break;
+	//		}
+	//		else
+	//		{
+	//			//push it into the list to check for next iteration
+	//			GameObject::goList.push_back(proj_trap);
 
-				Vector3 pos;
-				pos = player->pos.Normalized();
-				player->Shoot(pos);
-				break;
-			}
-		}
-	}
+	//			Vector3 pos;
+	//			pos = player->pos.Normalized();
+	//			player->Shoot(pos);
+	//			break;
+	//		}
+	//	}
+	//}
 
 	//if (Controls::GetInstance().mouse_ScrollY < 1)
 	if (Controls::GetInstance().OnPress(Controls::KEY_E))
@@ -169,6 +177,74 @@ void SceneDetlaff::PlayerController(double dt)
 	{
 		manager.ChangeScene(1);
 	}
+}
+
+void SceneDetlaff::GetGamePadInput(double dt)
+{
+	Vector3 forceDir;
+	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
+	player->SetFront(lookDir);
+	
+
+	//Update Gamepad
+	GamePad.Update();
+	
+	//Handle Gamepad movement
+	
+	//= Y Axis Movement
+	if (GamePad.Left_Stick_Y() > 0.2f)
+	{
+		forceDir.y += 5 * GamePad.Left_Stick_Y();
+	}
+	if (GamePad.Left_Stick_Y() < -0.2f)
+	{
+		forceDir.y += 5 * GamePad.Left_Stick_Y();
+	}
+
+	//= X Axis Movement
+	if (GamePad.Left_Stick_X() > 0.2f)
+	{
+		forceDir.x += 5 * GamePad.Left_Stick_X();
+	}
+	if (GamePad.Left_Stick_X() < -0.2f)
+	{
+		forceDir.x += 5 * GamePad.Left_Stick_X();
+	}
+
+	//= Dash
+	if (GamePad.LeftTrigger() > 0.2f)
+	{
+		player->Dash(forceDir, dt);
+	}
+
+	//= Update Movement
+	if (forceDir.IsZero() == false)
+	{
+		forceDir.Normalize();
+		player->Move(forceDir, dt);
+	}
+
+	
+	//Change Weapons
+	if (GamePad.GetButtonDown(8) > 0.5f)
+	{
+		player->ChangeWeaponDown();
+	}
+	if (GamePad.GetButtonDown(9) > 0.5f)
+	{
+		player->ChangeWeaponUp();
+	}
+
+	//Shooting
+	if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
+	{
+		stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
+		player->Shoot(stickDir.Normalized());
+	}
+
+	//Refresh Gamepad
+	GamePad.RefreshState();
+
 }
 
 void SceneDetlaff::Update(double dt)
@@ -190,6 +266,11 @@ void SceneDetlaff::Update(double dt)
 			);
 	}
 
+	controllerStick_Pos.Set((GamePad.Right_Stick_X() * 40) + player->pos.x, (GamePad.Right_Stick_Y() * 40) + player->pos.y, 0);
+	controllerStick_WorldPos.Set(
+		GamePad.Right_Stick_X() + mainCamera->target.x - (m_orthoWidth * 0.5f),
+		GamePad.Right_Stick_Y() + mainCamera->target.y - (m_orthoHeight * 0.5f),
+		0);
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -209,7 +290,14 @@ void SceneDetlaff::Update(double dt)
 	//Restrict the player from moving past the deadzone
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
-		PlayerController(dt);
+		//PlayerController(dt);
+
+		//Check if Gamepad is connected for controller input
+		if (GamePad.IsConnected())
+		{
+			//Handle Movement 
+			GetGamePadInput(dt);
+		}
 	}
 }
 
@@ -373,7 +461,7 @@ void SceneDetlaff::RenderWorld()
 		modelStack.Scale(player->GetScale().x, player->GetScale().y, player->GetScale().z);
 
 		modelStack.PushMatrix();
-		Vector3 toMouse = mousePos_worldBased - player->pos;
+		Vector3 toMouse = stickDir;
 		float toMouseAngle = Math::RadianToDegree(atan2(toMouse.y, toMouse.x));
 		modelStack.Rotate(toMouseAngle, 0, 0, 1);
 		RenderMesh(meshList[GEO_PLAYER_TOP], true);
@@ -394,12 +482,19 @@ void SceneDetlaff::RenderWorld()
 
 void SceneDetlaff::RenderHUD()
 {
-	// Render the crosshair
-    modelStack.PushMatrix();
-    modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-    modelStack.Scale(10, 10, 10);
-    RenderMesh(meshList[GEO_CROSSHAIR], false);
-    modelStack.PopMatrix();
+	//Render Minimap
+	modelStack.PushMatrix();
+	modelStack.Translate(70, 50, 0);
+	modelStack.Scale(18, 18, 1);
+	RenderMinimap(1.0f);
+	modelStack.PopMatrix();
+
+	////Render the crosshair
+	//modelStack.PushMatrix();
+	//modelStack.Translate(controllerStick_WorldPos.x, controllerStick_WorldPos.y, 6);
+	//modelStack.Scale(10, 10, 10);
+	//RenderMesh(meshList[GEO_CROSSHAIR], false);
+	//modelStack.PopMatrix();
 
 	//On screen text
 	std::ostringstream ss;
@@ -436,6 +531,69 @@ void SceneDetlaff::RenderHUD()
 	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
 }
 
+void SceneDetlaff::RenderMinimap(float zoom)
+{
+	glEnable(GL_STENCIL_TEST);
+
+	// Draw floor
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0xFF); // Write to stencil buffer
+	glDepthMask(GL_FALSE); // Don't write to depth buffer
+	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+
+	RenderMesh(meshList[GEO_MINIMAP], false);
+
+	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+	glStencilMask(0x00); // Don't write anything to stencil buffer
+	glDepthMask(GL_TRUE); // Write to depth buffer
+
+	for (int i = 0; i < GameObject::goList.size(); ++i)
+	{
+		if (GameObject::goList[i]->IsActive())
+		{
+			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
+			if (entity && entity->IsActive())
+			{
+				modelStack.PushMatrix();
+				Vector3 pos = entity->pos;
+				pos.x -= player->pos.x;// Move to player pos
+				pos.y -= player->pos.y;// Move to player pos
+				//sphere space == radius = 1
+				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
+				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
+				Vector3 scale = entity->GetScale();
+				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
+				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
+				modelStack.Translate(pos.x, pos.y, pos.z);
+				modelStack.Scale(scale.x, scale.y, scale.z);
+
+				switch (entity->GetEntityType())
+				{
+				case Entity::ENTITY_BOSS_MAIN:
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+					break;
+				case Entity::ENTITY_BOSS_BODY:
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+					break;
+				case Entity::ENTITY_PLAYER:
+					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+					break;
+				default:break;
+				}
+
+				modelStack.PopMatrix();
+			}
+		}
+	}
+
+	glDisable(GL_STENCIL_TEST);
+
+	glLineWidth(5.0f);
+	RenderMesh(meshList[GEO_MINIMAP_BORDER], false);
+	glLineWidth(1.0f);
+}
+
 void SceneDetlaff::Exit()
 {
 	if (mainCamera)
@@ -467,32 +625,7 @@ void SceneDetlaff::UpdateGameObjects(double dt)
 				}
 			}
 
-			{//Handles out of bounds
-				//Check Horizontally against edges
-				if ((go->GetPosition().x + go->GetScale().x > m_worldWidth && go->GetVelocity().x > 0) ||
-					(go->GetPosition().x - go->GetScale().x < 0 && go->GetVelocity().x < 0))
-				{
-					go->SetVelocity(-go->GetVelocity().x, go->GetVelocity().y, go->GetVelocity().z);
-				}
-				//remove if it cant be seen completely
-				else if (go->GetPosition().x - go->GetScale().x > m_worldWidth ||
-					go->GetPosition().x + go->GetScale().x < 0)
-				{
-					go->SetActive(false);
-				}
-				//Check Vertically against edges
-				if ((go->GetPosition().y + go->GetScale().y > m_worldHeight && go->GetVelocity().y > 0) ||
-					(go->GetPosition().y - go->GetScale().y < 0 && go->GetVelocity().y < 0))
-				{
-					go->SetVelocity(go->GetVelocity().x, -go->GetVelocity().y, go->GetVelocity().z);
-				}
-				//remove if it cant be seen completely
-				else if (go->GetPosition().y - go->GetScale().y > m_worldWidth ||
-					go->GetPosition().y + go->GetScale().y < 0)
-				{
-					go->SetActive(false);
-				}
-			}
+			go->HandleOutOfBounds(0, m_worldWidth, 0, m_worldHeight);
 		}
 	}
 }

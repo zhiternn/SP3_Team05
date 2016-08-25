@@ -340,13 +340,16 @@ void SceneSnakeBoss::RenderWorld()
 	}
 
 	RenderGameObjects();
-
 }
 
 void SceneSnakeBoss::RenderHUD()
 {
 	//Render Minimap
-	RenderMinimap();
+	modelStack.PushMatrix();
+	modelStack.Translate(70, 50, 0);
+	modelStack.Scale(18, 18, 1);
+	RenderMinimap(1.0f);
+	modelStack.PopMatrix();
 
     modelStack.PushMatrix();
     modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
@@ -388,12 +391,8 @@ void SceneSnakeBoss::RenderHUD()
 	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10)) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10), false);
 }
 
-void SceneSnakeBoss::RenderMinimap()
+void SceneSnakeBoss::RenderMinimap(float zoom)
 {
-	modelStack.PushMatrix();
-	modelStack.Translate(70, 50, 0);
-	modelStack.Scale(15, 15, 15);
-
 	glEnable(GL_STENCIL_TEST);
 
 	// Draw floor
@@ -405,7 +404,6 @@ void SceneSnakeBoss::RenderMinimap()
 
 	RenderMesh(meshList[GEO_MINIMAP], false);
 	
-	// Draw cube reflection
 	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
 	glStencilMask(0x00); // Don't write anything to stencil buffer
 	glDepthMask(GL_TRUE); // Write to depth buffer
@@ -419,24 +417,27 @@ void SceneSnakeBoss::RenderMinimap()
 			{
 				modelStack.PushMatrix();
 				Vector3 pos = entity->pos;
-				pos.x *= 80 / m_worldWidth;
-				pos.y *= 60 / m_worldHeight;
+				pos.x -= player->pos.x;// Move to player pos
+				pos.y -= player->pos.y;// Move to player pos
+				//sphere space == radius = 1
+				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
+				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
 				Vector3 scale = entity->GetScale();
-				scale.x *= 80 / m_worldWidth;
-				scale.y *= 60 / m_worldHeight;
+				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
+				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
 				modelStack.Translate(pos.x, pos.y, pos.z);
 				modelStack.Scale(scale.x, scale.y, scale.z);
 
 				switch (entity->GetEntityType())
 				{
 				case Entity::ENTITY_BOSS_MAIN:
-					RenderMesh(meshList[GEO_FLOOR], false);
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
 					break;
 				case Entity::ENTITY_BOSS_BODY:
-					RenderMesh(meshList[GEO_FLOOR], false);
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
 					break;
 				case Entity::ENTITY_PLAYER:
-					RenderMesh(meshList[GEO_FLOOR], false);
+					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
 					break;
 				default:break;
 				}
@@ -448,7 +449,9 @@ void SceneSnakeBoss::RenderMinimap()
 
 	glDisable(GL_STENCIL_TEST);
 
-	modelStack.PopMatrix();
+	glLineWidth(5.0f);
+	RenderMesh(meshList[GEO_MINIMAP_BORDER], false);
+	glLineWidth(1.0f);
 }
 
 void SceneSnakeBoss::Exit()
@@ -483,32 +486,7 @@ void SceneSnakeBoss::UpdateGameObjects(double dt)
 				}
 			}
 
-			{//Handles out of bounds
-				//Check Horizontally against edges
-				if ((go->GetPosition().x + go->GetScale().x > m_worldWidth && go->GetVelocity().x > 0) ||
-					(go->GetPosition().x - go->GetScale().x < 0 && go->GetVelocity().x < 0))
-				{
-					go->SetVelocity(-go->GetVelocity().x, go->GetVelocity().y, go->GetVelocity().z);
-				}
-				//remove if it cant be seen completely
-				else if (go->GetPosition().x - go->GetScale().x > m_worldWidth ||
-					go->GetPosition().x + go->GetScale().x < 0)
-				{
-					go->SetActive(false);
-				}
-				//Check Vertically against edges
-				if ((go->GetPosition().y + go->GetScale().y > m_worldHeight && go->GetVelocity().y > 0) ||
-					(go->GetPosition().y - go->GetScale().y < 0 && go->GetVelocity().y < 0))
-				{
-					go->SetVelocity(go->GetVelocity().x, -go->GetVelocity().y, go->GetVelocity().z);
-				}
-				//remove if it cant be seen completely
-				else if (go->GetPosition().y - go->GetScale().y > m_worldWidth ||
-					go->GetPosition().y + go->GetScale().y < 0)
-				{
-					go->SetActive(false);
-				}
-			}
+			go->HandleOutOfBounds(0, m_worldWidth, 0, m_worldHeight);
 		}
 	}
 }

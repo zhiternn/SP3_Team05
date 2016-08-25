@@ -19,9 +19,11 @@ void Rope::Init(Vector3 pos, GameObject* target, float lifeTime)
 {
 	type = GameObject::GO_ENVIRONMENT;
 	this->pos = pos;
+	this->vel.SetZero();
 	this->target = target;
 	lifetime = lifeTime;
-	collider.type = Collider::COLLIDER_NONE;
+	collider.type = Collider::COLLIDER_BALL;
+	collider.isTrigger = true;
 }
 
 void Rope::Update(double dt)
