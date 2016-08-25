@@ -43,6 +43,7 @@
     <ClCompile Include="Source\SceneDetlaff.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
+    <ClCompile Include="Source\Snake.cpp" />
     <ClCompile Include="Source\SnakeBody.cpp" />
     <ClCompile Include="Source\SnakeHead.cpp" />
     <ClCompile Include="Source\SpriteAnimation.cpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Shield.h" />
+    <ClInclude Include="Source\Snake.h" />
     <ClInclude Include="Source\SnakeBody.h" />
     <ClInclude Include="Source\SnakeHead.h" />
     <ClInclude Include="Source\SpriteAnimation.h" />

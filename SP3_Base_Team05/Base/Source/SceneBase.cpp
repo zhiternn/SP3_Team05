@@ -122,10 +122,10 @@ void SceneBase::Init()
 	lights[0].exponent = 3.f;
 	lights[0].spotDirection.Set(0.2f, -0.2f, 1.f);
 
-	lights[1].type = Light::LIGHT_POINT;
-	lights[1].position.Set(1, 1, 0);
-	lights[1].color.Set(1, 1, 0.5f);
-	lights[1].power = 0.4f;
+	//lights[1].type = Light::LIGHT_POINT;
+	//lights[1].position.Set(1, 1, 0);
+	//lights[1].color.Set(1, 1, 0.5f);
+	//lights[1].power = 0.4f;
 	//lights[1].kC = 1.f;
 	//lights[1].kL = 0.01f;
 	//lights[1].kQ = 0.001f;

@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Controls.h"
 #include "MeshManager.h"
+#include "SnakeHead.h"
 
 #include <sstream>
 
@@ -66,12 +67,11 @@ void SceneSnakeBoss::Init()
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	enemy = new SnakeHead();
+	SnakeHead* enemy = new SnakeHead();
 	GameObject::goList.push_back(enemy);
 	enemy->SetTarget(player);
 	enemy->SetType(GameObject::GO_ENTITY);
 	enemy->SetActive(true);
-	enemy->SetColliderType(Collider::COLLIDER_BALL);
 	enemy->SetScale(6, 6, 6);
 	enemy->SetMass(3);
 	enemy->Init(Vector3(m_worldWidth*0.1f, m_worldHeight*0.1f, 0), 20);
@@ -346,7 +346,7 @@ void SceneSnakeBoss::RenderHUD()
 
     modelStack.PushMatrix();
     modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-    modelStack.Scale(10, 10, 10);
+    modelStack.Scale(5, 5, 5);
     RenderMesh(meshList[GEO_CROSSHAIR], false);
     modelStack.PopMatrix();
 

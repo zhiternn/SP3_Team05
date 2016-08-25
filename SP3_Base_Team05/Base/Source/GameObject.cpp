@@ -28,14 +28,14 @@ void GameObject::Update(double dt)
 	pos += vel * (float)dt;
 }
 
-void GameObject::ApplyForce(double dt, Vector3 direction, float magnitude)
+void GameObject::ApplyForce(Vector3 direction, float magnitude)
 {
 	if (magnitude != 0)
 	{
 		if (!direction.IsZero())
 			direction = direction.Normalized() * magnitude;
 	}
-	vel += (direction / mass) * dt;
+	vel += (direction / mass);
 }
 
 float GameObject::GetForce()
