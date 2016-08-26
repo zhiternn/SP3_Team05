@@ -18,7 +18,7 @@ void Summons::Init(Vector3 pos)
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	speedLimit = 50.f;
-	scale.Set(5, 5, 5);
+	scale.Set(7, 7, 7);
 	health = 50;
 	isDead = false;
 	isDefending = false;
@@ -39,7 +39,7 @@ void Summons::Goto(Vector3 pos)
 	this->vel += (pos - this->pos).Normalized() * speedLimit;
 	if (Reached(pos))
 	{
-		this->vel * 0.9f;
+		this->vel.SetZero();
 	}
 }
 

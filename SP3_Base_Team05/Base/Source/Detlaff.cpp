@@ -11,7 +11,7 @@ CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 	weapon = new Splitgun(360.f, 36);
 	weapon->AssignProjectile(new Bullet());
 	weapon_extra = NULL;
-	health = 100;
+	health = 600;
 //	this->SetRate(0.f);
 }
 
@@ -41,7 +41,7 @@ void CDetlaff::Update(double dt)
 			{
 				//Spawn Stage 2 Boss
 				state = STATE_2;
-				this->health = 200;
+				this->health = 1200;
 				//Create the stage 2 splitgun
 				weapon = new Splitgun(45.0f, 12);
 				weapon->AssignProjectile(new Bullet());
@@ -51,13 +51,13 @@ void CDetlaff::Update(double dt)
 			{
 				//Spawn State 3 Boss
 				state = STATE_3;
-				this->health = 500;
+				this->health = 3000;
 				weapon = new Splitgun(90.f, 12);
 				weapon->AssignProjectile(new Hook());
 				weapon->GetProjInfo()->SetProjectileSpeed(100.0f);
 				weapon_extra = new Shotgun();
 				weapon_extra->AssignProjectile(new Bullet());
-				weapon_extra->GetProjInfo()->SetScale(1.f, 1.f, 1.f);
+				weapon_extra->GetProjInfo()->SetScale(2.f, 2.f, 2.f);
 				break;
 			}
 		}
@@ -79,6 +79,16 @@ void CDetlaff::Shoot(Vector3 dir)
 	{
 		this->weapon_extra->Fire(this->pos, dir, CProjectile::TEAM_ENEMY);
 	}
+}
+
+void CDetlaff::Teleport(float m_worldWidth, float m_worldHeight)
+{
+	float randPos_X, randPos_Y;
+
+	randPos_X = Math::RandFloatMinMax(0, m_worldWidth);
+	randPos_Y = Math::RandFloatMinMax(0, m_worldHeight);
+
+	this->pos.Set(randPos_X, randPos_Y, 0);
 }
 
 void CDetlaff::SetupMesh()

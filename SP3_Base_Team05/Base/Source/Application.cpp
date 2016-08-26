@@ -227,7 +227,6 @@ void Application::Init()
 		//return -1;
 	}
 
-	// Hide the cursor
 	//glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 	glfwSetScrollCallback(m_window, mouseWheel_callback);
 
@@ -256,6 +255,7 @@ void Application::Run()
 	meshManager.Init();
 
 	//sm.SetScene(new SceneSnakeBoss());
+	sm.SetScene(new SceneSnakeBoss());
 	//sm.SetScene(new SceneSummoner());
 	//sm.SetScene(new SceneDetlaff());
 	//sm.SetScene(new SceneGolem());

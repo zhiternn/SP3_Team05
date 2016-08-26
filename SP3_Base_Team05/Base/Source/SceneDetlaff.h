@@ -30,11 +30,13 @@ public:
 	void RenderMain();
 	void RenderWorld();
 	void RenderHUD();
+	void RenderMinimap(float zoom);
 
 	void RenderSkybox();
 	void RenderSkyPlane();
 
 	float enemyFireDelay;
+	float enemyMovementDelay;
 
 
 private:
@@ -54,10 +56,6 @@ private:
 
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
-
-	Vector3 controllerStick_Pos;
-	Vector3 controllerStick_WorldPos;
-	Vector3 stickDir;
 
 	CDetlaff* detlaff;
 

@@ -176,6 +176,7 @@ void SceneBase::Init()
 	GamePad = Gamepad(1);
 }
 
+
 void SceneBase::Update(double dt)
 {
 	if (Controls::GetInstance().OnPress(Controls::KEY_1))

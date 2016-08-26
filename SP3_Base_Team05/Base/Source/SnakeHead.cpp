@@ -48,6 +48,13 @@ void SnakeHead::Update(double dt)
 	if (this->vel.LengthSquared() > movementLimit * movementLimit)
 		this->vel = this->vel.Normalized() * movementLimit;
 
+	actionRate -= dt;
+	if (actionRate <= 0.0f)
+	{
+		actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN, ACTION_TIMER_MAX);
+		Action();
+	}
+
 	{//Move Body
 		Enemy* prev = this;
 
@@ -69,11 +76,6 @@ void SnakeHead::Update(double dt)
 			}
 		}
 	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_L))
-	{
-		Shoot();
-	}
 }
 
 void SnakeHead::HandleInteraction(GameObject* b, double dt)
@@ -85,7 +87,7 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 		{
 			if (CheckCollision(b, dt))
 			{
-				body->Init(body->pos, body->movementSpeed, body->speedLimit);
+				body->Init(body->pos, body->GetMovementSpeed(), body->GetSpeedLimit());
 				bodyList.push_back(body);
 			}
 

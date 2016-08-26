@@ -31,6 +31,7 @@ public:
     void RenderMain();
     void RenderWorld();
     void RenderHUD();
+	void RenderMinimap(float zoom);
 
     void RenderSkybox();
     void RenderSkyPlane();

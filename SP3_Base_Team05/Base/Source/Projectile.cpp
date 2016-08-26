@@ -161,3 +161,13 @@ void CProjectile::HandleInteraction(GameObject* b, double dt)
 		this->active = false;
 	}
 }
+
+void CProjectile::HandleOutOfBounds(float minX, float maxX, float minY, float maxY)
+{
+	if (this->pos.x < minX || this->pos.x > maxX ||
+		this->pos.y < minY || this->pos.y > maxY)
+	{
+		this->active = false;
+	}
+
+}

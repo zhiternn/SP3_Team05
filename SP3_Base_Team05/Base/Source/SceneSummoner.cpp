@@ -339,10 +339,17 @@ void SceneSummoner::RenderWorld()
 
 void SceneSummoner::RenderHUD()
 {
+	//Render Minimap
+	modelStack.PushMatrix();
+	modelStack.Translate(70, 50, 0);
+	modelStack.Scale(18, 18, 1);
+	RenderMinimap(1.0f);
+	modelStack.PopMatrix();
+
 	// Render the crosshair
     modelStack.PushMatrix();
     modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-    modelStack.Scale(10, 10, 10);
+    modelStack.Scale(5, 5, 5);
     RenderMesh(meshList[GEO_CROSSHAIR], false);
     modelStack.PopMatrix();
 
@@ -404,6 +411,69 @@ void SceneSummoner::RenderHUD()
 	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10, false);
 }
 
+void SceneSummoner::RenderMinimap(float zoom)
+{
+	glEnable(GL_STENCIL_TEST);
+
+	// Draw floor
+	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+	glStencilMask(0xFF); // Write to stencil buffer
+	glDepthMask(GL_FALSE); // Don't write to depth buffer
+	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+
+	RenderMesh(meshList[GEO_MINIMAP], false);
+
+	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+	glStencilMask(0x00); // Don't write anything to stencil buffer
+	glDepthMask(GL_TRUE); // Write to depth buffer
+
+	for (int i = 0; i < GameObject::goList.size(); ++i)
+	{
+		if (GameObject::goList[i]->IsActive())
+		{
+			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
+			if (entity && entity->IsActive())
+			{
+				modelStack.PushMatrix();
+				Vector3 pos = entity->pos;
+				pos.x -= player->pos.x;// Move to player pos
+				pos.y -= player->pos.y;// Move to player pos
+				//sphere space == radius = 1
+				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
+				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
+				Vector3 scale = entity->GetScale();
+				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
+				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
+				modelStack.Translate(pos.x, pos.y, pos.z);
+				modelStack.Scale(scale.x, scale.y, scale.z);
+
+				switch (entity->GetEntityType())
+				{
+				case Entity::ENTITY_BOSS_MAIN:
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+					break;
+				case Entity::ENTITY_BOSS_BODY:
+					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+					break;
+				case Entity::ENTITY_PLAYER:
+					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+					break;
+				default:break;
+				}
+
+				modelStack.PopMatrix();
+			}
+		}
+	}
+
+	glDisable(GL_STENCIL_TEST);
+
+	glLineWidth(5.0f);
+	RenderMesh(meshList[GEO_MINIMAP_BORDER], false);
+	glLineWidth(1.0f);
+}
+
 void SceneSummoner::Exit()
 {
 	if (mainCamera)
@@ -453,13 +523,21 @@ void SceneSummoner::RenderGameObjects()
 				RenderMesh(GameObject::goList[i]->mesh, false);
 
 			modelStack.PopMatrix();
-			Enemy* entity = dynamic_cast<Enemy*>(GameObject::goList[i]);
-			if (entity && !entity->IsDead())
+			Enemy* enemy = dynamic_cast<Enemy*>(GameObject::goList[i]);
+			if (enemy)
 			{
+				if (!enemy->IsDead())
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x, 50);
+					modelStack.Scale(enemy->GetHP() / 5, 3, 1);
+					RenderMesh(meshList[GEO_HEALTH], false);
+					modelStack.PopMatrix();
+				}
 				modelStack.PushMatrix();
-				modelStack.Translate(entity->pos.x, entity->pos.y, 5);
-				modelStack.Scale(entity->GetHP() / 5, 3, 1);
-				RenderMesh(meshList[GEO_HEALTH], false);
+				modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 5, 50);
+				modelStack.Scale(enemy->GetCaptureRate() * 5, 3, 1);
+				RenderMesh(meshList[GEO_CAPTURE], false);
 				modelStack.PopMatrix();
 			}
 		}
