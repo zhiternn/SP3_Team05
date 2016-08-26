@@ -8,6 +8,7 @@
 #include "Particle.h"
 #include "DepthFBO.h"
 #include "Gamepad.h"
+#include "OptionManager.h"
 
 
 
@@ -129,6 +130,7 @@ protected:
 	bool bLightEnabled;
 	bool isCulled;
 	bool isWireFrame;
+	bool useController;
 
 	float fps;
 
@@ -137,6 +139,8 @@ protected:
 	Vector3 controllerStick_Pos;
 	Vector3 controllerStick_WorldPos;
 	Vector3 stickDir;
+
+	OptionManager &options;
 };
 
 #endif

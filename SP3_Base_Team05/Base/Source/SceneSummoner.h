@@ -10,7 +10,6 @@
 #include "Summoner.h"
 #include "Summons.h"
 
-
 #include <vector>
 
 using std::vector;
@@ -38,6 +37,7 @@ public:
 
 private:
 	void PlayerController(double dt);
+	void GetGamePadInput(double dt);
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();
 

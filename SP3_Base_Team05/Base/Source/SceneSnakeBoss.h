@@ -37,6 +37,7 @@ public:
 private:
 
 	void PlayerController(double dt);
+	void GetGamePadInput(double dt);
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();
 	void RenderGO(GameObject* go);

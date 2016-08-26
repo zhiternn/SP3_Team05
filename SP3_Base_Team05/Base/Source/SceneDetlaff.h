@@ -63,7 +63,6 @@ private:
 	SceneManager &manager;
 	OptionManager &options;
 
-	bool useController;
 };
 
 #endif

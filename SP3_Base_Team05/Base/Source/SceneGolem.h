@@ -36,9 +36,11 @@ public:
     void RenderSkybox();
     void RenderSkyPlane();
 
+
 private:
 
     void PlayerController(double dt);
+	void GetGamePadInput(double dt);
     void UpdateGameObjects(double dt);
     void RenderGameObjects();
     void RenderGO(GameObject* go);

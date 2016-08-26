@@ -10,7 +10,7 @@
 
 #include <sstream>
 
-SceneBase::SceneBase()
+SceneBase::SceneBase():  options(OptionManager::GetInstance())
 {
 }
 
@@ -174,6 +174,9 @@ void SceneBase::Init()
 	isWireFrame = false;
 
 	GamePad = Gamepad(1);
+
+	//Get player Controls
+	useController = options.UseControl();
 }
 
 

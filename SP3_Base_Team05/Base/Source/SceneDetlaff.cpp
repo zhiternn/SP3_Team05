@@ -30,28 +30,6 @@ void SceneDetlaff::Init()
 	//Clear the list from previous scene
 	GameObject::goList.clear();
 
-	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
-	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-	//meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
-	//meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
-	//meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1));
-	//meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
-	//meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1));
-	//meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
-	//meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1));
-	//meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-	//meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1));
-	//meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-
-	//meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("skyplane", Color(0, 0, 0), 64, 256.f, 2000.f, 1.f, 1.f);
-	//meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//sky3.tga");
-
-	//// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
-	//Mtx44 perspective;
-	//perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	////perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
-	//projectionStack.LoadMatrix(perspective);
-
 	//World Space
 	m_worldHeight = 300;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
@@ -62,14 +40,6 @@ void SceneDetlaff::Init()
 
 	mainCamera = new Camera();
 	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
-	/*GameObject *go = FetchGO();
-	go->SetActive(true);
-	go->SetScale(20, 20, 20);
-	go->SetFront(1, 0, 0);
-	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	go->SetType(GameObject::GO_ENVIRONMENT);
-	go->SetColliderType(Collider::COLLIDER_BOX);*/
 
 	player = new Player();
 	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
@@ -89,10 +59,7 @@ void SceneDetlaff::Init()
 	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
 	enemyMovementDelay = ENEMY_MOVE_DELAY;
 
-	//Get User option from Menu
-	useController = options.UseControl();
-	
-	
+
 	if (!(GamePad.IsConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
