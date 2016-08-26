@@ -26,28 +26,6 @@ void SceneGolem::Init()
 	//Clear the list from previous scene
 	GameObject::goList.clear();
     
-	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
-    //meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-    //meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
-    //meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
-    //meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1));
-    //meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
-    //meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1));
-    //meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
-    //meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1));
-    //meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-    //meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1));
-    //meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-
-    //meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("skyplane", Color(0, 0, 0), 64, 256.f, 2000.f, 1.f, 1.f);
-    //meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//sky3.tga");
-
-    //// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
-    //Mtx44 perspective;
-    //perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-    ////perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
-    //projectionStack.LoadMatrix(perspective);
-
     //World Space
     m_worldHeight = 300;
     m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
@@ -99,11 +77,21 @@ void SceneGolem::Init()
     golemrhead->SetScale(8, 8, 8);
     golemrhead->SetMass(3);
     golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 50.f, 0));
+	
 
-    mainCamera->Include(&(player->pos));
-    mainCamera->Include(&mousePos_worldBased);
+	mainCamera->Include(&(player->pos));
+	if (!(GamePad.IsConnected() && useController))
+	{
+		mainCamera->Include(&mousePos_worldBased);
+	}
+	else
+	{
+		mainCamera->Include(&controllerStick_Pos);
+	}
 }
 
+//CONTROL SCHEMES
+//= KEYBOARD AND MOUSE
 void SceneGolem::PlayerController(double dt)
 {
     Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
@@ -151,17 +139,95 @@ void SceneGolem::PlayerController(double dt)
     //if (Controls::GetInstance().mouse_ScrollY < 1)
     if (Controls::GetInstance().OnPress(Controls::KEY_E))
     {
-        player->ChangeWeaponDown();
+        player->ChangeProjectileDown();
     }
     //if (Controls::GetInstance().mouse_ScrollY > 1)
     if (Controls::GetInstance().OnPress(Controls::KEY_Q))
     {
-        player->ChangeWeaponUp();
+        player->ChangeProjectileUp();
     }
     if (!Controls::GetInstance().OnHold(Controls::MOUSE_RBUTTON))
     {
         player->shield->SetActive(false);
     }
+    if (Controls::GetInstance().mouse_ScrollY < 0)
+    {
+        player->ChangeWeaponDown();
+        Controls::GetInstance().mouse_ScrollY = 0;
+    }
+    if (Controls::GetInstance().mouse_ScrollY > 0)
+    {
+        player->ChangeWeaponUp();
+        Controls::GetInstance().mouse_ScrollY = 0;
+    }
+}
+
+//CONTROLLER
+void SceneGolem::GetGamePadInput(double dt)
+{
+	Vector3 forceDir;
+	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
+	player->SetFront(lookDir);
+
+	//Update Gamepad
+	GamePad.Update();
+
+	//Handle Gamepad movement
+
+	//= Y Axis Movement
+	if (GamePad.Left_Stick_Y() > 0.2f)
+	{
+		forceDir.y += 5 * GamePad.Left_Stick_Y();
+	}
+	if (GamePad.Left_Stick_Y() < -0.2f)
+	{
+		forceDir.y += 5 * GamePad.Left_Stick_Y();
+	}
+
+	//= X Axis Movement
+	if (GamePad.Left_Stick_X() > 0.2f)
+	{
+		forceDir.x += 5 * GamePad.Left_Stick_X();
+	}
+	if (GamePad.Left_Stick_X() < -0.2f)
+	{
+		forceDir.x += 5 * GamePad.Left_Stick_X();
+	}
+
+	//= Dash
+	if (GamePad.LeftTrigger() > 0.2f)
+	{
+		player->Dash(forceDir, dt);
+	}
+
+	//= Update Movement
+	if (forceDir.IsZero() == false)
+	{
+		forceDir.Normalize();
+		player->Move(forceDir, dt);
+	}
+
+
+	//Change Weapons
+	if (GamePad.GetButtonDown(8) > 0.5f)
+	{
+		player->ChangeProjectileUp();
+	}
+	if (GamePad.GetButtonDown(9) > 0.5f)
+	{
+		player->ChangeWeaponUp();
+	}
+
+	//Shooting
+	if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
+	{
+		stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
+		player->Shoot(stickDir.Normalized());
+	}
+
+	//Refresh Gamepad
+	GamePad.RefreshState();
+
 }
 
 void SceneGolem::Update(double dt)
@@ -183,11 +249,21 @@ void SceneGolem::Update(double dt)
             );
     }
 
-    //Restrict the player from moving past the deadzone
+	//Restrict the player from moving past the deadzone
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
-    {
-        PlayerController(dt);
-    }
+	{
+		//Check if Gamepad is connected for controller input
+		if (useController && GamePad.IsConnected())
+		{
+			//Handle Controller Input 
+			GetGamePadInput(dt);
+		}
+		else
+		{
+			//Handle Keyboard and Mouse input
+			PlayerController(dt);
+		}
+	}
 
     mainCamera->Update(dt);
     mainCamera->Constrain(*player, mainCamera->target);
@@ -201,6 +277,8 @@ void SceneGolem::Update(double dt)
         golemlhead->SetSpeedLimit(100);
         golemlhead->SetMovementSpeed(5500);
         golemlhead->SetMass(99);
+        golemhead->SetMovementSpeed(300);
+        golemhead->SetSpeedLimit(35);
     }
     else if (golemhead->GetHP() <= 1500)
     {
@@ -210,6 +288,8 @@ void SceneGolem::Update(double dt)
         golemlhead->SetSpeedLimit(70);
         golemlhead->SetMovementSpeed(2300);
         golemlhead->SetMass(10);
+        golemhead->SetMovementSpeed(150.f);
+        golemhead->SetSpeedLimit(10);
     }
     else if (golemhead->GetHP() <= 3000)
     {
@@ -219,6 +299,8 @@ void SceneGolem::Update(double dt)
         golemlhead->SetSpeedLimit(60);
         golemlhead->SetMovementSpeed(1700);
         golemlhead->SetMass(4);
+        golemhead->SetMovementSpeed(150.f);
+        golemhead->SetSpeedLimit(10);
     }
     
     if (golemhead->GetHP() <= 0)
@@ -229,7 +311,7 @@ void SceneGolem::Update(double dt)
 }
 
 void SceneGolem::Render()
-{
+{   
     Mtx44 perspective;
     //perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
     perspective.SetToOrtho(-m_orthoWidth * 0.5f, m_orthoWidth * 0.5f, -m_orthoHeight * 0.5f, m_orthoHeight * 0.5f, -100, 100);
@@ -407,12 +489,16 @@ void SceneGolem::RenderHUD()
 	RenderMinimap(1.0f);
 	modelStack.PopMatrix();
 
-    // Render the crosshair
-    modelStack.PushMatrix();
-    modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-    modelStack.Scale(5, 5, 5);
-    RenderMesh(meshList[GEO_CROSSHAIR], false);
-    modelStack.PopMatrix();
+	if (!((GamePad.IsConnected() && useController)))
+	{
+		// Render the crosshair
+		modelStack.PushMatrix();
+		modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_CROSSHAIR], false);
+		modelStack.PopMatrix();
+	}
+    
 
     //On screen text
     std::ostringstream ss;
@@ -450,13 +536,6 @@ void SceneGolem::RenderHUD()
     RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
     RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 5) + 11, 55.5f, player->maxHealth / 5, false);
     RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
-
-    ss.str("");
-    ss.precision(2);
-    ss << "Dash";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-    RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
-    RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
 }
 
 void SceneGolem::RenderMinimap(float zoom)

@@ -12,7 +12,8 @@
 #include <sstream>
 
 SceneBase::SceneBase():
-player(NULL)
+player(NULL),
+options(OptionManager::GetInstance())
 {
 }
 
@@ -179,6 +180,9 @@ void SceneBase::Init()
 		player = new Player();
 
 	GamePad = Gamepad(1);
+
+	//Get player Controls
+	useController = options.UseControl();
 }
 
 

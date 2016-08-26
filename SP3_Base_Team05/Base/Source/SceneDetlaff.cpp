@@ -12,7 +12,8 @@
 
 SceneDetlaff::SceneDetlaff():
 mainCamera(NULL),
-manager(SceneManager::GetInstance())
+manager(SceneManager::GetInstance()),
+options(OptionManager::GetInstance())
 {
 }
 
@@ -29,28 +30,6 @@ void SceneDetlaff::Init()
 
 	//Clear the list from previous scene
 	GameObject::goList.clear();
-
-	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
-	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-	//meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
-	//meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
-	//meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1));
-	//meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
-	//meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1));
-	//meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
-	//meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1));
-	//meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-	//meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1));
-	//meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-
-	//meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("skyplane", Color(0, 0, 0), 64, 256.f, 2000.f, 1.f, 1.f);
-	//meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//sky3.tga");
-
-	//// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
-	//Mtx44 perspective;
-	//perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	////perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
-	//projectionStack.LoadMatrix(perspective);
 
 	//World Space
 	m_worldHeight = 300;
@@ -84,7 +63,12 @@ void SceneDetlaff::Init()
 	detlaff->SetMass(999999);
 
 	mainCamera->Include(&(player->pos));
-	if (!GamePad.IsConnected())
+	
+	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
+	enemyMovementDelay = ENEMY_MOVE_DELAY;
+
+
+	if (!(GamePad.IsConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
 	}
@@ -92,10 +76,6 @@ void SceneDetlaff::Init()
 	{
 		mainCamera->Include(&controllerStick_Pos);
 	}
-
-	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
-	enemyMovementDelay = ENEMY_MOVE_DELAY;
-
 
 }
 
@@ -213,7 +193,7 @@ void SceneDetlaff::GetGamePadInput(double dt)
 	}
 
 	//= Dash
-	if (GamePad.RightTrigger() > 0.2f)
+	if (GamePad.LeftTrigger() > 0.2f)
 	{
 		player->Dash(forceDir, dt);
 	}
@@ -227,10 +207,12 @@ void SceneDetlaff::GetGamePadInput(double dt)
 
 	
 	//Change Weapons
+	//= Left Bumper
 	if (GamePad.GetButtonDown(8) > 0.5f)
 	{
-		player->ChangeWeaponDown();
+		player->ChangeProjectileUp();
 	}
+	//= Right Bumper
 	if (GamePad.GetButtonDown(9) > 0.5f)
 	{
 		player->ChangeWeaponUp();
@@ -301,7 +283,7 @@ void SceneDetlaff::Update(double dt)
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
 		//Check if Gamepad is connected for controller input
-		if (GamePad.IsConnected())
+		if (useController && GamePad.IsConnected())
 		{
 			//Handle Controller Input 
 			GetGamePadInput(dt);
@@ -502,12 +484,16 @@ void SceneDetlaff::RenderHUD()
 	RenderMinimap(1.0f);
 	modelStack.PopMatrix();
 
-	////Render the crosshair
-	//modelStack.PushMatrix();
-	//modelStack.Translate(controllerStick_WorldPos.x, controllerStick_WorldPos.y, 6);
-	//modelStack.Scale(10, 10, 10);
-	//RenderMesh(meshList[GEO_CROSSHAIR], false);
-	//modelStack.PopMatrix();
+	if (!(useController && GamePad.IsConnected()))
+	{
+		//Render the crosshair
+		modelStack.PushMatrix();
+		modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
+		modelStack.Scale(10, 10, 10);
+		RenderMesh(meshList[GEO_CROSSHAIR], false);
+		modelStack.PopMatrix();
+	}
+	
 
 	//On screen text
 	std::ostringstream ss;

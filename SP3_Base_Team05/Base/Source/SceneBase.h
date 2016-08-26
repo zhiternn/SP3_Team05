@@ -9,6 +9,7 @@
 #include "DepthFBO.h"
 #include "Gamepad.h"
 #include "Player.h"
+#include "OptionManager.h"
 
 class SceneBase : public Scene
 {
@@ -128,6 +129,7 @@ protected:
 	bool bLightEnabled;
 	bool isCulled;
 	bool isWireFrame;
+	bool useController;
 
 	float fps;
 
@@ -138,6 +140,7 @@ protected:
 	Vector3 stickDir;
 
 	Player* player;
+	OptionManager &options;
 };
 
 #endif

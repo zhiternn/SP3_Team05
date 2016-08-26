@@ -18,6 +18,7 @@ Rendering Main Menu
 MainMenu::MainMenu() :
 mainCamera(NULL),
 sm(SceneManager::GetInstance()),
+om(OptionManager::GetInstance()),
 isHover(false),
 isClicked(false),
 continuetime(0),
@@ -1442,6 +1443,7 @@ void MainMenu::ControllerButton()
                 }
                 ControllerOn = true;
             }
+			om.SetControl(ControllerOn);
             //, SoundOn, ControllerOn;
         }
         else

@@ -33,6 +33,7 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\MeshManager.cpp" />
+    <ClCompile Include="Source\OptionManager.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
@@ -74,6 +75,7 @@
     <ClInclude Include="Source\Inventory.h" />
     <ClInclude Include="Source\MainMenu.h" />
     <ClInclude Include="Source\MeshManager.h" />
+    <ClInclude Include="Source\OptionManager.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
