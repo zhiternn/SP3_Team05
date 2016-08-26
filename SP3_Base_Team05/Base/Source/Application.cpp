@@ -136,7 +136,8 @@ Application::Application() :
 theSoundEngine(NULL),
 bgm_menu(NULL),
 menu_hover(NULL),
-menu_click(NULL)
+menu_click(NULL),
+sound_machinegun(NULL)
 {
 }
 
@@ -153,6 +154,11 @@ void Application::LoadMedia()
 
     Application::GetInstance().menu_hover = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//sound_onhover.wav");
     Application::GetInstance().menu_click = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//sound_onclick.wav");
+    Application::GetInstance().sound_shotgun = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//sound_shotgun.wav");
+    Application::GetInstance().sound_shotgun->setDefaultVolume(0.5);
+    Application::GetInstance().sound_machinegun = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//sound_machinegun.wav");
+    Application::GetInstance().sound_machinegun->setDefaultVolume(0.7);
+    Application::GetInstance().sound_splitgun = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//sound_splitgun.wav");
 
 	//Application::GetInstance().sound_Footstep = Application::GetInstance().theSoundEngine->play2D("media//footsteps.wav", true, true, true);
 	//Application::GetInstance().sound_jumpLanding = Application::GetInstance().theSoundEngine->addSoundSourceFromFile("media//jump_Landing.flac");

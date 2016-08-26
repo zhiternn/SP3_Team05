@@ -1,5 +1,6 @@
 #include "WeaponList.h"
 #include "Mtx44.h"
+#include "Application.h"
 
 void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 {
@@ -38,6 +39,7 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			proj->Init(pos, dir + offset);
 			proj->SetTeam(team);
 		}
+        Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().sound_shotgun);
 	}
 }
 
@@ -66,6 +68,8 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 		*proj = *projectileInfo;
 		proj->Init(pos, dir);
 		proj->SetTeam(team);
+
+        Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().sound_machinegun);
 	}
 }
 
@@ -115,6 +119,7 @@ void Splitgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			proj->Init(pos, rotate * dir);
 			proj->SetTeam(team);
 		}
+        Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().sound_splitgun);
 	}
 }
 

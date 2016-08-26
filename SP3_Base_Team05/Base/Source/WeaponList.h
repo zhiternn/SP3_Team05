@@ -2,6 +2,7 @@
 #define WEAPONLIST_H
 
 #include "Weapon.h"
+//#include "Application.h"
 
 class Shotgun : public Weapon
 {
@@ -35,7 +36,8 @@ public:
 	MachineGun(float firerate){
 		SetFireRate(firerate);
 	}
-	~MachineGun(){}
+    ~MachineGun(){
+    }
 
 	virtual	void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
 

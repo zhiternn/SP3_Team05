@@ -38,6 +38,9 @@ public:
     ISoundSource* bgm_menu;
     ISoundSource* menu_hover;
     ISoundSource* menu_click;
+    ISoundSource* sound_shotgun;
+    ISoundSource* sound_machinegun;
+    ISoundSource* sound_splitgun;
 
 	//ISoundSource* bgm_lullaby;
 	//ISound* sound_Footstep;
