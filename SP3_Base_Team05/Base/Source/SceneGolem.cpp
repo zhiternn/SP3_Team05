@@ -151,16 +151,26 @@ void SceneGolem::PlayerController(double dt)
     //if (Controls::GetInstance().mouse_ScrollY < 1)
     if (Controls::GetInstance().OnPress(Controls::KEY_E))
     {
-        player->ChangeWeaponDown();
+        player->ChangeProjectileDown();
     }
     //if (Controls::GetInstance().mouse_ScrollY > 1)
     if (Controls::GetInstance().OnPress(Controls::KEY_Q))
     {
-        player->ChangeWeaponUp();
+        player->ChangeProjectileUp();
     }
     if (!Controls::GetInstance().OnHold(Controls::MOUSE_RBUTTON))
     {
         player->shield->SetActive(false);
+    }
+    if (Controls::GetInstance().mouse_ScrollY < 0)
+    {
+        player->ChangeWeaponDown();
+        Controls::GetInstance().mouse_ScrollY = 0;
+    }
+    if (Controls::GetInstance().mouse_ScrollY > 0)
+    {
+        player->ChangeWeaponUp();
+        Controls::GetInstance().mouse_ScrollY = 0;
     }
 }
 
@@ -201,6 +211,8 @@ void SceneGolem::Update(double dt)
         golemlhead->SetSpeedLimit(100);
         golemlhead->SetMovementSpeed(5500);
         golemlhead->SetMass(99);
+        golemhead->SetMovementSpeed(300);
+        golemhead->SetSpeedLimit(35);
     }
     else if (golemhead->GetHP() <= 1500)
     {
@@ -210,6 +222,8 @@ void SceneGolem::Update(double dt)
         golemlhead->SetSpeedLimit(70);
         golemlhead->SetMovementSpeed(2300);
         golemlhead->SetMass(10);
+        golemhead->SetMovementSpeed(150.f);
+        golemhead->SetSpeedLimit(10);
     }
     else if (golemhead->GetHP() <= 3000)
     {
@@ -219,6 +233,8 @@ void SceneGolem::Update(double dt)
         golemlhead->SetSpeedLimit(60);
         golemlhead->SetMovementSpeed(1700);
         golemlhead->SetMass(4);
+        golemhead->SetMovementSpeed(150.f);
+        golemhead->SetSpeedLimit(10);
     }
     
     if (golemhead->GetHP() <= 0)
@@ -229,7 +245,7 @@ void SceneGolem::Update(double dt)
 }
 
 void SceneGolem::Render()
-{
+{   
     Mtx44 perspective;
     //perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
     perspective.SetToOrtho(-m_orthoWidth * 0.5f, m_orthoWidth * 0.5f, -m_orthoHeight * 0.5f, m_orthoHeight * 0.5f, -100, 100);
@@ -450,13 +466,6 @@ void SceneGolem::RenderHUD()
     RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
     RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 5) + 11, 55.5f, player->maxHealth / 5, false);
     RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
-
-    ss.str("");
-    ss.precision(2);
-    ss << "Dash";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-    RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
-    RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
 }
 
 void SceneGolem::RenderMinimap(float zoom)
