@@ -134,8 +134,6 @@ void GolemLeftHand::Update(double dt)
             offsetDir.Set(offsetDir.y, -offsetDir.x, offsetDir.z);
             float offset = combinedRadius * 2;
 
-            std::cout << target->pos.x << std::endl;
-
             Vector3 destination;
             destination = (target->pos + 50) + offsetDir.Normalized();
             if (target->pos.x > 360)

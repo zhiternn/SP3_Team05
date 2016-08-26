@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Controller">
       <UniqueIdentifier>{9f953b40-9593-48af-9f6b-53433486b02e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Boss\Tutorial">
+      <UniqueIdentifier>{8ba8c829-e9e4-4d38-9b85-6e11a840e19d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Boss\Tutorial">
+      <UniqueIdentifier>{996494f0-3ea4-42f6-8a34-e80894731160}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -194,6 +200,9 @@
     </ClCompile>
     <ClCompile Include="Source\ButtonPosition.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TutorialMob.cpp">
+      <Filter>Source Files\Boss\Tutorial</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +352,15 @@
     </ClInclude>
     <ClInclude Include="Source\ButtonPosition.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shield.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneTutorial.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutorialMob.h">
+      <Filter>Header Files\Boss\Tutorial</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
