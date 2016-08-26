@@ -51,6 +51,7 @@ enum GEOMETRY_TYPE_DEFAULT
 
     //Environment
     GEO_FLOOR,
+	GEO_FLOOR_HEX,
 	GEO_FIELD,
 
     //UI

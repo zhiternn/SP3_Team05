@@ -29,25 +29,21 @@ private:
 
 		STATE_END
 	};
-	enum ACTION
-	{
-		ACTION_RECOVER,//spins in a circle while sucking all dead bodies to it
-		ACTION_SHOOT,//orders all bodies to fire
-		ACTION_CHARGE,//orders all bodies to charge (with a random offset)
-		ACTION_ENRAGE,//increase speed massively
-
-		ACTION_END
-	};
 	
 	virtual void Die();
 
-	void Action();
+	void Action(float ratio);
 	void Shoot();
+	void Enrage();
+	void Recover();
 
 	std::vector<SnakeBody*> bodyList;
 	float actionRate;
 	float actionLifetime;
 	unsigned maxBodyCount;
+
+	bool isRecovering;
+	bool isRaging;
 };
 
 #endif

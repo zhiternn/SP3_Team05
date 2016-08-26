@@ -4,7 +4,8 @@
 #include "Enemy.h"
 #include "WeaponList.h"
 
-const static float CHARGE_FORCE = 50.0f;
+const static float CHARGE_FORCE = 100.0f;
+const static int DAMAGE_ONTOUCH = 5;
 
 class SnakeBody : public Enemy
 {
@@ -20,7 +21,6 @@ public:
 
 	void GoTo(Vector3 destination, double dt);
 	void Shoot(Vector3 target);
-	void Charge(Vector3 target);
 
 private:
 	Weapon* weapon;

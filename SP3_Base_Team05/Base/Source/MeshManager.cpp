@@ -65,8 +65,14 @@ void MeshManager::Init()
 	//meshList[GEO_PLAYER_BOTTOM]->textureArray[1] = LoadTGA("Image//player2.tga");
 	//meshList[GEO_PLAYER_BOTTOM]->textureArray[2] = LoadTGA("Image//player3.tga");
 
-	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f, 8.0f);
-	meshList[GEO_FLOOR]->textureArray[0] = LoadTGA("Image//floor.tga");
+	meshList[GEO_FLOOR] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f, 4.0f);
+	meshList[GEO_FLOOR]->textureArray[0] = LoadTGA("Image//hex_floor_default.tga");
+	meshList[GEO_FLOOR]->textureArray[1] = LoadTGA("Image//hex_floor_emissive.tga");
+
+
+	meshList[GEO_FLOOR_HEX] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f, 3.0f);
+	meshList[GEO_FLOOR_HEX]->textureArray[0] = LoadTGA("Image//hex_floor_default.tga");
+	meshList[GEO_FLOOR_HEX]->textureArray[1] = LoadTGA("Image//hex_floor_emissive.tga");
 
 	meshList[GEO_MINIMAP] = MeshBuilder::GenerateCircle("minimap_background", Color(0.4f, 0.4f, 0.4f));
 	meshList[GEO_MINIMAP]->textureArray[0] = LoadTGA("Image//minimap_background.tga");

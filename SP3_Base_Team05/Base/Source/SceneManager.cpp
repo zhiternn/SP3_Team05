@@ -37,7 +37,7 @@ void SceneManager::ChangeScene(int num)
 	}
 	case 4:
 	{
-		currentScene = new SceneDetlaff();
+		//currentScene = new SceneDetlaff();
 		break;
 	}
 	}

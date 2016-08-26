@@ -2,6 +2,7 @@
 #include "ProjectileList.h"
 #include "MeshManager.h"
 #include "SnakeHead.h"
+#include "Player.h"
 
 SnakeBody::SnakeBody() :
 Enemy(),
@@ -32,7 +33,7 @@ void SnakeBody::Init(Vector3 pos, float speed, float speedLimit)
 	movementSpeed = speed;
 	this->speedLimit = speedLimit;
 	collider.type = Collider::COLLIDER_BALL;
-	health = 100;
+	health = 300;
 	this->scale.Set(5, 5, 5);
 }
 
@@ -42,8 +43,6 @@ void SnakeBody::Update(double dt)
 
 	weapon->Update(dt);
 
-	if (this->vel.LengthSquared() > speedLimit * speedLimit)
-		this->vel = this->vel.Normalized() * speedLimit;
 	if (this->vel.IsZero() == false)
 		this->front = vel.Normalized();
 
@@ -60,6 +59,13 @@ void SnakeBody::HandleInteraction(GameObject* b, double dt)
 	if (body)//skips checks against body
 		return;
 
+	Player* player = dynamic_cast<Player*>(b);
+	if (player)
+	{
+		if (CheckCollision(b, dt))
+			player->TakeDamage(DAMAGE_ONTOUCH);
+	}
+
 	GameObject::HandleInteraction(b, dt);
 }
 
@@ -74,17 +80,14 @@ void SnakeBody::GoTo(Vector3 destination, double dt)
 		return;
 
 	this->vel += (destination - this->pos).Normalized() * this->movementSpeed * dt;
+	if (this->vel.LengthSquared() > speedLimit * speedLimit)
+		this->vel = this->vel.Normalized() * speedLimit;
 }
 
 void SnakeBody::Shoot(Vector3 target)
 {
 	if (weapon)
 		weapon->Fire(this->pos, target - this->pos, team);
-}
-
-void SnakeBody::Charge(Vector3 target)
-{
-	this->ApplyForce(target - this->pos, CHARGE_FORCE);
 }
 
 void SnakeBody::SetupMesh()
