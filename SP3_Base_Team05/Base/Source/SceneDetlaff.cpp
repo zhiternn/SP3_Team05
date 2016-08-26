@@ -71,10 +71,12 @@ void SceneDetlaff::Init()
 	if (!(GamePad.IsConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
+		Keyboard = false;
 	}
 	else
 	{
 		mainCamera->Include(&controllerStick_Pos);
+		Keyboard = true;
 	}
 
 }
@@ -274,8 +276,7 @@ void SceneDetlaff::Update(double dt)
 	if (enemyMovementDelay <= 0.f)
 	{
 		enemyMovementDelay = ENEMY_MOVE_DELAY;
-
-		detlaff->Teleport(m_worldWidth, m_worldHeight);
+		detlaff->Teleport(m_worldWidth - 50, m_worldHeight - 50);
 	}
 
 	
@@ -293,6 +294,21 @@ void SceneDetlaff::Update(double dt)
 			//Handle Keyboard and Mouse input
 			PlayerController(dt);
 		}
+	}
+
+	//Update Camera target scheme if Controller is plugged in
+	if (GamePad.IsConnected() && Keyboard)
+	{
+		Keyboard = false;
+
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&controllerStick_Pos);
+	}
+	else if (!(GamePad.IsConnected()))
+	{
+		Keyboard = true;
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&mousePos_worldBased);
 	}
 }
 

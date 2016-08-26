@@ -130,6 +130,7 @@ protected:
 	bool isCulled;
 	bool isWireFrame;
 	bool useController;
+	bool Keyboard;
 
 	float fps;
 

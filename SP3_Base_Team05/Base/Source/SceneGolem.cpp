@@ -83,10 +83,12 @@ void SceneGolem::Init()
 	if (!(GamePad.IsConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
+		Keyboard = false;
 	}
 	else
 	{
 		mainCamera->Include(&controllerStick_Pos);
+		Keyboard = true;
 	}
 }
 
@@ -308,6 +310,21 @@ void SceneGolem::Update(double dt)
         golemrhead->SetActive(false);
         golemlhead->SetActive(false);
     }
+
+	//Update Camera target scheme if Controller is plugged in
+	if (GamePad.IsConnected() && Keyboard)
+	{
+		Keyboard = false;
+
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&controllerStick_Pos);
+	}
+	else if (!(GamePad.IsConnected()))
+	{
+		Keyboard = true;
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&mousePos_worldBased);
+	}
 }
 
 void SceneGolem::Render()

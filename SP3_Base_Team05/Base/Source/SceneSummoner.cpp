@@ -57,10 +57,12 @@ void SceneSummoner::Init()
 	if (!(GamePad.IsConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
+		Keyboard = false;
 	}
 	else
 	{
 		mainCamera->Include(&controllerStick_Pos);
+		Keyboard = true;
 	}
 }
 
@@ -229,6 +231,21 @@ void SceneSummoner::Update(double dt)
 			//Handle Keyboard and Mouse input
 			PlayerController(dt);
 		}
+	}
+
+	//Update Camera target scheme if Controller is plugged in
+	if (GamePad.IsConnected() && Keyboard)
+	{
+		Keyboard = false;
+
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&controllerStick_Pos);
+	}
+	else if (!(GamePad.IsConnected()))
+	{
+		Keyboard = true;
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&mousePos_worldBased);
 	}
 
 	mainCamera->Update(dt);
