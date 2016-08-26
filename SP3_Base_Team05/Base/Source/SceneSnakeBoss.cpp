@@ -8,7 +8,6 @@
 #include <sstream>
 
 SceneSnakeBoss::SceneSnakeBoss() :
-player(NULL),
 mainCamera(NULL),
 manager(SceneManager::GetInstance())
 {
@@ -16,6 +15,8 @@ manager(SceneManager::GetInstance())
 
 SceneSnakeBoss::~SceneSnakeBoss()
 {
+	if (mainCamera)
+		delete mainCamera;
 }
 
 void SceneSnakeBoss::Init()
@@ -26,33 +27,11 @@ void SceneSnakeBoss::Init()
 	//Clear the list from previous scene
 	GameObject::goList.clear();
 
-	//meshList[GEO_FRONT] = MeshBuilder::GenerateQuad("front", Color(1, 1, 1));
-	//meshList[GEO_FRONT]->textureID = LoadTGA("Image//front.tga");
-	//meshList[GEO_BACK] = MeshBuilder::GenerateQuad("back", Color(1, 1, 1));
-	//meshList[GEO_BACK]->textureID = LoadTGA("Image//back.tga");
-	//meshList[GEO_LEFT] = MeshBuilder::GenerateQuad("left", Color(1, 1, 1));
-	//meshList[GEO_LEFT]->textureID = LoadTGA("Image//left.tga");
-	//meshList[GEO_RIGHT] = MeshBuilder::GenerateQuad("right", Color(1, 1, 1));
-	//meshList[GEO_RIGHT]->textureID = LoadTGA("Image//right.tga");
-	//meshList[GEO_TOP] = MeshBuilder::GenerateQuad("top", Color(1, 1, 1));
-	//meshList[GEO_TOP]->textureID = LoadTGA("Image//top.tga");
-	//meshList[GEO_BOTTOM] = MeshBuilder::GenerateQuad("bottom", Color(1, 1, 1));
-	//meshList[GEO_BOTTOM]->textureID = LoadTGA("Image//bottom.tga");
-
-	//meshList[GEO_SKYPLANE] = MeshBuilder::GenerateSkyPlane("skyplane", Color(0, 0, 0), 64, 256.f, 2000.f, 1.f, 1.f);
-	//meshList[GEO_SKYPLANE]->textureArray[0] = LoadTGA("Image//sky3.tga");
-
-	//// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 1000 units
-	//Mtx44 perspective;
-	//perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	////perspective.SetToOrtho(-80, 80, -60, 60, -1000, 1000);
-	//projectionStack.LoadMatrix(perspective);
-
 	//World Space
 	m_worldHeight = 300;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
-	//World Space View
+	//Camera Space View
 	m_orthoHeight = 100;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
@@ -67,7 +46,6 @@ void SceneSnakeBoss::Init()
 	//go->SetType(GameObject::GO_ENVIRONMENT);
 	//go->SetColliderType(Collider::COLLIDER_BOX);
 
-	player = new Player();
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
@@ -81,7 +59,14 @@ void SceneSnakeBoss::Init()
 	enemy->Init(Vector3(m_worldWidth*0.1f, m_worldHeight*0.1f, 0), 20);
 
 	mainCamera->Include(&(player->pos));
-	mainCamera->Include(&mousePos_worldBased);
+	if (!(GamePad.IsConnected() && useController))
+	{
+		mainCamera->Include(&mousePos_worldBased);
+	}
+	else
+	{
+		mainCamera->Include(&controllerStick_Pos);
+	}
 }
 
 void SceneSnakeBoss::PlayerController(double dt)
@@ -143,6 +128,73 @@ void SceneSnakeBoss::PlayerController(double dt)
 	}
 }
 
+void SceneSnakeBoss::GetGamePadInput(double dt)
+{
+	Vector3 forceDir;
+	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
+	player->SetFront(lookDir);
+
+	//Update Gamepad
+	GamePad.Update();
+
+	//Handle Gamepad movement
+
+	//= Y Axis Movement
+	if (GamePad.Left_Stick_Y() > 0.2f)
+	{
+		forceDir.y += 5 * GamePad.Left_Stick_Y();
+	}
+	if (GamePad.Left_Stick_Y() < -0.2f)
+	{
+		forceDir.y += 5 * GamePad.Left_Stick_Y();
+	}
+
+	//= X Axis Movement
+	if (GamePad.Left_Stick_X() > 0.2f)
+	{
+		forceDir.x += 5 * GamePad.Left_Stick_X();
+	}
+	if (GamePad.Left_Stick_X() < -0.2f)
+	{
+		forceDir.x += 5 * GamePad.Left_Stick_X();
+	}
+
+	//= Dash
+	if (GamePad.LeftTrigger() > 0.2f)
+	{
+		player->Dash(forceDir, dt);
+	}
+
+	//= Update Movement
+	if (forceDir.IsZero() == false)
+	{
+		forceDir.Normalize();
+		player->Move(forceDir, dt);
+	}
+
+
+	//Change Weapons
+	if (GamePad.GetButtonDown(8) > 0.5f)
+	{
+		player->ChangeProjectileUp();
+	}
+	if (GamePad.GetButtonDown(9) > 0.5f)
+	{
+		player->ChangeWeaponUp();
+	}
+
+	//Shooting
+	if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
+	{
+		stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
+		player->Shoot(stickDir.Normalized());
+	}
+
+	//Refresh Gamepad
+	GamePad.RefreshState();
+
+}
+
 void SceneSnakeBoss::Update(double dt)
 {
 	SceneBase::Update(dt);
@@ -165,7 +217,17 @@ void SceneSnakeBoss::Update(double dt)
 	//Restrict the player from moving past the deadzone
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
-		PlayerController(dt);
+		//Check if Gamepad is connected for controller input
+		if (useController && GamePad.IsConnected())
+		{
+			//Handle Controller Input 
+			GetGamePadInput(dt);
+		}
+		else
+		{
+			//Handle Keyboard and Mouse input
+			PlayerController(dt);
+		}
 	}
 
 	mainCamera->Update(dt);
@@ -313,7 +375,7 @@ void SceneSnakeBoss::RenderWorld()
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
-		RenderMesh(meshList[GEO_FLOOR], false);
+		RenderMesh(meshList[GEO_FLOOR_HEX], false);
 		modelStack.PopMatrix();
 	}
 
@@ -351,11 +413,15 @@ void SceneSnakeBoss::RenderHUD()
 	RenderMinimap(1.0f);
 	modelStack.PopMatrix();
 
-    modelStack.PushMatrix();
-    modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-    modelStack.Scale(5, 5, 5);
-    RenderMesh(meshList[GEO_CROSSHAIR], false);
-    modelStack.PopMatrix();
+	if (!((GamePad.IsConnected() && useController)))
+	{
+		// Render the crosshair
+		modelStack.PushMatrix();
+		modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
+		modelStack.Scale(5, 5, 5);
+		RenderMesh(meshList[GEO_CROSSHAIR], false);
+		modelStack.PopMatrix();
+	}
 
 	//On screen text
 	std::ostringstream ss;

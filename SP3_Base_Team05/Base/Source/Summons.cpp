@@ -3,7 +3,6 @@
 
 Summons::Summons()
 {
-
 }
 
 Summons::~Summons()
@@ -13,13 +12,12 @@ Summons::~Summons()
 void Summons::Init(Vector3 pos)
 {
 	Enemy::Init(pos);
-	type = GameObject::GO_ENTITY;
 	entityType = Entity::ENTITY_BOSS_BODY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
 	speedLimit = 50.f;
 	scale.Set(7, 7, 7);
-	health = 50;
+	health = 100;
 	isDead = false;
 	isDefending = false;
 	weapon = new MachineGun();
@@ -29,7 +27,9 @@ void Summons::Init(Vector3 pos)
 void Summons::Update(double dt)
 {
 	GameObject::Update(dt);
+	std::cout << this->captureRate << std::endl;
 	weapon->Update(dt);
+
 	if (vel.LengthSquared() > speedLimit * speedLimit)
 		vel = vel.Normalized() * speedLimit;
 }

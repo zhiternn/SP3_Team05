@@ -36,9 +36,11 @@ public:
     void RenderSkybox();
     void RenderSkyPlane();
 
+
 private:
 
     void PlayerController(double dt);
+	void GetGamePadInput(double dt);
     void UpdateGameObjects(double dt);
     void RenderGameObjects();
     void RenderGO(GameObject* go);
@@ -47,8 +49,6 @@ private:
     float m_orthoWidth, m_orthoHeight;
 
     Camera* mainCamera;
-
-    Player* player;
 
     Vector3 mousePos_screenBased;
     Vector3 mousePos_worldBased;

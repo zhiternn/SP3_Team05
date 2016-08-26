@@ -53,8 +53,6 @@ private:
 
 	Camera* mainCamera;
 
-	Player* player;
-
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;
 
@@ -63,7 +61,6 @@ private:
 	SceneManager &manager;
 	OptionManager &options;
 
-	bool useController;
 };
 
 #endif

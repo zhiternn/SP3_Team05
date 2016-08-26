@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "SceneText.h"
 #include "SceneSummoner.h"
 #include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
@@ -21,8 +20,8 @@
 #include "MeshManager.h"
 
 GLFWwindow* m_window;
-int Application::m_window_width = 800;
-int Application::m_window_height = 600;
+int Application::m_window_width = 1024;
+int Application::m_window_height = 800;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
 double Application::mouse_last_x = 0.0, Application::mouse_last_y = 0.0,
@@ -255,7 +254,7 @@ void Application::Run()
 	meshManager.Init();
 
 	//sm.SetScene(new SceneSnakeBoss());
-	sm.SetScene(new SceneSnakeBoss());
+	//sm.SetScene(new SceneSnakeBoss());
 	//sm.SetScene(new SceneSummoner());
 	//sm.SetScene(new SceneDetlaff());
 	//sm.SetScene(new SceneGolem());

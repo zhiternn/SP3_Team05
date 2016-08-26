@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -45,7 +45,6 @@
     <ClCompile Include="Source\SceneSnakeBoss.cpp" />
     <ClCompile Include="Source\SceneSummoner.cpp" />
     <ClCompile Include="Source\SceneDetlaff.cpp" />
-    <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SnakeBody.cpp" />
     <ClCompile Include="Source\SnakeHead.cpp" />
@@ -97,7 +96,6 @@
     <ClInclude Include="Source\SceneSnakeBoss.h" />
     <ClInclude Include="Source\SceneSummoner.h" />
     <ClInclude Include="Source\SceneDetlaff.h" />
-    <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\SceneTutorial.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Shield.h" />

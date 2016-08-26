@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include "Trap.h"
 
 Enemy::Enemy():
 Entity(),
@@ -18,6 +19,7 @@ void Enemy::Init(Vector3 pos)
 	this->active = true;
 	this->isDead = false;
 	this->isCaptured = false;
+	this->isCapturing = false;
 	destinationCountdown = REACH_CHECKER;
 	type = GameObject::GO_ENTITY;
 	team = TEAM_ENEMY;
@@ -27,11 +29,14 @@ void Enemy::Init(Vector3 pos)
 void Enemy::Update(double dt)
 {
 	GameObject::Update(dt);
-	if (vel.IsZero() == false)
-		front = vel.Normalized();
-
-	if (!UpdateMovement(dt))
-	{//if fail to update (zero destination left)
+	if (isCapturing)
+	{
+		Capturing(dt);
+		isCapturing = false;
+	}
+	else
+	{
+		captureRate = 0;
 	}
 }
 
@@ -61,6 +66,10 @@ bool Enemy::UpdateMovement(double dt)
 			{
 				vel = vel.Normalized() * speedLimit;
 			}
+		}
+		if (isCapturing)
+		{
+			//ChangeDestination(MOVETO_AVOID_ENVIRONMENT, )
 		}
 
 		return true;
@@ -171,16 +180,21 @@ void Enemy::SetTarget(Entity* target)
 
 void Enemy::HandleInteraction(GameObject* b, double dt)
 {
-	if (CheckCollision(b, dt))
+	if (b->GetType() == GameObject::GO_ENVIRONMENT)
 	{
-		if (b->GetType() == GameObject::GO_ENVIRONMENT)
+		Trap* trap = dynamic_cast<Trap*>(b);
+		if (trap)
 		{
-			Vector3 newPath = FindNewPath(target->pos, b);
-			ChangeDestination(MOVETO_AVOID_ENVIRONMENT, newPath);
+			float combinedRadius = this->scale.x + trap->GetScale().x;
+			float distanceBetween = (this->pos - trap->pos).LengthSquared();
+			if (distanceBetween <= combinedRadius * combinedRadius)
+			{
+				this->ChangeDestination(MOVETO_AVOID_ENVIRONMENT, Vector3(this->pos.x * combinedRadius, this->pos.y * combinedRadius, 0));
+			}
 		}
-
-		CollisionResponse(b);
 	}
+
+	GameObject::HandleInteraction(b, dt);
 }
 void Enemy::SetSpeedLimit(float speed)
 {
@@ -212,7 +226,7 @@ float Enemy::GetCaptureRate()
 	return captureRate;
 }
 
-void Enemy::SetIsCaptured(bool isCaptured)
+void Enemy::SetCaptured(bool isCaptured)
 {
 	this->isCaptured = isCaptured;
 }
@@ -222,15 +236,22 @@ bool Enemy::IsCaptured()
 	return isCaptured;
 }
 
-void Enemy::Capturing(float rate)
+void Enemy::SetCapturing(bool isCapturing)
 {
-	if (!isCaptured)
+	this->isCapturing = isCapturing;
+}
+
+bool Enemy::IsCapturing()
+{
+	return isCapturing;
+}
+
+void Enemy::Capturing(double dt)
+{
+	captureRate += dt * 20;
+	if (captureRate >= health / 10)
 	{
-		captureRate += rate;
-		if (captureRate >= health)
-		{
-			Captured();
-		}
+		Captured();
 	}
 }
 

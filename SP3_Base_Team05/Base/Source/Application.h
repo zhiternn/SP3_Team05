@@ -38,9 +38,6 @@ public:
     ISoundSource* bgm_menu;
     ISoundSource* menu_hover;
     ISoundSource* menu_click;
-    ISoundSource* sound_shotgun;
-    ISoundSource* sound_machinegun;
-    ISoundSource* sound_splitgun;
 
 	//ISoundSource* bgm_lullaby;
 	//ISound* sound_Footstep;
@@ -51,6 +48,9 @@ public:
 	//ISoundSource* sound_bulletImpact;
 	//ISoundSource* sound_rocketImpact;
 	//ISoundSource* sound_ballBounce;
+	ISoundSource* sound_shotgun;
+	ISoundSource* sound_machinegun;
+	ISoundSource* sound_splitgun;
 
 	void LoadMedia();
 	void StopSound();

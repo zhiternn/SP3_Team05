@@ -22,24 +22,30 @@ void Rope::Init(Vector3 pos, GameObject* target, float lifeTime)
 	this->vel.SetZero();
 	this->target = target;
 	lifetime = lifeTime;
-	collider.type = Collider::COLLIDER_BALL;
-	collider.isTrigger = true;
+	collider.type = Collider::COLLIDER_NONE;
 }
 
 void Rope::Update(double dt)
 {
 	if (!target)
+	{
+		active = false;
 		return;
+	}
 	lifetime -= dt;
 	
 	if (lifetime <= 0)
+	{
+		target = NULL;
 		active = false;
+		return;
+	}
 	if (target->pos != pos)
 	{
 		front = target->pos - pos;
 		this->scale.x = (target->pos - pos).Length();
 
-		if (!CheckCollision(target, dt))
+		if (this->scale.x > maxLength)
 		{
 			Vector3 N = (target->pos - this->pos).Normalized();
 			float difference = scale.x - maxLength;
