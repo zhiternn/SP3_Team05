@@ -9,6 +9,7 @@
 #include "ProjectileList.h"
 #include "Detlaff.h"
 #include "SceneManager.h"
+#include "OptionManager.h"
 
 #include <vector>
 
@@ -60,6 +61,9 @@ private:
 	CDetlaff* detlaff;
 
 	SceneManager &manager;
+	OptionManager &options;
+
+	bool useController;
 };
 
 #endif

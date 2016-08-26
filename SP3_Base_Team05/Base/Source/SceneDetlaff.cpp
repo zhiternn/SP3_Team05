@@ -13,7 +13,8 @@
 SceneDetlaff::SceneDetlaff() :
 player(NULL),
 mainCamera(NULL),
-manager(SceneManager::GetInstance())
+manager(SceneManager::GetInstance()),
+options(OptionManager::GetInstance())
 {
 }
 
@@ -84,7 +85,15 @@ void SceneDetlaff::Init()
 	detlaff->SetMass(999999);
 
 	mainCamera->Include(&(player->pos));
-	if (!GamePad.IsConnected())
+	
+	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
+	enemyMovementDelay = ENEMY_MOVE_DELAY;
+
+	//Get User option from Menu
+	useController = options.UseControl();
+	
+	
+	if (!(GamePad.IsConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
 	}
@@ -92,10 +101,6 @@ void SceneDetlaff::Init()
 	{
 		mainCamera->Include(&controllerStick_Pos);
 	}
-
-	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
-	enemyMovementDelay = ENEMY_MOVE_DELAY;
-
 
 }
 
@@ -301,7 +306,7 @@ void SceneDetlaff::Update(double dt)
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
 		//Check if Gamepad is connected for controller input
-		if (GamePad.IsConnected())
+		if (useController && GamePad.IsConnected())
 		{
 			//Handle Controller Input 
 			GetGamePadInput(dt);
@@ -502,12 +507,16 @@ void SceneDetlaff::RenderHUD()
 	RenderMinimap(1.0f);
 	modelStack.PopMatrix();
 
-	////Render the crosshair
-	//modelStack.PushMatrix();
-	//modelStack.Translate(controllerStick_WorldPos.x, controllerStick_WorldPos.y, 6);
-	//modelStack.Scale(10, 10, 10);
-	//RenderMesh(meshList[GEO_CROSSHAIR], false);
-	//modelStack.PopMatrix();
+	if (!(useController && GamePad.IsConnected()))
+	{
+		//Render the crosshair
+		modelStack.PushMatrix();
+		modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
+		modelStack.Scale(10, 10, 10);
+		RenderMesh(meshList[GEO_CROSSHAIR], false);
+		modelStack.PopMatrix();
+	}
+	
 
 	//On screen text
 	std::ostringstream ss;
