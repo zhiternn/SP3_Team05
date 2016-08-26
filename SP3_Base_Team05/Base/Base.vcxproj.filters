@@ -141,9 +141,6 @@
     <ClCompile Include="Source\SceneSummoner.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneText.cpp">
-      <Filter>Source Files\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneSnakeBoss.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
@@ -293,9 +290,6 @@
     <ClInclude Include="Source\SceneSummoner.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneText.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneSnakeBoss.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
@@ -342,6 +336,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\ButtonPosition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shield.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

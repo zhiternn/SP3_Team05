@@ -8,8 +8,7 @@
 #include "Particle.h"
 #include "DepthFBO.h"
 #include "Gamepad.h"
-
-
+#include "Player.h"
 
 class SceneBase : public Scene
 {
@@ -137,6 +136,8 @@ protected:
 	Vector3 controllerStick_Pos;
 	Vector3 controllerStick_WorldPos;
 	Vector3 stickDir;
+
+	Player* player;
 };
 
 #endif

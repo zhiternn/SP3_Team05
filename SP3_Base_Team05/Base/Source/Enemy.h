@@ -6,7 +6,6 @@
 #include "Weapon.h"
 
 static const float REACH_CHECKER = 2.0f;
-static const float CAPTURE_GOAL = 5.f;
 
 class Enemy : public Entity
 {
@@ -17,8 +16,6 @@ public:
 	virtual void Init(Vector3 pos);
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
-	virtual void Capturing(float rate);
-	virtual void Captured();
 
 	//Setters
 	void SetTarget(Entity* target);
@@ -26,7 +23,8 @@ public:
 	void SetSpeedLimit(float speed);
 	void SetMovementSpeed(float speed);
 	void SetCaptureRate(float captureRate);
-	void SetIsCaptured(bool isCaptured);
+	void SetCaptured(bool isCaptured);
+	void SetCapturing(bool isCapturing);
 
 	//Getters
 	float GetRate();
@@ -35,6 +33,7 @@ public:
 	float GetMovementSpeed();
 	float GetCaptureRate();
 	bool IsCaptured();
+	bool IsCapturing();
 
 protected:
 	enum MOVEMENT_PRIORITY
@@ -49,6 +48,8 @@ protected:
 	void ChangeDestination(MOVEMENT_PRIORITY priority, Vector3 pos);
 	bool UpdateMovement(double dt);//returns false if out of waypoints
 	Vector3 FindNewPath(Vector3 destination, GameObject* obstacle);
+	void Captured();
+	void Capturing(double dt);
 
 	std::vector<Vector3> destinations;
 	float destinationCountdown;
@@ -59,6 +60,7 @@ protected:
 
 	float captureRate;
 	bool isCaptured;
+	bool isCapturing;
 };
 
 Enemy* FetchEnemy();

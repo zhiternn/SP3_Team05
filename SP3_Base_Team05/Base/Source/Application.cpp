@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "SceneText.h"
 #include "SceneSummoner.h"
 #include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
@@ -249,7 +248,7 @@ void Application::Run()
 	meshManager.Init();
 
 	//sm.SetScene(new SceneSnakeBoss());
-	sm.SetScene(new SceneSnakeBoss());
+	//sm.SetScene(new SceneSnakeBoss());
 	//sm.SetScene(new SceneSummoner());
 	//sm.SetScene(new SceneDetlaff());
 	//sm.SetScene(new SceneGolem());

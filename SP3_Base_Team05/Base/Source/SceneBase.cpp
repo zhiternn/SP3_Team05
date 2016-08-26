@@ -8,9 +8,11 @@
 #include "Controls.h"
 #include "MeshManager.h"
 
+
 #include <sstream>
 
-SceneBase::SceneBase()
+SceneBase::SceneBase():
+player(NULL)
 {
 }
 
@@ -172,6 +174,9 @@ void SceneBase::Init()
 	bLightEnabled = true;
 	isCulled = true;
 	isWireFrame = false;
+
+	if (player == NULL)
+		player = new Player();
 
 	GamePad = Gamepad(1);
 }
@@ -597,4 +602,7 @@ void SceneBase::Exit()
 	glDeleteProgram(m_gPassShaderID);
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);
+
+	if (player)
+		delete player;
 }

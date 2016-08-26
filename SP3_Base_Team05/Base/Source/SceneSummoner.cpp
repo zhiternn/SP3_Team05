@@ -7,7 +7,6 @@
 #include <sstream>
 
 SceneSummoner::SceneSummoner() :
-player(NULL),
 mainCamera(NULL),
 manager(SceneManager::GetInstance())
 {
@@ -15,6 +14,8 @@ manager(SceneManager::GetInstance())
 
 SceneSummoner::~SceneSummoner()
 {
+	if (mainCamera)
+		delete mainCamera;
 }
 
 void SceneSummoner::Init()
@@ -66,7 +67,6 @@ void SceneSummoner::Init()
 	//go->SetType(GameObject::GO_ENVIRONMENT);
 	//go->SetColliderType(Collider::COLLIDER_BOX);
 
-	player = new Player();
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
@@ -530,13 +530,13 @@ void SceneSummoner::RenderGameObjects()
 				{
 					modelStack.PushMatrix();
 					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x, 50);
-					modelStack.Scale(enemy->GetHP() / 5, 3, 1);
+					modelStack.Scale(enemy->GetHP() / 10, 3, 1);
 					RenderMesh(meshList[GEO_HEALTH], false);
 					modelStack.PopMatrix();
 				}
 				modelStack.PushMatrix();
 				modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 5, 50);
-				modelStack.Scale(enemy->GetCaptureRate() * 5, 3, 1);
+				modelStack.Scale(enemy->GetCaptureRate(), 3, 1);
 				RenderMesh(meshList[GEO_CAPTURE], false);
 				modelStack.PopMatrix();
 			}

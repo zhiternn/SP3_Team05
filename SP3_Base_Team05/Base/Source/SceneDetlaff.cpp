@@ -10,8 +10,7 @@
 #define ENEMY_FIRE_COOLDOWN 2;
 #define ENEMY_MOVE_DELAY 15;
 
-SceneDetlaff::SceneDetlaff() :
-player(NULL),
+SceneDetlaff::SceneDetlaff():
 mainCamera(NULL),
 manager(SceneManager::GetInstance())
 {
@@ -19,6 +18,8 @@ manager(SceneManager::GetInstance())
 
 SceneDetlaff::~SceneDetlaff()
 {
+	if (mainCamera)
+		delete mainCamera;
 }
 
 void SceneDetlaff::Init()
@@ -70,7 +71,6 @@ void SceneDetlaff::Init()
 	go->SetType(GameObject::GO_ENVIRONMENT);
 	go->SetColliderType(Collider::COLLIDER_BOX);*/
 
-	player = new Player();
 	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
