@@ -133,7 +133,7 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 		{
 			if (CheckCollision(b, dt))//if touching dead body part
 			{
-				body->Init(body->pos, body->movementSpeed, body->speedLimit);
+				body->Init(body->pos, body->GetMovementSpeed(), body->GetSpeedLimit());
 				bodyList.push_back(body);
 			}
 

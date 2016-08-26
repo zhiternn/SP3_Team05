@@ -36,6 +36,8 @@ void GolemRightHand::Update(double dt)
     if (vel.IsZero() == false)
         front = vel.Normalized();
 
+    health = 999999;
+
     if (!Enemy::UpdateMovement(dt))
     {
         if (target)
@@ -108,7 +110,7 @@ void GolemLeftHand::Init(Vector3 pos)
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BALL;
     mass = 4;
-    destinationCountdown = 5.f;
+    destinationCountdown = 7.f;
     speedLimit = 45.f;
     movementSpeed = 800.f;
 
@@ -121,6 +123,8 @@ void GolemLeftHand::Update(double dt)
     if (vel.IsZero() == false)
         front = vel.Normalized();
 
+    health = 999999;
+
     if (!Enemy::UpdateMovement(dt))
     {
         if (target)
@@ -130,25 +134,29 @@ void GolemLeftHand::Update(double dt)
             offsetDir.Set(offsetDir.y, -offsetDir.x, offsetDir.z);
             float offset = combinedRadius * 2;
 
-            Vector3 destination = (target->pos + 50) + offsetDir.Normalized();
+            std::cout << target->pos.x << std::endl;
+
+            Vector3 destination;
+            destination = (target->pos + 50) + offsetDir.Normalized();
+            if (target->pos.x > 360)
+            {
+                destination = (target->pos - 50) + offsetDir.Normalized();
+                state = 1;
+            }
             ChangeDestination(MOVETO_TARGET, destination);
             if (Reached(destination))
             {
-                destination = (target->pos - 40) + offsetDir.Normalized();
-                ChangeDestination(MOVETO_TARGET, destination);
-                state == 2;
-            }
-
-            if (state == 2)
-            {
-                Vector3 destination = (target->pos - 50) + offsetDir.Normalized();
-                ChangeDestination(MOVETO_TARGET, destination);
-                if (Reached(destination))
+                if (state = 1)
                 {
-                    destination = (target->pos + 40) + offsetDir.Normalized();
+                    destination = (target->pos + 5) + offsetDir.Normalized();
+                    ChangeDestination(MOVETO_TARGET, destination);
+                    state = 0;
+                }
+                else
+                {
+                    destination = (target->pos - 60) + offsetDir.Normalized();
                     ChangeDestination(MOVETO_TARGET, destination);
                 }
-                state = 1;
             }
 
         }

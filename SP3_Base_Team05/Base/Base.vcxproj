@@ -33,6 +33,7 @@
     <ClCompile Include="Source\Mesh.cpp" />
     <ClCompile Include="Source\MeshBuilder.cpp" />
     <ClCompile Include="Source\MeshManager.cpp" />
+    <ClCompile Include="Source\OptionManager.cpp" />
     <ClCompile Include="Source\Particle.cpp" />
     <ClCompile Include="Source\Player.cpp" />
     <ClCompile Include="Source\Projectile.cpp" />
@@ -44,7 +45,6 @@
     <ClCompile Include="Source\SceneSnakeBoss.cpp" />
     <ClCompile Include="Source\SceneSummoner.cpp" />
     <ClCompile Include="Source\SceneDetlaff.cpp" />
-    <ClCompile Include="Source\SceneText.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SnakeBody.cpp" />
     <ClCompile Include="Source\SnakeHead.cpp" />
@@ -75,6 +75,7 @@
     <ClInclude Include="Source\Inventory.h" />
     <ClInclude Include="Source\MainMenu.h" />
     <ClInclude Include="Source\MeshManager.h" />
+    <ClInclude Include="Source\OptionManager.h" />
     <ClInclude Include="Source\Player.h" />
     <ClInclude Include="Source\Light.h" />
     <ClInclude Include="Source\LoadHmap.h" />
@@ -94,7 +95,6 @@
     <ClInclude Include="Source\SceneSnakeBoss.h" />
     <ClInclude Include="Source\SceneSummoner.h" />
     <ClInclude Include="Source\SceneDetlaff.h" />
-    <ClInclude Include="Source\SceneText.h" />
     <ClInclude Include="Source\shader.hpp" />
     <ClInclude Include="Source\Shield.h" />
     <ClInclude Include="Source\SnakeBody.h" />

@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "GameObject.h"
 #include "SceneManager.h"
+#include "OptionManager.h"
 
 #include "ButtonPosition.h"
 
@@ -72,6 +73,7 @@ private:
 
     MENU_STATE state;
     SceneManager &sm;
+	OptionManager &om;
 
     bool isHover, isClicked;
     float continuetime;

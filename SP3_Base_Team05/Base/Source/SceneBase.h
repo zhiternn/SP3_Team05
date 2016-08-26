@@ -8,8 +8,8 @@
 #include "Particle.h"
 #include "DepthFBO.h"
 #include "Gamepad.h"
-
-
+#include "Player.h"
+#include "OptionManager.h"
 
 class SceneBase : public Scene
 {
@@ -129,11 +129,18 @@ protected:
 	bool bLightEnabled;
 	bool isCulled;
 	bool isWireFrame;
+	bool useController;
 
 	float fps;
 
 	//Create the Gamepad object
-	//Gamepad GamePad;
+	Gamepad GamePad;
+	Vector3 controllerStick_Pos;
+	Vector3 controllerStick_WorldPos;
+	Vector3 stickDir;
+
+	Player* player;
+	OptionManager &options;
 };
 
 #endif

@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Controller">
       <UniqueIdentifier>{9f953b40-9593-48af-9f6b-53433486b02e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{c32c9ceb-0296-4029-99ba-1eaecb1337fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{6bedf66c-cd26-41ed-b098-a1696e5a2121}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -141,9 +147,6 @@
     <ClCompile Include="Source\SceneSummoner.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SceneText.cpp">
-      <Filter>Source Files\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="Source\SceneSnakeBoss.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
@@ -154,9 +157,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneGolem.cpp">
-      <Filter>Source Files\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\SceneManager.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Source\Trap.cpp">
@@ -194,6 +194,12 @@
     </ClCompile>
     <ClCompile Include="Source\ButtonPosition.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\OptionManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -293,9 +299,6 @@
     <ClInclude Include="Source\SceneSummoner.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SceneText.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
     <ClInclude Include="Source\SceneSnakeBoss.h">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
@@ -307,9 +310,6 @@
     </ClInclude>
     <ClInclude Include="Source\Rope.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\SceneManager.h">
-      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Source\Trap.h">
       <Filter>Header Files</Filter>
@@ -343,6 +343,15 @@
     </ClInclude>
     <ClInclude Include="Source\ButtonPosition.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shield.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\OptionManager.h">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

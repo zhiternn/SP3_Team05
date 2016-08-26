@@ -73,11 +73,11 @@ void GolemHead::Update(double dt)
     if (regendelay >= 10)
     {
         if (health < (maxhealth * 0.25))
-            health += 17;
-        else if (health < (maxhealth * 0.5))
             health += 15;
+        else if (health < (maxhealth * 0.5))
+            health += 12;
         else if (health < maxhealth)
-            health += 10;
+            health += 7;
 
         if (health >= maxhealth)
             health = maxhealth;

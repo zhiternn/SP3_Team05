@@ -48,6 +48,9 @@ public:
 	//ISoundSource* sound_bulletImpact;
 	//ISoundSource* sound_rocketImpact;
 	//ISoundSource* sound_ballBounce;
+	ISoundSource* sound_shotgun;
+	ISoundSource* sound_machinegun;
+	ISoundSource* sound_splitgun;
 
 	void LoadMedia();
 	void StopSound();

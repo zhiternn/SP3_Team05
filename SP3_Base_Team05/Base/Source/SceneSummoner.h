@@ -10,7 +10,6 @@
 #include "Summoner.h"
 #include "Summons.h"
 
-
 #include <vector>
 
 using std::vector;
@@ -38,6 +37,7 @@ public:
 
 private:
 	void PlayerController(double dt);
+	void GetGamePadInput(double dt);
 	void UpdateGameObjects(double dt);
 	void RenderGameObjects();
 
@@ -45,8 +45,6 @@ private:
 	float m_orthoWidth, m_orthoHeight;
 
 	Camera* mainCamera;
-
-	Player* player;
 
 	Vector3 mousePos_screenBased;
 	Vector3 mousePos_worldBased;

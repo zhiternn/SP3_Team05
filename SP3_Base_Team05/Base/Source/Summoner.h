@@ -7,7 +7,7 @@
 static const float ATTACK_COOLDOWN = 1.5f;
 static const float SUMMONING_COOLDOWN = 3.f;
 static const float HEALTH_REGEN_PERSEC = 10.f;
-static int AMOUNT_OF_SUMMONS = 1;
+static int AMOUNT_OF_SUMMONS = 0;
 
 class Summoner : public Enemy
 {
@@ -19,6 +19,7 @@ public:
 	virtual void Update(double dt);
 	virtual void TakeDamage(unsigned amount);
 	virtual void SetupMesh();
+	virtual void HandleInteraction(GameObject* b, double dt);
 
 	void CleaningUpMess();
 	void Defend();

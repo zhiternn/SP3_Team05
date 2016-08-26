@@ -45,7 +45,7 @@ void Summoner::Init(Vector3 pos)
 
 void Summoner::Update(double dt)
 {
-	GameObject::Update(dt);
+	Enemy::Update(dt);
 	UpdateCooldowns(dt);
 	//if (summonsList.size() < AMOUNT_OF_SUMMONS && summonCooldownTimer <= 0)
 	//{
@@ -102,6 +102,11 @@ void Summoner::Update(double dt)
 			vel = vel * 0.9f;
 		}
 	}
+}
+
+void Summoner::HandleInteraction(GameObject* b, double dt)
+{
+	Enemy::HandleInteraction(b, dt);
 }
 
 void Summoner::TakeDamage(unsigned amount)
