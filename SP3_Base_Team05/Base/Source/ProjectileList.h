@@ -123,7 +123,7 @@ public:
 		SetLifetime(2);
 		SetProjectileSpeed(150.f);
 		SetScale(.5f, .5f, .5f);
-		SetMass(0.5f);
+		SetMass(0.1f);
 	}
 	Bullet(int dmg, float lifeTime = 2.0f, float projSpeed = 150.0f, float size = 1.0f, float mass = 30.0f) :CProjectile(PROJECTILE_TYPE::BULLET)
 	{

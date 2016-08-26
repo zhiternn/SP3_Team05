@@ -66,6 +66,10 @@ void Player::Update(double dt)
 	{
 		active = false;
 	}
+    if (health <= 150)
+    {
+        health += 1;
+    }
 
 	if (damageBuffer > 0)
 		damageBuffer -= dt;

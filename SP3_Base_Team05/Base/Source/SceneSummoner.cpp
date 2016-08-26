@@ -30,8 +30,8 @@ void SceneSummoner::Init()
 	m_worldHeight = 300;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
-	//World Space View
-	m_orthoHeight = 300;
+	//Camera Space View
+	m_orthoHeight = 100;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();

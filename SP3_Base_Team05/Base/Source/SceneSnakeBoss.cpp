@@ -31,7 +31,7 @@ void SceneSnakeBoss::Init()
 	m_worldHeight = 300;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
-	//World Space View
+	//Camera Space View
 	m_orthoHeight = 100;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
@@ -375,7 +375,7 @@ void SceneSnakeBoss::RenderWorld()
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
-		RenderMesh(meshList[GEO_FLOOR], false);
+		RenderMesh(meshList[GEO_FLOOR_HEX], false);
 		modelStack.PopMatrix();
 	}
 

@@ -258,7 +258,7 @@ void Bullet::SetupMesh()
 		meshList[GEO_BULLET]->material.kAmbient.Set(0.5f, 0.1f, 0.1f);
 		break;
 	case TEAM_PLAYER:
-		meshList[GEO_BULLET]->material.kAmbient.Set(0.1f, 0.1f, 0.5f);
+		meshList[GEO_BULLET]->material.kAmbient.Set(0.8f, 0.8f, 1.0f);
 		break;
 
 	default: // team neutral
