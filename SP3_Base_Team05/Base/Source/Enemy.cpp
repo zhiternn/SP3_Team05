@@ -67,10 +67,6 @@ bool Enemy::UpdateMovement(double dt)
 				vel = vel.Normalized() * speedLimit;
 			}
 		}
-		if (isCapturing)
-		{
-			//ChangeDestination(MOVETO_AVOID_ENVIRONMENT, )
-		}
 
 		return true;
 	}
@@ -184,13 +180,11 @@ void Enemy::HandleInteraction(GameObject* b, double dt)
 	{
 		Trap* trap = dynamic_cast<Trap*>(b);
 		if (trap)
-		{
-			float combinedRadius = this->scale.x + trap->GetScale().x;
-			float distanceBetween = (this->pos - trap->pos).LengthSquared();
-			if (distanceBetween <= combinedRadius * combinedRadius)
-			{
-				this->ChangeDestination(MOVETO_AVOID_ENVIRONMENT, Vector3(this->pos.x * combinedRadius, this->pos.y * combinedRadius, 0));
-			}
+		{	
+			Vector3 dir = Vector3(1, 0, 0);
+			if (this->pos != trap->pos)
+				dir = (this->pos - trap->pos).Normalized();
+			this->vel += dir * speedLimit * dt;
 		}
 	}
 
@@ -248,8 +242,8 @@ bool Enemy::IsCapturing()
 
 void Enemy::Capturing(double dt)
 {
-	captureRate += dt * 20;
-	if (captureRate >= health / 10)
+	captureRate += dt;
+	if (captureRate >= health)
 	{
 		Captured();
 	}
