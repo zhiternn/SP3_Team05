@@ -150,7 +150,7 @@ void SceneSummoner::GetGamePadInput(double dt)
 	}
 
 	//= Dash
-	if (GamePad.RightTrigger() > 0.2f)
+	if (GamePad.LeftTrigger() > 0.2f)
 	{
 		player->Dash(forceDir, dt);
 	}
@@ -164,10 +164,12 @@ void SceneSummoner::GetGamePadInput(double dt)
 
 
 	//Change Weapons
+	//= Left Bumper
 	if (GamePad.GetButtonDown(8) > 0.5f)
 	{
-		player->ChangeWeaponDown();
+		player->ChangeProjectileUp();
 	}
+	//= Right Bumper
 	if (GamePad.GetButtonDown(9) > 0.5f)
 	{
 		player->ChangeWeaponUp();

@@ -187,7 +187,7 @@ void SceneGolem::GetGamePadInput(double dt)
 	}
 
 	//= Dash
-	if (GamePad.RightTrigger() > 0.2f)
+	if (GamePad.LeftTrigger() > 0.2f)
 	{
 		player->Dash(forceDir, dt);
 	}
@@ -203,7 +203,7 @@ void SceneGolem::GetGamePadInput(double dt)
 	//Change Weapons
 	if (GamePad.GetButtonDown(8) > 0.5f)
 	{
-		player->ChangeWeaponDown();
+		player->ChangeProjectileUp();
 	}
 	if (GamePad.GetButtonDown(9) > 0.5f)
 	{
