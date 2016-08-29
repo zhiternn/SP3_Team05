@@ -15,7 +15,7 @@ void GolemHead::Init(Vector3 pos)
 	entityType = Entity::ENTITY_BOSS_MAIN;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BALL;
-    mass = 999999;
+    mass = 999;
     destinationCountdown = REACH_CHECKER;
     speedLimit = 10.f;
     movementSpeed = 150.f;
@@ -26,6 +26,7 @@ void GolemHead::Init(Vector3 pos)
     golemGun = new Splitgun(360.f, 18);
     golemGun->AssignProjectile(new Bullet());
     golemGun->SetFireRate(0.1f);
+    scale.Set(12, 12, 12);
 }
 
 GolemHead::~GolemHead()

@@ -51,31 +51,16 @@ void SceneGolem::Init()
     golemhead = new GolemHead();
     GameObject::goList.push_back(golemhead);
     golemhead->SetTarget(player);
-    golemhead->SetType(GameObject::GO_ENTITY);
-    golemhead->SetActive(true);
-    golemhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemhead->SetScale(12, 12, 12);
-    golemhead->SetMass(999);
     golemhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 100.f, 0));
 
     golemlhead = new GolemLeftHand();
     GameObject::goList.push_back(golemlhead);
     golemlhead->SetTarget(player);
-    golemlhead->SetType(GameObject::GO_ENTITY);
-    golemlhead->SetActive(true);
-    golemlhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemlhead->SetScale(8, 8, 8);
-    golemlhead->SetMass(3);
     golemlhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 70.f, 0));
 
     golemrhead = new GolemRightHand();
     GameObject::goList.push_back(golemrhead);
     golemrhead->SetTarget(player);
-    golemrhead->SetType(GameObject::GO_ENTITY);
-    golemrhead->SetActive(true);
-    golemrhead->SetColliderType(Collider::COLLIDER_BALL);
-    golemrhead->SetScale(8, 8, 8);
-    golemrhead->SetMass(3);
     golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 50.f, 0));
 	
 
@@ -295,10 +280,10 @@ void SceneGolem::Update(double dt)
     {
         golemrhead->SetSpeedLimit(60);
         golemrhead->SetMovementSpeed(1700);
-        golemrhead->SetMass(4);
+        golemrhead->SetMass(6);
         golemlhead->SetSpeedLimit(60);
         golemlhead->SetMovementSpeed(1700);
-        golemlhead->SetMass(4);
+        golemlhead->SetMass(6);
         golemhead->SetMovementSpeed(150.f);
         golemhead->SetSpeedLimit(10);
     }
