@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "DepthFBO.h"
 #include "Gamepad.h"
+#include "GLFWController.h"
 #include "Player.h"
 #include "OptionManager.h"
 
@@ -157,6 +158,10 @@ protected:
 	Vector3 controllerStick_Pos;
 	Vector3 controllerStick_WorldPos;
 	Vector3 stickDir;
+
+	//Create glfwController
+	GLFWController glfwController;
+
 };
 
 #endif
