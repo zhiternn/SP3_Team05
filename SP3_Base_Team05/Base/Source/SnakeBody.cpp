@@ -29,7 +29,7 @@ SnakeBody::~SnakeBody()
 void SnakeBody::Init(Vector3 pos, float speed, float speedLimit)
 {
 	Enemy::Init(pos);
-	team = TEAM_PLAYER;
+	team = TEAM_ENEMY;
 	entityType = Entity::ENTITY_BOSS_BODY;
 	movementSpeed = speed;
 	this->speedLimit = speedLimit;

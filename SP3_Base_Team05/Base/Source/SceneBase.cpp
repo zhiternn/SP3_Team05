@@ -762,7 +762,7 @@ void SceneBase::RenderGameObjects()
 			{
 				if (!enemy->IsDead())
 				{
-					//if ((mousePos_worldBased - enemy->pos).LengthSquared() < enemy->GetScale().LengthSquared())
+					if ((mousePos_worldBased - enemy->pos).LengthSquared() < enemy->GetScale().LengthSquared())
 					{
 						modelStack.PushMatrix();
 						modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x, 50);
