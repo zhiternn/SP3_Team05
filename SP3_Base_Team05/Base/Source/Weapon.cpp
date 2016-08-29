@@ -3,7 +3,7 @@
 Weapon::Weapon():
 projectileInfo(NULL),
 fireRate(1.0f),
-shootDelay(0)
+shootDelay(0.1f)
 {
 }
 

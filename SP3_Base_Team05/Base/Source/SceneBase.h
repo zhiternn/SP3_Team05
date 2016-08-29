@@ -106,6 +106,7 @@ protected:
 	virtual void RenderUI(Mesh* mesh, float size, float x, float y, float scaleX, bool enableLight);
 	virtual void RenderHUD();
 	virtual void RenderGameObjects();
+	virtual void RenderBackground();
 	virtual void UpdateGameObjects(double dt);
 	virtual void PlayerController(double dt);
 	virtual void GetGamePadInput(double dt);
@@ -146,14 +147,16 @@ protected:
 
 	Camera* mainCamera;
 
+	Player* player;
+	OptionManager &options;
+
+	std::vector<Mesh*> backgroundList;
+
 	//Create the Gamepad object
 	Gamepad GamePad;
 	Vector3 controllerStick_Pos;
 	Vector3 controllerStick_WorldPos;
 	Vector3 stickDir;
-
-	Player* player;
-	OptionManager &options;
 };
 
 #endif
