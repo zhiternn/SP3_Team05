@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
@@ -54,6 +54,9 @@
     </Filter>
     <Filter Include="Source Files\Controller">
       <UniqueIdentifier>{9f953b40-9593-48af-9f6b-53433486b02e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Boss\Tutorial">
+      <UniqueIdentifier>{8ba8c829-e9e4-4d38-9b85-6e11a840e19d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Managers">
       <UniqueIdentifier>{c32c9ceb-0296-4029-99ba-1eaecb1337fb}</UniqueIdentifier>
@@ -194,6 +197,9 @@
     </ClCompile>
     <ClCompile Include="Source\ButtonPosition.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\TutorialMob.cpp">
+      <Filter>Source Files\Boss\Tutorial</Filter>
     </ClCompile>
     <ClCompile Include="Source\SceneManager.cpp">
       <Filter>Source Files\Managers</Filter>
@@ -346,6 +352,12 @@
     </ClInclude>
     <ClInclude Include="Source\Shield.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneTutorial.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\TutorialMob.h">
+      <Filter>Header Files\Boss\Tutorial</Filter>
     </ClInclude>
     <ClInclude Include="Source\SceneManager.h">
       <Filter>Header Files\Managers</Filter>
