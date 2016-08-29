@@ -248,7 +248,7 @@ bool Enemy::IsCapturing()
 
 void Enemy::Capturing(double dt)
 {
-	captureRate += dt;
+	captureRate += dt * 20;
 	if (captureRate >= health)
 	{
 		Captured();
@@ -259,6 +259,7 @@ void Enemy::Captured()
 {
 	this->isCaptured = true;
 	this->active = false;
+	
 	// do the pokemon things
 }
 

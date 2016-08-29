@@ -47,15 +47,15 @@ void Summoner::Update(double dt)
 {
 	Enemy::Update(dt);
 	UpdateCooldowns(dt);
-	//if (summonsList.size() < AMOUNT_OF_SUMMONS && summonCooldownTimer <= 0)
-	//{
-	//	summonCooldownTimer = SUMMONING_COOLDOWN;
-	//	Summons* summons = FetchSummons();
-	//	summons->Init(this->pos);
-	//	summons->SetTarget(target);
-	//	summonsList.push_back(summons);
-	//	GameObject::goList.push_back(summons);
-	//}
+	if (summonsList.size() < AMOUNT_OF_SUMMONS && summonCooldownTimer <= 0)
+	{
+		summonCooldownTimer = SUMMONING_COOLDOWN;
+		Summons* summons = FetchSummons();
+		summons->Init(this->pos);
+		summons->SetTarget(target);
+		summonsList.push_back(summons);
+		GameObject::goList.push_back(summons);
+	}
 	if (this->health < maxHealth)
 	{
 		static float healthregenCooldown = 0;
@@ -63,22 +63,19 @@ void Summoner::Update(double dt)
 		if (healthregenCooldown >= 1)
 		{
 			healthregenCooldown = 0.0f;
-			if (health + HEALTH_REGEN_PERSEC > maxHealth)
+			if (health + SUMMONER_HEALTH_REGEN_PERSEC > maxHealth)
 				health = maxHealth;
 			else
-				health += HEALTH_REGEN_PERSEC;
+				health += SUMMONER_HEALTH_REGEN_PERSEC;
 		}
 	}
-	if (!summonsList.empty())
+	Defend();
+	Attack();
+	for (auto q : summonsList)
 	{
-		Defend();
-		Attack();
-		for (auto q : summonsList)
+		if (!q->isDefending && attacking)
 		{
-			if (!q->isDefending && attacking)
-			{
-				q->Shoot(target->pos);
-			}
+			q->Shoot(target->pos);
 		}
 	}
 	if (!Enemy::UpdateMovement(dt))

@@ -8,6 +8,7 @@ static const float MOVEMENT_LIMIT = 300.f;
 static const float DASH_DISTANCE = 50.f;
 static const float DASH_COOLDOWN = 1.f;
 static const float DAMAGE_BUFFER = 0.5f;
+static const float PLAYER_HEALTH_REGEN_PERSEC = 5.0f;
 
 class Player : public Entity
 {
@@ -35,6 +36,10 @@ public:
 	// Setters
 	void SetMoving(bool isMoving);
 	void SetDashed(bool isDashed);
+	void SetCurrency(int currency);
+
+	// Getters
+	int GetCurrency();
 
 	// Issers
 	bool IsMoving();
@@ -54,6 +59,7 @@ private:
 	bool isMoving;
 	bool isDashed;
 	float forceMagnitude = 0;
+	int currency;
 };
 
 
