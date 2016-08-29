@@ -68,12 +68,15 @@ void Player::Update(double dt)
 	}
 	if (health <= maxHealth)
 	{
-		static float healthRegen = 0;
-		healthRegen += dt;
-		if (healthRegen >= 1)
+		static float healthregenCooldown = 0;
+		healthregenCooldown += dt;
+		if (healthregenCooldown >= 1)
 		{
-			health += 1;
-			healthRegen = 0;
+			healthregenCooldown = 0.0f;
+			if (health + PLAYER_HEALTH_REGEN_PERSEC > maxHealth)
+				health = maxHealth;
+			else
+				health += PLAYER_HEALTH_REGEN_PERSEC;
 		}
     }
 
@@ -186,6 +189,16 @@ void Player::SetMoving(bool isMoving)
 void Player::SetDashed(bool isDashed)
 {
 	this->isDashed = isDashed;
+}
+
+void Player::SetCurrency(int currency)
+{
+	this->currency = currency;
+}
+
+int Player::GetCurrency()
+{
+	return currency;
 }
 
 bool Player::IsMoving()
