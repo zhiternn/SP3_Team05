@@ -179,6 +179,11 @@ void SceneBase::Init()
 	//Camera Space View
 	m_orthoHeight = 200;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+	
+	backgroundList.push_back(meshList[GEO_BACKGROUND2]);
+	backgroundList.push_back(meshList[GEO_BACKGROUND3]);
+	backgroundList.push_back(meshList[GEO_BACKGROUND2]);
+	backgroundList.push_back(meshList[GEO_BACKGROUND3]);
 
 	mainCamera = new Camera();
 	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -791,6 +796,51 @@ void SceneBase::RenderGameObjects()
 			}
 		}
 	}
+}
+
+void SceneBase::RenderBackground()
+{
+	SetHUD(true, -0.5f, 0.5f, -0.5f, 0.5f);
+
+	RenderMesh(meshList[GEO_BACKGROUND1], false);
+
+	for (int i = 0; i < backgroundList.size(); ++i)
+	{
+		float xOffset = -mainCamera->target.x / ((backgroundList.size()) + 0.1f - i);
+		float yOffset = -mainCamera->target.y / ((backgroundList.size()) + 0.1f - i);
+
+		if (abs(xOffset) > 1)
+		{
+			xOffset -= Math::GetSign(xOffset);
+		}
+		if (abs(yOffset) > 1)
+		{
+			yOffset -= Math::GetSign(yOffset);
+		}
+
+		modelStack.PushMatrix();
+		modelStack.Translate(xOffset / m_worldWidth, yOffset / m_worldHeight, 0);
+		RenderMesh(backgroundList[i], false);
+
+		modelStack.PushMatrix();
+		modelStack.Translate(1, 0, 0);
+		RenderMesh(backgroundList[i], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(0, 1, 0);
+		RenderMesh(backgroundList[i], false);
+		modelStack.PopMatrix();
+
+		modelStack.PushMatrix();
+		modelStack.Translate(1, 1, 0);
+		RenderMesh(backgroundList[i], false);
+		modelStack.PopMatrix();
+		
+		modelStack.PopMatrix();
+	}
+
+	SetHUD(false);
 }
 
 void SceneBase::UpdateGameObjects(double dt)

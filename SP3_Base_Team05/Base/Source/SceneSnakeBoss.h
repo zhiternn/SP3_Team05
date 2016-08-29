@@ -8,6 +8,7 @@
 #include "WeaponList.h"
 #include "ProjectileList.h"
 #include "SceneManager.h"
+#include "SnakeHead.h" 
 
 #include <vector>
 
@@ -42,6 +43,7 @@ public:
 private:
 	SceneManager &manager;
 
+	SnakeHead* snake;
 };
 
 #endif

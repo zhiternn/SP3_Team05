@@ -9,6 +9,7 @@ weapon(NULL)
 	inventory->weapons.front()->AssignProjectile(inventory->bullets.front());
 	weapon = inventory->weapons.front();
 	projectile = inventory->bullets.front();
+	currency = 0;
 
     shield = new Shield();
     GameObject::goList.push_back(shield);

@@ -190,6 +190,9 @@ void SceneSummoner::RenderMain()
 	m_lightDepthFBO.BindForReading(GL_TEXTURE8);
 	glUniform1i(m_parameters[U_SHADOW_MAP], 8);
 
+	//RenderBackground
+	RenderBackground();
+
 	RenderWorld();
 
 	//RenderSkyPlane();

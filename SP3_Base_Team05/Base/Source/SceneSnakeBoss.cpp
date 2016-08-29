@@ -3,13 +3,13 @@
 #include "Application.h"
 #include "Controls.h"
 #include "MeshManager.h"
-#include "SnakeHead.h"
 #include "Summoner.h"
 
 #include <sstream>
 
 SceneSnakeBoss::SceneSnakeBoss() :
-manager(SceneManager::GetInstance())
+manager(SceneManager::GetInstance()),
+snake(NULL)
 {
 }
 
@@ -37,65 +37,16 @@ void SceneSnakeBoss::Init()
 
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
-	player->SetActive(false);
+	player->SetActive(true);
 
-	SnakeHead* enemy = new SnakeHead();
-	GameObject::goList.push_back(enemy);
-	enemy->SetTarget(player);
-	enemy->SetType(GameObject::GO_ENTITY);
-	enemy->SetActive(true);
-	enemy->SetScale(6, 6, 6);
-	enemy->SetMass(3);
-	enemy->Init(Vector3(m_worldWidth*0.1f, m_worldHeight*0.1f, 0), 20);
-	SnakeHead* snake = new SnakeHead();
+	snake = new SnakeHead();
 	GameObject::goList.push_back(snake);
-
-	//Summoner* summoner = new Summoner();
-	//GameObject::goList.push_back(summoner);
-
-	GolemHead* golemhead = new GolemHead();
-	GolemLeftHand* golemlhead = new GolemLeftHand();
-	GolemRightHand* golemrhead = new GolemRightHand();
-
-	
-	//summoner->SetTarget(snake);
-	//summoner->Init(Vector3(m_worldWidth * 0.5f + 5, m_worldHeight * 0.5f, 0));
-
-	snake->SetTarget(golemhead);
+	snake->SetTarget(player);
 	snake->SetType(GameObject::GO_ENTITY);
 	snake->SetActive(true);
 	snake->SetScale(6, 6, 6);
 	snake->SetMass(3);
-	snake->SetTeam(GameObject::TEAM_PLAYER);
-	snake->Init(Vector3(m_worldWidth*0.1f, m_worldHeight*0.1f, 0), 10);
-
-	GameObject::goList.push_back(golemhead);
-	golemhead->SetTarget(snake);
-	golemhead->SetType(GameObject::GO_ENTITY);
-	golemhead->SetActive(true);
-	golemhead->SetColliderType(Collider::COLLIDER_BALL);
-	golemhead->SetScale(12, 12, 12);
-	golemhead->SetMass(999);
-	golemhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 100.f, 0));
-
-	GameObject::goList.push_back(golemlhead);
-	golemlhead->SetTarget(snake);
-	golemlhead->SetType(GameObject::GO_ENTITY);
-	golemlhead->SetActive(true);
-	golemlhead->SetColliderType(Collider::COLLIDER_BALL);
-	golemlhead->SetScale(8, 8, 8);
-	golemlhead->SetMass(3);
-	golemlhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 70.f, 0));
-
-	GameObject::goList.push_back(golemrhead);
-	golemrhead->SetTarget(snake);
-	golemrhead->SetType(GameObject::GO_ENTITY);
-	golemrhead->SetActive(true);
-	golemrhead->SetColliderType(Collider::COLLIDER_BALL);
-	golemrhead->SetScale(8, 8, 8);
-	golemrhead->SetMass(3);
-	golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 50.f, 0));
-
+	snake->Init(Vector3(m_worldWidth*0.1f, m_worldHeight*0.1f, 0), 20);
 }
 
 void SceneSnakeBoss::PlayerController(double dt)
@@ -115,6 +66,12 @@ void SceneSnakeBoss::Update(double dt)
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
+
+	if (snake->IsDead())
+	{
+		player->SetCurrency(100000);
+	}
+	std::cout << player->GetCurrency() << std::endl;
 }
 
 void SceneSnakeBoss::Render()
@@ -245,6 +202,9 @@ void SceneSnakeBoss::RenderMain()
 	//pass light depth texture
 	m_lightDepthFBO.BindForReading(GL_TEXTURE8);
 	glUniform1i(m_parameters[U_SHADOW_MAP], 8);
+
+	//RenderBackground
+	RenderBackground();
 
 	RenderWorld();
 

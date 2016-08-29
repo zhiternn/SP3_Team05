@@ -15,7 +15,7 @@ SnakeHead::~SnakeHead()
 void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 {
 	Enemy::Init(pos);
-	team = TEAM_PLAYER;
+	team = TEAM_ENEMY;
 	entityType = Entity::ENTITY_BOSS_MAIN;
 	this->collider.type = Collider::COLLIDER_BALL;
 	//scale;
