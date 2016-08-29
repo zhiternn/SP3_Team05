@@ -1,5 +1,6 @@
 #include "Enemy.h"
 #include "Trap.h"
+#include "MeshManager.h"
 
 Enemy::Enemy():
 Entity(),
@@ -24,10 +25,11 @@ void Enemy::Init(Vector3 pos)
 	type = GameObject::GO_ENTITY;
 	team = TEAM_ENEMY;
 	captureRate = 0;
+	this->health = 100;
 	this->collider.type = Collider::COLLIDER_BALL;
 
-	this->movementSpeed = 30.0f;
-	this->speedLimit = 20.0f;
+	this->movementSpeed = 60.0f;
+	this->speedLimit = 15.0f;
 }
 
 void Enemy::Update(double dt)
@@ -258,4 +260,13 @@ void Enemy::Captured()
 	this->isCaptured = true;
 	this->active = false;
 	// do the pokemon things
+}
+
+void Enemy::SetupMesh()
+{
+	float degree = Math::RadianToDegree(atan2(front.y, front.x));
+	modelStack.Translate(pos.x, pos.y, pos.z);
+	modelStack.Rotate(degree, 0, 0, 1);
+	modelStack.Scale(scale.x, scale.y, scale.z);
+	mesh = meshList[GEO_SPHERE];
 }
