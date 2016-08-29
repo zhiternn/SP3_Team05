@@ -196,6 +196,7 @@ void SceneBase::Init()
 		player = new Player();
 
 	GamePad = Gamepad(1);
+	glfwController = GLFWController();
 
 	//Get player Controls
 	useController = options.UseControl();
