@@ -4,7 +4,7 @@
 
 Trap::Trap() :
 GameObject(GO_ENVIRONMENT),
-radius(20.0f)
+radius(50.f)
 {
 }
 
@@ -43,7 +43,9 @@ void Trap::HandleInteraction(GameObject* b, double dt)
 	float distanceBetween = (this->pos - b->pos + b->GetVelocity() * (float)dt).LengthSquared();
 	if (distanceBetween <= combinedRadius * combinedRadius)
 	{
-		if (enemy->GetVelocity().Length() >= (enemy->GetSpeedLimit() / 2))
+		float halfSpeed = enemy->GetSpeedLimit() * 0.5f;
+		if (enemy->GetVelocity().LengthSquared() >= halfSpeed * halfSpeed)
+
 			enemy->SetVelocity(enemy->GetVelocity() * 0.9f);
 
 		enemy->SetCapturing(true);

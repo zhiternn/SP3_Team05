@@ -63,10 +63,6 @@ void Player::Update(double dt)
 			isDashed = false;
 		}
 	}
-	if (health <= 0)
-	{
-		active = false;
-	}
 	if (health <= maxHealth)
 	{
 		static float healthregenCooldown = 0;

@@ -762,9 +762,9 @@ void SceneBase::RenderGameObjects()
 			{
 				if (!enemy->IsDead())
 				{
-					if ((mousePos_worldBased - enemy->pos).LengthSquared() < enemy->GetScale().LengthSquared())
+					float healthRatio = (float)enemy->GetHP() / (float)enemy->GetMaxHP();
+					if ((mousePos_worldBased - enemy->pos).LengthSquared() < enemy->GetScale().LengthSquared() || enemy->IsCapturing())
 					{
-						float healthRatio = (float)enemy->GetHP() / (float)enemy->GetMaxHP();
 						modelStack.PushMatrix();
 						modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y, 50);
 						modelStack.Translate(-enemy->GetScale().x, 0, 0);
@@ -787,8 +787,8 @@ void SceneBase::RenderGameObjects()
 				if (enemy->IsCapturing())
 				{
 					modelStack.PushMatrix();
-					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 5, 50);
-					modelStack.Scale(2, 3, 2);
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 7, 50);
+					modelStack.Scale(2, 5, 2);
 					modelStack.Scale(enemy->GetCaptureRate() / 10.f, 1, 1);
 					RenderMesh(meshList[GEO_CAPTURE], false);
 					modelStack.PopMatrix();
