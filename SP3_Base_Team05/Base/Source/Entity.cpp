@@ -35,9 +35,14 @@ void Entity::Die()
 	this->active = false;
 }
 
-unsigned int Entity::GetHP()
+short int Entity::GetHP()
 {
 	return this->health;
+}
+
+short int Entity::GetMaxHP()
+{
+	return this->maxHealth;
 }
 
 void Entity::SetHP(short int HP)

@@ -19,10 +19,17 @@ public:
 
 	virtual void TakeDamage(unsigned amount);
 	virtual void Die();
+
+	// Setters
 	void SetHP(short int HP);
 
+	// Getters
+	short int GetHP();
+	short int GetMaxHP();
+
+	// Issers
 	bool IsDead();
-	unsigned int GetHP();
+
 	ENTITY_TYPE GetEntityType();
 
 	void SetEntityType(ENTITY_TYPE type);
@@ -30,6 +37,7 @@ public:
 protected:
 	ENTITY_TYPE entityType;
 	short int health;
+	short int maxHealth;
 	bool isDead;
 
 };
