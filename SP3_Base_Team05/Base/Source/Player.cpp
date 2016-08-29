@@ -66,9 +66,15 @@ void Player::Update(double dt)
 	{
 		active = false;
 	}
-    if (health <= 150)
-    {
-        health += 1;
+	if (health <= maxHealth)
+	{
+		static float healthRegen = 0;
+		healthRegen += dt;
+		if (healthRegen >= 1)
+		{
+			health += 1;
+			healthRegen = 0;
+		}
     }
 
 	if (damageBuffer > 0)
