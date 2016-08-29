@@ -757,17 +757,25 @@ void SceneBase::RenderGameObjects()
 			{
 				if (!enemy->IsDead())
 				{
+					//if ((mousePos_worldBased - enemy->pos).LengthSquared() < enemy->GetScale().LengthSquared())
+					{
+						modelStack.PushMatrix();
+						modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x, 50);
+						modelStack.Scale(1, 1, 1);
+						modelStack.Translate(enemy->GetHP() / 10.f, 0, 0);
+						modelStack.Scale(enemy->GetHP() / 10.f, 3, 1);
+						RenderMesh(meshList[GEO_HEALTH], false);
+						modelStack.PopMatrix();
+					}
+				}
+				if (enemy->IsCapturing())
+				{
 					modelStack.PushMatrix();
-					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x, 50);
-					modelStack.Scale(enemy->GetHP() / 10, 3, 1);
-					RenderMesh(meshList[GEO_HEALTH], false);
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 5, 50);
+					modelStack.Scale(enemy->GetCaptureRate() / 10.f, 3, 1);
+					RenderMesh(meshList[GEO_CAPTURE], false);
 					modelStack.PopMatrix();
 				}
-				modelStack.PushMatrix();
-				modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 5, 50);
-				modelStack.Scale(enemy->GetCaptureRate(), 3, 1);
-				RenderMesh(meshList[GEO_CAPTURE], false);
-				modelStack.PopMatrix();
 			}
 		}
 	}
