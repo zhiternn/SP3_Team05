@@ -24,6 +24,10 @@ void Enemy::Init(Vector3 pos)
 	type = GameObject::GO_ENTITY;
 	team = TEAM_ENEMY;
 	captureRate = 0;
+	this->collider.type = Collider::COLLIDER_BALL;
+
+	this->movementSpeed = 30.0f;
+	this->speedLimit = 20.0f;
 }
 
 void Enemy::Update(double dt)
@@ -66,10 +70,6 @@ bool Enemy::UpdateMovement(double dt)
 			{
 				vel = vel.Normalized() * speedLimit;
 			}
-		}
-		if (isCapturing)
-		{
-			//ChangeDestination(MOVETO_AVOID_ENVIRONMENT, )
 		}
 
 		return true;

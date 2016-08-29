@@ -15,6 +15,7 @@ SnakeHead::~SnakeHead()
 void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 {
 	Enemy::Init(pos);
+	team = TEAM_PLAYER;
 	entityType = Entity::ENTITY_BOSS_MAIN;
 	this->collider.type = Collider::COLLIDER_BALL;
 	//scale;
@@ -59,10 +60,12 @@ void SnakeHead::Update(double dt)
 	{
 		if (this->vel.IsZero() == false)
 			this->front = vel.Normalized();
-
-		this->vel += (target->pos - this->pos).Normalized() * headSpeed * dt;
-		if (this->vel.LengthSquared() > headLimit * headLimit)
-			this->vel = this->vel.Normalized() * headLimit;
+		if (target->pos != this->pos)
+		{
+			this->vel += (target->pos - this->pos).Normalized() * headSpeed * dt;
+			if (this->vel.LengthSquared() > headLimit * headLimit)
+				this->vel = this->vel.Normalized() * headLimit;
+		}
 	}
 	else
 	{//Recovering state
@@ -81,7 +84,7 @@ void SnakeHead::Update(double dt)
 		actionRate -= dt;
 		if (actionRate <= 0.0f)
 		{
-			actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN, ACTION_TIMER_MAX);
+			actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN + (10 * (1 - bodyRatio)), ACTION_TIMER_MAX + (10 * (1 - bodyRatio)));
 			Action(bodyRatio);
 		}
 	}
@@ -134,6 +137,7 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 			if (CheckCollision(b, dt))//if touching dead body part
 			{
 				body->Init(body->pos, body->GetMovementSpeed(), body->GetSpeedLimit());
+				this->health += 100;
 				bodyList.push_back(body);
 			}
 
@@ -145,10 +149,10 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 	}
 	else
 	{
-		Player* player = dynamic_cast<Player*>(b);
-		if (player)
+		Entity* entity = dynamic_cast<Entity*>(b);
+		if (entity && this->team != entity->GetTeam())
 			if (CheckCollision(b, dt))
-				player->TakeDamage(DAMAGE_ONTOUCH);
+				entity->TakeDamage(DAMAGE_ONTOUCH);
 
 		GameObject::HandleInteraction(b, dt);
 	}
@@ -160,10 +164,12 @@ void SnakeHead::Action(float ratio)
 	float rand = Math::RandFloatMinMax(0, 1);
 	if (rand <= ratio)//attack
 	{
-		if (Math::RandInt() % 2)
-			Shoot();
-		else
+		int hehe = Math::RandInt() % 2;
+		std::cout << hehe << std::endl;
+		if (isCapturing || hehe)
 			Enrage();
+		else
+			Shoot();
 	}
 	else//recover
 	{

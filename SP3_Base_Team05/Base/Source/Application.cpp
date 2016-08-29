@@ -15,6 +15,7 @@
 #include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
 #include "SceneDetlaff.h"
+#include "SceneTutorial.h"
 #include "MainMenu.h"
 
 #include "MeshManager.h"
@@ -258,7 +259,7 @@ void Application::Run()
 	//sm.SetScene(new SceneSummoner());
 	//sm.SetScene(new SceneDetlaff());
 	//sm.SetScene(new SceneGolem());
-    sm.SetScene(new MainMenu());
+    sm.SetScene(new SceneTutorial());
 
 	//Main Loop
 

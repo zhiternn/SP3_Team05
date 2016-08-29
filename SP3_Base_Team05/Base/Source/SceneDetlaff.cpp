@@ -19,8 +19,6 @@ options(OptionManager::GetInstance())
 
 SceneDetlaff::~SceneDetlaff()
 {
-	if (mainCamera)
-		delete mainCamera;
 }
 
 void SceneDetlaff::Init()

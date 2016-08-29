@@ -10,12 +10,23 @@ static const float REACH_CHECKER = 2.0f;
 class Enemy : public Entity
 {
 public:
+	enum MOVEMENT_PRIORITY
+	{
+		MOVETO_TARGET,
+		MOVETO_AVOID_ENVIRONMENT,
+		MOVETO_AVOID_PROJECTILE,
+
+		MOVETO_END,
+	};
+
 	Enemy();
 	~Enemy();
 
 	virtual void Init(Vector3 pos);
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
+	bool UpdateMovement(double dt);//returns false if out of waypoints
+	void ChangeDestination(MOVEMENT_PRIORITY priority, Vector3 pos);
 
 	//Setters
 	void SetTarget(Entity* target);
@@ -36,17 +47,7 @@ public:
 	bool IsCapturing();
 
 protected:
-	enum MOVEMENT_PRIORITY
-	{
-		MOVETO_TARGET,
-		MOVETO_AVOID_ENVIRONMENT,
-		MOVETO_AVOID_PROJECTILE,
 
-		MOVETO_END,
-	};
-
-	void ChangeDestination(MOVEMENT_PRIORITY priority, Vector3 pos);
-	bool UpdateMovement(double dt);//returns false if out of waypoints
 	Vector3 FindNewPath(Vector3 destination, GameObject* obstacle);
 	void Captured();
 	void Capturing(double dt);

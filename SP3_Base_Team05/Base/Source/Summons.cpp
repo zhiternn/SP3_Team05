@@ -51,10 +51,10 @@ void Summons::Shoot(Vector3 dir)
 
 void Summons::SetupMesh()
 {
-	float rotateAngle = Math::RadianToDegree(atan2f(this->pos.y - target->pos.y, this->pos.x - target->pos.x));
+	//float rotateAngle = Math::RadianToDegree(atan2f(this->pos.y - target->pos.y, this->pos.x - target->pos.x));
 
 	modelStack.Translate(pos.x, pos.y, pos.z);
-	modelStack.Rotate(rotateAngle - 90, 0, 0, 1);
+	//modelStack.Rotate(rotateAngle - 90, 0, 0, 1);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 
 	mesh = meshList[GEO_SUMMONS];

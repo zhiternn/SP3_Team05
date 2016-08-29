@@ -33,8 +33,8 @@ void Summoner::Init(Vector3 pos)
 		Summons* summons = FetchSummons();
 		summons->Init(pos);
 		summons->SetTarget(target);
+		summons->SetTeam(this->team);
 		summonsList.push_back(summons);
-		GameObject::goList.push_back(summons);
 	}
 	for (auto q : summonsList)
 	{
@@ -77,7 +77,7 @@ void Summoner::Update(double dt)
 		{
 			if (!q->isDefending && attacking)
 			{
-				//q->Shoot(target->pos);
+				q->Shoot(target->pos);
 			}
 		}
 	}
