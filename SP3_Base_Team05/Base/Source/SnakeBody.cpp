@@ -35,6 +35,7 @@ void SnakeBody::Init(Vector3 pos, float speed, float speedLimit)
 	this->speedLimit = speedLimit;
 	collider.type = Collider::COLLIDER_BALL;
 	health = 300;
+	maxHealth = health;
 	this->scale.Set(5, 5, 5);
 }
 

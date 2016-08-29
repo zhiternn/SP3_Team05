@@ -1,6 +1,7 @@
 #include "Inventory.h"
 
-Inventory::Inventory()
+Inventory::Inventory() :
+currency(0)
 {
 	weapons.push_back(new Shotgun());
 	weapons.push_back(new Splitgun());
@@ -13,4 +14,31 @@ Inventory::Inventory()
 
 Inventory::~Inventory()
 {
+}
+
+void Inventory::AddCurrency(unsigned currency)
+{
+	this->currency += currency;
+}
+
+bool Inventory::IsDeducting(unsigned currency)
+{
+	if (this->currency - currency >= 0)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Inventory::SetCurrency(unsigned currency)
+{
+	this->currency = currency;
+}
+
+unsigned Inventory::GetCurrency()
+{
+	return currency;
 }

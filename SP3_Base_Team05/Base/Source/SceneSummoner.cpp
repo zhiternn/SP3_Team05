@@ -49,7 +49,7 @@ void SceneSummoner::PlayerController(double dt)
 
 void SceneSummoner::GetGamePadInput(double dt)
 {
-	SceneBase::GetGamePadInput(dt);
+	//SceneBase::GetGamePadInput(dt);
 }
 
 void SceneSummoner::Update(double dt)
@@ -59,6 +59,16 @@ void SceneSummoner::Update(double dt)
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
+
+	if (summoner->IsDead())
+	{
+		player->inventory->AddCurrency(50);
+	}
+	else if (summoner->IsCaptured())
+	{
+		player->inventory->AddCurrency(50 + summoner->GetHP());
+	}
+	std::cout << player->inventory->GetCurrency() << std::endl;
 }
 
 void SceneSummoner::Render()

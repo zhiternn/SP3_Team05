@@ -26,6 +26,7 @@ void Enemy::Init(Vector3 pos)
 	team = TEAM_ENEMY;
 	captureRate = 0;
 	this->health = 100;
+	this->maxHealth = health;
 	this->collider.type = Collider::COLLIDER_BALL;
 
 	this->movementSpeed = 60.0f;
@@ -249,7 +250,7 @@ bool Enemy::IsCapturing()
 void Enemy::Capturing(double dt)
 {
 	captureRate += dt * 20;
-	if (captureRate >= health / 20)
+	if (captureRate >= health)
 	{
 		Captured();
 	}
@@ -257,10 +258,9 @@ void Enemy::Capturing(double dt)
 
 void Enemy::Captured()
 {
+	this->isDead = true;
 	this->isCaptured = true;
 	this->active = false;
-	
-	// do the pokemon things
 }
 
 void Enemy::SetupMesh()

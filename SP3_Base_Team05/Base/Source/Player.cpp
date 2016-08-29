@@ -128,6 +128,7 @@ void Player::Shielding(Vector3 dir)
 
     this->shield->Init(tempPos);
 }
+
 void Player::ChangeWeaponUp()
 {
 	weaponIter++;
@@ -186,16 +187,6 @@ void Player::SetMoving(bool isMoving)
 void Player::SetDashed(bool isDashed)
 {
 	this->isDashed = isDashed;
-}
-
-void Player::SetCurrency(int currency)
-{
-	this->currency = currency;
-}
-
-int Player::GetCurrency()
-{
-	return currency;
 }
 
 bool Player::IsMoving()

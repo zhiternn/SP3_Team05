@@ -46,7 +46,7 @@ void TutorialMob::Init(Vector3 pos)
     speedLimit = 50.f;
     movementSpeed = 300.f;
     health = 100.f; 
-    maxhealth = 100.f;
+	maxHealth = health;
     isDead = false;
     regendelay = 0;
     mobGun = new MachineGun();

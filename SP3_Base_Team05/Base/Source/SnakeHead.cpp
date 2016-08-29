@@ -25,6 +25,7 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 	//captureRatio;
 	actionRate = ACTION_TIMER_MAX;
 	health = 1000;
+	maxHealth = health;
 	this->mass = 30.0f;
 
 	isRecovering = false;
