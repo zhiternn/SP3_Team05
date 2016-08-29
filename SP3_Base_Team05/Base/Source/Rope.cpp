@@ -34,7 +34,7 @@ void Rope::Update(double dt)
 	}
 	lifetime -= dt;
 	
-	if (lifetime <= 0)
+	if (lifetime <= 0 || target->IsActive() == false)
 	{
 		target = NULL;
 		active = false;

@@ -1,27 +1,24 @@
-#include "SceneDetlaff.h"
+#include "SceneTutorial.h"
 
 #include "Application.h"
 #include "Controls.h"
 #include "MeshManager.h"
+#include "SnakeHead.h"
+#include "Summoner.h"
 
-
-#include <sstream>
-
-#define ENEMY_FIRE_COOLDOWN 2;
-#define ENEMY_MOVE_DELAY 15;
-
-SceneDetlaff::SceneDetlaff():
+SceneTutorial::SceneTutorial() :
 mainCamera(NULL),
-manager(SceneManager::GetInstance()),
-options(OptionManager::GetInstance())
+manager(SceneManager::GetInstance())
 {
 }
 
-SceneDetlaff::~SceneDetlaff()
+SceneTutorial::~SceneTutorial()
 {
+	if (mainCamera)
+		delete mainCamera;
 }
 
-void SceneDetlaff::Init()
+void SceneTutorial::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
@@ -33,39 +30,33 @@ void SceneDetlaff::Init()
 	m_worldHeight = 300;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
-	//World Space View
-	m_orthoHeight = 150;
+	//Camera Space View
+	m_orthoHeight = 100;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	mainCamera = new Camera();
-	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
+	mainCamera->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 1), Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0), Vector3(0, 1, 0));
 
-	/*GameObject *go = FetchGO();
-	go->SetActive(true);
-	go->SetScale(20, 20, 20);
-	go->SetFront(1, 0, 0);
-	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	go->SetType(GameObject::GO_ENVIRONMENT);
-	go->SetColliderType(Collider::COLLIDER_BOX);*/
+	//GameObject *go = FetchGO();
+	//go->SetActive(true);
+	//go->SetScale(20, 20, 20);
+	//go->SetFront(1, 0, 0);
+	//go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+	//go->SetType(GameObject::GO_ENVIRONMENT);
+	//go->SetColliderType(Collider::COLLIDER_NONE);
 
-	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
+	player->SetActive(true);
 
-	detlaff = new CDetlaff();
-	GameObject::goList.push_back(detlaff);
-	detlaff->SetTarget(player);
-	detlaff->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0));
-	detlaff->SetScale(10, 10, 10);
-	detlaff->SetActive(true);
-	detlaff->SetColliderType(Collider::COLLIDER_BALL);
-	detlaff->SetMass(999999);
-
-	mainCamera->Include(&(player->pos));
-	
-	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
-	enemyMovementDelay = ENEMY_MOVE_DELAY;
+	enemy = FetchEnemy();
+	enemy->SetScale(5, 5, 5);
+	enemy->SetTarget(player);
+	enemy->SetEntityType(Entity::ENTITY_BOSS_BODY);
+	enemy->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f));
 
 
+	mainCamera->Include(&player->pos);
 	if (!(GamePad.IsConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
@@ -75,9 +66,21 @@ void SceneDetlaff::Init()
 		mainCamera->Include(&controllerStick_Pos);
 	}
 
+	pauseGame = false;
+	firstTimeKill = true;
+	firstTimeCapture = true;
+	for (int i = 0; i < Weapon::W_END; ++i)
+	{
+		weaponChecks[i] = true;
+	}
+	for (int i = 0; i < CProjectile::MAX; ++i)
+	{
+
+		projChecks[i] = true;
+	}
 }
 
-void SceneDetlaff::PlayerController(double dt)
+void SceneTutorial::PlayerController(double dt)
 {
 	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
 	player->SetFront(lookDir);
@@ -99,15 +102,14 @@ void SceneDetlaff::PlayerController(double dt)
 	{
 		forceDir.x += 1;
 	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
-	{
-		player->Dash(forceDir, dt);
-	}
 	if (forceDir.IsZero() == false)
 	{
 		forceDir.Normalize();
 		player->Move(forceDir, dt);
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
+	{
+		player->Dash(forceDir, dt);
 	}
 	if (Controls::GetInstance().OnHold(Controls::MOUSE_LBUTTON))
 	{
@@ -115,61 +117,130 @@ void SceneDetlaff::PlayerController(double dt)
 		mouseDir = (mousePos_worldBased - player->pos).Normalized();
 		player->Shoot(mouseDir);
 	}
-	//if (Controls::GetInstance().OnHold(Controls::KEY_LSHIFT))
-	//{
-	//	CProjectile *proj_trap = new TrapProjectile();
-	//	proj_trap->SetTeam(CProjectile::TEAM_PLAYER);
-	//	proj_trap->SetVelocity(0, 0, 0);
-	//	proj_trap->SetColliderType(Collider::COLLIDER_BOX);
-	//	player->weapon->AssignProjectile(proj_trap);
 
-	//	for (int i = 0; i < GameObject::goList.size(); i++)
-	//	{
-	//		if (GameObject::goList[i]->GetType() == CProjectile::TRAP)
-	//		{
-	//			//Trap found in current map
-	//			break;
-	//		}
-	//		else
-	//		{
-	//			//push it into the list to check for next iteration
-	//			GameObject::goList.push_back(proj_trap);
-
-	//			Vector3 pos;
-	//			pos = player->pos.Normalized();
-	//			player->Shoot(pos);
-	//			break;
-	//		}
-	//	}
-	//}
-
-	//if (Controls::GetInstance().mouse_ScrollY < 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_E))
+	if (Controls::GetInstance().mouse_ScrollY < 0)
 	{
 		player->ChangeWeaponDown();
+		Controls::GetInstance().mouse_ScrollY = 0;
+
+		if (weaponChecks[player->weapon->weapon_type] == true)
+		{
+			weaponChecks[player->weapon->weapon_type] = false;
+			pauseGame = true;
+
+			tutorialLines.str("");
+			tutorialLines.clear();
+			switch (player->weapon->weapon_type)
+			{
+			case Weapon::W_MACHINEGUN:
+				tutorialLines << "Machinegun that fires rapidly";
+				break;
+			case Weapon::W_SHOTGUN:
+				tutorialLines << "Shotgun that fires randomly in a cone";
+				break;
+			case Weapon::W_SPLITGUN:
+				tutorialLines << "Splitgun that fires evenly in a cone";
+				break;
+			default:
+				break;
+			}
+		}
 	}
-	//if (Controls::GetInstance().mouse_ScrollY > 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	if (Controls::GetInstance().mouse_ScrollY > 0)
 	{
 		player->ChangeWeaponUp();
+		Controls::GetInstance().mouse_ScrollY = 0;
+
+		if (weaponChecks[player->weapon->weapon_type] == true)
+		{
+			weaponChecks[player->weapon->weapon_type] = false;
+			pauseGame = true;
+
+			tutorialLines.str("");
+			tutorialLines.clear();
+			switch (player->weapon->weapon_type)
+			{
+			case Weapon::W_MACHINEGUN:
+				tutorialLines << "Machinegun that fires rapidly";
+				break;
+			case Weapon::W_SHOTGUN:
+				tutorialLines << "Shotgun that fires randomly in a cone";
+				break;
+			case Weapon::W_SPLITGUN:
+				tutorialLines << "Splitgun that fires evenly in a cone";
+				break;
+			default:
+				break;
+			}
+		}
 	}
-	if (Controls::GetInstance().OnPress(Controls::KEY_B))
+	if (Controls::GetInstance().OnPress(Controls::KEY_E))
 	{
-		manager.ChangeScene(1);
+		player->ChangeProjectileUp();
+
+		if (weaponChecks[player->projectile->GetProjType()] == true)
+		{
+			weaponChecks[player->projectile->GetProjType()] = false;
+			pauseGame = true;
+
+			tutorialLines.str("");
+			tutorialLines.clear();
+			switch (player->projectile->GetProjType())
+			{
+			case CProjectile::BULLET:
+				tutorialLines << "Bullet deals minor damage and knockback";
+				break;
+			case CProjectile::HOOK:
+				tutorialLines << "Hook chains enemies to the ground";
+				break;
+			case CProjectile::TRAP:
+				tutorialLines << "Keep enemies within trap to capture";
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
+	{
+		player->ChangeProjectileDown();
+
+		if (weaponChecks[player->projectile->GetProjType()] == true)
+		{
+			weaponChecks[player->projectile->GetProjType()] = false;
+			pauseGame = true;
+
+			tutorialLines.str("");
+			tutorialLines.clear();
+			switch (player->projectile->GetProjType())
+			{
+			case CProjectile::BULLET:
+				tutorialLines << "Bullet deals minor damage and knockback";
+				break;
+			case CProjectile::HOOK:
+				tutorialLines << "Hook chains enemies to the ground";
+				break;
+			case CProjectile::TRAP:
+				tutorialLines << "Keep enemies within trap to capture";
+				break;
+			default:
+				break;
+			}
+		}
 	}
 }
 
-void SceneDetlaff::GetGamePadInput(double dt)
+void SceneTutorial::GetGamePadInput(double dt)
 {
 	Vector3 forceDir;
 	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
 	player->SetFront(lookDir);
-	
+
 	//Update Gamepad
 	GamePad.Update();
-	
+
 	//Handle Gamepad movement
-	
+
 	//= Y Axis Movement
 	if (GamePad.Left_Stick_Y() > 0.2f)
 	{
@@ -203,14 +274,12 @@ void SceneDetlaff::GetGamePadInput(double dt)
 		player->Move(forceDir, dt);
 	}
 
-	
+
 	//Change Weapons
-	//= Left Bumper
 	if (GamePad.GetButtonDown(8) > 0.5f)
 	{
 		player->ChangeProjectileUp();
 	}
-	//= Right Bumper
 	if (GamePad.GetButtonDown(9) > 0.5f)
 	{
 		player->ChangeWeaponUp();
@@ -228,7 +297,7 @@ void SceneDetlaff::GetGamePadInput(double dt)
 
 }
 
-void SceneDetlaff::Update(double dt)
+void SceneTutorial::Update(double dt)
 {
 	SceneBase::Update(dt);
 	{//handles required mouse calculationsdouble x, y;
@@ -247,54 +316,68 @@ void SceneDetlaff::Update(double dt)
 			);
 	}
 
-	controllerStick_Pos.Set((GamePad.Right_Stick_X() * 100) + player->pos.x, (GamePad.Right_Stick_Y() * 100) + player->pos.y, 0);
-	controllerStick_WorldPos.Set(
-		GamePad.Right_Stick_X() + mainCamera->target.x - (m_orthoWidth * 0.5f),
-		GamePad.Right_Stick_Y() + mainCamera->target.y - (m_orthoHeight * 0.5f),
-		0);
-
-	mainCamera->Update(dt);
-	mainCamera->Constrain(*player, mainCamera->target);
-	UpdateGameObjects(dt);
-
-	enemyFireDelay -= dt;
-	enemyMovementDelay -= dt;
-
-	if (enemyFireDelay <= 0.f)
+	if (!pauseGame)
 	{
-		enemyFireDelay = ENEMY_FIRE_COOLDOWN;
-
-		Vector3 mouseDir;
-		mouseDir = (player->pos - detlaff->pos).Normalized();
-		detlaff->Shoot(mouseDir);
-	}
-
-	if (enemyMovementDelay <= 0.f)
-	{
-		enemyMovementDelay = ENEMY_MOVE_DELAY;
-
-		detlaff->Teleport(m_worldWidth, m_worldHeight);
-	}
-
-	
-	//Restrict the player from moving past the deadzone
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
-	{
-		//Check if Gamepad is connected for controller input
-		if (useController && GamePad.IsConnected())
+		mainCamera->Update(dt);
+		mainCamera->Constrain(*player, mainCamera->target);
+		if (enemy->IsDead() || enemy->IsCaptured())
 		{
-			//Handle Controller Input 
-			GetGamePadInput(dt);
+			if (enemy->IsDead() && firstTimeKill)
+			{
+				firstTimeKill = false;
+				pauseGame = true;
+				tutorialLines.str("");
+				tutorialLines.clear();
+				tutorialLines << "You successfully killed an enemy";
+			}
+			if (enemy->IsCaptured() && firstTimeCapture)
+			{
+				firstTimeCapture = false;
+				pauseGame = true;
+				tutorialLines.str("");
+				tutorialLines.clear();
+				tutorialLines << "You successfully captured an enemy";
+			}
+
+			enemy->SetScale(5, 5, 5);
+			enemy->SetTarget(player);
+			enemy->SetEntityType(Entity::ENTITY_BOSS_BODY);
+			enemy->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f));
 		}
-		else
+		else if (!enemy->UpdateMovement(dt))
 		{
-			//Handle Keyboard and Mouse input
-			PlayerController(dt);
+			enemy->ChangeDestination(Enemy::MOVETO_TARGET, player->pos);
+		}
+		UpdateGameObjects(dt);
+
+		//Restrict the player from moving past the deadzone
+		if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
+		{
+			//Check if Gamepad is connected for controller input
+			if (useController && GamePad.IsConnected())
+			{
+				//Handle Controller Input
+				GetGamePadInput(dt);
+			}
+			else
+			{
+				//Handle Keyboard and Mouse input
+				PlayerController(dt);
+			}
+		}
+	}
+	else
+	{
+		if (Controls::GetInstance().OnRelease(Controls::KEY_RETURN))
+		{
+			tutorialLines.str("");
+			tutorialLines.clear();
+			pauseGame = false;
 		}
 	}
 }
 
-void SceneDetlaff::Render()
+void SceneTutorial::Render()
 {
 	Mtx44 perspective;
 	//perspective.SetToPerspective(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
@@ -326,7 +409,7 @@ void SceneDetlaff::Render()
 }
 
 static const float SKYBOXSIZE = 1000.f;
-void SceneDetlaff::RenderSkybox()
+void SceneTutorial::RenderSkybox()
 {
 	////front
 	//modelStack.PushMatrix();
@@ -379,7 +462,7 @@ void SceneDetlaff::RenderSkybox()
 	//modelStack.PopMatrix();
 }
 
-void SceneDetlaff::RenderSkyPlane()
+void SceneTutorial::RenderSkyPlane()
 {
 	//modelStack.PushMatrix();
 	//modelStack.Translate(0, 2500, 0);
@@ -388,7 +471,7 @@ void SceneDetlaff::RenderSkyPlane()
 	//modelStack.PopMatrix();
 }
 
-void SceneDetlaff::RenderGPass()
+void SceneTutorial::RenderGPass()
 {
 	m_renderPass = RENDER_PASS_PRE;
 
@@ -409,7 +492,7 @@ void SceneDetlaff::RenderGPass()
 	RenderWorld();
 }
 
-void SceneDetlaff::RenderMain()
+void SceneTutorial::RenderMain()
 {
 	m_renderPass = RENDER_PASS_MAIN;
 
@@ -425,25 +508,16 @@ void SceneDetlaff::RenderMain()
 
 	RenderWorld();
 
-	/*if (!detlaff->destinations.empty())
-	{
-		modelStack.PushMatrix();
-		modelStack.Translate(detlaff->destinations.front().x, detlaff->destinations.front().y, 0);
-		RenderMesh(meshList[GEO_CUBE], false);
-		modelStack.PopMatrix();
-	}*/
-
 	//RenderSkyPlane();
 }
 
-void SceneDetlaff::RenderWorld()
+void SceneTutorial::RenderWorld()
 {
-	{
-		//Render Floor
+	{//Render Floor
 		modelStack.PushMatrix();
 		modelStack.Translate(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
 		modelStack.Scale(m_worldWidth, m_worldHeight, 0);
-		RenderMesh(meshList[GEO_FLOOR], false);
+		RenderMesh(meshList[GEO_FLOOR_HEX], false);
 		modelStack.PopMatrix();
 	}
 
@@ -454,7 +528,7 @@ void SceneDetlaff::RenderWorld()
 		modelStack.Scale(player->GetScale().x, player->GetScale().y, player->GetScale().z);
 
 		modelStack.PushMatrix();
-		Vector3 toMouse = stickDir;
+		Vector3 toMouse = mousePos_worldBased - player->pos;
 		float toMouseAngle = Math::RadianToDegree(atan2(toMouse.y, toMouse.x));
 		modelStack.Rotate(toMouseAngle, 0, 0, 1);
 		RenderMesh(meshList[GEO_PLAYER_TOP], true);
@@ -470,10 +544,9 @@ void SceneDetlaff::RenderWorld()
 	}
 
 	RenderGameObjects();
-
 }
 
-void SceneDetlaff::RenderHUD()
+void SceneTutorial::RenderHUD()
 {
 	//Render Minimap
 	modelStack.PushMatrix();
@@ -482,53 +555,92 @@ void SceneDetlaff::RenderHUD()
 	RenderMinimap(1.0f);
 	modelStack.PopMatrix();
 
-	if (!(useController && GamePad.IsConnected()))
+	if (!((GamePad.IsConnected() && useController)))
 	{
-		//Render the crosshair
+		// Render the crosshair
 		modelStack.PushMatrix();
 		modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-		modelStack.Scale(10, 10, 10);
+		modelStack.Scale(5, 5, 5);
 		RenderMesh(meshList[GEO_CROSSHAIR], false);
 		modelStack.PopMatrix();
 	}
-	
 
 	//On screen text
 	std::ostringstream ss;
 	ss.precision(5);
 	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
 
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
+	ss.str("");
+	ss.precision(4);
+	ss << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
 
-	std::ostringstream ss2;
-	ss2.precision(2);
-	ss2 << "Dash cooldown: " << player->cooldownTimer;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 3, 0, 9);
+	ss.str("");
+	ss << "Weapon: ";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
+	switch (player->weapon->weapon_type)
+	{
+	case Weapon::W_SHOTGUN:
+	{
+		RenderUI(meshList[GEO_WEAPON_SHOTGUN], 5, 18, 58.5f, 1, false);
+	}
+		break;
+	case Weapon::W_MACHINEGUN:
+	{
+		RenderUI(meshList[GEO_WEAPON_MACHINEGUN], 5, 18, 58.5f, 1, false);
+	}
+		break;
+	case Weapon::W_SPLITGUN:
+	{
+		RenderUI(meshList[GEO_WEAPON_SPLITGUN], 5, 18, 58.5f, 1, false);
+	}
+		break;
+	}
 
-	std::ostringstream ss3;
-	ss3.precision(2);
-	ss3 << "Weapon: " << player->weaponIter;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
+	ss.str("");
+	ss << "Bullet: ";
+	switch (player->projectile->GetProjType())
+	{
+	case CProjectile::BULLET:
+		ss << "Normal";
+		break;
+	case CProjectile::HOOK:
+		ss << "Hook";
+		break;
+	case CProjectile::TRAP:
+		ss << "Trap";
+		break;
+	}
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
+
+	if (pauseGame)
+	{
+		modelStack.PushMatrix();
+		modelStack.Translate(40, 30.0f, 0);
+		modelStack.Scale(80, 10, 1);
+		RenderMesh(meshList[GEO_QUAD], false);
+		modelStack.PopMatrix();
+
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press \"Enter\" to continue", Color(0, 1, 0), 2.0f, 5, 27.5f);
+		RenderTextOnScreen(meshList[GEO_TEXT], tutorialLines.str(), Color(0, 1, 0), 3, 5, 30);
+	}
 
 	ss.str("");
 	ss << "HP";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
-	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 5) + 11, 55.5f, player->maxHealth / 5, false);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
+	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 10) + 11, 55.5f, player->maxHealth / 10, false);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 55.5f, player->GetHP() / 10, false);
 
 	ss.str("");
 	ss.precision(2);
 	ss << "Dash";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
-	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
+	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * (player->maxHealth / 10)) + 11, 52.5f, DASH_COOLDOWN * (player->maxHealth / 10), false);
+	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10)) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10), false);
 }
 
-void SceneDetlaff::RenderMinimap(float zoom)
+void SceneTutorial::RenderMinimap(float zoom)
 {
 	glEnable(GL_STENCIL_TEST);
 
@@ -549,33 +661,74 @@ void SceneDetlaff::RenderMinimap(float zoom)
 	{
 		if (GameObject::goList[i]->IsActive())
 		{
-			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
-			if (entity && entity->IsActive())
+			GameObject* go = GameObject::goList[i];
+			if (go->IsActive())
 			{
 				modelStack.PushMatrix();
-				Vector3 pos = entity->pos;
+				Vector3 pos = go->pos;
 				pos.x -= player->pos.x;// Move to player pos
 				pos.y -= player->pos.y;// Move to player pos
 				//sphere space == radius = 1
 				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
 				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
-				Vector3 scale = entity->GetScale();
+				Vector3 scale = go->GetScale();
 				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
 				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
-				modelStack.Translate(pos.x, pos.y, pos.z);
-				modelStack.Scale(scale.x, scale.y, scale.z);
-
-				switch (entity->GetEntityType())
+				
+				switch (go->GetType())
 				{
-				case Entity::ENTITY_BOSS_MAIN:
-					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+				case GameObject::GO_ENVIRONMENT:
+					switch (go->collider.type)
+					{
+					case Collider::COLLIDER_BALL:
+						modelStack.Translate(pos.x, pos.y, pos.z);
+						modelStack.Scale(scale.x, scale.y, scale.z);
+						RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+						break;
+					case Collider::COLLIDER_BOX:
+					{
+						float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
+						modelStack.Translate(pos.x, pos.y, pos.z);
+						modelStack.Rotate(degree, 0, 0, 1);
+						modelStack.Scale(scale.x, scale.y, scale.z);
+						RenderMesh(meshList[GEO_QUAD], false);
+					}
+						break;
+
+					default:break;
+					}
 					break;
-				case Entity::ENTITY_BOSS_BODY:
-					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+				case GameObject::GO_PROJECTILE:
 					break;
-				case Entity::ENTITY_PLAYER:
-					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+				case GameObject::GO_ENTITY:
+				{
+					Entity* entity = dynamic_cast<Entity*>(go);
+					if (entity)
+					{
+					  switch (entity->GetEntityType())
+					  {
+					  case Entity::ENTITY_PLAYER:
+						  modelStack.Translate(pos.x, pos.y, pos.z);
+						  modelStack.Scale(scale.x, scale.y, scale.z);
+						  RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+						  break;
+					  case Entity::ENTITY_BOSS_MAIN:
+						  modelStack.Translate(pos.x, pos.y, pos.z);
+						  modelStack.Scale(scale.x, scale.y, scale.z);
+						  RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+						  break;
+					  case Entity::ENTITY_BOSS_BODY:
+						  modelStack.Translate(pos.x, pos.y, pos.z);
+						  modelStack.Scale(scale.x, scale.y, scale.z);
+						  RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+						  break;
+
+					  default:
+						  break;
+					  }
+					}
 					break;
+				}
 				default:break;
 				}
 
@@ -591,7 +744,7 @@ void SceneDetlaff::RenderMinimap(float zoom)
 	glLineWidth(1.0f);
 }
 
-void SceneDetlaff::Exit()
+void SceneTutorial::Exit()
 {
 	if (mainCamera)
 		delete mainCamera;
@@ -601,7 +754,7 @@ void SceneDetlaff::Exit()
 	SceneBase::Exit();
 }
 
-void SceneDetlaff::UpdateGameObjects(double dt)
+void SceneTutorial::UpdateGameObjects(double dt)
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
@@ -615,7 +768,8 @@ void SceneDetlaff::UpdateGameObjects(double dt)
 				for (int j = 0; j < GameObject::goList.size(); ++j)
 				{
 					GameObject *go2 = GameObject::goList[j];
-					if (go2->IsActive() && go->GetTeam() != go2->GetTeam() && go2->GetType() != GameObject::GO_PROJECTILE)
+					if (go2->IsActive() &&
+						go2->GetType() != GameObject::GO_PROJECTILE)//only allow projectiles to check against GOs
 					{
 						go->HandleInteraction(go2, dt);
 					}
@@ -627,21 +781,7 @@ void SceneDetlaff::UpdateGameObjects(double dt)
 	}
 }
 
-void SceneDetlaff::RenderGO(GameObject* go)
-{
-	modelStack.PushMatrix();
-
-	if (go)
-	{
-		go->SetupMesh();
-		if (go->mesh)
-			RenderMesh(go->mesh, false);
-	}
-
-	modelStack.PopMatrix();
-}
-
-void SceneDetlaff::RenderGameObjects()
+void SceneTutorial::RenderGameObjects()
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
 	{
@@ -651,9 +791,26 @@ void SceneDetlaff::RenderGameObjects()
 
 			GameObject::goList[i]->SetupMesh();
 			if (GameObject::goList[i]->mesh)
-				RenderMesh(GameObject::goList[i]->mesh, false);
+				RenderMesh(GameObject::goList[i]->mesh, true);
 
 			modelStack.PopMatrix();
+			Enemy* enemy = dynamic_cast<Enemy*>(GameObject::goList[i]);
+			if (enemy)
+			{
+				if (!enemy->IsDead())
+				{
+					modelStack.PushMatrix();
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x, 50);
+					modelStack.Scale(enemy->GetHP() / 10, 3, 1);
+					RenderMesh(meshList[GEO_HEALTH], false);
+					modelStack.PopMatrix();
+				}
+				modelStack.PushMatrix();
+				modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 5, 50);
+				modelStack.Scale(enemy->GetCaptureRate(), 3, 1);
+				RenderMesh(meshList[GEO_CAPTURE], false);
+				modelStack.PopMatrix();
+			}
 		}
 	}
 }

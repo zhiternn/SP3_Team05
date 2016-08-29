@@ -356,7 +356,6 @@ void SceneBase::Update(double dt)
 		if (useController && GamePad.IsConnected())
 		{
 			//Handle Controller Input 
-			std::cout << "test" << std::endl;
 			GetGamePadInput(dt);
 		}
 		else
@@ -477,7 +476,7 @@ void SceneBase::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 	for (unsigned i = 0; i < text.length(); ++i)
 	{
 		Mtx44 characterSpacing;
-		characterSpacing.SetToTranslation(i * 1.0f + 0.5f, 0.5f, 0); //1.0f is the spacing of each character, you may change this value
+		characterSpacing.SetToTranslation(i * 0.6f + 0.5f, 0.5f, 0); //0.6f is the spacing of each character, you may change this value
 		Mtx44 MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top() * characterSpacing;
 		glUniformMatrix4fv(m_parameters[U_MVP], 1, GL_FALSE, &MVP.a[0]);
 
@@ -491,16 +490,9 @@ void SceneBase::RenderTextOnScreen(Mesh* mesh, std::string text, Color color, fl
 
 void SceneBase::RenderUI(Mesh* mesh, float size, float x, float y, float scaleX, bool enableLight)
 {
-	glDisable(GL_DEPTH_TEST);
-	Mtx44 ortho;
-	ortho.SetToOrtho(0, 80, 0, 60, -100, 100); //size of screen UI
-	projectionStack.PushMatrix();
-	projectionStack.LoadMatrix(ortho);
-	viewStack.PushMatrix();
-	viewStack.LoadIdentity(); //No need camera for ortho mode
 	modelStack.PushMatrix();
 	modelStack.LoadIdentity(); //Reset modelStack
-	modelStack.Translate(x, y, 50);
+	modelStack.Translate(x, y, 0);
 	modelStack.Scale(size, size, size);
 	modelStack.Scale(scaleX, 1, 1);
 	if (enableLight)
@@ -532,10 +524,7 @@ void SceneBase::RenderUI(Mesh* mesh, float size, float x, float y, float scaleX,
 	mesh->Render();
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-	projectionStack.PopMatrix();
-	viewStack.PopMatrix();
 	modelStack.PopMatrix();
-	glEnable(GL_DEPTH_TEST);
 }
 
 void SceneBase::RenderMesh(Mesh *mesh, bool enableLight)
@@ -984,6 +973,11 @@ void SceneBase::Exit()
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);
 
+	while (GameObject::goList.size() > 0)
+	{
+		delete GameObject::goList.back();
+		GameObject::goList.pop_back();
+	}
 	if (player)
 		delete player;
 }

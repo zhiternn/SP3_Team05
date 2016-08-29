@@ -15,7 +15,7 @@ void GolemHead::Init(Vector3 pos)
 	entityType = Entity::ENTITY_BOSS_MAIN;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BALL;
-    mass = 999999;
+    mass = 999;
     destinationCountdown = REACH_CHECKER;
     speedLimit = 10.f;
     movementSpeed = 150.f;
@@ -24,8 +24,9 @@ void GolemHead::Init(Vector3 pos)
     isDead = false;
     regendelay = 0;
     golemGun = new Splitgun(360.f, 18);
-    golemGun->AssignProjectile(new Hook());
+    golemGun->AssignProjectile(new Bullet());
     golemGun->SetFireRate(0.1f);
+    scale.Set(12, 12, 12);
 }
 
 GolemHead::~GolemHead()
@@ -109,10 +110,10 @@ void GolemHead::HandleInteraction(GameObject* b, double dt)
     {
         CollisionResponse(b);
 
-        Player* player = dynamic_cast<Player*>(b);
-        if (player)
-        {
-            player->TakeDamage(20);
-        }
+		Entity* entity = dynamic_cast<Entity*>(b);
+		if (entity && this->team != entity->GetTeam())
+		{
+			entity->TakeDamage(20);
+		}
     }
 }
