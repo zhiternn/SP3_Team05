@@ -10,8 +10,9 @@
 
 #include <sstream>
 
+Player* SceneBase::player = new Player();
+
 SceneBase::SceneBase():
-player(NULL),
 options(OptionManager::GetInstance())
 {
 }
@@ -39,7 +40,6 @@ void SceneBase::Init()
 
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
-
 
 	m_gPassShaderID = LoadShaders("Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
 	m_programID = LoadShaders("Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
@@ -190,9 +190,6 @@ void SceneBase::Init()
 	bLightEnabled = true;
 	isCulled = true;
 	isWireFrame = false;
-
-	if (player == NULL)
-		player = new Player();
 
 	player->SetScale(3, 3, 3);
 
@@ -1137,12 +1134,4 @@ void SceneBase::Exit()
 	glDeleteProgram(m_gPassShaderID);
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);
-
-	while (GameObject::goList.size() > 0)
-	{
-		delete GameObject::goList.back();
-		GameObject::goList.pop_back();
-	}
-	if (player)
-		delete player;
 }

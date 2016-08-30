@@ -25,13 +25,23 @@ void SceneDetlaff::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
-	//Clear the list from previous scene
-	GameObject::goList.clear();
 
 
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
 
-	GameObject::goList.push_back(player);
+	mainCamera = new Camera();
+	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
+
+	/*GameObject *go = FetchGO();
+	go->SetActive(true);
+	go->SetScale(20, 20, 20);
+	go->SetFront(1, 0, 0);
+	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+	go->SetType(GameObject::GO_ENVIRONMENT);
+	go->SetColliderType(Collider::COLLIDER_BOX);*/
+
+	player->Init(Vector3(0, 1, 0));
+    GameObject::goList.push_back(SceneBase::player);
 
 	detlaff = new CDetlaff();
 	GameObject::goList.push_back(detlaff);
@@ -246,6 +256,8 @@ void SceneDetlaff::RenderMain()
 
 	RenderWorld();
 
+	RenderParticles();
+
 	/*if (!detlaff->destinations.empty())
 	{
 		modelStack.PushMatrix();
@@ -364,11 +376,6 @@ void SceneDetlaff::RenderMinimap(float zoom)
 
 void SceneDetlaff::Exit()
 {
-	if (mainCamera)
-		delete mainCamera;
-	if (player)
-		delete player;
-
 	SceneBase::Exit();
 }
 
