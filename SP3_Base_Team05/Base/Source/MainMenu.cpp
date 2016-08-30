@@ -111,7 +111,7 @@ void MainMenu::Update(double dt)
     else
         Application::GetInstance().theSoundEngine->setSoundVolume(0.0f);
 
-    std::cout << mousePos_screenBased << std::endl;
+    //std::cout << mousePos_screenBased << std::endl;
 
     mainCamera->Update(dt);
 }
@@ -149,7 +149,8 @@ void MainMenu::Render()
     case MainMenu::MENU_MAIN:
         MainMenuPage();
         break;
-    case MainMenu::MENU_PLAY: state = MENU_INSTRUCTIONS;
+    case MainMenu::MENU_PLAY: 
+		state = MENU_INSTRUCTIONS;
         break;
     case MainMenu::MENU_LOADLEVEL:
         LevelSelectPage();
@@ -157,13 +158,17 @@ void MainMenu::Render()
     case MainMenu::MENU_INSTRUCTIONS: 
         InstructionPage();
         break;
-    case MainMenu::MENU_OPTIONS: OptionsPage();
+    case MainMenu::MENU_OPTIONS: 
+		OptionsPage();
         break;
-    case MainMenu::MENU_CREDITS: CreditsPage();
+    case MainMenu::MENU_CREDITS: 
+		CreditsPage();
         break;
-    case MainMenu::MENU_LEVEL: LevelUpPage();
+    case MainMenu::MENU_LEVEL: 
+		LevelUpPage();
         break;
-    case MainMenu::MENU_EXIT: confirmExit();
+    case MainMenu::MENU_EXIT: 
+		confirmExit();
         break;
     default:
         break;
@@ -809,7 +814,7 @@ void MainMenu::LevelSelectPage()
                     isClicked = true;
                 }
 
-                sm.ChangeScene(SCENE::SCENE_DETLAFF);
+                sm.ChangeScene(SCENE::SCENE_MENU);
 				state = MENU_MAIN;
             }
             else
@@ -997,7 +1002,7 @@ void MainMenu::CreditsPage()
 
     std::ostringstream ss;
     ss.precision(5);
-    ss << "Zhi Tern";
+    ss << "Tang Zhi Tern";
     RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0), 4, (m_orthoWidth * LayoutScale) * (80 / m_orthoWidth), ((m_orthoHeight * 0.5) + 5) * (60 / m_orthoHeight));
 
     std::ostringstream ss2;
@@ -1007,7 +1012,7 @@ void MainMenu::CreditsPage()
 
     std::ostringstream ss3;
     ss3.precision(5);
-    ss3 << "Yu Xian";
+    ss3 << "Lee Yu Xian";
     RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 0, 0), 4, (m_orthoWidth * LayoutScale) * (80 / m_orthoWidth), (m_orthoHeight * 0.5 - 5) * (60 / m_orthoHeight));
 
     std::ostringstream ss4;
@@ -1054,7 +1059,7 @@ void MainMenu::LevelUpPage()
     std::ostringstream ss;
     ss.precision(5);
     ss << "Upgrades";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 4, 20, ((m_orthoHeight * 0.8) - 4)* (60 / m_orthoHeight));
+    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 4, 18, ((m_orthoHeight * 0.8) - 4)* (60 / m_orthoHeight));
 
     modelStack.PushMatrix();
     modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.8) * (60 / m_orthoHeight), 1);
@@ -1064,8 +1069,8 @@ void MainMenu::LevelUpPage()
 
     std::ostringstream ss2;
     ss2.precision(5);
-    ss2 << "Currency: " << "0";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 1.8, 53, ((m_orthoHeight * 0.8) - 4)* (60 / m_orthoHeight));
+    ss2 << "Currency: " << player->inventory->GetCurrency();
+    RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 1.8, 51, ((m_orthoHeight * 0.8) - 3)* (60 / m_orthoHeight));
 
     modelStack.PushMatrix();
     modelStack.Translate((m_orthoWidth * 0.6) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
@@ -1157,19 +1162,26 @@ void MainMenu::LevelUpPage()
                 {
                     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
                     isClicked = true;
-                }
-                switch (player->inventory->weapons[player->weaponIter]->weapon_type)
-                {
-                case Weapon::W_MACHINEGUN:
-                    UpgradeMG();
-                    break;
-                case Weapon::W_SHOTGUN:
-                    UpgradeSHG();
-                    break;
-                case Weapon::W_SPLITGUN:
-                    UpgradeSPG();
-                    break;
-                default:break;
+					if (player->inventory->IsDeducting(1000))
+					{
+						switch (player->inventory->weapons[player->weaponIter]->weapon_type)
+						{
+						case Weapon::W_MACHINEGUN:
+							UpgradeMG();
+							break;
+						case Weapon::W_SHOTGUN:
+							UpgradeSHG();
+							break;
+						case Weapon::W_SPLITGUN:
+							UpgradeSPG();
+							break;
+						default:break;
+						}
+					}
+					else
+					{
+						std::cout << "NOT ENOUGH MONEY LA" << std::endl;
+					}
                 }
             }
             else
@@ -1213,8 +1225,14 @@ void MainMenu::LevelUpPage()
                     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
                     isClicked = true;
                 }
-
-                UpgradeLifetime();
+				if (player->inventory->IsDeducting(1000))
+				{
+					UpgradeLifetime();
+				}
+				else
+				{
+					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
+				}
             }
             else
             {
@@ -1257,8 +1275,15 @@ void MainMenu::LevelUpPage()
                     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
                     isClicked = true;
                 }
-                UpgradeProjSpd();
-            }
+				if (player->inventory->IsDeducting(1000))
+				{
+					UpgradeProjSpd();
+				}
+				else
+				{
+					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
+				}
+			}
             else
             {
                 modelStack.PushMatrix();
@@ -1300,7 +1325,14 @@ void MainMenu::LevelUpPage()
                     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
                     isClicked = true;
                 }
-                UpgradeDmg();
+				if (player->inventory->IsDeducting(1000))
+				{
+					UpgradeDmg();
+				}
+				else
+				{
+					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
+				}
             }
             else
             {

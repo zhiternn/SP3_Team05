@@ -16,15 +16,16 @@ Inventory::~Inventory()
 {
 }
 
-void Inventory::AddCurrency(unsigned currency)
+void Inventory::AddCurrency(int currency)
 {
 	this->currency += currency;
 }
 
-bool Inventory::IsDeducting(unsigned currency)
+bool Inventory::IsDeducting(int currency)
 {
 	if (this->currency - currency >= 0)
 	{
+		this->currency -= currency;
 		return true;
 	}
 	else
@@ -33,12 +34,12 @@ bool Inventory::IsDeducting(unsigned currency)
 	}
 }
 
-void Inventory::SetCurrency(unsigned currency)
+void Inventory::SetCurrency(int currency)
 {
 	this->currency = currency;
 }
 
-unsigned Inventory::GetCurrency()
+int Inventory::GetCurrency()
 {
 	return currency;
 }
