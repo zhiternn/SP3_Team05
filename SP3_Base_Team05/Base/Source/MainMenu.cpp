@@ -69,14 +69,14 @@ void MainMenu::Init()
     b_No.Set(67.5, 87.5, 30, 40);
     //b_Continue.Set(117, 132, 12, 18);
     b_On.Set(90, 115, 43, 47);
-    upgradeMG.Set(45, 50, 71, 76);
-    upgradeSHG.Set(75, 82, 71, 76);
-    upgradeSPG.Set(107, 115, 71, 76);
+    upgradeMG.Set(45, 50, 47, 52);
+    upgradeSHG.Set(75, 82, 47, 52);
+    upgradeSPG.Set(107, 115, 47, 52);
     //29.6, 45
 
-    upgradeBullet.Set(45, 50, 21, 27);
-    upgradeTrap.Set(75, 82, 21, 27);
-    upgradeHook.Set(107, 115, 21, 27);
+    upgradeBullet.Set(45, 50, 47, 52);
+    upgradeTrap.Set(75, 82, 47, 52);
+    upgradeHook.Set(107, 115, 47, 52);
 }
 
 void MainMenu::Update(double dt)
@@ -272,7 +272,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Play";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
                 state = MENU_PLAY;
 
                 if (isClicked == false)
@@ -292,7 +292,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Play!";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
@@ -321,7 +321,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Options";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
                 state = MENU_OPTIONS;
 
                 if (isClicked == false)
@@ -340,8 +340,8 @@ void MainMenu::MainMenuPage()
 
                 std::ostringstream ss;
                 ss.precision(5);
-                ss << "Options";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
+                ss << "Options!";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
@@ -371,7 +371,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Credits";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
 
                 state = MENU_CREDITS;
 
@@ -392,7 +392,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Credits!";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
@@ -421,7 +421,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Upgrade";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 if (isClicked == false)
                 {
@@ -441,7 +441,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Upgrade!";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
@@ -470,7 +470,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Exit";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
 
                 state = MENU_EXIT;
 
@@ -491,7 +491,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Exit!";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.45)) * (60 / m_orthoHeight), 1);
@@ -556,7 +556,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Golem";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
 
                 if (isClicked == false)
                 {
@@ -575,8 +575,8 @@ void MainMenu::LevelSelectPage()
 
                 std::ostringstream ss;
                 ss.precision(5);
-                ss << "Golem";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
+                ss << "Golem!";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
@@ -596,7 +596,7 @@ void MainMenu::LevelSelectPage()
             std::ostringstream ss;
             ss.precision(5);
             ss << "Golem";
-            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
         }
 
         //OPTION BUTTON
@@ -615,7 +615,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Snake";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
 
                 if (isClicked == false)
                 {
@@ -634,8 +634,8 @@ void MainMenu::LevelSelectPage()
 
                 std::ostringstream ss;
                 ss.precision(5);
-                ss << "Snake";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
+                ss << "Snake!";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
@@ -657,7 +657,7 @@ void MainMenu::LevelSelectPage()
             std::ostringstream ss1;
             ss1.precision(5);
             ss1 << "Snake";
-            RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
+            RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
         }
         //CREDIT BUTTON
         if (mousePos_screenBased.x >= b_Credit.minX && mousePos_screenBased.x <= b_Credit.maxX
@@ -675,7 +675,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Summoner";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
 
                 state = MENU_CREDITS;
 
@@ -697,7 +697,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Summoner!";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
@@ -718,7 +718,7 @@ void MainMenu::LevelSelectPage()
             std::ostringstream ss2;
             ss2.precision(5);
             ss2 << "Summoner";
-            RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+            RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
         }
 
         //Detallff
@@ -737,7 +737,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Detalff";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 if (isClicked == false)
                 {
@@ -757,7 +757,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Detalff!";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
@@ -778,7 +778,7 @@ void MainMenu::LevelSelectPage()
             std::ostringstream ss;
             ss.precision(5);
             ss << "Detalff";
-            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
         }
 
         //EXIT BUTTON
@@ -797,7 +797,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Menu";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
 
                 if (isClicked == false)
                 {
@@ -818,7 +818,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Menu!";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
                 modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.45)) * (60 / m_orthoHeight), 1);
@@ -839,7 +839,7 @@ void MainMenu::LevelSelectPage()
             std::ostringstream ss3;
             ss3.precision(5);
             ss3 << "Menu";
-            RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
+            RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
         }
     }
     else
@@ -856,7 +856,7 @@ void MainMenu::LevelSelectPage()
         std::ostringstream ss;
         ss.precision(5);
         ss << "Golem";
-        RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
+        RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
 
         modelStack.PushMatrix();
         modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
@@ -867,7 +867,7 @@ void MainMenu::LevelSelectPage()
         std::ostringstream ss1;
         ss1.precision(5);
         ss1 << "Snake";
-        RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
+        RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
 
         modelStack.PushMatrix();
         modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
@@ -878,7 +878,7 @@ void MainMenu::LevelSelectPage()
         std::ostringstream ss2;
         ss2.precision(5);
         ss2 << "Summoner";
-        RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+        RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
 
 
         modelStack.PushMatrix();
@@ -890,7 +890,7 @@ void MainMenu::LevelSelectPage()
         std::ostringstream ss4;
         ss4.precision(5);
         ss4 << "Detalff";
-        RenderTextOnScreen(meshList[GEO_TEXT], ss4.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+        RenderTextOnScreen(meshList[GEO_TEXT], ss4.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
 
         modelStack.PushMatrix();
@@ -902,7 +902,7 @@ void MainMenu::LevelSelectPage()
         std::ostringstream ss3;
         ss3.precision(5);
         ss3 << "Menu";
-        RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
+        RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
     }
 }
 
@@ -1041,51 +1041,51 @@ void MainMenu::LevelUpPage()
     standardLayout();
 
     modelStack.PushMatrix();
-    modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+    modelStack.Translate((m_orthoWidth * 0.35) * (80 / m_orthoWidth), (m_orthoHeight * 0.8) * (60 / m_orthoHeight), 1);
     modelStack.Scale(35, 10, 2);
     RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
     modelStack.PopMatrix();
 
     std::ostringstream ss;
     ss.precision(5);
-    ss << "Weapon Upgrades";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 25, ((m_orthoHeight * 0.5) - 2)* (60 / m_orthoHeight));
+    ss << "Upgrades";
+    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 4, 20, ((m_orthoHeight * 0.8) - 4)* (60 / m_orthoHeight));
 
     modelStack.PushMatrix();
-    modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
     modelStack.Scale(12, 12, 2);
     RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
     modelStack.Scale(10, 10, 2);
     RenderMesh(meshList[GEO_WEAPON_MACHINEGUN], false);
     modelStack.PopMatrix();
 
-    modelStack.PushMatrix();
-    modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
-    modelStack.Scale(12, 12, 2);
-    RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-    modelStack.PopMatrix();
+    //modelStack.PushMatrix();
+    //modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+    //modelStack.Scale(12, 12, 2);
+    //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    //modelStack.PopMatrix();
 
-    modelStack.PushMatrix();
-    modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
-    modelStack.Scale(10, 10, 2);
-    RenderMesh(meshList[GEO_WEAPON_SHOTGUN], false);
-    modelStack.PopMatrix();
+    //modelStack.PushMatrix();
+    //modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+    //modelStack.Scale(10, 10, 2);
+    //RenderMesh(meshList[GEO_WEAPON_SHOTGUN], false);
+    //modelStack.PopMatrix();
 
-    modelStack.PushMatrix();
-    modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
-    modelStack.Scale(12, 12, 2);
-    RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-    modelStack.PopMatrix();
+    //modelStack.PushMatrix();
+    //modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+    //modelStack.Scale(12, 12, 2);
+    //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    //modelStack.PopMatrix();
 
-    modelStack.PushMatrix();
-    modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
-    modelStack.Scale(10, 10, 2);
-    RenderMesh(meshList[GEO_WEAPON_SPLITGUN], false);
-    modelStack.PopMatrix();
+    //modelStack.PushMatrix();
+    //modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+    //modelStack.Scale(10, 10, 2);
+    //RenderMesh(meshList[GEO_WEAPON_SPLITGUN], false);
+    //modelStack.PopMatrix();
 
     //// Machine Gun Upgrade
     //modelStack.PushMatrix();
@@ -1123,7 +1123,7 @@ void MainMenu::LevelUpPage()
             if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
             {
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(5, 5, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -1138,13 +1138,13 @@ void MainMenu::LevelUpPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(6, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
 
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(10, 10, 2);
                 RenderMesh(meshList[GEO_MENU_SELECTION], false);
                 modelStack.PopMatrix();
@@ -1153,7 +1153,7 @@ void MainMenu::LevelUpPage()
         else
         {
             modelStack.PushMatrix();
-            modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+            modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
             modelStack.Scale(5, 5, 2);
             RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
             modelStack.PopMatrix();
@@ -1165,7 +1165,7 @@ void MainMenu::LevelUpPage()
             if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
             {
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(5, 5, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -1181,13 +1181,13 @@ void MainMenu::LevelUpPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(6, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
 
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(10, 10, 2);
                 RenderMesh(meshList[GEO_MENU_SELECTION], false);
                 modelStack.PopMatrix();
@@ -1196,7 +1196,7 @@ void MainMenu::LevelUpPage()
         else
         {
             modelStack.PushMatrix();
-            modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+            modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
             modelStack.Scale(5, 5, 2);
             RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
             modelStack.PopMatrix();
@@ -1209,7 +1209,7 @@ void MainMenu::LevelUpPage()
             if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
             {
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(5, 5, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -1224,13 +1224,13 @@ void MainMenu::LevelUpPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(6, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
 
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(10, 10, 2);
                 RenderMesh(meshList[GEO_MENU_SELECTION], false);
                 modelStack.PopMatrix();
@@ -1239,7 +1239,7 @@ void MainMenu::LevelUpPage()
         else
         {
             modelStack.PushMatrix();
-            modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+            modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
             modelStack.Scale(5, 5, 2);
             RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
             modelStack.PopMatrix();
@@ -1381,19 +1381,19 @@ void MainMenu::LevelUpPage()
     else
     {
         modelStack.PushMatrix();
-        modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+        modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
         modelStack.Scale(5, 5, 2);
         RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
         modelStack.PopMatrix();
 
         modelStack.PushMatrix();
-        modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+        modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
         modelStack.Scale(5, 5, 2);
         RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
         modelStack.PopMatrix();
 
         modelStack.PushMatrix();
-        modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+        modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
         modelStack.Scale(5, 5, 2);
         RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
         modelStack.PopMatrix();
@@ -1428,14 +1428,17 @@ void MainMenu::UpgradeMG()
 {
 
 }
+
 void MainMenu::UpgradeSHG()
 {
 
 }
+
 void MainMenu::UpgradeSPG()
 {
 
 }
+
 void MainMenu::UpgradeBullet()
 {
     Bullet *bullettest = new Bullet();
@@ -1445,10 +1448,12 @@ void MainMenu::UpgradeBullet()
 
     std::cout << "Upgraded Successfully!" << std::endl;
 }
+
 void MainMenu::UpgradeTrap()
 {
 
 }
+
 void MainMenu::UpgradeHook()
 {
 
@@ -1719,7 +1724,7 @@ void MainMenu::RenderPlayButton()
     std::ostringstream ss;
     ss.precision(5);
     ss << "Play";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * 0.725) * (60 / m_orthoHeight));
+    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * 0.725) * (60 / m_orthoHeight));
 }
 
 void MainMenu::RenderOptionButton()
@@ -1733,7 +1738,7 @@ void MainMenu::RenderOptionButton()
     std::ostringstream ss1;
     ss1.precision(5);
     ss1 << "Options";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.575)) * (60 / m_orthoHeight));
+    RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.575)) * (60 / m_orthoHeight));
 }
 
 void MainMenu::RenderCreditButton()
@@ -1747,7 +1752,7 @@ void MainMenu::RenderCreditButton()
     std::ostringstream ss2;
     ss2.precision(5);
     ss2 << "Credits";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.425)) * (60 / m_orthoHeight));
+    RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.425)) * (60 / m_orthoHeight));
 }
 
 void MainMenu::RenderLevelUpButton()
@@ -1761,7 +1766,7 @@ void MainMenu::RenderLevelUpButton()
     std::ostringstream ss2;
     ss2.precision(5);
     ss2 << "Upgrade";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.275)) * (60 / m_orthoHeight));
+    RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.275)) * (60 / m_orthoHeight));
 }
 
 void MainMenu::RenderExitButton()
@@ -1775,7 +1780,7 @@ void MainMenu::RenderExitButton()
     std::ostringstream ss3;
     ss3.precision(5);
     ss3 << "Exit";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
+    RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
 }
 
 void MainMenu::MusicBGMButton()
