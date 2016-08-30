@@ -25,6 +25,7 @@ public:
 	virtual void Init(Vector3 pos);
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject* b, double dt);
+	virtual void Captured();
 	virtual void SetupMesh();
 	bool UpdateMovement(double dt);//returns false if out of waypoints
 	void ChangeDestination(MOVEMENT_PRIORITY priority, Vector3 pos);
@@ -50,7 +51,6 @@ public:
 protected:
 
 	Vector3 FindNewPath(Vector3 destination, GameObject* obstacle);
-	void Captured();
 	void Capturing(double dt);
 
 	std::vector<Vector3> destinations;

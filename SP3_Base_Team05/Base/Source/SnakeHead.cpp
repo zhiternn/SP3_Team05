@@ -25,7 +25,7 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 	//captureRatio;
 	actionRate = ACTION_TIMER_MAX;
 
-	health = 2000;
+	health = 3000;
 	maxHealth = health;
 	this->mass = 10.0f;
 
@@ -38,7 +38,6 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 	{
 		SnakeBody* body = new SnakeBody();
 		body->Init(this->pos, movementSpeed * 10.0f, speedLimit);
-
 		GameObject::goList.push_back(body);
 		bodyList.push_back(body);
 	}
@@ -54,8 +53,8 @@ void SnakeHead::Update(double dt)
 
 	if (isRaging)
 	{
-		headSpeed = movementSpeed * 2.0f;
-		headLimit = speedLimit * 2.0f;
+		headSpeed = movementSpeed * RAGING_SPEED_MULTIPLIER;
+		headLimit = speedLimit * RAGING_SPEED_MULTIPLIER;
 	}
 
 	if (!isRecovering)
@@ -87,7 +86,7 @@ void SnakeHead::Update(double dt)
 		if (actionRate <= 0.0f)
 		{
 			actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN + (10 * (1 - bodyRatio)), ACTION_TIMER_MAX + (10 * (1 - bodyRatio)));
-			Action(bodyRatio);
+			Action();
 		}
 	}
 	else
@@ -141,7 +140,7 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 			if (CheckCollision(b, dt))//if touching dead body part
 			{
 				body->Init(body->pos, body->GetMovementSpeed(), body->GetSpeedLimit());
-				this->health += 50;
+				this->health += BODY_PICKUP_RECOVER_AMOUNT;
 				bodyList.push_back(body);
 			}
 			if (isRecovering)
@@ -152,7 +151,6 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 	}
 	else
 	{
-
 		if (b->GetType() == GameObject::GO_ENTITY)
 		{
 			if (CheckCollision(b, dt))//if touching dead body part
@@ -165,6 +163,8 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 					Enemy* enemy = static_cast<Enemy*>(b);
 					enemy->TakeDamage(ATTACK_RAM_DAMAGE);
 				}
+
+				CollisionResponse(b);
 			}
 		}
 
@@ -172,21 +172,39 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 	}
 }
 
-void SnakeHead::Action(float ratio)
+void SnakeHead::Action()
 {
-	float chanceToAttack = ratio;//higher it is, more likely to attack
+	float bodyRatio = (float)bodyList.size() / (float)maxBodyCount;
+	float healthRatio = (float)health / (float)maxHealth;
+	float chanceToAttack = Math::Min(bodyRatio, healthRatio);//higher it is, more likely to attack
 	float rand = Math::RandFloatMinMax(0, 1);
-	if (rand <= ratio)//attack
+	if (rand <= chanceToAttack)//attack
 	{
-		int halfChance = Math::RandInt() % 2;
-		if (isCapturing || halfChance)
+		bool chance = !(bool)(Math::RandInt() % 5);//20% chance to use enrage
+		std::cout << chance << std::endl;
+		if (isCapturing || chance)
 			Enrage();
 		else
 			Shoot();
 	}
 	else//recover
 	{
-		Recover();
+		//if lower health than lower body
+		if (healthRatio < bodyRatio && healthRatio > 0.2f)
+		{
+			for (int i = 0; i < bodyList.size(); ++i)
+			{
+				if (Math::RandInt() % 2)//50% percent chance to discard body
+				{
+					bodyList[i]->ApplyForce(bodyList[i]->pos - this->pos, 50.0f);
+					bodyList[i]->Die();
+				}
+			}
+		}
+		else
+		{
+			Recover();
+		}
 	}
 }
 
@@ -209,7 +227,7 @@ void SnakeHead::Shoot()
 void SnakeHead::Enrage()
 {
 	isRaging = true;
-	actionLifetime = 8.0f;
+	actionLifetime = 6.0f;
 }
 
 void SnakeHead::Die()
@@ -224,6 +242,12 @@ void SnakeHead::Die()
 		body->Die();
 		it = bodyList.erase(it);
 	}
+}
+
+void SnakeHead::Captured()
+{
+	isCaptured = true;
+	Die();
 }
 
 void SnakeHead::SetupMesh()

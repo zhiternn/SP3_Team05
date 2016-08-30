@@ -4,6 +4,8 @@
 #include "Vector3.h"
 #include "Mesh.h"
 
+#include <vector>
+
 class Particle
 {
 public:
@@ -14,15 +16,6 @@ public:
 		ENTRY_SCALEIN,
 
 		ENTRY_END
-	};
-	enum PARTICLE_PATTERN
-	{
-		PATTERN_NONE,
-
-		PATTERN_SPRAY,
-		PATTERN_DISPERSE,
-
-		PATTERN_END
 	};
 	enum EXIT_EFFECT
 	{
@@ -36,16 +29,16 @@ public:
 	Particle();
 	~Particle();
 
-	virtual void Init(Vector3 pos, Vector3 vel);
-	virtual void Update(double dt);
+	static std::vector<Particle*> particleList;
 
-	void ScaleIn(double dt);
-	void ScaleOut(double dt);
+	virtual void Init(Vector3 pos, Vector3 vel = Vector3(), float rotationSpeed = 0.0f);
+	virtual void Update(double dt);
+	virtual void SetupMesh();
 
 	Vector3 pos;
 	Vector3 vel;
 	Vector3 scale;
-	PARTICLE_PATTERN pattern;
+	Mesh* mesh;
 
 	float rotation;
 	float rotationSpeed;
@@ -53,6 +46,7 @@ public:
 	bool active;
 	float lifetime;
 	bool isPhysics;
+	bool hasDirection;
 
 	bool entered;
 	bool exited;
@@ -61,6 +55,14 @@ public:
 	Vector3 entryTarget;
 	ENTRY_EFFECT entryEffect;
 	EXIT_EFFECT exitEffect;
+
+protected:
+	void ScaleIn(double dt);
+	void ScaleOut(double dt);
 };
+
+Particle* FetchParticle();
+
+void EmitDashParticle(Vector3 pos, Vector3 dir);
 
 #endif

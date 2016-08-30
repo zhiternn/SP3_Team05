@@ -50,20 +50,36 @@ void SceneSnakeBoss::Init()
 		Keyboard = true;
 	}
 
-	Mtx44 rotate;
-	for (int i = 0; i < 8; ++i)
-	{
-		GameObject *go = FetchGO();
+	GameObject *go;
+	{//setup border walls
+		//top wall
+		go = FetchGO();
 		go->SetColliderType(Collider::COLLIDER_BOX);
 		go->SetType(GameObject::GO_WALL);
-		rotate.SetToRotation(45 * i, 0, 0, 1);
-		go->pos.Set(150, 0, 0);
+		go->pos.Set(m_worldWidth * 0.5f, m_worldHeight + 0.5f, 0);
+		go->SetFront(0, 1, 0);
+		go->SetScale(1, m_worldWidth * 3, 1);
+		//bottom wall
+		go = FetchGO();
+		go->SetColliderType(Collider::COLLIDER_BOX);
+		go->SetType(GameObject::GO_WALL);
+		go->pos.Set(m_worldWidth * 0.5f, -0.5f, 0);
+		go->SetFront(0, 1, 0);
+		go->SetScale(1, m_worldWidth * 3, 1);
+		//left wall
+		go = FetchGO();
+		go->SetColliderType(Collider::COLLIDER_BOX);
+		go->SetType(GameObject::GO_WALL);
+		go->pos.Set(-0.5f, m_worldHeight * 0.5f, 0);
 		go->SetFront(1, 0, 0);
-		go->SetScale(10, 150, 10);
-
-		go->pos = rotate * go->pos;
-		go->pos += Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-		go->SetFront(rotate * go->GetFront());
+		go->SetScale(1, m_worldHeight * 3, 1);
+		//right wall
+		go = FetchGO();
+		go->SetColliderType(Collider::COLLIDER_BOX);
+		go->SetType(GameObject::GO_WALL);
+		go->pos.Set(m_worldWidth + 0.5f, m_worldHeight * 0.5f, 0);
+		go->SetFront(1, 0, 0);
+		go->SetScale(1, m_worldHeight * 3, 1);
 	}
 
 	snake = new SnakeHead();
@@ -71,7 +87,7 @@ void SceneSnakeBoss::Init()
 	snake->SetTarget(player);
 	snake->SetType(GameObject::GO_ENTITY);
 	snake->SetActive(true);
-	snake->SetScale(6, 6, 6);
+	snake->SetScale(8, 8, 8);
 	snake->SetMass(3);
 	snake->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), 20);
 }
@@ -248,6 +264,8 @@ void SceneSnakeBoss::RenderMain()
 	RenderBackground();
 
 	RenderWorld();
+
+	RenderParticles();
 
 	//RenderSkyPlane();
 }

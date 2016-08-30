@@ -47,6 +47,7 @@ void MeshManager::Init()
 	meshList[GEO_BULLET]->material.kAmbient.Set(0.5f, 0.1f, 0.1f);
 	meshList[GEO_BULLET]->material.kDiffuse.Set(0.2f, 0.2f, 0.2f);
 	meshList[GEO_BULLET]->material.kSpecular.Set(0.1f, 0.1f, 0.1f);
+	meshList[GEO_BULLET]->enableLight = true;
 	meshList[GEO_GRENADE];
 	meshList[GEO_SHIELD];
 
@@ -97,7 +98,7 @@ void MeshManager::Init()
 	meshList[GEO_BORDER] = MeshBuilder::GenerateQuad("border", Color(1, 1, 1), 1.f);
 	meshList[GEO_HEALTH] = MeshBuilder::GenerateQuad("health", Color(0, 1, 0), 1.f);
 	meshList[GEO_DASH] = MeshBuilder::GenerateQuad("dash", Color(0, 0.3f, 0.7f), 1.f);
-	meshList[GEO_CAPTURE] = MeshBuilder::GenerateQuad("capture", Color(0.0f, 0.0f, 0.5f), 1.f);
+	meshList[GEO_CAPTURE] = MeshBuilder::GenerateQuad("capture", Color(1.0f, 1.0f, 0.0f), 1.f);
 
 	meshList[GEO_WEAPON_MACHINEGUN] = MeshBuilder::GenerateQuad("machinegun", Color(0, 0, 0), 1.f);
 	meshList[GEO_WEAPON_MACHINEGUN]->textureArray[0] = LoadTGA("Image//machinegun.tga");

@@ -443,6 +443,13 @@ void SceneBase::Update(double dt)
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	//Update particles
+	for (int i = 0; i < Particle::particleList.size(); ++i)
+	{
+		if (Particle::particleList[i]->active)
+			Particle::particleList[i]->Update(dt);
+	}
+
 	//static float time = 0.0f;
 	//time += dt * 0.1f;
 	//lights[0].position.x = sinf(time) * 1000.0f;
@@ -808,7 +815,7 @@ void SceneBase::RenderGameObjects()
 
 			GameObject::goList[i]->SetupMesh();
 			if (GameObject::goList[i]->mesh)
-				RenderMesh(GameObject::goList[i]->mesh, false);
+				RenderMesh(GameObject::goList[i]->mesh, GameObject::goList[i]->mesh->enableLight);
 
 			modelStack.PopMatrix();
 			Enemy* enemy = dynamic_cast<Enemy*>(GameObject::goList[i]);
@@ -910,6 +917,20 @@ void SceneBase::RenderBackground()
 	SetHUD(false);
 }
 
+void SceneBase::RenderParticles()
+{
+	for (int i = 0; i < Particle::particleList.size(); ++i)
+	{
+		if (Particle::particleList[i]->active)
+		{
+			modelStack.PushMatrix();
+			Particle::particleList[i]->SetupMesh();
+			RenderMesh(Particle::particleList[i]->mesh, false);
+			modelStack.PopMatrix();
+		}
+	}
+}
+
 void SceneBase::UpdateGameObjects(double dt)
 {
 	for (int i = 0; i < GameObject::goList.size(); ++i)
@@ -924,7 +945,7 @@ void SceneBase::UpdateGameObjects(double dt)
 				for (int j = 0; j < GameObject::goList.size(); ++j)
 				{
 					GameObject *go2 = GameObject::goList[j];
-					if (go2->IsActive() && go->GetTeam() != go2->GetTeam() && go2->GetType() != GameObject::GO_PROJECTILE)
+					if (go2->IsActive() && go2->GetType() != GameObject::GO_PROJECTILE)
 					{
 						go->HandleInteraction(go2, dt);
 					}

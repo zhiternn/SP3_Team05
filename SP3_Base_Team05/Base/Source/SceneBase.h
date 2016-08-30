@@ -1,6 +1,7 @@
 #ifndef SCENE_BASE_H
 #define SCENE_BASE_H
 
+#include "Particle.h"
 #include "Scene.h"
 #include "Mtx44.h"
 #include "MatrixStack.h"
@@ -108,6 +109,7 @@ protected:
 	virtual void RenderHUD();
 	virtual void RenderGameObjects();
 	virtual void RenderBackground();
+	virtual void RenderParticles();
 	virtual void UpdateGameObjects(double dt);
 	virtual void PlayerController(double dt);
 	virtual void GetGamePadInput(double dt);
