@@ -227,7 +227,7 @@ void GameObject::CollisionResponse(GameObject* b)
 		   this->vel = this->vel - ((2 * this->vel).Dot(NP)) * NP;
 
 		   float difference = ab.Dot(NP) - (b->scale.x * 0.5f + this->scale.x);
-		   this->pos += NP * difference;
+		   this->vel += NP * difference;
 		}
 		else
 		{
@@ -239,7 +239,7 @@ void GameObject::CollisionResponse(GameObject* b)
 		   this->vel = this->vel - ((2 * this->vel).Dot(N)) * N;
 
 		   float difference = ab.Dot(N) - (b->scale.y * 0.5f + this->scale.x);
-		   this->pos += N * difference;
+		   this->vel += N * difference;
 		}
 	}
 		break;

@@ -35,7 +35,7 @@ void SceneSnakeBoss::Init()
 	//go->SetType(GameObject::GO_ENVIRONMENT);
 	//go->SetColliderType(Collider::COLLIDER_BOX);
 
-	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.2f, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
 	mainCamera->Include(&(player->pos));
@@ -50,7 +50,20 @@ void SceneSnakeBoss::Init()
 		Keyboard = true;
 	}
 
-	player->SetActive(true);
+	Mtx44 rotate;
+	for (int i = 0; i < 8; ++i)
+	{
+		GameObject *go = FetchGO();
+		go->SetColliderType(Collider::COLLIDER_BOX);
+		rotate.SetToRotation(45 * i, 0, 0, 1);
+		go->pos.Set(150, 0, 0);
+		go->SetFront(1, 0, 0);
+		go->SetScale(10, 150, 10);
+
+		go->pos = rotate * go->pos;
+		go->pos += Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
+		go->SetFront(rotate * go->GetFront());
+	}
 
 	snake = new SnakeHead();
 	GameObject::goList.push_back(snake);
@@ -59,7 +72,7 @@ void SceneSnakeBoss::Init()
 	snake->SetActive(true);
 	snake->SetScale(6, 6, 6);
 	snake->SetMass(3);
-	snake->Init(Vector3(m_worldWidth*0.1f, m_worldHeight*0.1f, 0), 20);
+	snake->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), 20);
 }
 
 void SceneSnakeBoss::PlayerController(double dt)

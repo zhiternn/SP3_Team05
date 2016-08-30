@@ -54,7 +54,14 @@ void Trap::HandleInteraction(GameObject* b, double dt)
 
 void Trap::SetupMesh()
 {
+	static float degree = 0.0f;
+	degree += 0.1f;
+
+	if (degree > 360.0f)
+		degree -= 360.0f;
+
 	modelStack.Translate(pos.x, pos.y, pos.z + 0.01f);
+	modelStack.Rotate(degree, 0, 0, 1);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	mesh = meshList[GEO_TRAP];
 }
