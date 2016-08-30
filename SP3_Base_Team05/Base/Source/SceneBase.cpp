@@ -730,10 +730,12 @@ void SceneBase::RenderHUD()
 
 	if (!((GamePad.IsConnected() && useController)))
 	{
+		float weaponDelayRatio = player->inventory->weapons[player->weaponIter]->GetShootDelay();
+		float scale = 5 + weaponDelayRatio;
 		// Render the crosshair
 		modelStack.PushMatrix();
 		modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-		modelStack.Scale(5, 5, 5);
+		modelStack.Scale(scale, scale, 5);
 		RenderMesh(meshList[GEO_CROSSHAIR], false);
 		modelStack.PopMatrix();
 	}
@@ -808,7 +810,7 @@ void SceneBase::RenderGameObjects()
 
 			GameObject::goList[i]->SetupMesh();
 			if (GameObject::goList[i]->mesh)
-				RenderMesh(GameObject::goList[i]->mesh, false);
+				RenderMesh(GameObject::goList[i]->mesh, GameObject::goList[i]->mesh->enableLight);
 
 			modelStack.PopMatrix();
 			Enemy* enemy = dynamic_cast<Enemy*>(GameObject::goList[i]);
@@ -853,12 +855,6 @@ void SceneBase::RenderGameObjects()
 					modelStack.PopMatrix();
 
 					modelStack.PopMatrix();
-					//modelStack.PushMatrix();
-					//modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 7, 50);
-					//modelStack.Scale(2, 5, 2);
-					//modelStack.Scale(enemy->GetCaptureRate() / 10.f, 1, 1);
-					//RenderMesh(meshList[GEO_CAPTURE], false);
-					//modelStack.PopMatrix();
 				}
 			}
 		}

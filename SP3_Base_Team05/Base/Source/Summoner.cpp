@@ -18,10 +18,10 @@ void Summoner::Init(Vector3 pos)
 	Entity::entityType = Entity::ENTITY_BOSS_MAIN;
 	active = true;
 	mass = 10;
-	speedLimit = 50.f;
-	movementSpeed = 50.0f;
+	speedLimit = 70.f;
+	movementSpeed = 70.f;
 	scale.Set(15, 15, 15);
-	health = 500;
+	health = 1000;
 	maxHealth = health;
 	isDead = false;
 	attacking = false;

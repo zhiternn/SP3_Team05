@@ -17,10 +17,11 @@ public:
 	void Shoot(Vector3 dir);
 
 	bool isDefending;
-
-	Weapon* weapon;
+	Weapon *weapon;
 
 private:
+	short randWeapon;
+	short randProjectile;
 
 };
 

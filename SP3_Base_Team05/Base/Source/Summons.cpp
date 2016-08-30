@@ -17,20 +17,47 @@ void Summons::Init(Vector3 pos)
 	mass = 1;
 	speedLimit = 50.f;
 	scale.Set(7, 7, 7);
-	health = 100;
+	health = 300;
+	maxHealth = health;
 	isDead = false;
 	isDefending = false;
-	weapon = new MachineGun();
-	weapon->AssignProjectile(new Bullet());
+	randWeapon = Math::RandIntMinMax(1, 3);
+	randProjectile = Math::RandIntMinMax(1, 2);
+	switch (randWeapon)
+	{
+	case 1:
+		weapon = new MachineGun();
+		break;
+	case 2:
+		weapon = new Shotgun();
+		break;
+	case 3:
+		weapon = new Splitgun();
+		break;
+	default:
+		break;
+	}
+	switch (randProjectile)
+	{
+	case 1:
+		weapon->AssignProjectile(new Bullet);
+		break;
+	case 2:
+		weapon->AssignProjectile(new Hook);
+		break;
+	default:
+		break;
+	}
 }
 
 void Summons::Update(double dt)
 {
-	GameObject::Update(dt);
-	weapon->Update(dt);
-
 	if (vel.LengthSquared() > speedLimit * speedLimit)
 		vel = vel.Normalized() * speedLimit;
+
+	GameObject::Update(dt);
+
+	weapon->Update(dt);
 }
 
 void Summons::Goto(Vector3 pos)
@@ -50,10 +77,10 @@ void Summons::Shoot(Vector3 dir)
 
 void Summons::SetupMesh()
 {
-	//float rotateAngle = Math::RadianToDegree(atan2f(this->pos.y - target->pos.y, this->pos.x - target->pos.x));
+	float rotateAngle = Math::RadianToDegree(atan2f(this->pos.y - target->pos.y, this->pos.x - target->pos.x));
 
 	modelStack.Translate(pos.x, pos.y, pos.z);
-	//modelStack.Rotate(rotateAngle - 90, 0, 0, 1);
+	modelStack.Rotate(rotateAngle - 90, 0, 0, 1);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 
 	mesh = meshList[GEO_SUMMONS];

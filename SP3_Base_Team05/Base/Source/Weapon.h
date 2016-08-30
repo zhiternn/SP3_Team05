@@ -37,6 +37,7 @@ public:
 
 	// Getters
 	float GetFireRate();
+	float GetShootDelay();
 	CProjectile* GetProjInfo();
 
 	// Setters

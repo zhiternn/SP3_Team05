@@ -108,7 +108,8 @@ void SceneSummoner::GenerateWorld()
 		float randPosY = Math::RandFloatMinMax(0, m_worldHeight);
 		float randScaleX = Math::RandFloatMinMax(7, 10);
 		float randScaleY = Math::RandFloatMinMax(7, 10);
-		GameObject *wall = FetchGO();
+		GameObject *wall = new GameObject();
+		GameObject::goList.push_back(wall);
 		wall->SetActive(true);
 		wall->SetColliderType(Collider::COLLIDER_BOX);
 		wall->SetPostion(randPosX, randPosY, 0);
