@@ -16,7 +16,7 @@ float GLFWController::GetJoyStickButtonPressed(CONTROLLER_BUTTON buttonQuery)
 	int buttonArray;
 
 
-	const unsigned char *Button = glfwGetJoystickButtons(GLFW_JOYSTICK_2, &buttonArray);
+	const unsigned char *Button = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &buttonArray);
 
 	return Button[buttonQuery];
 }
@@ -26,7 +26,7 @@ float GLFWController::GetJoyStickTriggerPressed(CONTROLLER_STICKS stickQuery)
 	int stickArray;
 
 
-	const float *Stick = glfwGetJoystickAxes(GLFW_JOYSTICK_2, &stickArray);
+	const float *Stick = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &stickArray);
 
 	return Stick[stickQuery];
 }
@@ -34,7 +34,7 @@ float GLFWController::GetJoyStickTriggerPressed(CONTROLLER_STICKS stickQuery)
 
 bool GLFWController::isConnected()
 {
-	int present = glfwJoystickPresent(GLFW_JOYSTICK_2);
+	int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
 
 	return present;
 }
