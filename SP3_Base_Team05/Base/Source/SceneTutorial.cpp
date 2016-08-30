@@ -23,9 +23,6 @@ void SceneTutorial::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
-	//Clear the list from previous scene
-	GameObject::goList.clear();
-
 	//World Space
 	m_worldHeight = 300;
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
@@ -46,8 +43,7 @@ void SceneTutorial::Init()
 	//go->SetColliderType(Collider::COLLIDER_NONE);
 
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
-	GameObject::goList.push_back(player);
-	player->SetActive(true);
+    GameObject::goList.push_back(SceneBase::player);
 
 	enemy = FetchEnemy();
 	enemy->SetScale(5, 5, 5);
@@ -749,11 +745,6 @@ void SceneTutorial::RenderMinimap(float zoom)
 
 void SceneTutorial::Exit()
 {
-	if (mainCamera)
-		delete mainCamera;
-	if (player)
-		delete player;
-
 	SceneBase::Exit();
 }
 

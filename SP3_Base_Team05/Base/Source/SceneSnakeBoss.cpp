@@ -23,9 +23,6 @@ void SceneSnakeBoss::Init()
 {
 	SceneBase::Init();
 	Math::InitRNG();
-	
-	//Clear the list from previous scene
-	GameObject::goList.clear();
 
 	//GameObject *go = FetchGO();
 	//go->SetActive(true);
@@ -36,9 +33,9 @@ void SceneSnakeBoss::Init()
 	//go->SetColliderType(Collider::COLLIDER_BOX);
 
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
-	GameObject::goList.push_back(player);
+	GameObject::goList.push_back(SceneBase::player);
 
-	mainCamera->Include(&(player->pos));
+    mainCamera->Include(&(SceneBase::player->pos));
 	if (!(glfwController.isConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
@@ -357,12 +354,7 @@ void SceneSnakeBoss::RenderHUD()
 
 void SceneSnakeBoss::Exit()
 {
-	if (mainCamera)
-		delete mainCamera;
-	if (player)
-		delete player;
-
-	SceneBase::Exit();
+    SceneBase::Exit();
 }
 
 void SceneSnakeBoss::UpdateGameObjects(double dt)

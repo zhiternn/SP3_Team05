@@ -8,11 +8,11 @@
 #include "Controls.h"
 #include "MeshManager.h"
 
-
 #include <sstream>
 
+Player* SceneBase::player = new Player();
+
 SceneBase::SceneBase():
-player(NULL),
 options(OptionManager::GetInstance())
 {
 }
@@ -40,7 +40,6 @@ void SceneBase::Init()
 
 	glGenVertexArrays(1, &m_vertexArrayID);
 	glBindVertexArray(m_vertexArrayID);
-
 
 	m_gPassShaderID = LoadShaders("Shader//GPass.vertexshader", "Shader//GPass.fragmentshader");
 	m_programID = LoadShaders("Shader//Shadow.vertexshader", "Shader//Shadow.fragmentshader");
@@ -191,9 +190,6 @@ void SceneBase::Init()
 	bLightEnabled = true;
 	isCulled = true;
 	isWireFrame = false;
-
-	if (player == NULL)
-		player = new Player();
 
 	player->SetScale(3, 3, 3);
 
@@ -808,7 +804,7 @@ void SceneBase::RenderGameObjects()
 
 			GameObject::goList[i]->SetupMesh();
 			if (GameObject::goList[i]->mesh)
-				RenderMesh(GameObject::goList[i]->mesh, false);
+                RenderMesh(GameObject::goList[i]->mesh, GameObject::goList[i]->mesh->enableLight);
 
 			modelStack.PopMatrix();
 			Enemy* enemy = dynamic_cast<Enemy*>(GameObject::goList[i]);
@@ -1109,12 +1105,4 @@ void SceneBase::Exit()
 	glDeleteProgram(m_gPassShaderID);
 	glDeleteProgram(m_programID);
 	glDeleteVertexArrays(1, &m_vertexArrayID);
-
-	while (GameObject::goList.size() > 0)
-	{
-		delete GameObject::goList.back();
-		GameObject::goList.pop_back();
-	}
-	if (player)
-		delete player;
 }

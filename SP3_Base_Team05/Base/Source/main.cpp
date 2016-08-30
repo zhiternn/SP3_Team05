@@ -1,5 +1,4 @@
-
-
+#include <crtdbg.h>
 #include "Application.h"
 
 int main( void )
@@ -8,4 +7,6 @@ int main( void )
 	app.Init();
 	app.Run();
 	app.Exit();
+
+    _CrtDumpMemoryLeaks();
 }

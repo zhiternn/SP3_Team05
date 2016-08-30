@@ -22,9 +22,6 @@ void SceneSummoner::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
-	//Clear the List from previous Scene
-	GameObject::goList.clear();
-
 	//GameObject *go = FetchGO();
 	//go->SetActive(true);
 	//go->SetScale(20, 20, 20);
@@ -34,7 +31,7 @@ void SceneSummoner::Init()
 	//go->SetColliderType(Collider::COLLIDER_BOX);
 
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
-	GameObject::goList.push_back(player);
+    GameObject::goList.push_back(SceneBase::player);
 
 	summoner = new Summoner();
 	GameObject::goList.push_back(summoner);
@@ -278,11 +275,6 @@ void SceneSummoner::RenderHUD()
 
 void SceneSummoner::Exit()
 {
-	if (mainCamera)
-		delete mainCamera;
-	if (player)
-		delete player;
-
 	SceneBase::Exit();
 }
 

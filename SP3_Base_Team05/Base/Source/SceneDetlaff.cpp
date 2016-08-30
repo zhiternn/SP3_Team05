@@ -26,8 +26,6 @@ void SceneDetlaff::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
-	//Clear the list from previous scene
-	GameObject::goList.clear();
 
 	//World Space
 	m_worldHeight = 300;
@@ -49,7 +47,7 @@ void SceneDetlaff::Init()
 	go->SetColliderType(Collider::COLLIDER_BOX);*/
 
 	player->Init(Vector3(0, 1, 0));
-	GameObject::goList.push_back(player);
+    GameObject::goList.push_back(SceneBase::player);
 
 	detlaff = new CDetlaff();
 	GameObject::goList.push_back(detlaff);
@@ -564,11 +562,6 @@ void SceneDetlaff::RenderMinimap(float zoom)
 
 void SceneDetlaff::Exit()
 {
-	if (mainCamera)
-		delete mainCamera;
-	if (player)
-		delete player;
-
 	SceneBase::Exit();
 }
 

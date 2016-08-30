@@ -149,7 +149,7 @@ protected:
 
 	Camera* mainCamera;
 
-	Player* player;
+	static Player* player;
 	OptionManager &options;
 
 	std::vector<Mesh*> backgroundList;
