@@ -35,7 +35,7 @@ void SceneSnakeBoss::Init()
 	//go->SetType(GameObject::GO_ENVIRONMENT);
 	//go->SetColliderType(Collider::COLLIDER_BOX);
 
-	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.2f, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
 	GameObject::goList.push_back(player);
 
 	mainCamera->Include(&(player->pos));

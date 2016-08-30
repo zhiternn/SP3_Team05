@@ -36,7 +36,7 @@ GolemHead::~GolemHead()
 
 void GolemHead::Update(double dt)
 {
-    GameObject::Update(dt);
+    Enemy::Update(dt);
     golemGun->Update(dt);
     if (vel.IsZero() == false)
         front = vel.Normalized();
@@ -105,6 +105,7 @@ void GolemHead::GolemShoot(Vector3 dir)
 
 void GolemHead::HandleInteraction(GameObject* b, double dt)
 {
+	Enemy::HandleInteraction(b, dt);
     if (CheckCollision(b, dt))
     {
         CollisionResponse(b);
