@@ -24,7 +24,7 @@ void GolemHead::Init(Vector3 pos)
     isDead = false;
     regendelay = 0;
     golemGun = new Splitgun(360.f, 18);
-    golemGun->AssignProjectile(new Bullet());
+    golemGun->AssignProjectile(new Hook());
     golemGun->SetFireRate(0.1f);
     scale.Set(12, 12, 12);
 }
@@ -85,7 +85,6 @@ void GolemHead::Update(double dt)
 
         regendelay = 0;
     }
-    //std::cout << health << std::endl;
     // No Movement on Head
     GolemShoot(target->GetFront());
 }

@@ -58,16 +58,20 @@ void SnakeBody::HandleInteraction(GameObject* b, double dt)
 	if (head)//skips checks against head
 		return;
 	SnakeBody* body = dynamic_cast<SnakeBody*>(b);
-	if (body)//skips checks against body
+	if (body)//skips checks against living body
 		return;
 
 	Entity* entity = dynamic_cast<Entity*>(b);
 	if (entity && this->team != entity->GetTeam())
 	{
 		if (CheckCollision(b, dt))
+		{
 			entity->TakeDamage(DAMAGE_ONTOUCH);
-	}
+			CollisionResponse(b);
+		}
 
+		return;
+	}
 	GameObject::HandleInteraction(b, dt);
 }
 

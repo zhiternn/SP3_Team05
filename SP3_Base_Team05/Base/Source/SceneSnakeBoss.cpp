@@ -77,19 +77,19 @@ void SceneSnakeBoss::Update(double dt)
 	SceneBase::Update(dt);
 
 	//Update Camera target scheme if Controller is plugged in
-	if (GamePad.IsConnected() && Keyboard)
-	{
-		Keyboard = false;
+	//if (GamePad.IsConnected() && Keyboard)
+	//{
+	//	Keyboard = false;
 
-		mainCamera->entityList.pop_back();
-		mainCamera->Include(&controllerStick_Pos);
-	}
-	else if (!(GamePad.IsConnected()))
-	{
-		Keyboard = true;
-		mainCamera->entityList.pop_back();
-		mainCamera->Include(&mousePos_worldBased);
-	}
+	//	mainCamera->entityList.pop_back();
+	//	mainCamera->Include(&controllerStick_Pos);
+	//}
+	//else if (!(GamePad.IsConnected()))
+	//{
+	//	Keyboard = true;
+	//	mainCamera->entityList.pop_back();
+	//	mainCamera->Include(&mousePos_worldBased);
+	//}
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -99,7 +99,6 @@ void SceneSnakeBoss::Update(double dt)
 	{
 		player->inventory->SetCurrency(100000);
 	}
-	std::cout << player->inventory->GetCurrency() << std::endl;
 }
 
 void SceneSnakeBoss::Render()

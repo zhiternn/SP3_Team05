@@ -58,15 +58,25 @@ void MainMenu::Init()
 
     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().bgm_menu, true);
 
-    b_Play.Set(0, 25, 55, 65);
-    b_Option.Set(0, 25, 40, 50);
-    b_Credit.Set(0, 25, 25, 35);
+    b_Play.Set(0, 25, 70, 80);
+    b_Option.Set(0, 25, 55, 65);
+    b_Credit.Set(0, 25, 40, 50);
+    b_LevelUp.Set(0, 25, 25, 35);
     b_Exit.Set(0, 25, 10, 20);
+
     b_Back.Set(0, 25, 10, 20);
     b_Yes.Set(42.5, 62.5, 30, 40);
     b_No.Set(67.5, 87.5, 30, 40);
     //b_Continue.Set(117, 132, 12, 18);
     b_On.Set(90, 115, 43, 47);
+    upgradeMG.Set(45, 50, 71, 76);
+    upgradeSHG.Set(75, 82, 71, 76);
+    upgradeSPG.Set(107, 115, 71, 76);
+    //29.6, 45
+
+    upgradeBullet.Set(45, 50, 21, 27);
+    upgradeTrap.Set(75, 82, 21, 27);
+    upgradeHook.Set(107, 115, 21, 27);
 }
 
 void MainMenu::Update(double dt)
@@ -87,7 +97,6 @@ void MainMenu::Update(double dt)
             0
             );
     }
-    //std::cout << mousePos_worldBased << std::endl;
     //-50 to 50 x, -65 to 65 y
 
     if (state == MENU_INSTRUCTIONS)
@@ -97,6 +106,8 @@ void MainMenu::Update(double dt)
         Application::GetInstance().theSoundEngine->setSoundVolume(1.0f);
     else
         Application::GetInstance().theSoundEngine->setSoundVolume(0.0f);
+
+    //std::cout << mousePos_screenBased << std::endl;
 
     mainCamera->Update(dt);
 }
@@ -145,6 +156,8 @@ void MainMenu::Render()
     case MainMenu::MENU_OPTIONS: OptionsPage();
         break;
     case MainMenu::MENU_CREDITS: CreditsPage();
+        break;
+    case MainMenu::MENU_LEVEL: LevelUpPage();
         break;
     case MainMenu::MENU_EXIT: confirmExit();
         break;
@@ -228,7 +241,6 @@ void MainMenu::RenderHUD()
 void MainMenu::MainMenuPage()
 {
     //PLAY BUTTON
-    //std::cout << mousePos_screenBased << std::endl;
     float boxposscale = 0.6;
     float textposscale = 0.575;
 
@@ -237,7 +249,8 @@ void MainMenu::MainMenuPage()
         && mousePos_screenBased.y >= b_Play.minY && mousePos_screenBased.y <= b_Play.maxY) || (mousePos_screenBased.x >= b_Option.minX && mousePos_screenBased.x <= b_Option.maxX
         && mousePos_screenBased.y >= b_Option.minY && mousePos_screenBased.y <= b_Option.maxY) || (mousePos_screenBased.x >= b_Credit.minX && mousePos_screenBased.x <= b_Credit.maxX
         && mousePos_screenBased.y >= b_Credit.minY && mousePos_screenBased.y <= b_Credit.maxY) || (mousePos_screenBased.x >= b_Exit.minX && mousePos_screenBased.x <= b_Exit.maxX
-        && mousePos_screenBased.y >= b_Exit.minY && mousePos_screenBased.y <= b_Exit.maxY))
+        && mousePos_screenBased.y >= b_Exit.minY && mousePos_screenBased.y <= b_Exit.maxY) || (mousePos_screenBased.x >= b_LevelUp.minX && mousePos_screenBased.x <= b_LevelUp.maxX
+        && mousePos_screenBased.y >= b_LevelUp.minY && mousePos_screenBased.y <= b_LevelUp.maxY))
     {
         if (isHover == false)
         {
@@ -251,7 +264,7 @@ void MainMenu::MainMenuPage()
             {
                 //RenderButtonsOnScreen(meshList[GEO_MENU_CHOICEBOX], "Play", Color(0, 0, 0), 3, 0, 0, 65, 50);
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * boxposscale) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -259,7 +272,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Play";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * textposscale) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
                 state = MENU_PLAY;
 
                 if (isClicked == false)
@@ -271,7 +284,7 @@ void MainMenu::MainMenuPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * boxposscale) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 7, 3);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -279,10 +292,10 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Play!";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * textposscale) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
-                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * boxposscale) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(26, 15, 15);
                 RenderMesh(meshList[GEO_MENU_SELECTION], false);
                 modelStack.PopMatrix();
@@ -293,7 +306,6 @@ void MainMenu::MainMenuPage()
 
 
         //OPTION BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Option.minX && mousePos_screenBased.x <= b_Option.maxX
             && mousePos_screenBased.y >= b_Option.minY && mousePos_screenBased.y <= b_Option.maxY)
         {
@@ -301,7 +313,7 @@ void MainMenu::MainMenuPage()
             {
                 //RenderButtonsOnScreen(meshList[GEO_MENU_CHOICEBOX], "Play", Color(0, 0, 0), 3, 0, 0, 65, 50);
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -309,7 +321,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Options";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
                 state = MENU_OPTIONS;
 
                 if (isClicked == false)
@@ -321,7 +333,7 @@ void MainMenu::MainMenuPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 7, 3);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -329,10 +341,10 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Options";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
-                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(26, 15, 15);
                 RenderMesh(meshList[GEO_MENU_SELECTION], false);
                 modelStack.PopMatrix();
@@ -344,7 +356,6 @@ void MainMenu::MainMenuPage()
             RenderOptionButton();
 
         //CREDIT BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Credit.minX && mousePos_screenBased.x <= b_Credit.maxX
             && mousePos_screenBased.y >= b_Credit.minY && mousePos_screenBased.y <= b_Credit.maxY)
         {
@@ -352,7 +363,7 @@ void MainMenu::MainMenuPage()
             {
                 //RenderButtonsOnScreen(meshList[GEO_MENU_CHOICEBOX], "Play", Color(0, 0, 0), 3, 0, 0, 65, 50);
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -360,7 +371,7 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Credits";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
 
                 state = MENU_CREDITS;
 
@@ -373,7 +384,7 @@ void MainMenu::MainMenuPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 7, 3);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -381,6 +392,55 @@ void MainMenu::MainMenuPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Credits!";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+
+                modelStack.PushMatrix();
+                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(26, 15, 15);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+
+            }
+        }
+        else
+            RenderCreditButton();
+
+        //Upgrade
+        if (mousePos_screenBased.x >= b_LevelUp.minX && mousePos_screenBased.x <= b_LevelUp.maxX
+            && mousePos_screenBased.y >= b_LevelUp.minY && mousePos_screenBased.y <= b_LevelUp.maxY)
+        {
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                //RenderButtonsOnScreen(meshList[GEO_MENU_CHOICEBOX], "Play", Color(0, 0, 0), 3, 0, 0, 65, 50);
+                modelStack.PushMatrix();
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(25, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                std::ostringstream ss;
+                ss.precision(5);
+                ss << "Upgrade";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+                state = MENU_LEVEL;
+            }
+            else
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(25, 7, 3);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                std::ostringstream ss;
+                ss.precision(5);
+                ss << "Upgrade!";
                 RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
@@ -392,10 +452,9 @@ void MainMenu::MainMenuPage()
             }
         }
         else
-            RenderCreditButton();
+            RenderLevelUpButton();
 
         //EXIT BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Exit.minX && mousePos_screenBased.x <= b_Exit.maxX
             && mousePos_screenBased.y >= b_Exit.minY && mousePos_screenBased.y <= b_Exit.maxY)
         {
@@ -453,6 +512,7 @@ void MainMenu::MainMenuPage()
         RenderPlayButton();
         RenderOptionButton();
         RenderCreditButton();
+        RenderLevelUpButton();
         RenderExitButton();
     }
 }
@@ -465,7 +525,6 @@ void MainMenu::LevelSelectPage()
     RenderMesh(meshList[GEO_MENU_LVLSELECT], false);
     modelStack.PopMatrix();
     //PLAY BUTTON
-    //std::cout << mousePos_screenBased << std::endl;
     float boxposscale = 0.6;
     float textposscale = 0.575;
 
@@ -474,7 +533,8 @@ void MainMenu::LevelSelectPage()
         && mousePos_screenBased.y >= b_Play.minY && mousePos_screenBased.y <= b_Play.maxY) || (mousePos_screenBased.x >= b_Option.minX && mousePos_screenBased.x <= b_Option.maxX
         && mousePos_screenBased.y >= b_Option.minY && mousePos_screenBased.y <= b_Option.maxY) || (mousePos_screenBased.x >= b_Credit.minX && mousePos_screenBased.x <= b_Credit.maxX
         && mousePos_screenBased.y >= b_Credit.minY && mousePos_screenBased.y <= b_Credit.maxY) || (mousePos_screenBased.x >= b_Exit.minX && mousePos_screenBased.x <= b_Exit.maxX
-        && mousePos_screenBased.y >= b_Exit.minY && mousePos_screenBased.y <= b_Exit.maxY))
+        && mousePos_screenBased.y >= b_Exit.minY && mousePos_screenBased.y <= b_Exit.maxY) || (mousePos_screenBased.x >= b_LevelUp.minX && mousePos_screenBased.x <= b_LevelUp.maxX
+        && mousePos_screenBased.y >= b_LevelUp.minY && mousePos_screenBased.y <= b_LevelUp.maxY))
     {
         if (isHover == false)
         {
@@ -488,7 +548,7 @@ void MainMenu::LevelSelectPage()
             {
                 //RenderButtonsOnScreen(meshList[GEO_MENU_CHOICEBOX], "Play", Color(0, 0, 0), 3, 0, 0, 65, 50);
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * boxposscale) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -496,7 +556,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Golem";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * textposscale) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
 
                 if (isClicked == false)
                 {
@@ -508,7 +568,7 @@ void MainMenu::LevelSelectPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * boxposscale) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 7, 3);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -516,10 +576,10 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Golem";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * textposscale) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
-                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * boxposscale) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(26, 15, 15);
                 RenderMesh(meshList[GEO_MENU_SELECTION], false);
                 modelStack.PopMatrix();
@@ -528,7 +588,7 @@ void MainMenu::LevelSelectPage()
         else
         {
             modelStack.PushMatrix();
-            modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * 0.6) * (60 / m_orthoHeight), 1);
+            modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
             modelStack.Scale(25, 6, 2);
             RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
             modelStack.PopMatrix();
@@ -536,12 +596,10 @@ void MainMenu::LevelSelectPage()
             std::ostringstream ss;
             ss.precision(5);
             ss << "Golem";
-            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * 0.575) * (60 / m_orthoHeight));
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
         }
 
-
         //OPTION BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Option.minX && mousePos_screenBased.x <= b_Option.maxX
             && mousePos_screenBased.y >= b_Option.minY && mousePos_screenBased.y <= b_Option.maxY)
         {
@@ -549,7 +607,7 @@ void MainMenu::LevelSelectPage()
             {
                 //RenderButtonsOnScreen(meshList[GEO_MENU_CHOICEBOX], "Play", Color(0, 0, 0), 3, 0, 0, 65, 50);
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -557,8 +615,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Snake";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
-                state = MENU_OPTIONS;
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
 
                 if (isClicked == false)
                 {
@@ -570,7 +627,7 @@ void MainMenu::LevelSelectPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 7, 3);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -578,10 +635,10 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Snake";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
-                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(26, 15, 15);
                 RenderMesh(meshList[GEO_MENU_SELECTION], false);
                 modelStack.PopMatrix();
@@ -592,7 +649,7 @@ void MainMenu::LevelSelectPage()
         else
         {
             modelStack.PushMatrix();
-            modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.45)) * (60 / m_orthoHeight), 1);
+            modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
             modelStack.Scale(25, 6, 2);
             RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
             modelStack.PopMatrix();
@@ -600,10 +657,9 @@ void MainMenu::LevelSelectPage()
             std::ostringstream ss1;
             ss1.precision(5);
             ss1 << "Snake";
-            RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.425)) * (60 / m_orthoHeight));
+            RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
         }
         //CREDIT BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Credit.minX && mousePos_screenBased.x <= b_Credit.maxX
             && mousePos_screenBased.y >= b_Credit.minY && mousePos_screenBased.y <= b_Credit.maxY)
         {
@@ -611,7 +667,7 @@ void MainMenu::LevelSelectPage()
             {
                 //RenderButtonsOnScreen(meshList[GEO_MENU_CHOICEBOX], "Play", Color(0, 0, 0), 3, 0, 0, 65, 50);
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -619,7 +675,7 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Summoner";
-                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
 
                 state = MENU_CREDITS;
 
@@ -633,7 +689,7 @@ void MainMenu::LevelSelectPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(25, 7, 3);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
@@ -641,6 +697,66 @@ void MainMenu::LevelSelectPage()
                 std::ostringstream ss;
                 ss.precision(5);
                 ss << "Summoner!";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+
+                modelStack.PushMatrix();
+                modelStack.Translate(10 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(26, 15, 15);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+
+            }
+        }
+        else
+        {
+            modelStack.PushMatrix();
+            modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
+            modelStack.Scale(25, 6, 2);
+            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+            modelStack.PopMatrix();
+
+            std::ostringstream ss2;
+            ss2.precision(5);
+            ss2 << "Summoner";
+            RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+        }
+
+        //Detallff
+        if (mousePos_screenBased.x >= b_LevelUp.minX && mousePos_screenBased.x <= b_LevelUp.maxX
+            && mousePos_screenBased.y >= b_LevelUp.minY && mousePos_screenBased.y <= b_LevelUp.maxY)
+        {
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                //RenderButtonsOnScreen(meshList[GEO_MENU_CHOICEBOX], "Play", Color(0, 0, 0), 3, 0, 0, 65, 50);
+                modelStack.PushMatrix();
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(25, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                std::ostringstream ss;
+                ss.precision(5);
+                ss << "Detalff";
+                RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+                state = MENU_LEVEL;
+            }
+            else
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(25, 7, 3);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                std::ostringstream ss;
+                ss.precision(5);
+                ss << "Detalff!";
                 RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
@@ -654,19 +770,18 @@ void MainMenu::LevelSelectPage()
         else
         {
             modelStack.PushMatrix();
-            modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.3)) * (60 / m_orthoHeight), 1);
+            modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
             modelStack.Scale(25, 6, 2);
             RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
             modelStack.PopMatrix();
 
-            std::ostringstream ss2;
-            ss2.precision(5);
-            ss2 << "Summoner";
-            RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.275)) * (60 / m_orthoHeight));
+            std::ostringstream ss;
+            ss.precision(5);
+            ss << "Detalff";
+            RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
         }
 
         //EXIT BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Exit.minX && mousePos_screenBased.x <= b_Exit.maxX
             && mousePos_screenBased.y >= b_Exit.minY && mousePos_screenBased.y <= b_Exit.maxY)
         {
@@ -681,17 +796,16 @@ void MainMenu::LevelSelectPage()
 
                 std::ostringstream ss;
                 ss.precision(5);
-                ss << "Detalff";
+                ss << "Menu";
                 RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
-
-                state = MENU_EXIT;
 
                 if (isClicked == false)
                 {
                     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
                     isClicked = true;
                 }
-                sm.ChangeScene(4);
+
+                state = MENU_MAIN;
             }
             else
             {
@@ -703,7 +817,7 @@ void MainMenu::LevelSelectPage()
 
                 std::ostringstream ss;
                 ss.precision(5);
-                ss << "Detalff!";
+                ss << "Menu!";
                 RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.45)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
@@ -724,7 +838,7 @@ void MainMenu::LevelSelectPage()
 
             std::ostringstream ss3;
             ss3.precision(5);
-            ss3 << "Detalff";
+            ss3 << "Menu";
             RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
         }
     }
@@ -733,9 +847,8 @@ void MainMenu::LevelSelectPage()
         isHover = false;
         isClicked = false;
 
-
         modelStack.PushMatrix();
-        modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * 0.6) * (60 / m_orthoHeight), 1);
+        modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale + 0.15)) * (60 / m_orthoHeight), 1);
         modelStack.Scale(25, 6, 2);
         RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
         modelStack.PopMatrix();
@@ -743,10 +856,10 @@ void MainMenu::LevelSelectPage()
         std::ostringstream ss;
         ss.precision(5);
         ss << "Golem";
-        RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * 0.575) * (60 / m_orthoHeight));
+        RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
 
         modelStack.PushMatrix();
-        modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.45)) * (60 / m_orthoHeight), 1);
+        modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale)) * (60 / m_orthoHeight), 1);
         modelStack.Scale(25, 6, 2);
         RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
         modelStack.PopMatrix();
@@ -754,10 +867,10 @@ void MainMenu::LevelSelectPage()
         std::ostringstream ss1;
         ss1.precision(5);
         ss1 << "Snake";
-        RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.425)) * (60 / m_orthoHeight));
+        RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
 
         modelStack.PushMatrix();
-        modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.3)) * (60 / m_orthoHeight), 1);
+        modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.15)) * (60 / m_orthoHeight), 1);
         modelStack.Scale(25, 6, 2);
         RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
         modelStack.PopMatrix();
@@ -765,7 +878,20 @@ void MainMenu::LevelSelectPage()
         std::ostringstream ss2;
         ss2.precision(5);
         ss2 << "Summoner";
-        RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.275)) * (60 / m_orthoHeight));
+        RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
+
+
+        modelStack.PushMatrix();
+        modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (boxposscale - 0.3)) * (60 / m_orthoHeight), 1);
+        modelStack.Scale(25, 6, 2);
+        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+        modelStack.PopMatrix();
+
+        std::ostringstream ss4;
+        ss4.precision(5);
+        ss4 << "Detalff";
+        RenderTextOnScreen(meshList[GEO_TEXT], ss4.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
+
 
         modelStack.PushMatrix();
         modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.15)) * (60 / m_orthoHeight), 1);
@@ -775,7 +901,7 @@ void MainMenu::LevelSelectPage()
 
         std::ostringstream ss3;
         ss3.precision(5);
-        ss3 << "Detalff";
+        ss3 << "Menu";
         RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
     }
 }
@@ -908,6 +1034,424 @@ void MainMenu::CreditsPage()
     /*
      (155134X) (152773F) (155118A) (140189H)
     */
+}
+
+void MainMenu::LevelUpPage()
+{
+    standardLayout();
+
+    modelStack.PushMatrix();
+    modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+    modelStack.Scale(35, 10, 2);
+    RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    modelStack.PopMatrix();
+
+    std::ostringstream ss;
+    ss.precision(5);
+    ss << "Weapon Upgrades";
+    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 25, ((m_orthoHeight * 0.5) - 2)* (60 / m_orthoHeight));
+
+    modelStack.PushMatrix();
+    modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    modelStack.Scale(12, 12, 2);
+    RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    modelStack.Scale(10, 10, 2);
+    RenderMesh(meshList[GEO_WEAPON_MACHINEGUN], false);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    modelStack.Scale(12, 12, 2);
+    RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    modelStack.Scale(10, 10, 2);
+    RenderMesh(meshList[GEO_WEAPON_SHOTGUN], false);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    modelStack.Scale(12, 12, 2);
+    RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    modelStack.PopMatrix();
+
+    modelStack.PushMatrix();
+    modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    modelStack.Scale(10, 10, 2);
+    RenderMesh(meshList[GEO_WEAPON_SPLITGUN], false);
+    modelStack.PopMatrix();
+
+    //// Machine Gun Upgrade
+    //modelStack.PushMatrix();
+    //modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    //modelStack.Scale(5, 5, 2);
+    //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    //modelStack.PopMatrix();
+
+    //// Shotgun Upgrade
+    //modelStack.PushMatrix();
+    //modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    //modelStack.Scale(5, 5, 2);
+    //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    //modelStack.PopMatrix();
+
+    //// Splitgun Upgrade
+    //modelStack.PushMatrix();
+    //modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+    //modelStack.Scale(5, 5, 2);
+    //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    //modelStack.PopMatrix();
+
+    if ((mousePos_screenBased.x >= upgradeMG.minX && mousePos_screenBased.x <= upgradeMG.maxX
+        && mousePos_screenBased.y >= upgradeMG.minY && mousePos_screenBased.y <= upgradeMG.maxY) || (mousePos_screenBased.x >= upgradeSHG.minX && mousePos_screenBased.x <= upgradeSHG.maxX
+        && mousePos_screenBased.y >= upgradeSHG.minY && mousePos_screenBased.y <= upgradeSHG.maxY) || (mousePos_screenBased.x >= upgradeSPG.minX && mousePos_screenBased.x <= upgradeSPG.maxX
+        && mousePos_screenBased.y >= upgradeSPG.minY && mousePos_screenBased.y <= upgradeSPG.maxY) || (mousePos_screenBased.x >= upgradeBullet.minX && mousePos_screenBased.x <= upgradeBullet.maxX
+        && mousePos_screenBased.y >= upgradeBullet.minY && mousePos_screenBased.y <= upgradeBullet.maxY) || (mousePos_screenBased.x >= upgradeTrap.minX && mousePos_screenBased.x <= upgradeTrap.maxX
+        && mousePos_screenBased.y >= upgradeTrap.minY && mousePos_screenBased.y <= upgradeTrap.maxY) || (mousePos_screenBased.x >= upgradeHook.minX && mousePos_screenBased.x <= upgradeHook.maxX
+        && mousePos_screenBased.y >= upgradeHook.minY && mousePos_screenBased.y <= upgradeHook.maxY))
+    {
+
+        if (mousePos_screenBased.x >= upgradeMG.minX && mousePos_screenBased.x <= upgradeMG.maxX
+            && mousePos_screenBased.y >= upgradeMG.minY && mousePos_screenBased.y <= upgradeMG.maxY)
+        {
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(5, 5, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+                UpgradeMG();
+            }
+            else
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(6, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(10, 10, 2);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+            }
+        }
+        else
+        {
+            modelStack.PushMatrix();
+            modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+            modelStack.Scale(5, 5, 2);
+            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+            modelStack.PopMatrix();
+        }
+
+        if (mousePos_screenBased.x >= upgradeSHG.minX && mousePos_screenBased.x <= upgradeSHG.maxX
+            && mousePos_screenBased.y >= upgradeSHG.minY && mousePos_screenBased.y <= upgradeSHG.maxY)
+        {
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(5, 5, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+
+                UpgradeSHG();
+            }
+            else
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(6, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(10, 10, 2);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+            }
+        }
+        else
+        {
+            modelStack.PushMatrix();
+            modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+            modelStack.Scale(5, 5, 2);
+            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+            modelStack.PopMatrix();
+        }
+        
+        //SPG
+        if (mousePos_screenBased.x >= upgradeSPG.minX && mousePos_screenBased.x <= upgradeSPG.maxX
+            && mousePos_screenBased.y >= upgradeSPG.minY && mousePos_screenBased.y <= upgradeSPG.maxY)
+        {
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(5, 5, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+                UpgradeSPG();
+            }
+            else
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(6, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(10, 10, 2);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+            }
+        }
+        else
+        {
+            modelStack.PushMatrix();
+            modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+            modelStack.Scale(5, 5, 2);
+            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+            modelStack.PopMatrix();
+        }
+
+        //BULLETS
+        //NORM
+        if (mousePos_screenBased.x >= upgradeBullet.minX && mousePos_screenBased.x <= upgradeBullet.maxX
+            && mousePos_screenBased.y >= upgradeBullet.minY && mousePos_screenBased.y <= upgradeBullet.maxY)
+        {
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(5, 5, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+
+                UpgradeBullet();
+            }
+            else
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(6, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(10, 10, 2);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+            }
+        }
+        else
+        {
+            modelStack.PushMatrix();
+            modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+            modelStack.Scale(5, 5, 2);
+            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+            modelStack.PopMatrix();
+        }
+
+        //TRAP
+        if (mousePos_screenBased.x >= upgradeTrap.minX && mousePos_screenBased.x <= upgradeTrap.maxX
+            && mousePos_screenBased.y >= upgradeTrap.minY && mousePos_screenBased.y <= upgradeTrap.maxY)
+        {
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(5, 5, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+
+                UpgradeTrap();
+            }
+            else
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(6, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(10, 10, 2);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+            }
+        }
+        else
+        {
+            modelStack.PushMatrix();
+            modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+            modelStack.Scale(5, 5, 2);
+            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+            modelStack.PopMatrix();
+        }
+
+        // HOOK
+        if (mousePos_screenBased.x >= upgradeHook.minX && mousePos_screenBased.x <= upgradeHook.maxX
+            && mousePos_screenBased.y >= upgradeHook.minY && mousePos_screenBased.y <= upgradeHook.maxY)
+        {
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(5, 5, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+                UpgradeHook();
+            }
+            else
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(6, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(10, 10, 2);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+            }
+        }
+        else
+        {
+            modelStack.PushMatrix();
+            modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+            modelStack.Scale(5, 5, 2);
+            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+            modelStack.PopMatrix();
+        }
+
+    }
+    else
+    {
+        modelStack.PushMatrix();
+        modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+        modelStack.Scale(5, 5, 2);
+        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+        modelStack.PopMatrix();
+
+        modelStack.PushMatrix();
+        modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+        modelStack.Scale(5, 5, 2);
+        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+        modelStack.PopMatrix();
+
+        modelStack.PushMatrix();
+        modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
+        modelStack.Scale(5, 5, 2);
+        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+        modelStack.PopMatrix();
+
+        //BULLET
+        modelStack.PushMatrix();
+        modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+        modelStack.Scale(5, 5, 2);
+        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+        modelStack.PopMatrix();
+
+        modelStack.PushMatrix();
+        modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+        modelStack.Scale(5, 5, 2);
+        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+        modelStack.PopMatrix();
+
+        modelStack.PushMatrix();
+        modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight), 1);
+        modelStack.Scale(5, 5, 2);
+        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+        modelStack.PopMatrix();
+    }
+    /*
+    upgradeMG.Set(29, 30, 44, 46);
+    upgradeSHG.Set(49, 50, 44, 46);
+    upgradeSPG.Set(69, 70, 44, 46);
+    */
+}
+
+void MainMenu::UpgradeMG()
+{
+
+}
+void MainMenu::UpgradeSHG()
+{
+
+}
+void MainMenu::UpgradeSPG()
+{
+
+}
+void MainMenu::UpgradeBullet()
+{
+    Bullet *bullettest = new Bullet();
+    float temp = bullettest->GetProjectileSpeed();
+    bullettest->SetProjectileSpeed(temp + 1);
+    bullettest->SetDMG(100);
+
+    std::cout << "Upgraded Successfully!" << std::endl;
+}
+void MainMenu::UpgradeTrap()
+{
+
+}
+void MainMenu::UpgradeHook()
+{
+
 }
 
 void MainMenu::standardLayout()
@@ -1167,7 +1711,7 @@ void MainMenu::confirmExit()
 void MainMenu::RenderPlayButton()
 {
     modelStack.PushMatrix();
-    modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * 0.6) * (60 / m_orthoHeight), 1);
+    modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
     modelStack.Scale(25, 6, 2);
     RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
     modelStack.PopMatrix();
@@ -1175,13 +1719,13 @@ void MainMenu::RenderPlayButton()
     std::ostringstream ss;
     ss.precision(5);
     ss << "Play";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * 0.575) * (60 / m_orthoHeight));
+    RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * 0.725) * (60 / m_orthoHeight));
 }
 
 void MainMenu::RenderOptionButton()
 {
     modelStack.PushMatrix();
-    modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.45)) * (60 / m_orthoHeight), 1);
+    modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.6)) * (60 / m_orthoHeight), 1);
     modelStack.Scale(25, 6, 2);
     RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
     modelStack.PopMatrix();
@@ -1189,12 +1733,24 @@ void MainMenu::RenderOptionButton()
     std::ostringstream ss1;
     ss1.precision(5);
     ss1 << "Options";
-    RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.425)) * (60 / m_orthoHeight));
-
-   
+    RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.575)) * (60 / m_orthoHeight));
 }
 
 void MainMenu::RenderCreditButton()
+{
+    modelStack.PushMatrix();
+    modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.45)) * (60 / m_orthoHeight), 1);
+    modelStack.Scale(25, 6, 2);
+    RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    modelStack.PopMatrix();
+
+    std::ostringstream ss2;
+    ss2.precision(5);
+    ss2 << "Credits";
+    RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.425)) * (60 / m_orthoHeight));
+}
+
+void MainMenu::RenderLevelUpButton()
 {
     modelStack.PushMatrix();
     modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.3)) * (60 / m_orthoHeight), 1);
@@ -1204,7 +1760,7 @@ void MainMenu::RenderCreditButton()
 
     std::ostringstream ss2;
     ss2.precision(5);
-    ss2 << "Credits";
+    ss2 << "Upgrade";
     RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.275)) * (60 / m_orthoHeight));
 }
 

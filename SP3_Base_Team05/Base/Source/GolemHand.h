@@ -12,6 +12,7 @@ Class to handle Boss Golem Hand
 
 #include "Enemy.h"
 #include "WeaponList.h"
+#include "Player.h"
 
 static const int ATTACK_COLLIDE_DAMAGE = 5;
 
@@ -33,14 +34,12 @@ public:
     virtual void SetupMesh();
     virtual void HandleInteraction(GameObject* b, double dt);
 
-    void Action(float ratio);
-    void GrabPlayer(GameObject* b, double dt);
-
 private:
     float stopdelay;
-    bool isGrabPlayer, GrabbedPlayer;
-    float targetPlayer;
-};
+    float speedboost, speedtime;
+    float handSpeed, handLimit;
+
+};        
 
 /******************************************************************************/
 /*!
@@ -59,9 +58,13 @@ public:
 
     virtual void SetupMesh();
     virtual void HandleInteraction(GameObject* b, double dt);
+    virtual void TakeDamage(unsigned amount);
+
+    void Shoot();
 
 private:
-    float state;
+    float state, firegogo, pewpew;                                          //< Firing State and Rate of Hand
+    Weapon* golemLHGun;                                                     //< Golem's Left Hand
 };
 
 #endif /* GOLEMHAND_H */
