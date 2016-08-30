@@ -45,7 +45,7 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 
 void SnakeHead::Update(double dt)
 {
-	GameObject::Update(dt);
+	Enemy::Update(dt);
 
 	float bodyRatio = (float)bodyList.size() / (float)maxBodyCount;//counts the percentage of body left
 	float headLimit = speedLimit * bodyRatio;

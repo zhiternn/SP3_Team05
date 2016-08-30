@@ -68,7 +68,6 @@ bool Enemy::UpdateMovement(double dt)
 			Vector3 dir = (destinations.back() - pos).Normalized();
 
 			vel += dir * movementSpeed * dt;
-
 			if (vel.LengthSquared() > speedLimit * speedLimit)
 			{
 				vel = vel.Normalized() * speedLimit;
@@ -187,14 +186,14 @@ void Enemy::HandleInteraction(GameObject* b, double dt)
 	{
 		Trap* trap = dynamic_cast<Trap*>(b);
 		if (trap)
-		{	
-			Vector3 dir = Vector3(1, 0, 0);
+		{
+			Vector3 dir = Vector3(5, 0, 0);
 			if (this->pos != trap->pos)
 				dir = (this->pos - trap->pos).Normalized();
-			this->vel += dir * speedLimit * dt;
+
+			this->vel += dir * this->movementSpeed * dt;
 		}
 	}
-
 	GameObject::HandleInteraction(b, dt);
 }
 void Enemy::SetSpeedLimit(float speed)
@@ -249,7 +248,7 @@ bool Enemy::IsCapturing()
 
 void Enemy::Capturing(double dt)
 {
-	captureRate += dt * 20;
+	captureRate += dt;
 	if (captureRate >= health)
 	{
 		Captured();

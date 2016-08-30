@@ -98,6 +98,16 @@ void MeshManager::Init()
 	meshList[GEO_WEAPON_SPLITGUN] = MeshBuilder::GenerateQuad("splitgun", Color(0, 0, 0), 1.f);
 	meshList[GEO_WEAPON_SPLITGUN]->textureArray[0] = LoadTGA("Image//splitgun.tga");
 
+	meshList[GEO_PROJECTILE_BULLET] = MeshBuilder::GenerateQuad("bullet", Color(0, 0, 0), 1.f);
+	meshList[GEO_PROJECTILE_BULLET]->textureArray[0] = LoadTGA("Image//bullet_icon.tga");
+	meshList[GEO_PROJECTILE_HOOK] = MeshBuilder::GenerateQuad("hook", Color(0, 0, 0), 1.f);
+	meshList[GEO_PROJECTILE_HOOK]->textureArray[0] = LoadTGA("Image//hook_icon.tga");
+	meshList[GEO_PROJECTILE_TRAP] = MeshBuilder::GenerateQuad("trap", Color(0, 0, 0), 1.f);
+	meshList[GEO_PROJECTILE_TRAP]->textureArray[0] = LoadTGA("Image//trap_icon.tga");
+
+	meshList[GEO_UI_BACKGROUND] = MeshBuilder::GenerateQuad("UI_background", Color(0, 0, 0), 1.f);
+	meshList[GEO_UI_BACKGROUND]->textureArray[0] = LoadTGA("Image//UI_background.tga");
+
 	InitSceneSnake();
 	InitSceneDetlaff();
 	InitSceneSummoner();

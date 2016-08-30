@@ -698,51 +698,53 @@ void SceneBase::RenderHUD()
 	ss << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
 
+	RenderUI(meshList[GEO_UI_BACKGROUND], 7, 0, 60, 15, false);
+
 	ss.str("");
 	ss << "Weapon: ";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
 	switch (player->weapon->weapon_type)
 	{
 	case Weapon::W_SHOTGUN:
-		RenderUI(meshList[GEO_WEAPON_SHOTGUN], 7, 25, 58.5f, 1, false);
+		RenderUI(meshList[GEO_WEAPON_SHOTGUN], 6, 17, 58.f, 1, false);
 		break;
 	case Weapon::W_MACHINEGUN:
-		RenderUI(meshList[GEO_WEAPON_MACHINEGUN], 7, 25, 58.5f, 1, false);
+		RenderUI(meshList[GEO_WEAPON_MACHINEGUN], 6, 17, 58.f, 1, false);
 		break;
 	case Weapon::W_SPLITGUN:
-		RenderUI(meshList[GEO_WEAPON_SPLITGUN], 7, 25, 58.5f, 1, false);
+		RenderUI(meshList[GEO_WEAPON_SPLITGUN], 6, 17, 58.f, 1, false);
 		break;
 	}
 
 	ss.str("");
-	ss << "Bullet: ";
+	ss << "Projectile: ";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 22, 57);
 	switch (player->projectile->GetProjType())
 	{
 	case CProjectile::BULLET:
-		ss << "Normal";
+		RenderUI(meshList[GEO_PROJECTILE_BULLET], 4, 44, 58.f, 1, false);
 		break;
 	case CProjectile::HOOK:
-		ss << "Hook";
+		RenderUI(meshList[GEO_PROJECTILE_HOOK], 4, 44, 58.f, 1, false);
 		break;
 	case CProjectile::TRAP:
-		ss << "Trap";
+		RenderUI(meshList[GEO_PROJECTILE_TRAP], 4, 44, 58.f, 1, false);
 		break;
 	}
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
 
 	ss.str("");
 	ss.precision(1);
 	ss << "HP";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
-	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 10) + 11, 55.5f, player->maxHealth / 10, false);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 55.5f, player->GetHP() / 10, false);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 53);
+	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 10) + 11, 54.5f, player->maxHealth / 10, false);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 54.5f, player->GetHP() / 10, false);
 
 	ss.str("");
 	ss.precision(2);
 	ss << "Dash";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * player->maxHealth / 10) + 11, 52.5f, DASH_COOLDOWN * player->maxHealth / 10, false);
-	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10, false);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 50);
+	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * player->maxHealth / 10) + 11, 51.5f, DASH_COOLDOWN * player->maxHealth / 10, false);
+	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10) + 11, 51.5f, (DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10, false);
 }
 
 void SceneBase::RenderGameObjects()
@@ -763,9 +765,9 @@ void SceneBase::RenderGameObjects()
 			{
 				if (!enemy->IsDead())
 				{
-					float healthRatio = (float)enemy->GetHP() / (float)enemy->GetMaxHP();
 					if ((mousePos_worldBased - enemy->pos).LengthSquared() < enemy->GetScale().LengthSquared() || enemy->IsCapturing())
 					{
+						float healthRatio = (float)enemy->GetHP() / (float)enemy->GetMaxHP();
 						modelStack.PushMatrix();
 						modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y, 50);
 						modelStack.Translate(-enemy->GetScale().x, 0, 0);

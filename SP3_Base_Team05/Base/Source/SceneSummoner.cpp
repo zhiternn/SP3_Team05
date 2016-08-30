@@ -96,7 +96,6 @@ void SceneSummoner::Update(double dt)
 	{
 		player->inventory->AddCurrency(50 + summoner->GetHP());
 	}
-	std::cout << player->inventory->GetCurrency() << std::endl;
 }
 
 void SceneSummoner::Render()
