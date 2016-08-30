@@ -17,7 +17,7 @@ void Summoner::Init(Vector3 pos)
 	collider.type = Collider::COLLIDER_BALL;
 	Entity::entityType = Entity::ENTITY_BOSS_MAIN;
 	active = true;
-	mass = 1;
+	mass = 10;
 	speedLimit = 50.f;
 	movementSpeed = 50.0f;
 	scale.Set(15, 15, 15);

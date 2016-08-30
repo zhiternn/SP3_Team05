@@ -14,6 +14,8 @@
 
 using std::vector;
 
+static int NUMBER_OF_WORLD_OBJECTS = 50;
+
 class SceneManager;
 
 class SceneSummoner : public SceneBase
@@ -32,6 +34,8 @@ public:
 	virtual void RenderGameObjects();
 	virtual void RenderHUD();
 	virtual void UpdateGameObjects(double dt);
+
+	void GenerateWorld();
 
 	void RenderGPass();
 	void RenderMain();

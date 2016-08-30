@@ -25,7 +25,9 @@ void SceneSummoner::Init()
 	//Clear the List from previous Scene
 	GameObject::goList.clear();
 
-	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
+
 	GameObject::goList.push_back(player);
 
 	summoner = new Summoner();
@@ -33,7 +35,7 @@ void SceneSummoner::Init()
 	summoner->SetTarget(player);
 	summoner->Init(Vector3(m_worldWidth * 0.5f + 5, m_worldHeight * 0.5f, 0));
 
-
+	GenerateWorld();
 }
 
 void SceneSummoner::PlayerController(double dt)
@@ -76,6 +78,22 @@ void SceneSummoner::Update(double dt)
 	else if (summoner->IsCaptured())
 	{
 		player->inventory->AddCurrency(50 + summoner->GetHP());
+	}
+}
+
+void SceneSummoner::GenerateWorld()
+{
+	for (int i = 0; i < NUMBER_OF_WORLD_OBJECTS; ++i)
+	{
+		float randPosX = Math::RandFloatMinMax(0, m_worldWidth);
+		float randPosY = Math::RandFloatMinMax(0, m_worldHeight);
+		float randScaleX = Math::RandFloatMinMax(7, 10);
+		float randScaleY = Math::RandFloatMinMax(7, 10);
+		GameObject *wall = FetchGO();
+		wall->SetActive(true);
+		wall->SetColliderType(Collider::COLLIDER_BOX);
+		wall->SetPostion(randPosX, randPosY, 0);
+		wall->SetScale(randScaleX, randScaleY, 1);
 	}
 }
 

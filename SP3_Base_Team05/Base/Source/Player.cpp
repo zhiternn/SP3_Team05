@@ -27,12 +27,11 @@ Player::~Player()
 	//	delete weapon;
 }
 
-void Player::Init(Vector3 pos, Vector3 scale, Vector3 front)
+void Player::Init(Vector3 pos)
 {
 	damageBuffer = DAMAGE_BUFFER;
-	this->scale.Set(scale.x, scale.y, scale.z);
 	this->pos.Set(pos.x, pos.y, pos.z);
-	this->front.Set(front.x, front.y, front.z);
+
 	team = TEAM_PLAYER;
 	active = true;
 	type = GameObject::GO_ENTITY;
@@ -63,19 +62,6 @@ void Player::Update(double dt)
 			isDashed = false;
 		}
 	}
-	if (health <= maxHealth)
-	{
-		static float healthregenCooldown = 0;
-		healthregenCooldown += dt;
-		if (healthregenCooldown >= 1)
-		{
-			healthregenCooldown = 0.0f;
-			if (health + PLAYER_HEALTH_REGEN_PERSEC > maxHealth)
-				health = maxHealth;
-			else
-				health += PLAYER_HEALTH_REGEN_PERSEC;
-		}
-    }
 
 	if (damageBuffer > 0)
 		damageBuffer -= dt;

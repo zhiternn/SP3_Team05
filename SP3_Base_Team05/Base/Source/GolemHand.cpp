@@ -2,6 +2,7 @@
 #include "GolemHead.h"
 #include "MeshManager.h"
 #include "Player.h"
+#include "Application.h"
 
 GolemRightHand::GolemRightHand() :
 Enemy()
@@ -25,12 +26,15 @@ void GolemRightHand::Init(Vector3 pos)
     destinationCountdown = 5.f;
     speedLimit = 45.f;
     movementSpeed = 800.f;
-    health = 999999;
+    health = 0;
+	maxHealth = health;
     scale.Set(8, 8, 8);
 
     stopdelay = 0.1f;
-    isGrabPlayer = false;
-    targetPlayer = 0.f;
+    speedboost = speedtime = 0.f;
+    handSpeed = 0.f;
+    handLimit = 0.f;
+
 }
 
 void GolemRightHand::Update(double dt)
@@ -41,6 +45,23 @@ void GolemRightHand::Update(double dt)
 
     health = 999999;
 
+    speedboost += dt;
+
+    if (speedboost >= Math::RandFloatMinMax(3.0, 7.0))
+    {
+        movementSpeed += 100;
+        speedLimit += 2;
+
+        speedtime += dt;
+        if (speedtime >= 1.1)
+        {
+            speedLimit = 45.f;
+            movementSpeed = 800.f;
+            speedtime = 0;
+            speedboost = 0;
+        }
+    }
+
     if (!Enemy::UpdateMovement(dt))
     {
         if (target)
@@ -49,10 +70,10 @@ void GolemRightHand::Update(double dt)
             Vector3 offsetDir = (target->pos - pos);
             offsetDir.Set(-offsetDir.y, offsetDir.x, offsetDir.z);
             float offset = combinedRadius * 1.5;
-
+    
             Vector3 destination = (target->pos * 0.7) + offsetDir.Normalized();
             ChangeDestination(MOVETO_TARGET, destination);
-
+    
             if (Reached(destination))
             {
                 stopdelay -= dt;
@@ -65,56 +86,8 @@ void GolemRightHand::Update(double dt)
                 }
             }
         }
-
     }
-}
 
-void GolemRightHand::GrabPlayer(GameObject* b, double dt)
-{
-    //GolemHead* head = dynamic_cast<GolemHead*>(b);
-    //for (int i = 0; i < GameObject::goList.size(); ++i)
-    //{
-    //    if (GameObject::goList[i]->IsActive())
-    //    {
-    //        //GameObject::goList[i]->
-    //        Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
-    //    }
-    //}
-    //ChangeDestination(MOVETO_TARGET, head->GetPosition());
-    //destinationCountdown = 20.f;
-
-    //targetPlayer += (float)dt;
-
-    //if (targetPlayer >= 5)
-    //{
-    //    speedLimit = 545.f;
-    //    movementSpeed = 3800.f;
-    //    if (CheckCollision(b, dt))
-    //    {
-    //        Player* player = dynamic_cast<Player*>(b);
-
-    //        ChangeDestination(MOVETO_TARGET, head->pos);
-    //        Vector3 tempPos(pos.x + front.x * (scale.x + 4), pos.y + front.y * (scale.y + 4), 0);
-    //        player->pos = tempPos;
-
-    //        if (Reached(head->pos))
-    //        {
-    //            destinationCountdown = 0.f;
-    //            targetPlayer = 0;
-    //        }
-    //    }
-    //    if (targetPlayer >= 10)
-    //    {
-    //        targetPlayer = 0;
-    //        destinationCountdown = 0.f;
-    //        speedLimit = 45.f;
-    //        movementSpeed = 800.f;
-    //    }
-    //}
-    //else
-    //{
-    //    
-    //}
 }
 
 void GolemRightHand::SetupMesh()
@@ -128,38 +101,24 @@ void GolemRightHand::SetupMesh()
     mesh = meshList[GEO_GOLEMHAND];
 }
 
-void GolemRightHand::Action(float ratio)
-{
-    //float rand = Math::RandFloatMinMax(0, 1);
-    //if (rand <= ratio)//attack
-    //{
-    //    if (Math::RandInt() % 2)
-    //        //GrabPlayer();
-    //    else
-    //    {
-
-    //    }
-    //}
-
-}
-
 void GolemRightHand::HandleInteraction(GameObject* b, double dt)
 {
     if (CheckCollision(b, dt))
     {
         CollisionResponse(b);
 
-		Entity* entity = dynamic_cast<Entity*>(b);
-		if (entity && this->team != entity->GetTeam())
-        {
-			entity->TakeDamage(ATTACK_COLLIDE_DAMAGE);
-        }
+		if (b->GetType() == GameObject::GO_ENTITY)
+		{
+			Player* player = dynamic_cast<Player*>(b);
+			if (player)
+				player->TakeDamage(20);
+			else
+			{
+				Enemy* enemy = static_cast<Enemy*>(b);
+				enemy->TakeDamage(20);
+			}
+		}
     }
-    //float rand = Math::RandFloatMinMax(0, 1);
-    //if (rand <= 0.7)
-    //{
-    //    GrabPlayer(b, dt);
-    //}
 }
 
 GolemLeftHand::GolemLeftHand() :
@@ -175,7 +134,8 @@ void GolemLeftHand::Init(Vector3 pos)
 {
     Enemy::Init(pos);
     this->pos = pos;
-    health = 999999;
+    health = 0;
+	maxHealth = health;
     active = true;
     type = GameObject::GO_ENTITY;
     team = TEAM_ENEMY;
@@ -188,16 +148,34 @@ void GolemLeftHand::Init(Vector3 pos)
     scale.Set(8, 8, 8);
 
     state = 0;
+    golemLHGun = new MachineGun();
+    golemLHGun->AssignProjectile(new Bullet());
+    golemLHGun->SetFireRate(10.f);
+
+    firegogo = pewpew = 0.f;
 }
 
 void GolemLeftHand::Update(double dt)
 {
     GameObject::Update(dt);
+    golemLHGun->Update(dt);
     if (vel.IsZero() == false)
         front = vel.Normalized();
 
     health = 999999;
 
+    firegogo += dt;
+
+    if (firegogo >= 4)
+    {
+        Shoot();
+        pewpew += dt;
+        if (pewpew >= 0.3)
+        {
+            firegogo = 0;
+            pewpew = 0;
+        }
+    }
     if (!Enemy::UpdateMovement(dt))
     {
         if (target)
@@ -234,6 +212,12 @@ void GolemLeftHand::Update(double dt)
     }
 }
 
+void GolemLeftHand::Shoot()
+{
+    front = target->pos - this->pos;
+    golemLHGun->Fire(this->pos, target->pos - this->pos, team);
+}
+
 void GolemLeftHand::SetupMesh()
 {
     float degree = Math::RadianToDegree(atan2(front.y, front.x));
@@ -244,7 +228,10 @@ void GolemLeftHand::SetupMesh()
     modelStack.Scale(scale.x, scale.y, scale.z);
     mesh = meshList[GEO_GOLEMHAND];
 }
+void GolemLeftHand::TakeDamage(unsigned amount)
+{
 
+}
 void GolemLeftHand::HandleInteraction(GameObject* b, double dt)
 {
     if (CheckCollision(b, dt))

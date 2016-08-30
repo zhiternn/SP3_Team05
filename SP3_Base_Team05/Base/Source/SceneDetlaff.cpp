@@ -28,7 +28,9 @@ void SceneDetlaff::Init()
 	//Clear the list from previous scene
 	GameObject::goList.clear();
 
-	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
+
 	GameObject::goList.push_back(player);
 
 	detlaff = new CDetlaff();

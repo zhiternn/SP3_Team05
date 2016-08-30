@@ -37,6 +37,7 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			}
 
 			proj->Init(pos, dir + offset);
+			proj->Boost(0.7f);
 			proj->SetTeam(team);
 		}
         Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().sound_shotgun);
@@ -67,6 +68,7 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 
 		*proj = *projectileInfo;
 		proj->Init(pos, dir);
+		proj->Boost(0.1f);
 		proj->SetTeam(team);
 
         Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().sound_machinegun);
@@ -114,9 +116,8 @@ void Splitgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			}
 			
 			*proj = *projectileInfo;
-			proj->SetLifetime(2.0f);
-			proj->SetScale(2.0f, 2.0f, 2.0f);
 			proj->Init(pos, rotate * dir);
+			proj->Boost(0.5f);
 			proj->SetTeam(team);
 		}
         Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().sound_splitgun);

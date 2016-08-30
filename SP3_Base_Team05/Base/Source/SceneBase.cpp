@@ -126,16 +126,16 @@ void SceneBase::Init()
 	lights[0].spotDirection.Set(0.2f, -0.2f, 1.f);
 
 	//lights[1].type = Light::LIGHT_POINT;
-		//lights[1].position.Set(1, 1, 0);
-		//lights[1].color.Set(1, 1, 0.5f);
-		//lights[1].power = 0.4f;
-		//lights[1].kC = 1.f;
-		//lights[1].kL = 0.01f;
-		//lights[1].kQ = 0.001f;
-		//lights[1].cosCutoff = cos(Math::DegreeToRadian(45));
-		//lights[1].cosInner = cos(Math::DegreeToRadian(30));
-		//lights[1].exponent = 3.f;
-		//lights[1].spotDirection.Set(0.f, 1.f, 0.f);
+	//lights[1].position.Set(1, 1, 0);
+	//lights[1].color.Set(1, 1, 0.5f);
+	//lights[1].power = 0.4f;
+	//lights[1].kC = 1.f;
+	//lights[1].kL = 0.01f;
+	//lights[1].kQ = 0.001f;
+	//lights[1].cosCutoff = cos(Math::DegreeToRadian(45));
+	//lights[1].cosInner = cos(Math::DegreeToRadian(30));
+	//lights[1].exponent = 3.f;
+	//lights[1].spotDirection.Set(0.f, 1.f, 0.f);
 
 	glUniform1i(m_parameters[U_NUMLIGHTS], 1);
 	glUniform1i(m_parameters[U_TEXT_ENABLED], 0);
@@ -177,7 +177,7 @@ void SceneBase::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//Camera Space View
-	m_orthoHeight = 150;
+	m_orthoHeight = 200;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 	
 	backgroundList.push_back(meshList[GEO_BACKGROUND2]);
@@ -195,12 +195,16 @@ void SceneBase::Init()
 	if (player == NULL)
 		player = new Player();
 
+	player->SetScale(3, 3, 3);
+
+	GamePad = Gamepad(1);
 	glfwController = GLFWController();
 
 	//Get player Controls
 	useController = options.UseControl();
 
 	mainCamera->Include(&(player->pos));
+
 	if (!(glfwController.isConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
@@ -267,6 +271,18 @@ void SceneBase::PlayerController(double dt)
 	{
 		player->ChangeProjectileDown();
 	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_NUMPAD_0))
+	{
+		if (player->IsDead())
+		{
+			player->Init(Vector3(m_worldWidth / 2, m_worldHeight / 2, 0));
+		}
+		player->SetHP(player->maxHealth);
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_NUMPAD_1))
+	{
+		player->inventory->AddCurrency(10000);
+	}
 }
 
 void SceneBase::GetGamePadInput(double dt)
@@ -275,6 +291,9 @@ void SceneBase::GetGamePadInput(double dt)
 	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
 	player->SetFront(lookDir);
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////====================================== GLFW CONTROLLER CONTROLS =====================================/////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Handle Gamepad movement
 	std::cout << glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) << std::endl;
 	//= Y Axis Movement 
@@ -286,9 +305,6 @@ void SceneBase::GetGamePadInput(double dt)
 	{
 		forceDir.y += 5 * glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y);
 	}
-
-
-
 
 	//= X Axis Movement
 	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_X) > 0.2f)
@@ -315,9 +331,7 @@ void SceneBase::GetGamePadInput(double dt)
 		player->ChangeWeaponUp();
 	}
 
-
 	//Shooting
-
 	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) > 0.2f
 		|| glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) < -0.2f
 		|| glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y) > 0.2f
@@ -334,6 +348,9 @@ void SceneBase::GetGamePadInput(double dt)
 		forceDir.Normalize();
 		player->Move(forceDir, dt);
 	}
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////======================================== GLFW CONTROLLER END ========================================/////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
 
 void SceneBase::Update(double dt)
@@ -630,37 +647,74 @@ void SceneBase::RenderMinimap(float zoom)
 	{
 		if (GameObject::goList[i]->IsActive())
 		{
-			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
-			if (entity && entity->IsActive())
+			GameObject *go = GameObject::goList[i];
+			if (go->GetType() == GameObject::GO_WALL)
 			{
 				modelStack.PushMatrix();
-				Vector3 pos = entity->pos;
+				Vector3 pos = go->pos;
 				pos.x -= player->pos.x;// Move to player pos
 				pos.y -= player->pos.y;// Move to player pos
 				//sphere space == radius = 1
 				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
 				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
-				Vector3 scale = entity->GetScale();
+				Vector3 scale = go->GetScale();
 				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
 				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
 				modelStack.Translate(pos.x, pos.y, pos.z);
-				modelStack.Scale(scale.x, scale.y, scale.z);
 
-				switch (entity->GetEntityType())
+				switch (go->GetCollider().type)
 				{
-				case Entity::ENTITY_BOSS_MAIN:
-					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+				case Collider::COLLIDER_BALL:
+					modelStack.Scale(scale.x, scale.y, scale.z);
+					RenderMesh(meshList[GEO_SPHERE], false);
 					break;
-				case Entity::ENTITY_BOSS_BODY:
-					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
-					break;
-				case Entity::ENTITY_PLAYER:
-					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+				case Collider::COLLIDER_BOX:
+				{
+					float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
+					modelStack.Rotate(degree, 0, 0, 1);
+					modelStack.Scale(scale.x, scale.y, scale.z);
+					RenderMesh(meshList[GEO_QUAD], false);
+				}
 					break;
 				default:break;
 				}
 
 				modelStack.PopMatrix();
+			}
+			else
+			{
+				Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
+				if (entity && entity->IsActive())
+				{
+					modelStack.PushMatrix();
+					Vector3 pos = entity->pos;
+					pos.x -= player->pos.x;// Move to player pos
+					pos.y -= player->pos.y;// Move to player pos
+					//sphere space == radius = 1
+					pos.x /= m_worldWidth * zoom; //convert to regular sphere space
+					pos.y /= m_worldHeight * zoom;//convert to regular sphere space
+					Vector3 scale = entity->GetScale();
+					scale.x /= m_worldWidth * zoom; //convert to regular sphere space
+					scale.y /= m_worldHeight * zoom;//convert to regular sphere space
+					modelStack.Translate(pos.x, pos.y, pos.z);
+					modelStack.Scale(scale.x, scale.y, scale.z);
+
+					switch (entity->GetEntityType())
+					{
+					case Entity::ENTITY_BOSS_MAIN:
+						RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+						break;
+					case Entity::ENTITY_BOSS_BODY:
+						RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+						break;
+					case Entity::ENTITY_PLAYER:
+						RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+						break;
+					default:break;
+					}
+
+					modelStack.PopMatrix();
+				}
 			}
 		}
 	}
@@ -678,8 +732,9 @@ void SceneBase::RenderHUD()
 	modelStack.PushMatrix();
 	modelStack.Translate(70, 50, 0);
 	modelStack.Scale(18, 18, 1);
-	RenderMinimap(1.5f);
+	RenderMinimap(1.0f);
 	modelStack.PopMatrix();
+
 
 	if (!((glfwController.isConnected() && useController)))
 	{
@@ -702,51 +757,53 @@ void SceneBase::RenderHUD()
 	ss << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
 
+	RenderUI(meshList[GEO_UI_BACKGROUND], 7, 0, 60, 15, false);
+
 	ss.str("");
 	ss << "Weapon: ";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
 	switch (player->weapon->weapon_type)
 	{
 	case Weapon::W_SHOTGUN:
-		RenderUI(meshList[GEO_WEAPON_SHOTGUN], 7, 25, 58.5f, 1, false);
+		RenderUI(meshList[GEO_WEAPON_SHOTGUN], 6, 17, 58.f, 1, false);
 		break;
 	case Weapon::W_MACHINEGUN:
-		RenderUI(meshList[GEO_WEAPON_MACHINEGUN], 7, 25, 58.5f, 1, false);
+		RenderUI(meshList[GEO_WEAPON_MACHINEGUN], 6, 17, 58.f, 1, false);
 		break;
 	case Weapon::W_SPLITGUN:
-		RenderUI(meshList[GEO_WEAPON_SPLITGUN], 7, 25, 58.5f, 1, false);
+		RenderUI(meshList[GEO_WEAPON_SPLITGUN], 6, 17, 58.f, 1, false);
 		break;
 	}
 
 	ss.str("");
-	ss << "Bullet: ";
+	ss << "Projectile: ";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 22, 57);
 	switch (player->projectile->GetProjType())
 	{
 	case CProjectile::BULLET:
-		ss << "Normal";
+		RenderUI(meshList[GEO_PROJECTILE_BULLET], 4, 44, 58.f, 1, false);
 		break;
 	case CProjectile::HOOK:
-		ss << "Hook";
+		RenderUI(meshList[GEO_PROJECTILE_HOOK], 4, 44, 58.f, 1, false);
 		break;
 	case CProjectile::TRAP:
-		ss << "Trap";
+		RenderUI(meshList[GEO_PROJECTILE_TRAP], 4, 44, 58.f, 1, false);
 		break;
 	}
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
 
 	ss.str("");
 	ss.precision(1);
 	ss << "HP";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
-	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 10) + 11, 55.5f, player->maxHealth / 10, false);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 55.5f, player->GetHP() / 10, false);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 53);
+	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 10) + 11, 54.5f, player->maxHealth / 10, false);
+	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 54.5f, player->GetHP() / 10, false);
 
 	ss.str("");
 	ss.precision(2);
 	ss << "Dash";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * player->maxHealth / 10) + 11, 52.5f, DASH_COOLDOWN * player->maxHealth / 10, false);
-	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10, false);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 50);
+	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * player->maxHealth / 10) + 11, 51.5f, DASH_COOLDOWN * player->maxHealth / 10, false);
+	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10) + 11, 51.5f, (DASH_COOLDOWN - player->cooldownTimer) * player->maxHealth / 10, false);
 }
 
 void SceneBase::RenderGameObjects()
@@ -759,7 +816,7 @@ void SceneBase::RenderGameObjects()
 
 			GameObject::goList[i]->SetupMesh();
 			if (GameObject::goList[i]->mesh)
-				RenderMesh(GameObject::goList[i]->mesh, GameObject::goList[i]->mesh->enableLight);
+				RenderMesh(GameObject::goList[i]->mesh, false);
 
 			modelStack.PopMatrix();
 			Enemy* enemy = dynamic_cast<Enemy*>(GameObject::goList[i]);
@@ -776,7 +833,7 @@ void SceneBase::RenderGameObjects()
 
 						modelStack.PushMatrix();
 						modelStack.Scale(enemy->GetScale().x * 2 * healthRatio, 5, 1);
-						modelStack.Translate(0.5f, 0.5f, 0);
+						modelStack.Translate(0.5f, 0.5f, 1);
 						RenderMesh(meshList[GEO_HEALTH], false);
 						modelStack.PopMatrix();
 
@@ -791,12 +848,25 @@ void SceneBase::RenderGameObjects()
 				}
 				if (enemy->IsCapturing())
 				{
+					float healthRatio = (float)enemy->GetHP() / (float)enemy->GetMaxHP();
+					float captureRatio = (float)enemy->GetCaptureRate() / (float)enemy->GetHP();
 					modelStack.PushMatrix();
-					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 7, 50);
-					modelStack.Scale(2, 5, 2);
-					modelStack.Scale(enemy->GetCaptureRate() / 10.f, 1, 1);
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y + 5.0f, 50);
+					modelStack.Translate(-enemy->GetScale().x, 0, 0);
+
+					modelStack.PushMatrix();
+					modelStack.Scale((enemy->GetScale().x * 2 * healthRatio) * captureRatio, 5, 1);
+					modelStack.Translate(0.5f, 0.5f, 1);
 					RenderMesh(meshList[GEO_CAPTURE], false);
 					modelStack.PopMatrix();
+
+					modelStack.PopMatrix();
+					//modelStack.PushMatrix();
+					//modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 7, 50);
+					//modelStack.Scale(2, 5, 2);
+					//modelStack.Scale(enemy->GetCaptureRate() / 10.f, 1, 1);
+					//RenderMesh(meshList[GEO_CAPTURE], false);
+					//modelStack.PopMatrix();
 				}
 			}
 		}
@@ -862,7 +932,7 @@ void SceneBase::UpdateGameObjects(double dt)
 				for (int j = 0; j < GameObject::goList.size(); ++j)
 				{
 					GameObject *go2 = GameObject::goList[j];
-					if (go2->IsActive() && go2->GetType() != GameObject::GO_PROJECTILE)
+					if (go2->IsActive() && go->GetTeam() != go2->GetTeam() && go2->GetType() != GameObject::GO_PROJECTILE)
 					{
 						go->HandleInteraction(go2, dt);
 					}

@@ -24,7 +24,7 @@ void GolemHead::Init(Vector3 pos)
     isDead = false;
     regendelay = 0;
     golemGun = new Splitgun(360.f, 18);
-    golemGun->AssignProjectile(new Bullet());
+    golemGun->AssignProjectile(new Hook());
     golemGun->SetFireRate(0.1f);
     scale.Set(12, 12, 12);
 }
@@ -36,7 +36,7 @@ GolemHead::~GolemHead()
 
 void GolemHead::Update(double dt)
 {
-    GameObject::Update(dt);
+    Enemy::Update(dt);
     golemGun->Update(dt);
     if (vel.IsZero() == false)
         front = vel.Normalized();
@@ -105,14 +105,21 @@ void GolemHead::GolemShoot(Vector3 dir)
 
 void GolemHead::HandleInteraction(GameObject* b, double dt)
 {
+	Enemy::HandleInteraction(b, dt);
     if (CheckCollision(b, dt))
     {
         CollisionResponse(b);
 
-		Entity* entity = dynamic_cast<Entity*>(b);
-		if (entity && this->team != entity->GetTeam())
+		if (b->GetType() == GameObject::GO_ENTITY)
 		{
-			entity->TakeDamage(20);
+			Player* player = dynamic_cast<Player*>(b);
+			if (player)
+				player->TakeDamage(20);
+			else
+			{
+				Enemy* enemy = static_cast<Enemy*>(b);
+				enemy->TakeDamage(20);
+			}
 		}
     }
 }

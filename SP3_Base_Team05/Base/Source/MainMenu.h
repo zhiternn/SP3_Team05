@@ -8,6 +8,9 @@
 #include "OptionManager.h"
 
 #include "ButtonPosition.h"
+#include "Inventory.h"
+#include "WeaponList.h"
+#include "ProjectileList.h"
 
 #include <vector>
 
@@ -23,6 +26,7 @@ class MainMenu : public SceneBase
         MENU_INSTRUCTIONS,
         MENU_OPTIONS,
         MENU_CREDITS,
+        MENU_LEVEL,
         MENU_EXIT,
 
         MENU_TOTAL
@@ -47,6 +51,7 @@ public:
     void HelpPage();
     void OptionsPage();
     void CreditsPage();
+    void LevelUpPage();
     void LevelSelectPage();
 
     void confirmExit();
@@ -55,11 +60,20 @@ public:
     void RenderPlayButton();
     void RenderOptionButton();
     void RenderCreditButton();
+    void RenderLevelUpButton();
     void RenderExitButton();
 
     void MusicBGMButton();
     void MusicVFXButton();
     void ControllerButton();
+
+    void UpgradeMG();
+    void UpgradeSHG();
+    void UpgradeSPG();
+
+    void UpgradeBullet();
+    void UpgradeTrap();
+    void UpgradeHook();
 
 private:
 
@@ -78,17 +92,7 @@ private:
     bool isHover, isClicked;
     float continuetime;
 
-    ButtonPosition b_Play;
-    ButtonPosition b_Continue;
-    ButtonPosition b_Option;
-    ButtonPosition b_Credit;
-    ButtonPosition b_Exit;
-    ButtonPosition b_Back;
-    ButtonPosition b_Yes;
-    ButtonPosition b_No;
-
-    ButtonPosition b_On;
-    ButtonPosition b_Off;
+    ButtonPosition b_Play, b_Continue, b_Option, b_Credit, b_LevelUp, b_Exit, b_Back, b_Yes, b_No, b_On, b_Off, upgradeMG, upgradeSHG, upgradeSPG, upgradeBullet, upgradeTrap, upgradeHook;
 
     bool MusicOn, SoundOn, ControllerOn;
 };
