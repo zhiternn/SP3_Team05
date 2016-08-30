@@ -24,9 +24,10 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 	//health;
 	//captureRatio;
 	actionRate = ACTION_TIMER_MAX;
-	health = 1000;
+
+	health = 2000;
 	maxHealth = health;
-	this->mass = 30.0f;
+	this->mass = 10.0f;
 
 	isRecovering = false;
 	isRaging = false;
@@ -35,11 +36,11 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 
 	for (int i = 0; i < bodyCount; ++i)
 	{
-		SnakeBody* body2 = new SnakeBody();
-		body2->Init(this->pos, movementSpeed * 10.0f, speedLimit);
+		SnakeBody* body = new SnakeBody();
+		body->Init(this->pos, movementSpeed * 10.0f, speedLimit);
 
-		GameObject::goList.push_back(body2);
-		bodyList.push_back(body2);
+		GameObject::goList.push_back(body);
+		bodyList.push_back(body);
 	}
 }
 
@@ -122,6 +123,8 @@ void SnakeHead::Update(double dt)
 			}
 			else
 			{
+				(*it)->SetMovementSpeed(movementSpeed);
+				(*it)->SetSpeedLimit(speedLimit);
 				it = bodyList.erase(it);
 			}
 		}
@@ -138,10 +141,9 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 			if (CheckCollision(b, dt))//if touching dead body part
 			{
 				body->Init(body->pos, body->GetMovementSpeed(), body->GetSpeedLimit());
-				this->health += 100;
+				this->health += 50;
 				bodyList.push_back(body);
 			}
-
 			if (isRecovering)
 			{
 				body->GoTo(this->pos, dt);
@@ -165,9 +167,8 @@ void SnakeHead::Action(float ratio)
 	float rand = Math::RandFloatMinMax(0, 1);
 	if (rand <= ratio)//attack
 	{
-		int hehe = Math::RandInt() % 2;
-		std::cout << hehe << std::endl;
-		if (isCapturing || hehe)
+		int halfChance = Math::RandInt() % 2;
+		if (isCapturing || halfChance)
 			Enrage();
 		else
 			Shoot();
@@ -181,7 +182,7 @@ void SnakeHead::Action(float ratio)
 void SnakeHead::Recover()
 {
 	isRecovering = true;
-	actionLifetime = 5.0f * (bodyList.size() / maxBodyCount) * 10;
+	actionLifetime = 2.0f + 10 * (1 - (bodyList.size() / maxBodyCount));
 }
 
 void SnakeHead::Shoot()

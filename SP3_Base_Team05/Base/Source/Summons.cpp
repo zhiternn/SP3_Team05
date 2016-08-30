@@ -27,7 +27,6 @@ void Summons::Init(Vector3 pos)
 void Summons::Update(double dt)
 {
 	GameObject::Update(dt);
-	std::cout << this->captureRate << std::endl;
 	weapon->Update(dt);
 
 	if (vel.LengthSquared() > speedLimit * speedLimit)

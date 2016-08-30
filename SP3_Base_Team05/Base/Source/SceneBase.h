@@ -155,7 +155,7 @@ protected:
 	std::vector<Mesh*> backgroundList;
 
 	//Create the Gamepad object
-	Gamepad GamePad;
+	//Gamepad GamePad;
 	Vector3 controllerStick_Pos;
 	Vector3 controllerStick_WorldPos;
 	Vector3 stickDir;

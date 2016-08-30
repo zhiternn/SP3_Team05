@@ -19,7 +19,7 @@ void Trap::Init(Vector3 pos)
 	this->mass = 0;
 	this->vel.SetZero();
 	lifetime = 1.0f;
-	scale.Set(radius, radius, 2);
+	scale.Set(radius, radius, radius);
 	collider.type = Collider::COLLIDER_BALL;
 	collider.isTrigger = true;
 }
@@ -44,9 +44,8 @@ void Trap::HandleInteraction(GameObject* b, double dt)
 	if (distanceBetween <= combinedRadius * combinedRadius)
 	{
 		float halfSpeed = enemy->GetSpeedLimit() * 0.5f;
-		if (enemy->GetVelocity().LengthSquared() >= halfSpeed * halfSpeed)
-
-			enemy->SetVelocity(enemy->GetVelocity() * 0.9f);
+		if (enemy->GetVelocity().LengthSquared() > halfSpeed * halfSpeed)
+			enemy->SetVelocity(enemy->GetVelocity().Normalized() * halfSpeed);
 
 		enemy->SetCapturing(true);
 		this->lifetime = 1.0f;

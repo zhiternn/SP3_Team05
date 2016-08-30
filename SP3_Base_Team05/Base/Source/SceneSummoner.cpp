@@ -42,15 +42,15 @@ void SceneSummoner::Init()
 	summoner->Init(Vector3(m_worldWidth * 0.5f + 5, m_worldHeight * 0.5f, 0));
 
 	mainCamera->Include(&(player->pos));
-	if (!(GamePad.IsConnected() && useController))
+	//if (!(GamePad.IsConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
 		Keyboard = false;
 	}
-	else
+	//else
 	{
-		mainCamera->Include(&controllerStick_Pos);
-		Keyboard = true;
+		//mainCamera->Include(&controllerStick_Pos);
+		//Keyboard = true;
 	}
 
 }
@@ -70,19 +70,19 @@ void SceneSummoner::Update(double dt)
 	SceneBase::Update(dt);
 
 	//Update Camera target scheme if Controller is plugged in
-	if (GamePad.IsConnected() && Keyboard)
-	{
-		Keyboard = false;
+	//if (GamePad.IsConnected() && Keyboard)
+	//{
+	//	Keyboard = false;
 
-		mainCamera->entityList.pop_back();
-		mainCamera->Include(&controllerStick_Pos);
-	}
-	else if (!(GamePad.IsConnected()))
-	{
-		Keyboard = true;
-		mainCamera->entityList.pop_back();
-		mainCamera->Include(&mousePos_worldBased);
-	}
+	//	mainCamera->entityList.pop_back();
+	//	mainCamera->Include(&controllerStick_Pos);
+	//}
+	//else if (!(GamePad.IsConnected()))
+	//{
+	//	Keyboard = true;
+	//	mainCamera->entityList.pop_back();
+	//	mainCamera->Include(&mousePos_worldBased);
+	//}
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);

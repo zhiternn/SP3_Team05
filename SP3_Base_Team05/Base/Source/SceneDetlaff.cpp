@@ -64,13 +64,12 @@ void SceneDetlaff::Init()
 	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
 	enemyMovementDelay = ENEMY_MOVE_DELAY;
 
-
 	if (!(glfwController.isConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
 		Keyboard = false;
 	}
-	else
+	//else
 	{
 		mainCamera->Include(&controllerStick_Pos);
 		Keyboard = true;
@@ -169,18 +168,6 @@ void SceneDetlaff::GetGamePadInput(double dt)
 	{
 		player->Dash(forceDir, dt);
 	}
-	
-
-	//= Update Movement
-	if (forceDir.IsZero() == false)
-	{
-		forceDir.Normalize();
-		player->Move(forceDir, dt);
-	}
-
-	
-	//Change Weapons
-	//= Left Bumper
 
 	if (glfwController.GetJoyStickButtonPressed(GLFWController::CONTROLLER_BUTTON::L_SHOULDER) != NULL)
 	{
@@ -205,7 +192,8 @@ void SceneDetlaff::GetGamePadInput(double dt)
 		player->Shoot(stickDir.Normalized());
 	}
 	
-
+	////Refresh Gamepad
+	//GamePad.RefreshState();
 }
 
 void SceneDetlaff::Update(double dt)
@@ -264,28 +252,13 @@ void SceneDetlaff::Update(double dt)
 		if (useController && glfwController.isConnected())
 		{
 			//Handle Controller Input 
-			GetGamePadInput(dt);
+			//GetGamePadInput(dt);
 		}
-		else
+		//else
 		{
 			//Handle Keyboard and Mouse input
 			PlayerController(dt);
 		}
-	}
-
-	//Update Camera target scheme if Controller is plugged in
-	if (GamePad.IsConnected() && Keyboard)
-	{
-		Keyboard = false;
-
-		mainCamera->entityList.pop_back();
-		mainCamera->Include(&controllerStick_Pos);
-	}
-	else if (!(GamePad.IsConnected()))
-	{
-		Keyboard = true;
-		mainCamera->entityList.pop_back();
-		mainCamera->Include(&mousePos_worldBased);
 	}
 }
 

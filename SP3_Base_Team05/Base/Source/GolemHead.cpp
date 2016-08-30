@@ -85,7 +85,6 @@ void GolemHead::Update(double dt)
 
         regendelay = 0;
     }
-    //std::cout << health << std::endl;
     // No Movement on Head
     GolemShoot(target->GetFront());
 }
