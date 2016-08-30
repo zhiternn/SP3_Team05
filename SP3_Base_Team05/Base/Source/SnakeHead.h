@@ -6,8 +6,8 @@
 
 #include <vector>
 
-static const float ACTION_TIMER_MIN = 5.0f;
-static const float ACTION_TIMER_MAX = 8.0f;
+static const float ACTION_TIMER_MIN = 3.0f;
+static const float ACTION_TIMER_MAX = 6.0f;
 static const int ATTACK_RAM_DAMAGE = 20;
 
 class SnakeHead : public Enemy

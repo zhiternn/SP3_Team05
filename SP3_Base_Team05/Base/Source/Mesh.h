@@ -29,6 +29,7 @@ public:
 	Material material;
 	unsigned textureID;
 	unsigned textureArray[MAX_TEXTURES];
+	bool enableLight;
 };
 
 #endif

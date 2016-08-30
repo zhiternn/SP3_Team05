@@ -71,7 +71,6 @@ void SceneSnakeBoss::Update(double dt)
 	{
 		player->SetCurrency(100000);
 	}
-	std::cout << player->GetCurrency() << std::endl;
 }
 
 void SceneSnakeBoss::Render()

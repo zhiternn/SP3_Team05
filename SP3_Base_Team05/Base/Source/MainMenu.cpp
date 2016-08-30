@@ -87,7 +87,6 @@ void MainMenu::Update(double dt)
             0
             );
     }
-    //std::cout << mousePos_worldBased << std::endl;
     //-50 to 50 x, -65 to 65 y
 
     if (state == MENU_INSTRUCTIONS)
@@ -228,7 +227,6 @@ void MainMenu::RenderHUD()
 void MainMenu::MainMenuPage()
 {
     //PLAY BUTTON
-    //std::cout << mousePos_screenBased << std::endl;
     float boxposscale = 0.6;
     float textposscale = 0.575;
 
@@ -293,7 +291,6 @@ void MainMenu::MainMenuPage()
 
 
         //OPTION BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Option.minX && mousePos_screenBased.x <= b_Option.maxX
             && mousePos_screenBased.y >= b_Option.minY && mousePos_screenBased.y <= b_Option.maxY)
         {
@@ -344,7 +341,6 @@ void MainMenu::MainMenuPage()
             RenderOptionButton();
 
         //CREDIT BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Credit.minX && mousePos_screenBased.x <= b_Credit.maxX
             && mousePos_screenBased.y >= b_Credit.minY && mousePos_screenBased.y <= b_Credit.maxY)
         {
@@ -395,7 +391,6 @@ void MainMenu::MainMenuPage()
             RenderCreditButton();
 
         //EXIT BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Exit.minX && mousePos_screenBased.x <= b_Exit.maxX
             && mousePos_screenBased.y >= b_Exit.minY && mousePos_screenBased.y <= b_Exit.maxY)
         {
@@ -465,7 +460,6 @@ void MainMenu::LevelSelectPage()
     RenderMesh(meshList[GEO_MENU_LVLSELECT], false);
     modelStack.PopMatrix();
     //PLAY BUTTON
-    //std::cout << mousePos_screenBased << std::endl;
     float boxposscale = 0.6;
     float textposscale = 0.575;
 
@@ -541,7 +535,6 @@ void MainMenu::LevelSelectPage()
 
 
         //OPTION BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Option.minX && mousePos_screenBased.x <= b_Option.maxX
             && mousePos_screenBased.y >= b_Option.minY && mousePos_screenBased.y <= b_Option.maxY)
         {
@@ -603,7 +596,6 @@ void MainMenu::LevelSelectPage()
             RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 0, (m_orthoHeight * (0.425)) * (60 / m_orthoHeight));
         }
         //CREDIT BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Credit.minX && mousePos_screenBased.x <= b_Credit.maxX
             && mousePos_screenBased.y >= b_Credit.minY && mousePos_screenBased.y <= b_Credit.maxY)
         {
@@ -666,7 +658,6 @@ void MainMenu::LevelSelectPage()
         }
 
         //EXIT BUTTON
-        //std::cout << mousePos_screenBased << std::endl;
         if (mousePos_screenBased.x >= b_Exit.minX && mousePos_screenBased.x <= b_Exit.maxX
             && mousePos_screenBased.y >= b_Exit.minY && mousePos_screenBased.y <= b_Exit.maxY)
         {

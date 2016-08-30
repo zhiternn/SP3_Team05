@@ -66,11 +66,11 @@ void SceneDetlaff::Init()
 	enemyMovementDelay = ENEMY_MOVE_DELAY;
 
 
-	if (!(GamePad.IsConnected() && useController))
+	//if (!(GamePad.IsConnected() && useController))
 	{
-		mainCamera->Include(&mousePos_worldBased);
+		//mainCamera->Include(&mousePos_worldBased);
 	}
-	else
+	//else
 	{
 		mainCamera->Include(&controllerStick_Pos);
 	}
@@ -161,71 +161,70 @@ void SceneDetlaff::PlayerController(double dt)
 
 void SceneDetlaff::GetGamePadInput(double dt)
 {
-	Vector3 forceDir;
-	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
-	player->SetFront(lookDir);
-	
-	//Update Gamepad
-	GamePad.Update();
-	
-	//Handle Gamepad movement
-	
-	//= Y Axis Movement
-	if (GamePad.Left_Stick_Y() > 0.2f)
-	{
-		forceDir.y += 5 * GamePad.Left_Stick_Y();
-	}
-	if (GamePad.Left_Stick_Y() < -0.2f)
-	{
-		forceDir.y += 5 * GamePad.Left_Stick_Y();
-	}
+	//Vector3 forceDir;
+	//Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
+	//player->SetFront(lookDir);
+	//
+	////Update Gamepad
+	//GamePad.Update();
+	//
+	////Handle Gamepad movement
+	//
+	////= Y Axis Movement
+	//if (GamePad.Left_Stick_Y() > 0.2f)
+	//{
+	//	forceDir.y += 5 * GamePad.Left_Stick_Y();
+	//}
+	//if (GamePad.Left_Stick_Y() < -0.2f)
+	//{
+	//	forceDir.y += 5 * GamePad.Left_Stick_Y();
+	//}
 
-	//= X Axis Movement
-	if (GamePad.Left_Stick_X() > 0.2f)
-	{
-		forceDir.x += 5 * GamePad.Left_Stick_X();
-	}
-	if (GamePad.Left_Stick_X() < -0.2f)
-	{
-		forceDir.x += 5 * GamePad.Left_Stick_X();
-	}
+	////= X Axis Movement
+	//if (GamePad.Left_Stick_X() > 0.2f)
+	//{
+	//	forceDir.x += 5 * GamePad.Left_Stick_X();
+	//}
+	//if (GamePad.Left_Stick_X() < -0.2f)
+	//{
+	//	forceDir.x += 5 * GamePad.Left_Stick_X();
+	//}
 
-	//= Dash
-	if (GamePad.LeftTrigger() > 0.2f)
-	{
-		player->Dash(forceDir, dt);
-	}
+	////= Dash
+	//if (GamePad.LeftTrigger() > 0.2f)
+	//{
+	//	player->Dash(forceDir, dt);
+	//}
 
-	//= Update Movement
-	if (forceDir.IsZero() == false)
-	{
-		forceDir.Normalize();
-		player->Move(forceDir, dt);
-	}
+	////= Update Movement
+	//if (forceDir.IsZero() == false)
+	//{
+	//	forceDir.Normalize();
+	//	player->Move(forceDir, dt);
+	//}
 
-	
-	//Change Weapons
-	//= Left Bumper
-	if (GamePad.GetButtonDown(8) > 0.5f)
-	{
-		player->ChangeProjectileUp();
-	}
-	//= Right Bumper
-	if (GamePad.GetButtonDown(9) > 0.5f)
-	{
-		player->ChangeWeaponUp();
-	}
+	//
+	////Change Weapons
+	////= Left Bumper
+	//if (GamePad.GetButtonDown(8) > 0.5f)
+	//{
+	//	player->ChangeProjectileUp();
+	//}
+	////= Right Bumper
+	//if (GamePad.GetButtonDown(9) > 0.5f)
+	//{
+	//	player->ChangeWeaponUp();
+	//}
 
-	//Shooting
-	if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
-	{
-		stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
-		player->Shoot(stickDir.Normalized());
-	}
+	////Shooting
+	//if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
+	//{
+	//	stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
+	//	player->Shoot(stickDir.Normalized());
+	//}
 
-	//Refresh Gamepad
-	GamePad.RefreshState();
-
+	////Refresh Gamepad
+	//GamePad.RefreshState();
 }
 
 void SceneDetlaff::Update(double dt)
@@ -247,11 +246,11 @@ void SceneDetlaff::Update(double dt)
 			);
 	}
 
-	controllerStick_Pos.Set((GamePad.Right_Stick_X() * 100) + player->pos.x, (GamePad.Right_Stick_Y() * 100) + player->pos.y, 0);
-	controllerStick_WorldPos.Set(
-		GamePad.Right_Stick_X() + mainCamera->target.x - (m_orthoWidth * 0.5f),
-		GamePad.Right_Stick_Y() + mainCamera->target.y - (m_orthoHeight * 0.5f),
-		0);
+	//controllerStick_Pos.Set((GamePad.Right_Stick_X() * 100) + player->pos.x, (GamePad.Right_Stick_Y() * 100) + player->pos.y, 0);
+	//controllerStick_WorldPos.Set(
+	//	GamePad.Right_Stick_X() + mainCamera->target.x - (m_orthoWidth * 0.5f),
+	//	GamePad.Right_Stick_Y() + mainCamera->target.y - (m_orthoHeight * 0.5f),
+	//	0);
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -281,12 +280,12 @@ void SceneDetlaff::Update(double dt)
 	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 	{
 		//Check if Gamepad is connected for controller input
-		if (useController && GamePad.IsConnected())
+		//if (useController && GamePad.IsConnected())
 		{
 			//Handle Controller Input 
-			GetGamePadInput(dt);
+			//GetGamePadInput(dt);
 		}
-		else
+		//else
 		{
 			//Handle Keyboard and Mouse input
 			PlayerController(dt);
@@ -485,7 +484,7 @@ void SceneDetlaff::RenderHUD()
 	RenderMinimap(1.0f);
 	modelStack.PopMatrix();
 
-	if (!(useController && GamePad.IsConnected()))
+	//if (!(useController && GamePad.IsConnected()))
 	{
 		//Render the crosshair
 		modelStack.PushMatrix();

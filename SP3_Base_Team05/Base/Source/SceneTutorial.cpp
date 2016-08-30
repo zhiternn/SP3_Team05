@@ -57,13 +57,13 @@ void SceneTutorial::Init()
 
 
 	mainCamera->Include(&player->pos);
-	if (!(GamePad.IsConnected() && useController))
+	//if (!(GamePad.IsConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
 	}
-	else
+	//else
 	{
-		mainCamera->Include(&controllerStick_Pos);
+		//mainCamera->Include(&controllerStick_Pos);
 	}
 
 	pauseGame = false;
@@ -232,68 +232,68 @@ void SceneTutorial::PlayerController(double dt)
 
 void SceneTutorial::GetGamePadInput(double dt)
 {
-	Vector3 forceDir;
-	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
-	player->SetFront(lookDir);
+	//Vector3 forceDir;
+	//Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
+	//player->SetFront(lookDir);
 
-	//Update Gamepad
-	GamePad.Update();
+	////Update Gamepad
+	////GamePad.Update();
 
-	//Handle Gamepad movement
+	////Handle Gamepad movement
 
-	//= Y Axis Movement
-	if (GamePad.Left_Stick_Y() > 0.2f)
-	{
-		forceDir.y += 5 * GamePad.Left_Stick_Y();
-	}
-	if (GamePad.Left_Stick_Y() < -0.2f)
-	{
-		forceDir.y += 5 * GamePad.Left_Stick_Y();
-	}
+	////= Y Axis Movement
+	//if (GamePad.Left_Stick_Y() > 0.2f)
+	//{
+	//	forceDir.y += 5 * GamePad.Left_Stick_Y();
+	//}
+	//if (GamePad.Left_Stick_Y() < -0.2f)
+	//{
+	//	forceDir.y += 5 * GamePad.Left_Stick_Y();
+	//}
 
-	//= X Axis Movement
-	if (GamePad.Left_Stick_X() > 0.2f)
-	{
-		forceDir.x += 5 * GamePad.Left_Stick_X();
-	}
-	if (GamePad.Left_Stick_X() < -0.2f)
-	{
-		forceDir.x += 5 * GamePad.Left_Stick_X();
-	}
+	////= X Axis Movement
+	//if (GamePad.Left_Stick_X() > 0.2f)
+	//{
+	//	forceDir.x += 5 * GamePad.Left_Stick_X();
+	//}
+	//if (GamePad.Left_Stick_X() < -0.2f)
+	//{
+	//	forceDir.x += 5 * GamePad.Left_Stick_X();
+	//}
 
-	//= Dash
-	if (GamePad.LeftTrigger() > 0.2f)
-	{
-		player->Dash(forceDir, dt);
-	}
+	////= Dash
+	//if (GamePad.LeftTrigger() > 0.2f)
+	//{
+	//	player->Dash(forceDir, dt);
+	//}
 
-	//= Update Movement
-	if (forceDir.IsZero() == false)
-	{
-		forceDir.Normalize();
-		player->Move(forceDir, dt);
-	}
+	////= Update Movement
+	//if (forceDir.IsZero() == false)
+	//{
+	//	forceDir.Normalize();
+	//	player->Move(forceDir, dt);
+	//}
 
 
-	//Change Weapons
-	if (GamePad.GetButtonDown(8) > 0.5f)
-	{
-		player->ChangeProjectileUp();
-	}
-	if (GamePad.GetButtonDown(9) > 0.5f)
-	{
-		player->ChangeWeaponUp();
-	}
+	////Change Weapons
+	//if (GamePad.GetButtonDown(8) > 0.5f)
+	//{
+	//	player->ChangeProjectileUp();
+	//}
+	//if (GamePad.GetButtonDown(9) > 0.5f)
+	//{
+	//	player->ChangeWeaponUp();
+	//}
 
-	//Shooting
-	if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
-	{
-		stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
-		player->Shoot(stickDir.Normalized());
-	}
+	////Shooting
+	//if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
+	//{
+	//	stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
+	//	player->Shoot(stickDir.Normalized());
+	//}
 
-	//Refresh Gamepad
-	GamePad.RefreshState();
+	////Refresh Gamepad
+	//GamePad.RefreshState();
 
 }
 
@@ -354,12 +354,12 @@ void SceneTutorial::Update(double dt)
 		if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
 		{
 			//Check if Gamepad is connected for controller input
-			if (useController && GamePad.IsConnected())
+			//if (useController && GamePad.IsConnected())
 			{
 				//Handle Controller Input
-				GetGamePadInput(dt);
+				//GetGamePadInput(dt);
 			}
-			else
+			//else
 			{
 				//Handle Keyboard and Mouse input
 				PlayerController(dt);
@@ -558,7 +558,7 @@ void SceneTutorial::RenderHUD()
 	RenderMinimap(1.0f);
 	modelStack.PopMatrix();
 
-	if (!((GamePad.IsConnected() && useController)))
+	//if (!((GamePad.IsConnected() && useController)))
 	{
 		// Render the crosshair
 		modelStack.PushMatrix();
