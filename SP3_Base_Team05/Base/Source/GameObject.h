@@ -7,7 +7,7 @@
 
 #include <vector>
 
-static const float GAME_SPEED_LIMIT = 50.0f;
+static const float GAME_SPEED_LIMIT = 250.0f;
 
 class GameObject
 {
@@ -15,6 +15,7 @@ public:
 	enum GAMEOBJECT_TYPE
 	{
 		GO_ENVIRONMENT = 0,
+		GO_WALL,
 		GO_PROJECTILE,
 		GO_ENTITY,
 

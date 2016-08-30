@@ -41,6 +41,9 @@ void SnakeBody::Init(Vector3 pos, float speed, float speedLimit)
 
 void SnakeBody::Update(double dt)
 {
+	if (this->vel.LengthSquared() > speedLimit * speedLimit)
+		this->vel = this->vel.Normalized() * speedLimit;
+
 	GameObject::Update(dt);
 
 	weapon->Update(dt);
@@ -61,16 +64,21 @@ void SnakeBody::HandleInteraction(GameObject* b, double dt)
 	if (body)//skips checks against living body
 		return;
 
-	Entity* entity = dynamic_cast<Entity*>(b);
-	if (entity && this->team != entity->GetTeam())
+	if (b->GetType() == GameObject::GO_ENTITY)
 	{
-		if (CheckCollision(b, dt))
+		if (CheckCollision(b, dt))//if touching dead body part
 		{
-			entity->TakeDamage(DAMAGE_ONTOUCH);
-			CollisionResponse(b);
-		}
+			Player* player = dynamic_cast<Player*>(b);
+			if (player)
+				player->TakeDamage(ATTACK_RAM_DAMAGE);
+			else
+			{
+				Enemy* enemy = static_cast<Enemy*>(b);
+				enemy->TakeDamage(ATTACK_RAM_DAMAGE);
+			}
 
-		return;
+			return;
+		}
 	}
 	GameObject::HandleInteraction(b, dt);
 }
@@ -86,8 +94,6 @@ void SnakeBody::GoTo(Vector3 destination, double dt)
 		return;
 
 	this->vel += (destination - this->pos).Normalized() * this->movementSpeed * dt;
-	if (this->vel.LengthSquared() > speedLimit * speedLimit)
-		this->vel = this->vel.Normalized() * speedLimit;
 }
 
 void SnakeBody::Shoot(Vector3 target)

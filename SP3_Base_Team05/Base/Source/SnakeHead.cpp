@@ -46,7 +46,7 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 
 void SnakeHead::Update(double dt)
 {
-	GameObject::Update(dt);
+	Enemy::Update(dt);
 
 	float bodyRatio = (float)bodyList.size() / (float)maxBodyCount;//counts the percentage of body left
 	float headLimit = speedLimit * bodyRatio;
@@ -152,10 +152,21 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 	}
 	else
 	{
-		Entity* entity = dynamic_cast<Entity*>(b);
-		if (entity && this->team != entity->GetTeam())
-			if (CheckCollision(b, dt))
-				entity->TakeDamage(DAMAGE_ONTOUCH);
+
+		if (b->GetType() == GameObject::GO_ENTITY)
+		{
+			if (CheckCollision(b, dt))//if touching dead body part
+			{
+				Player* player = dynamic_cast<Player*>(b);
+				if (player)
+					player->TakeDamage(ATTACK_RAM_DAMAGE);
+				else
+				{
+					Enemy* enemy = static_cast<Enemy*>(b);
+					enemy->TakeDamage(ATTACK_RAM_DAMAGE);
+				}
+			}
+		}
 
 		GameObject::HandleInteraction(b, dt);
 	}

@@ -55,6 +55,7 @@ void SceneSnakeBoss::Init()
 	{
 		GameObject *go = FetchGO();
 		go->SetColliderType(Collider::COLLIDER_BOX);
+		go->SetType(GameObject::GO_WALL);
 		rotate.SetToRotation(45 * i, 0, 0, 1);
 		go->pos.Set(150, 0, 0);
 		go->SetFront(1, 0, 0);
