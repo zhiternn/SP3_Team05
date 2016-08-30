@@ -48,18 +48,6 @@ void SceneGolem::Init()
     golemrhead->SetTarget(player);
     golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 50.f, 0));
 
-	mainCamera->Include(&(player->pos));
-	if (!(glfwController.isConnected() && useController))
-	{
-		mainCamera->Include(&mousePos_worldBased);
-		Keyboard = false;
-	}
-	else
-	{
-		mainCamera->Include(&controllerStick_Pos);
-		Keyboard = true;
-	}
-
 }
 
 //CONTROL SCHEMES
@@ -78,6 +66,21 @@ void SceneGolem::GetGamePadInput(double dt)
 void SceneGolem::Update(double dt)
 {
     SceneBase::Update(dt);
+
+	//Update Camera target scheme if Controller is plugged in
+	if (glfwController.isConnected() && Keyboard)
+	{
+		Keyboard = false;
+
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&controllerStick_Pos);
+	}
+	else if (!(glfwController.isConnected()))
+	{
+		Keyboard = true;
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&mousePos_worldBased);
+	}
 
     mainCamera->Update(dt);
     mainCamera->Constrain(*player, mainCamera->target);

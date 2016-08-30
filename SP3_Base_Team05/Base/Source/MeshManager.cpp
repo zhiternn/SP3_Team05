@@ -127,7 +127,7 @@ void MeshManager::InitSceneDetlaff()
 {
 	meshList[GEO_DETLAFF_1] = MeshBuilder::GenerateOBJ("DETLAFF", "obj\\snake_body.obj");
 	meshList[GEO_DETLAFF_1]->enableLight = true;
-	meshList[GEO_DETLAFF_1]->textureArray[0] = LoadTGA("Image//Detlaff_TGA//deathstarwdas.tga");
+	meshList[GEO_DETLAFF_1]->textureArray[0] = LoadTGA("Image//Detlaff_TGA//deathstar.tga");
 }
 
 void MeshManager::InitSceneSnake()

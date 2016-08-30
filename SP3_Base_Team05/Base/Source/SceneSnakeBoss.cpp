@@ -24,14 +24,6 @@ void SceneSnakeBoss::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
-	//GameObject *go = FetchGO();
-	//go->SetActive(true);
-	//go->SetScale(20, 20, 20);
-	//go->SetFront(1, 0, 0);
-	//go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	//go->SetType(GameObject::GO_ENVIRONMENT);
-	//go->SetColliderType(Collider::COLLIDER_BOX);
-
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
 	GameObject::goList.push_back(SceneBase::player);
 
@@ -48,6 +40,7 @@ void SceneSnakeBoss::Init()
 	}
 
 	Mtx44 rotate;
+
 	for (int i = 0; i < 8; ++i)
 	{
 		GameObject *go = FetchGO();
@@ -88,19 +81,19 @@ void SceneSnakeBoss::Update(double dt)
 	SceneBase::Update(dt);
 
 	//Update Camera target scheme if Controller is plugged in
-	//if (GamePad.IsConnected() && Keyboard)
-	//{
-	//	Keyboard = false;
+	if (glfwController.isConnected() && Keyboard)
+	{
+		Keyboard = false;
 
-	//	mainCamera->entityList.pop_back();
-	//	mainCamera->Include(&controllerStick_Pos);
-	//}
-	//else if (!(GamePad.IsConnected()))
-	//{
-	//	Keyboard = true;
-	//	mainCamera->entityList.pop_back();
-	//	mainCamera->Include(&mousePos_worldBased);
-	//}
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&controllerStick_Pos);
+	}
+	else if (!(glfwController.isConnected()))
+	{
+		Keyboard = true;
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&mousePos_worldBased);
+	}
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);

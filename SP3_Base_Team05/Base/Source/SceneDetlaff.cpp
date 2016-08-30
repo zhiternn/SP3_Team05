@@ -4,21 +4,20 @@
 #include "Controls.h"
 #include "MeshManager.h"
 
-
 #include <sstream>
 
 #define ENEMY_FIRE_COOLDOWN 2;
 #define ENEMY_MOVE_DELAY 5;
 
 SceneDetlaff::SceneDetlaff():
-mainCamera(NULL),
-manager(SceneManager::GetInstance()),
-options(OptionManager::GetInstance())
+manager(SceneManager::GetInstance())
 {
 }
 
 SceneDetlaff::~SceneDetlaff()
 {
+	if (mainCamera)
+		delete mainCamera;
 }
 
 void SceneDetlaff::Init()
@@ -27,13 +26,8 @@ void SceneDetlaff::Init()
 	Math::InitRNG();
 
 
-	//World Space
-	m_worldHeight = 300;
-	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
-	//World Space View
-	m_orthoHeight = 150;
-	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
 
 	mainCamera = new Camera();
 	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -56,169 +50,40 @@ void SceneDetlaff::Init()
 	detlaff->SetScale(10, 10, 10);
 	detlaff->SetActive(true);
 	detlaff->SetColliderType(Collider::COLLIDER_BALL);
+	detlaff->SetMass(100.f);
 
-	mainCamera->Include(&(player->pos));
-	
 	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
 	enemyMovementDelay = ENEMY_MOVE_DELAY;
-
-	if (!(glfwController.isConnected() && useController))
-	{
-		mainCamera->Include(&mousePos_worldBased);
-		Keyboard = false;
-	}
-	//else
-	{
-		mainCamera->Include(&controllerStick_Pos);
-		Keyboard = true;
-	}
-
 }
 
 void SceneDetlaff::PlayerController(double dt)
 {
-	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
-	player->SetFront(lookDir);
-	Vector3 forceDir;
-
-	if (Controls::GetInstance().OnHold(Controls::KEY_W))
-	{
-		forceDir.y += 1;
-	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_S))
-	{
-		forceDir.y -= 1;
-	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_A))
-	{
-		forceDir.x -= 1;
-	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_D))
-	{
-		forceDir.x += 1;
-	}
-
-	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
-	{
-		player->Dash(forceDir, dt);
-	}
-	if (forceDir.IsZero() == false)
-	{
-		forceDir.Normalize();
-		player->Move(forceDir, dt);
-	}
-	if (Controls::GetInstance().OnHold(Controls::MOUSE_LBUTTON))
-	{
-		Vector3 mouseDir;
-		mouseDir = (mousePos_worldBased - player->pos).Normalized();
-		player->Shoot(mouseDir);
-	}
-
-	//if (Controls::GetInstance().mouse_ScrollY < 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_E))
-	{
-		player->ChangeWeaponDown();
-	}
-	//if (Controls::GetInstance().mouse_ScrollY > 1)
-	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
-	{
-		player->ChangeWeaponUp();
-	}
-	if (Controls::GetInstance().OnPress(Controls::KEY_B))
-	{
-		manager.ChangeScene(1);
-	}
+	SceneBase::PlayerController(dt);
 }
 
 void SceneDetlaff::GetGamePadInput(double dt)
 {
-	Vector3 forceDir;
-	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
-	player->SetFront(lookDir);
-	
-	//Handle Gamepad movement
-	
-	//= Y Axis Movement 
-	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) > 0.2f)
-	{
-		forceDir.y += 5 * glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y);
-	}
-	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) < -0.2f)
-	{
-		forceDir.y += 5 * glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y);
-	}
-
-	
-
-
-	//= X Axis Movement
-	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_X) > 0.2f)
-	{
-		forceDir.x += 5 * glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_X);
-	}
-	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_X) < -0.2f)
-	{
-		forceDir.x += 5 * glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_X);
-	}
-
-	//= Dash
-	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::TRIGGERS) > 0.5f)
-	{
-		player->Dash(forceDir, dt);
-	}
-
-	if (glfwController.GetJoyStickButtonPressed(GLFWController::CONTROLLER_BUTTON::L_SHOULDER) != NULL)
-	{
-		player->ChangeProjectileUp();
-	}
-	if (glfwController.GetJoyStickButtonPressed(GLFWController::CONTROLLER_BUTTON::R_SHOULDER) != NULL)
-	{
-		player->ChangeWeaponUp();
-	}
-	
-
-	//Shooting
-
-	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) > 0.2f
-		|| glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) < -0.2f
-		|| glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y) > 0.2f
-		|| glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y) < -0.2f)
-	{
-		stickDir = Vector3(glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X)
-			, -(glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y))
-			, 0);
-		player->Shoot(stickDir.Normalized());
-	}
-	
-	////Refresh Gamepad
-	//GamePad.RefreshState();
+	SceneBase::GetGamePadInput(dt);
 }
 
 void SceneDetlaff::Update(double dt)
 {
 	SceneBase::Update(dt);
-	{//handles required mouse calculationsdouble x, y;
-		double x, y;
-		Application::GetCursorPos(x, y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		x = m_orthoWidth * (x / w);
-		y = m_orthoHeight * ((h - y) / h);
 
-		mousePos_screenBased.Set(x, y, 0);
-		mousePos_worldBased.Set(
-			x + mainCamera->target.x - (m_orthoWidth * 0.5f),
-			y + mainCamera->target.y - (m_orthoHeight * 0.5f),
-			0
-			);
+	//Update Camera target scheme if Controller is plugged in
+	if (glfwController.isConnected() && Keyboard)
+	{
+		Keyboard = false;
+
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&controllerStick_Pos);
 	}
-
-	controllerStick_Pos.Set((glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) * 100) + player->pos.x, 
-		(-(glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y)) * 100) + player->pos.y, 0);
-	controllerStick_WorldPos.Set(
-		glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) + mainCamera->target.x - (m_orthoWidth * 0.5f),
-		(-(glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y)) * 100) + mainCamera->target.y - (m_orthoHeight * 0.5f),
-		0);
+	else if (!(glfwController.isConnected()))
+	{
+		Keyboard = true;
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&mousePos_worldBased);
+	}
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -239,24 +104,21 @@ void SceneDetlaff::Update(double dt)
 	if (enemyMovementDelay <= 0.f)
 	{
 		enemyMovementDelay = ENEMY_MOVE_DELAY;
-		detlaff->Teleport(m_worldWidth - 50.f, m_worldHeight - 50.f);
+		detlaff->Teleport(m_worldWidth - 100.f, m_worldHeight - 100.f);
 	}
 
-	
-	//Restrict the player from moving past the deadzone
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
+	if (detlaff->IsDead())
 	{
-		//Check if Gamepad is connected for controller input
-		if (useController && glfwController.isConnected())
-		{
-			//Handle Controller Input 
-			//GetGamePadInput(dt);
-		}
-		//else
-		{
-			//Handle Keyboard and Mouse input
-			PlayerController(dt);
-		}
+		player->inventory->AddCurrency(100);
+	}
+	else if (detlaff->IsCaptured())
+	{
+		player->inventory->AddCurrency(400);
+	}
+	
+	if ((detlaff->GetVelocity().x > 50.f) || (detlaff->GetVelocity().y > 50.f))
+	{
+		detlaff->SetVelocity(Vector3(10.f, 10.f, 10.f));
 	}
 }
 
@@ -444,57 +306,7 @@ void SceneDetlaff::RenderWorld()
 
 void SceneDetlaff::RenderHUD()
 {
-	//Render Minimap
-	modelStack.PushMatrix();
-	modelStack.Translate(70, 50, 0);
-	modelStack.Scale(18, 18, 1);
-	RenderMinimap(1.0f);
-	modelStack.PopMatrix();
-
-	if (!(useController && glfwController.isConnected()))
-	{
-		//Render the crosshair
-		modelStack.PushMatrix();
-		modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-		modelStack.Scale(10, 10, 10);
-		RenderMesh(meshList[GEO_CROSSHAIR], false);
-		modelStack.PopMatrix();
-	}
-	
-
-	//On screen text
-	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 6);
-
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 3, 0, 3);
-
-	std::ostringstream ss2;
-	ss2.precision(2);
-	ss2 << "Dash cooldown: " << player->cooldownTimer;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 3, 0, 9);
-
-	std::ostringstream ss3;
-	ss3.precision(2);
-	ss3 << "Weapon: " << player->weaponIter;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 3, 0, 12);
-
-	ss.str("");
-	ss << "HP";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
-	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 5) + 11, 55.5f, player->maxHealth / 5, false);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 5) + 11, 55.5f, player->GetHP() / 5, false);
-
-	ss.str("");
-	ss.precision(2);
-	ss << "Dash";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * 10) + 11, 52.5f, DASH_COOLDOWN * 10, false);
-	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * 10) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * 10, false);
+	SceneBase::RenderHUD();
 }
 
 void SceneDetlaff::RenderMinimap(float zoom)
