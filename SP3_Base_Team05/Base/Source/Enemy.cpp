@@ -248,7 +248,7 @@ bool Enemy::IsCapturing()
 
 void Enemy::Capturing(double dt)
 {
-	captureRate += dt;
+	captureRate += dt * 100;
 	if (captureRate >= health)
 	{
 		Captured();

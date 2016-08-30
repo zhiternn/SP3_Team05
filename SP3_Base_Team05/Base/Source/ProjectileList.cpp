@@ -26,12 +26,29 @@ void Hook::HandleInteraction(GameObject* b, double dt)
 				entity->TakeDamage(proj_dmg);
 
 				Rope* rope = FetchRope();
-				rope->Init(this->pos, b, this->ropeLifetime);
+				rope->Init(this->pos, b, this->ropeLifetime, this->ropeLength);
 			}
 		}
 
 		this->SetActive(false);
 	}
+}
+
+void Hook::Boost(float multiplier)
+{
+	this->proj_speed += 20.0f * multiplier;
+	this->ropeLifetime += 2.0f * multiplier;
+	this->ropeLength -= 3.0f * multiplier;
+	if (ropeLength < 5)
+		ropeLength = 5.0f;
+}
+
+void Hook::UpgradeEffect(float amount)
+{
+	this->ropeLifetime += amount;
+	this->ropeLength -= amount;
+	if (this->ropeLength < 5.0f)
+		ropeLength = 5.0f;
 }
 
 void TrapProjectile::Update(double dt)
@@ -53,11 +70,22 @@ void TrapProjectile::HandleInteraction(GameObject *b, double dt)
 			enemy->TakeDamage(proj_dmg);
 			
 			Trap* trap = FetchTrap();
-			trap->Init(enemy->pos);
+			trap->Init(enemy->pos, this->trapSize);
 		}
 
 		this->SetActive(false);
 	}
+}
+
+void TrapProjectile::Boost(float multiplier)
+{
+	this->proj_speed += 20.0f * multiplier;
+	this->trapSize += 5.0f * multiplier;
+}
+
+void TrapProjectile::UpgradeEffect(float amount)
+{
+	this->trapSize += amount;
 }
 
 void Shield::Init(Vector3 pos)
@@ -113,6 +141,13 @@ void Shield::HandleInteraction(GameObject* b, double dt)
             }
         }
     }
+}
+
+void Shield::Boost(float multiplier)
+{
+}
+void Shield::UpgradeEffect(float amount)
+{
 }
 
 void Shield::regenerateShield(float currHP, double dt)
@@ -245,6 +280,18 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 		if (b->collider.isTrigger == false)
 			this->SetActive(false);
 	}
+}
+
+void Bullet::Boost(float multiplier)
+{
+	this->proj_speed += 20.0f * multiplier;
+	this->proj_dmg += 5.0f * multiplier;
+	this->proj_lifetime += 3.0f * multiplier;
+}
+
+void Bullet::UpgradeEffect(float amount)
+{
+	this->proj_dmg += amount;
 }
 
 void Bullet::SetupMesh()

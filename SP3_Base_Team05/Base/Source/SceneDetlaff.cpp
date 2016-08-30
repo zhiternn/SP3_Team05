@@ -48,7 +48,7 @@ void SceneDetlaff::Init()
 	go->SetType(GameObject::GO_ENVIRONMENT);
 	go->SetColliderType(Collider::COLLIDER_BOX);*/
 
-	player->Init(Vector3(0, 1, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
+	player->Init(Vector3(0, 1, 0));
 	GameObject::goList.push_back(player);
 
 	detlaff = new CDetlaff();

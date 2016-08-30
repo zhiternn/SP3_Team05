@@ -26,7 +26,8 @@ void GolemRightHand::Init(Vector3 pos)
     destinationCountdown = 5.f;
     speedLimit = 45.f;
     movementSpeed = 800.f;
-    health = 999999;
+    health = 0;
+	maxHealth = health;
     scale.Set(8, 8, 8);
 
     stopdelay = 0.1f;
@@ -106,11 +107,17 @@ void GolemRightHand::HandleInteraction(GameObject* b, double dt)
     {
         CollisionResponse(b);
 
-		Entity* entity = dynamic_cast<Entity*>(b);
-		if (entity && this->team != entity->GetTeam())
-        {
-			entity->TakeDamage(ATTACK_COLLIDE_DAMAGE);
-        }
+		if (b->GetType() == GameObject::GO_ENTITY)
+		{
+			Player* player = dynamic_cast<Player*>(b);
+			if (player)
+				player->TakeDamage(20);
+			else
+			{
+				Enemy* enemy = static_cast<Enemy*>(b);
+				enemy->TakeDamage(20);
+			}
+		}
     }
 }
 
@@ -127,7 +134,8 @@ void GolemLeftHand::Init(Vector3 pos)
 {
     Enemy::Init(pos);
     this->pos = pos;
-    health = 999999;
+    health = 0;
+	maxHealth = health;
     active = true;
     type = GameObject::GO_ENTITY;
     team = TEAM_ENEMY;

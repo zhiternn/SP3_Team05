@@ -4,7 +4,7 @@
 
 Trap::Trap() :
 GameObject(GO_ENVIRONMENT),
-radius(50.f)
+radius(20.f)
 {
 }
 
@@ -12,13 +12,14 @@ Trap::~Trap()
 {
 }
 
-void Trap::Init(Vector3 pos)
+void Trap::Init(Vector3 pos, float size)
 {
 	type = GameObject::GO_ENVIRONMENT;
 	this->pos = pos;
 	this->mass = 0;
 	this->vel.SetZero();
 	lifetime = 1.0f;
+	this->radius = size;
 	scale.Set(radius, radius, radius);
 	collider.type = Collider::COLLIDER_BALL;
 	collider.isTrigger = true;
@@ -54,7 +55,14 @@ void Trap::HandleInteraction(GameObject* b, double dt)
 
 void Trap::SetupMesh()
 {
+	static float degree = 0.0f;
+	degree += 0.1f;
+
+	if (degree > 360.0f)
+		degree -= 360.0f;
+
 	modelStack.Translate(pos.x, pos.y, pos.z + 0.01f);
+	modelStack.Rotate(degree, 0, 0, 1);
 	modelStack.Scale(scale.x, scale.y, scale.z);
 	mesh = meshList[GEO_TRAP];
 }

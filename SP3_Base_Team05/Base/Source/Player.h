@@ -8,7 +8,8 @@ static const float MOVEMENT_LIMIT = 300.f;
 static const float DASH_DISTANCE = 50.f;
 static const float DASH_COOLDOWN = 1.f;
 static const float DAMAGE_BUFFER = 0.5f;
-static const float PLAYER_HEALTH_REGEN_PERSEC = 5.0f;
+static const float PLAYER_HEALTH_REGEN_COOLDOWN = 5.0f;
+static const float PLAYER_HEALTH_REGEN = 1.0f;
 
 class Player : public Entity
 {
@@ -17,7 +18,7 @@ public:
 	~Player();
 
 	// Functions
-	void Init(Vector3 pos, Vector3 scale, Vector3 front);
+	void Init(Vector3 pos);
 	virtual void Update(double dt);
 	virtual void SetupMesh();
 	virtual void TakeDamage(int amount);

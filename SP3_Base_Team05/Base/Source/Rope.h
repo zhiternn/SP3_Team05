@@ -9,7 +9,7 @@ public:
 	Rope();
 	~Rope();
 
-	virtual void Init(Vector3 pos, GameObject* target, float lifeTime);
+	virtual void Init(Vector3 pos, GameObject* target, float lifeTime, float length);
 	virtual void Update(double dt);
 	virtual void SetupMesh();
 	virtual void HandleInteraction(double dt);

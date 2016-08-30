@@ -1052,37 +1052,67 @@ void MainMenu::LevelUpPage()
     RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 4, 20, ((m_orthoHeight * 0.8) - 4)* (60 / m_orthoHeight));
 
     modelStack.PushMatrix();
+    modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.8) * (60 / m_orthoHeight), 1);
+    modelStack.Scale(20, 8, 2);
+    RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+    modelStack.PopMatrix();
+
+    std::ostringstream ss2;
+    ss2.precision(5);
+    ss2 << "Currency: " << "0";
+    RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 1.8, 53, ((m_orthoHeight * 0.8) - 4)* (60 / m_orthoHeight));
+
+    modelStack.PushMatrix();
     modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
     modelStack.Scale(12, 12, 2);
     RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
     modelStack.PopMatrix();
 
+	modelStack.PushMatrix();
+	modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (58 / m_orthoHeight), 1);
+	modelStack.Scale(10, 10, 2);
+    switch (player->inventory->weapons[player->weaponIter]->weapon_type)
+	{
+	case CProjectile::BULLET:
+		RenderMesh(meshList[GEO_WEAPON_MACHINEGUN], false);
+		break;
+	case CProjectile::TRAP:
+		RenderMesh(meshList[GEO_WEAPON_SHOTGUN], false);
+		break;
+	case CProjectile::HOOK:
+		RenderMesh(meshList[GEO_WEAPON_SPLITGUN], false);
+		break;
+	default:break;
+	}
+	modelStack.PopMatrix();
+
     modelStack.PushMatrix();
-    modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+    modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (58 / m_orthoHeight), 1);
     modelStack.Scale(10, 10, 2);
-    RenderMesh(meshList[GEO_WEAPON_MACHINEGUN], false);
+    switch (player->inventory->bullets[player->projectileIter]->proj_type)
+	{
+	case Weapon::W_MACHINEGUN:
+		RenderMesh(meshList[GEO_WEAPON_MACHINEGUN], false);
+		break;
+	case Weapon::W_SHOTGUN:
+		RenderMesh(meshList[GEO_WEAPON_SHOTGUN], false);
+		break;
+	case Weapon::W_SPLITGUN:
+		RenderMesh(meshList[GEO_WEAPON_SPLITGUN], false);
+		break;
+	default:break;
+	}
     modelStack.PopMatrix();
 
     //modelStack.PushMatrix();
-    //modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-    //modelStack.Scale(12, 12, 2);
-    //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-    //modelStack.PopMatrix();
-
-    //modelStack.PushMatrix();
-    //modelStack.Translate((m_orthoWidth * 0.5) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-    //modelStack.Scale(10, 10, 2);
-    //RenderMesh(meshList[GEO_WEAPON_SHOTGUN], false);
-    //modelStack.PopMatrix();
-
-    //modelStack.PushMatrix();
-    //modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+    //modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
     //modelStack.Scale(12, 12, 2);
     //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
     //modelStack.PopMatrix();
 
     //modelStack.PushMatrix();
     //modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+    //modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
     //modelStack.Scale(10, 10, 2);
     //RenderMesh(meshList[GEO_WEAPON_SPLITGUN], false);
     //modelStack.PopMatrix();
@@ -1426,7 +1456,6 @@ void MainMenu::LevelUpPage()
 
 void MainMenu::UpgradeMG()
 {
-
 }
 
 void MainMenu::UpgradeSHG()
@@ -1441,12 +1470,6 @@ void MainMenu::UpgradeSPG()
 
 void MainMenu::UpgradeBullet()
 {
-    Bullet *bullettest = new Bullet();
-    float temp = bullettest->GetProjectileSpeed();
-    bullettest->SetProjectileSpeed(temp + 1);
-    bullettest->SetDMG(100);
-
-    std::cout << "Upgraded Successfully!" << std::endl;
 }
 
 void MainMenu::UpgradeTrap()

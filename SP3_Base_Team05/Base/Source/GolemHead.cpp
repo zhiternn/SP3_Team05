@@ -110,10 +110,16 @@ void GolemHead::HandleInteraction(GameObject* b, double dt)
     {
         CollisionResponse(b);
 
-		Entity* entity = dynamic_cast<Entity*>(b);
-		if (entity && this->team != entity->GetTeam())
+		if (b->GetType() == GameObject::GO_ENTITY)
 		{
-			entity->TakeDamage(20);
+			Player* player = dynamic_cast<Player*>(b);
+			if (player)
+				player->TakeDamage(20);
+			else
+			{
+				Enemy* enemy = static_cast<Enemy*>(b);
+				enemy->TakeDamage(20);
+			}
 		}
     }
 }
