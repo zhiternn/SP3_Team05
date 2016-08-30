@@ -30,7 +30,6 @@ private:
 	float safetyThreshold;
 	float chaseThreshold;
 	float agressiveLevel;
-	float maxHealth;
 	float summonCooldownTimer = 0;
 	float attackCooldownTimer = 3;
 	bool attacking;

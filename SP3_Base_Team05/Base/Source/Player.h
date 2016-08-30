@@ -36,10 +36,6 @@ public:
 	// Setters
 	void SetMoving(bool isMoving);
 	void SetDashed(bool isDashed);
-	void SetCurrency(int currency);
-
-	// Getters
-	int GetCurrency();
 
 	// Issers
 	bool IsMoving();

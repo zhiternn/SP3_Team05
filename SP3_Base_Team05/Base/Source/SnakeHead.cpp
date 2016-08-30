@@ -24,8 +24,10 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 	//health;
 	//captureRatio;
 	actionRate = ACTION_TIMER_MAX;
+
 	health = 2000;
-	this->mass = 30.0f;
+	maxHealth = health;
+	this->mass = 10.0f;
 
 	isRecovering = false;
 	isRaging = false;
@@ -166,11 +168,6 @@ void SnakeHead::Action(float ratio)
 	if (rand <= ratio)//attack
 	{
 		int halfChance = Math::RandInt() % 2;
-		std::cout << "Real: " << halfChance << std::endl;
-		for (int i = 0; i < 10; ++i)
-		{
-			std::cout << Math::RandInt() % 2 << std::endl;
-		}
 		if (isCapturing || halfChance)
 			Enrage();
 		else

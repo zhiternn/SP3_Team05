@@ -4,7 +4,7 @@
 
 Trap::Trap() :
 GameObject(GO_ENVIRONMENT),
-radius(20.0f)
+radius(50.f)
 {
 }
 

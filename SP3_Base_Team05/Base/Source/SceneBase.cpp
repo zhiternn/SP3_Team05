@@ -195,7 +195,7 @@ void SceneBase::Init()
 	if (player == NULL)
 		player = new Player();
 
-	//GamePad = Gamepad(1);
+	glfwController = GLFWController();
 
 	//Get player Controls
 	useController = options.UseControl();
@@ -761,11 +761,11 @@ void SceneBase::RenderGameObjects()
 			{
 				if (!enemy->IsDead())
 				{
-					if ((mousePos_worldBased - enemy->pos).LengthSquared() < enemy->GetScale().LengthSquared() * 2)
+					if ((mousePos_worldBased - enemy->pos).LengthSquared() < enemy->GetScale().LengthSquared() || enemy->IsCapturing())
 					{
-						float healthRatio = (float)enemy->GetHP() / 1000.0f;
+						float healthRatio = (float)enemy->GetHP() / (float)enemy->GetMaxHP();
 						modelStack.PushMatrix();
-						modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y, 0);
+						modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y, 50);
 						modelStack.Translate(-enemy->GetScale().x, 0, 0);
 
 						modelStack.PushMatrix();
@@ -786,8 +786,9 @@ void SceneBase::RenderGameObjects()
 				if (enemy->IsCapturing())
 				{
 					modelStack.PushMatrix();
-					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 5, 50);
-					modelStack.Scale(enemy->GetCaptureRate() / 10.f, 3, 1);
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 7, 50);
+					modelStack.Scale(2, 5, 2);
+					modelStack.Scale(enemy->GetCaptureRate() / 10.f, 1, 1);
 					RenderMesh(meshList[GEO_CAPTURE], false);
 					modelStack.PopMatrix();
 				}

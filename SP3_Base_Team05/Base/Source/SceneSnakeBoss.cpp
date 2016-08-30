@@ -37,6 +37,19 @@ void SceneSnakeBoss::Init()
 
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
+
+	mainCamera->Include(&(player->pos));
+	if (!(glfwController.isConnected() && useController))
+	{
+		mainCamera->Include(&mousePos_worldBased);
+		Keyboard = false;
+	}
+	else
+	{
+		mainCamera->Include(&controllerStick_Pos);
+		Keyboard = true;
+	}
+
 	player->SetActive(true);
 
 	snake = new SnakeHead();
@@ -63,13 +76,28 @@ void SceneSnakeBoss::Update(double dt)
 {
 	SceneBase::Update(dt);
 
+	//Update Camera target scheme if Controller is plugged in
+	//if (GamePad.IsConnected() && Keyboard)
+	//{
+	//	Keyboard = false;
+
+	//	mainCamera->entityList.pop_back();
+	//	mainCamera->Include(&controllerStick_Pos);
+	//}
+	//else if (!(GamePad.IsConnected()))
+	//{
+	//	Keyboard = true;
+	//	mainCamera->entityList.pop_back();
+	//	mainCamera->Include(&mousePos_worldBased);
+	//}
+
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
 
 	if (snake->IsDead())
 	{
-		player->SetCurrency(100000);
+		player->inventory->SetCurrency(100000);
 	}
 }
 
