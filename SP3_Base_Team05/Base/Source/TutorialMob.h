@@ -38,7 +38,7 @@ private:
     float safetyThreshold;
     float chaseThreshold;
     float agressiveLevel;
-    float maxhealth, regendelay;
+    float regendelay;
     Weapon *mobGun;
 };
 

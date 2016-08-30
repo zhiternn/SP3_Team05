@@ -227,7 +227,6 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 {
 	if (this->team == b->GetTeam())
 		return;
-
 	if (CheckCollision(b, dt))
 	{
 		CollisionResponse(b);
@@ -243,7 +242,8 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 			}
 		}
 
-		this->SetActive(false);
+		if (b->collider.isTrigger == false)
+			this->SetActive(false);
 	}
 }
 

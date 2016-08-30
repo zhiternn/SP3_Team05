@@ -15,17 +15,18 @@ void GolemHead::Init(Vector3 pos)
 	entityType = Entity::ENTITY_BOSS_MAIN;
     team = TEAM_ENEMY;
     collider.type = Collider::COLLIDER_BALL;
-    mass = 999999;
+    mass = 999;
     destinationCountdown = REACH_CHECKER;
     speedLimit = 10.f;
     movementSpeed = 150.f;
     health = 4000.f;
-    maxhealth = 4000.f;
+	maxHealth = 4000.f;
     isDead = false;
     regendelay = 0;
     golemGun = new Splitgun(360.f, 18);
-    golemGun->AssignProjectile(new Hook());
+    golemGun->AssignProjectile(new Bullet());
     golemGun->SetFireRate(0.1f);
+    scale.Set(12, 12, 12);
 }
 
 GolemHead::~GolemHead()
@@ -63,24 +64,24 @@ void GolemHead::Update(double dt)
         }
 
     }
-    if (health < (maxhealth) * 0.75)
+    if (health < (maxHealth) * 0.75)
         golemGun->SetFireRate(0.2f);
-    if (health < (maxhealth)* 0.50)
+    if (health < (maxHealth)* 0.50)
         golemGun->SetFireRate(0.35f);
-    if (health < (maxhealth) * 0.1)
+    if (health < (maxHealth) * 0.1)
         golemGun->SetFireRate(0.4f);
 
     if (regendelay >= 10)
     {
-        if (health < (maxhealth * 0.25))
+        if (health < (maxHealth * 0.25))
             health += 15;
-        else if (health < (maxhealth * 0.5))
+        else if (health < (maxHealth * 0.5))
             health += 12;
-        else if (health < maxhealth)
+        else if (health < maxHealth)
             health += 7;
 
-        if (health >= maxhealth)
-            health = maxhealth;
+        if (health >= maxHealth)
+            health = maxHealth;
 
         regendelay = 0;
     }
@@ -109,10 +110,10 @@ void GolemHead::HandleInteraction(GameObject* b, double dt)
     {
         CollisionResponse(b);
 
-        Player* player = dynamic_cast<Player*>(b);
-        if (player)
-        {
-            player->TakeDamage(20);
-        }
+		Entity* entity = dynamic_cast<Entity*>(b);
+		if (entity && this->team != entity->GetTeam())
+		{
+			entity->TakeDamage(20);
+		}
     }
 }

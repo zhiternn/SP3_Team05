@@ -9,7 +9,7 @@ Class to handle Boss Golem Hand
 /******************************************************************************/
 #ifndef GOLEMHAND_H
 #define GOLEMHAND_H
- 
+
 #include "Enemy.h"
 #include "WeaponList.h"
 
@@ -33,8 +33,13 @@ public:
     virtual void SetupMesh();
     virtual void HandleInteraction(GameObject* b, double dt);
 
+    void Action(float ratio);
+    void GrabPlayer(GameObject* b, double dt);
+
 private:
     float stopdelay;
+    bool isGrabPlayer, GrabbedPlayer;
+    float targetPlayer;
 };
 
 /******************************************************************************/

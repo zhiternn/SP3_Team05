@@ -3,13 +3,13 @@
 #include "Application.h"
 #include "Controls.h"
 #include "MeshManager.h"
-#include "SnakeHead.h"
+#include "Summoner.h"
 
 #include <sstream>
 
 SceneSnakeBoss::SceneSnakeBoss() :
-mainCamera(NULL),
-manager(SceneManager::GetInstance())
+manager(SceneManager::GetInstance()),
+snake(NULL)
 {
 }
 
@@ -27,17 +27,6 @@ void SceneSnakeBoss::Init()
 	//Clear the list from previous scene
 	GameObject::goList.clear();
 
-	//World Space
-	m_worldHeight = 300;
-	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
-
-	//Camera Space View
-	m_orthoHeight = 100;
-	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
-
-	mainCamera = new Camera();
-	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
 	//GameObject *go = FetchGO();
 	//go->SetActive(true);
 	//go->SetScale(20, 20, 20);
@@ -49,17 +38,8 @@ void SceneSnakeBoss::Init()
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0), Vector3(2.5f, 2.5f, 2.5f), Vector3(1, 0, 0));
 	GameObject::goList.push_back(player);
 
-	SnakeHead* enemy = new SnakeHead();
-	GameObject::goList.push_back(enemy);
-	enemy->SetTarget(player);
-	enemy->SetType(GameObject::GO_ENTITY);
-	enemy->SetActive(true);
-	enemy->SetScale(6, 6, 6);
-	enemy->SetMass(3);
-	enemy->Init(Vector3(m_worldWidth*0.1f, m_worldHeight*0.1f, 0), 20);
-
 	mainCamera->Include(&(player->pos));
-	if (!(GamePad.IsConnected() && useController))
+	if (!(glfwController.isConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
 		Keyboard = false;
@@ -69,168 +49,32 @@ void SceneSnakeBoss::Init()
 		mainCamera->Include(&controllerStick_Pos);
 		Keyboard = true;
 	}
+
+	player->SetActive(true);
+
+	snake = new SnakeHead();
+	GameObject::goList.push_back(snake);
+	snake->SetTarget(player);
+	snake->SetType(GameObject::GO_ENTITY);
+	snake->SetActive(true);
+	snake->SetScale(6, 6, 6);
+	snake->SetMass(3);
+	snake->Init(Vector3(m_worldWidth*0.1f, m_worldHeight*0.1f, 0), 20);
 }
 
 void SceneSnakeBoss::PlayerController(double dt)
 {
-	Vector3 lookDir = (mousePos_worldBased - player->pos).Normalized();
-	player->SetFront(lookDir);
-	Vector3 forceDir;
-
-	if (Controls::GetInstance().OnHold(Controls::KEY_W))
-	{
-		forceDir.y += 1;
-	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_S))
-	{
-		forceDir.y -= 1;
-	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_A))
-	{
-		forceDir.x -= 1;
-	}
-	if (Controls::GetInstance().OnHold(Controls::KEY_D))
-	{
-		forceDir.x += 1;
-	}
-	if (forceDir.IsZero() == false)
-	{
-		forceDir.Normalize();
-		player->Move(forceDir, dt);
-	}
-	if (Controls::GetInstance().OnPress(Controls::KEY_SPACE))
-	{
-		player->Dash(forceDir, dt);
-	}
-	if (Controls::GetInstance().OnHold(Controls::MOUSE_LBUTTON))
-	{
-		Vector3 mouseDir;
-		mouseDir = (mousePos_worldBased - player->pos).Normalized();
-		player->Shoot(mouseDir);
-	}
-
-	if (Controls::GetInstance().mouse_ScrollY < 0)
-	{
-		player->ChangeWeaponDown();
-		Controls::GetInstance().mouse_ScrollY = 0;
-	}
-	if (Controls::GetInstance().mouse_ScrollY > 0)
-
-	{
-		player->ChangeWeaponUp();
-		Controls::GetInstance().mouse_ScrollY = 0;
-	}
-	if (Controls::GetInstance().OnPress(Controls::KEY_E))
-	{
-		player->ChangeProjectileUp();
-	}
-	if (Controls::GetInstance().OnPress(Controls::KEY_Q))
-	{
-		player->ChangeProjectileDown();
-	}
+	SceneBase::PlayerController(dt);
 }
 
 void SceneSnakeBoss::GetGamePadInput(double dt)
 {
-	Vector3 forceDir;
-	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
-	player->SetFront(lookDir);
-
-	//Update Gamepad
-	GamePad.Update();
-
-	//Handle Gamepad movement
-
-	//= Y Axis Movement
-	if (GamePad.Left_Stick_Y() > 0.2f)
-	{
-		forceDir.y += 5 * GamePad.Left_Stick_Y();
-	}
-	if (GamePad.Left_Stick_Y() < -0.2f)
-	{
-		forceDir.y += 5 * GamePad.Left_Stick_Y();
-	}
-
-	//= X Axis Movement
-	if (GamePad.Left_Stick_X() > 0.2f)
-	{
-		forceDir.x += 5 * GamePad.Left_Stick_X();
-	}
-	if (GamePad.Left_Stick_X() < -0.2f)
-	{
-		forceDir.x += 5 * GamePad.Left_Stick_X();
-	}
-
-	//= Dash
-	if (GamePad.LeftTrigger() > 0.2f)
-	{
-		player->Dash(forceDir, dt);
-	}
-
-	//= Update Movement
-	if (forceDir.IsZero() == false)
-	{
-		forceDir.Normalize();
-		player->Move(forceDir, dt);
-	}
-
-
-	//Change Weapons
-	if (GamePad.GetButtonDown(8) > 0.5f)
-	{
-		player->ChangeProjectileUp();
-	}
-	if (GamePad.GetButtonDown(9) > 0.5f)
-	{
-		player->ChangeWeaponUp();
-	}
-
-	//Shooting
-	if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
-	{
-		stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
-		player->Shoot(stickDir.Normalized());
-	}
-
-	//Refresh Gamepad
-	GamePad.RefreshState();
-
+	SceneBase::GetGamePadInput(dt);
 }
 
 void SceneSnakeBoss::Update(double dt)
 {
 	SceneBase::Update(dt);
-	{//handles required mouse calculationsdouble x, y;
-		double x, y;
-		Application::GetCursorPos(x, y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		x = m_orthoWidth * (x / w);
-		y = m_orthoHeight * ((h - y) / h);
-
-		mousePos_screenBased.Set(x, y, 0);
-		mousePos_worldBased.Set(
-			x + mainCamera->target.x - (m_orthoWidth * 0.5f),
-			y + mainCamera->target.y - (m_orthoHeight * 0.5f),
-			0
-			);
-	}
-
-	//Restrict the player from moving past the deadzone
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
-	{
-		//Check if Gamepad is connected for controller input
-		if (useController && GamePad.IsConnected())
-		{
-			//Handle Controller Input 
-			GetGamePadInput(dt);
-		}
-		else
-		{
-			//Handle Keyboard and Mouse input
-			PlayerController(dt);
-		}
-	}
 
 	//Update Camera target scheme if Controller is plugged in
 	if (GamePad.IsConnected() && Keyboard)
@@ -250,6 +94,12 @@ void SceneSnakeBoss::Update(double dt)
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
+
+	if (snake->IsDead())
+	{
+		player->inventory->SetCurrency(100000);
+	}
+	std::cout << player->inventory->GetCurrency() << std::endl;
 }
 
 void SceneSnakeBoss::Render()
@@ -381,6 +231,9 @@ void SceneSnakeBoss::RenderMain()
 	m_lightDepthFBO.BindForReading(GL_TEXTURE8);
 	glUniform1i(m_parameters[U_SHADOW_MAP], 8);
 
+	//RenderBackground
+	RenderBackground();
+
 	RenderWorld();
 
 	//RenderSkyPlane();
@@ -423,119 +276,71 @@ void SceneSnakeBoss::RenderWorld()
 
 void SceneSnakeBoss::RenderHUD()
 {
-	//Render Minimap
-	modelStack.PushMatrix();
-	modelStack.Translate(70, 50, 0);
-	modelStack.Scale(18, 18, 1);
-	RenderMinimap(1.0f);
-	modelStack.PopMatrix();
-
-	if (!((GamePad.IsConnected() && useController)))
-	{
-		// Render the crosshair
-		modelStack.PushMatrix();
-		modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-		modelStack.Scale(5, 5, 5);
-		RenderMesh(meshList[GEO_CROSSHAIR], false);
-		modelStack.PopMatrix();
-	}
-
-	//On screen text
-	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
-
-	ss.str("");
-	ss.precision(4);
-	ss << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
-
-	ss.str("");
-	ss.precision(1);
-	ss << "Weapon: " << player->weaponIter;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
-
-	ss.str("");
-	ss << "Projectile: " << player->projectileIter;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
-
-	ss.str("");
-	ss << "HP";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
-	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 10) + 11, 55.5f, player->maxHealth / 10, false);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 55.5f, player->GetHP() / 10, false);
-
-	ss.str("");
-	ss.precision(2);
-	ss << "Dash";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * (player->maxHealth / 10)) + 11, 52.5f, DASH_COOLDOWN * (player->maxHealth / 10), false);
-	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10)) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10), false);
+	SceneBase::RenderHUD();
 }
 
-void SceneSnakeBoss::RenderMinimap(float zoom)
-{
-	glEnable(GL_STENCIL_TEST);
-
-	// Draw floor
-	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-	glStencilMask(0xFF); // Write to stencil buffer
-	glDepthMask(GL_FALSE); // Don't write to depth buffer
-	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
-
-	RenderMesh(meshList[GEO_MINIMAP], false);
-	
-	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
-	glStencilMask(0x00); // Don't write anything to stencil buffer
-	glDepthMask(GL_TRUE); // Write to depth buffer
-
-	for (int i = 0; i < GameObject::goList.size(); ++i)
-	{
-		if (GameObject::goList[i]->IsActive())
-		{
-			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
-			if (entity && entity->IsActive())
-			{
-				modelStack.PushMatrix();
-				Vector3 pos = entity->pos;
-				pos.x -= player->pos.x;// Move to player pos
-				pos.y -= player->pos.y;// Move to player pos
-				//sphere space == radius = 1
-				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
-				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
-				Vector3 scale = entity->GetScale();
-				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
-				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
-				modelStack.Translate(pos.x, pos.y, pos.z);
-				modelStack.Scale(scale.x, scale.y, scale.z);
-
-				switch (entity->GetEntityType())
-				{
-				case Entity::ENTITY_BOSS_MAIN:
-					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
-					break;
-				case Entity::ENTITY_BOSS_BODY:
-					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
-					break;
-				case Entity::ENTITY_PLAYER:
-					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
-					break;
-				default:break;
-				}
-
-				modelStack.PopMatrix();
-			}
-		}
-	}
-
-	glDisable(GL_STENCIL_TEST);
-
-	glLineWidth(5.0f);
-	RenderMesh(meshList[GEO_MINIMAP_BORDER], false);
-	glLineWidth(1.0f);
-}
+//void SceneSnakeBoss::RenderMinimap(float zoom)
+//{
+//	glEnable(GL_STENCIL_TEST);
+//
+//	// Draw floor
+//	glStencilFunc(GL_ALWAYS, 1, 0xFF); // Set any stencil to 1
+//	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+//	glStencilMask(0xFF); // Write to stencil buffer
+//	glDepthMask(GL_FALSE); // Don't write to depth buffer
+//	glClear(GL_STENCIL_BUFFER_BIT); // Clear stencil buffer (0 by default)
+//
+//	RenderMesh(meshList[GEO_MINIMAP], false);
+//	
+//	glStencilFunc(GL_EQUAL, 1, 0xFF); // Pass test if stencil value is 1
+//	glStencilMask(0x00); // Don't write anything to stencil buffer
+//	glDepthMask(GL_TRUE); // Write to depth buffer
+//
+//	for (int i = 0; i < GameObject::goList.size(); ++i)
+//	{
+//		if (GameObject::goList[i]->IsActive())
+//		{
+//			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
+//			if (entity && entity->IsActive())
+//			{
+//				modelStack.PushMatrix();
+//				Vector3 pos = entity->pos;
+//				pos.x -= player->pos.x;// Move to player pos
+//				pos.y -= player->pos.y;// Move to player pos
+//				//sphere space == radius = 1
+//				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
+//				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
+//				Vector3 scale = entity->GetScale();
+//				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
+//				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
+//				modelStack.Translate(pos.x, pos.y, pos.z);
+//				modelStack.Scale(scale.x, scale.y, scale.z);
+//
+//				switch (entity->GetEntityType())
+//				{
+//				case Entity::ENTITY_BOSS_MAIN:
+//					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+//					break;
+//				case Entity::ENTITY_BOSS_BODY:
+//					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+//					break;
+//				case Entity::ENTITY_PLAYER:
+//					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+//					break;
+//				default:break;
+//				}
+//
+//				modelStack.PopMatrix();
+//			}
+//		}
+//	}
+//
+//	glDisable(GL_STENCIL_TEST);
+//
+//	glLineWidth(5.0f);
+//	RenderMesh(meshList[GEO_MINIMAP_BORDER], false);
+//	glLineWidth(1.0f);
+//}
 
 void SceneSnakeBoss::Exit()
 {
@@ -549,50 +354,10 @@ void SceneSnakeBoss::Exit()
 
 void SceneSnakeBoss::UpdateGameObjects(double dt)
 {
-	for (int i = 0; i < GameObject::goList.size(); ++i)
-	{
-		GameObject *go = GameObject::goList[i];
-		if (go->IsActive())
-		{
-			go->Update(dt);
-
-			if (go->GetCollider().type == Collider::COLLIDER_BALL)
-			{
-				for (int j = 0; j < GameObject::goList.size(); ++j)
-				{
-					GameObject *go2 = GameObject::goList[j];
-					if (go2->IsActive() && 
-						go2->GetType() != GameObject::GO_PROJECTILE)//only allow projectiles to check against GOs
-					{
-						go->HandleInteraction(go2, dt);
-					}
-				}
-			}
-
-			go->HandleOutOfBounds(0, m_worldWidth, 0, m_worldHeight);
-		}
-	}
-}
-
-void SceneSnakeBoss::RenderGO(GameObject* go)
-{
-	modelStack.PushMatrix();
-
-	if (go)
-	{
-		go->SetupMesh();
-		if (go->mesh)
-			RenderMesh(go->mesh, true);
-	}
-
-	modelStack.PopMatrix();
+	SceneBase::UpdateGameObjects(dt);
 }
 
 void SceneSnakeBoss::RenderGameObjects()
 {
-	for (int i = 0; i < GameObject::goList.size(); ++i)
-	{
-		if (GameObject::goList[i]->IsActive())
-			RenderGO(GameObject::goList[i]);
-	}
+	SceneBase::RenderGameObjects();
 }

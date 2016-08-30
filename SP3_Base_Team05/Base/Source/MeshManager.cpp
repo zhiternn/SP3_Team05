@@ -54,8 +54,6 @@ void MeshManager::Init()
 	meshList[GEO_ROPE]->textureArray[0] = LoadTGA("Image//rope.tga");
 	meshList[GEO_TRAP] = MeshBuilder::GenerateSphere("trap", Color(1, 0, 0), 9, 18, 1.f);
 
-	meshList[GEO_FIELD] = MeshBuilder::GenerateSphere("Forcefield", Color(1, 1, 1), 9, 18, 1.f);
-
 	meshList[GEO_PLAYER_TOP] = MeshBuilder::GenerateOBJ("player_top", "Obj//player_top.obj");
 	meshList[GEO_PLAYER_TOP]->textureArray[0] = LoadTGA("Image//player.tga");
 	//meshList[GEO_PLAYER_TOP]->textureArray[1] = LoadTGA("Image//player2.tga");
@@ -69,6 +67,13 @@ void MeshManager::Init()
 	meshList[GEO_FLOOR]->textureArray[0] = LoadTGA("Image//hex_floor_default.tga");
 	meshList[GEO_FLOOR]->textureArray[1] = LoadTGA("Image//hex_floor_emissive.tga");
 
+	meshList[GEO_BACKGROUND1] = MeshBuilder::GenerateQuad("bg1", Color(0.4f, 0.4f, 0.4f), 1.f);
+	meshList[GEO_BACKGROUND1]->textureArray[0] = LoadTGA("Image//bg1.tga");
+	meshList[GEO_BACKGROUND2] = MeshBuilder::GenerateQuad("bg2", Color(0.4f, 0.4f, 0.4f), 1.f);
+	meshList[GEO_BACKGROUND2]->textureArray[0] = LoadTGA("Image//bg2.tga");
+	meshList[GEO_BACKGROUND3] = MeshBuilder::GenerateQuad("bg3", Color(0.4f, 0.4f, 0.4f), 1.f);
+	meshList[GEO_BACKGROUND3]->textureArray[0] = LoadTGA("Image//bg3.tga");
+
 
 	meshList[GEO_FLOOR_HEX] = MeshBuilder::GenerateQuad("floor", Color(0.4f, 0.4f, 0.4f), 1.f, 3.0f);
 	meshList[GEO_FLOOR_HEX]->textureArray[0] = LoadTGA("Image//hex_floor_default.tga");
@@ -81,10 +86,10 @@ void MeshManager::Init()
 	meshList[GEO_MINIMAP_BOSS_MAIN_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(1.0f, 0.0f, 0.0f), 2);
 	meshList[GEO_MINIMAP_BOSS_BODY_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(0.5f, 0.1f, 0.1f), 2);
 
-	meshList[GEO_BORDER] = MeshBuilder::GenerateQuad("border", Color(0, 0, 0), 1.f);
+	meshList[GEO_BORDER] = MeshBuilder::GenerateQuad("border", Color(0.5f, 0.5f, 0.5f), 1.f);
 	meshList[GEO_HEALTH] = MeshBuilder::GenerateQuad("health", Color(0, 1, 0), 1.f);
 	meshList[GEO_DASH] = MeshBuilder::GenerateQuad("dash", Color(0, 0.3f, 0.7f), 1.f);
-	meshList[GEO_CAPTURE] = MeshBuilder::GenerateQuad("capture", Color(1.f, 0.0f, 0.0f), 1.f);
+	meshList[GEO_CAPTURE] = MeshBuilder::GenerateQuad("capture", Color(0.0f, 0.0f, 0.5f), 1.f);
 
 	meshList[GEO_WEAPON_MACHINEGUN] = MeshBuilder::GenerateQuad("machinegun", Color(0, 0, 0), 1.f);
 	meshList[GEO_WEAPON_MACHINEGUN]->textureArray[0] = LoadTGA("Image//machinegun.tga");

@@ -29,11 +29,13 @@ SnakeBody::~SnakeBody()
 void SnakeBody::Init(Vector3 pos, float speed, float speedLimit)
 {
 	Enemy::Init(pos);
+	team = TEAM_ENEMY;
 	entityType = Entity::ENTITY_BOSS_BODY;
 	movementSpeed = speed;
 	this->speedLimit = speedLimit;
 	collider.type = Collider::COLLIDER_BALL;
 	health = 300;
+	maxHealth = health;
 	this->scale.Set(5, 5, 5);
 }
 
@@ -59,11 +61,11 @@ void SnakeBody::HandleInteraction(GameObject* b, double dt)
 	if (body)//skips checks against body
 		return;
 
-	Player* player = dynamic_cast<Player*>(b);
-	if (player)
+	Entity* entity = dynamic_cast<Entity*>(b);
+	if (entity && this->team != entity->GetTeam())
 	{
 		if (CheckCollision(b, dt))
-			player->TakeDamage(DAMAGE_ONTOUCH);
+			entity->TakeDamage(DAMAGE_ONTOUCH);
 	}
 
 	GameObject::HandleInteraction(b, dt);

@@ -9,6 +9,7 @@ weapon(NULL)
 	inventory->weapons.front()->AssignProjectile(inventory->bullets.front());
 	weapon = inventory->weapons.front();
 	projectile = inventory->bullets.front();
+	currency = 0;
 
     shield = new Shield();
     GameObject::goList.push_back(shield);
@@ -62,13 +63,18 @@ void Player::Update(double dt)
 			isDashed = false;
 		}
 	}
-	if (health <= 0)
+	if (health <= maxHealth)
 	{
-		active = false;
-	}
-    if (health <= 150)
-    {
-        health += 1;
+		static float healthregenCooldown = 0;
+		healthregenCooldown += dt;
+		if (healthregenCooldown >= 1)
+		{
+			healthregenCooldown = 0.0f;
+			if (health + PLAYER_HEALTH_REGEN_PERSEC > maxHealth)
+				health = maxHealth;
+			else
+				health += PLAYER_HEALTH_REGEN_PERSEC;
+		}
     }
 
 	if (damageBuffer > 0)
@@ -122,6 +128,7 @@ void Player::Shielding(Vector3 dir)
 
     this->shield->Init(tempPos);
 }
+
 void Player::ChangeWeaponUp()
 {
 	weaponIter++;

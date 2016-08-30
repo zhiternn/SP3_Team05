@@ -6,8 +6,10 @@
 #include "MatrixStack.h"
 #include "Light.h"
 #include "Particle.h"
+#include "Camera.h"
 #include "DepthFBO.h"
 #include "Gamepad.h"
+#include "GLFWController.h"
 #include "Player.h"
 #include "OptionManager.h"
 
@@ -103,7 +105,14 @@ protected:
 	virtual void RenderTextOnScreen(Mesh* mesh, std::string text, Color color, float size, float x, float y);
 	virtual void RenderMesh(Mesh *mesh, bool enableLight);
 	virtual void RenderUI(Mesh* mesh, float size, float x, float y, float scaleX, bool enableLight);
+	virtual void RenderHUD();
+	virtual void RenderGameObjects();
+	virtual void RenderBackground();
+	virtual void UpdateGameObjects(double dt);
+	virtual void PlayerController(double dt);
+	virtual void GetGamePadInput(double dt);
 
+	void RenderMinimap(float zoom);
 	void SetupLights();
 	void SetHUD(const bool HUDmode, float fromX = 0.0f, float toX = 80.0f, float fromY = 0.0f, float toY = 60.0f, float fromZ = -10.0f, float toZ = 10.0f);
 	void SetCull(const bool cullMode);
@@ -133,6 +142,17 @@ protected:
 	bool Keyboard;
 
 	float fps;
+	float m_worldWidth, m_worldHeight;
+	float m_orthoWidth, m_orthoHeight;
+	Vector3 mousePos_screenBased;
+	Vector3 mousePos_worldBased;
+
+	Camera* mainCamera;
+
+	Player* player;
+	OptionManager &options;
+
+	std::vector<Mesh*> backgroundList;
 
 	//Create the Gamepad object
 	Gamepad GamePad;
@@ -140,8 +160,9 @@ protected:
 	Vector3 controllerStick_WorldPos;
 	Vector3 stickDir;
 
-	Player* player;
-	OptionManager &options;
+	//Create glfwController
+	GLFWController glfwController;
+
 };
 
 #endif
