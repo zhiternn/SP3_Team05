@@ -250,6 +250,21 @@ Return a random float between min and max
 		return (num + min);
 	}//end of RandFloatMinMax function
 
+
+/******************************************************************************/
+/*!
+\brief
+Returns the sign of variable (+1 or -1)
+
+\param val - the value to check
+\exception None
+\return +ve or -ve int
+*/
+/******************************************************************************/
+	template<typename T>
+	int GetSign(T val) {
+		return (T(0) < val) - (val < T(0));
+	}
 }//end namespace Math
 
 /******************************************************************************/

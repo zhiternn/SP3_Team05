@@ -33,7 +33,6 @@ public:
     void GolemShoot(Vector3 dir);
 
 private:
-    float maxhealth;
     float regendelay;
     Weapon* golemGun;
 };

@@ -15,6 +15,7 @@ SnakeHead::~SnakeHead()
 void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 {
 	Enemy::Init(pos);
+	team = TEAM_ENEMY;
 	entityType = Entity::ENTITY_BOSS_MAIN;
 	this->collider.type = Collider::COLLIDER_BALL;
 	//scale;
@@ -23,8 +24,10 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 	//health;
 	//captureRatio;
 	actionRate = ACTION_TIMER_MAX;
-	health = 1000;
-	this->mass = 30.0f;
+
+	health = 2000;
+	maxHealth = health;
+	this->mass = 10.0f;
 
 	isRecovering = false;
 	isRaging = false;
@@ -33,11 +36,11 @@ void SnakeHead::Init(Vector3 pos, unsigned bodyCount)
 
 	for (int i = 0; i < bodyCount; ++i)
 	{
-		SnakeBody* body2 = new SnakeBody();
-		body2->Init(this->pos, movementSpeed * 10.0f, speedLimit);
+		SnakeBody* body = new SnakeBody();
+		body->Init(this->pos, movementSpeed * 10.0f, speedLimit);
 
-		GameObject::goList.push_back(body2);
-		bodyList.push_back(body2);
+		GameObject::goList.push_back(body);
+		bodyList.push_back(body);
 	}
 }
 
@@ -59,10 +62,12 @@ void SnakeHead::Update(double dt)
 	{
 		if (this->vel.IsZero() == false)
 			this->front = vel.Normalized();
-
-		this->vel += (target->pos - this->pos).Normalized() * headSpeed * dt;
-		if (this->vel.LengthSquared() > headLimit * headLimit)
-			this->vel = this->vel.Normalized() * headLimit;
+		if (target->pos != this->pos)
+		{
+			this->vel += (target->pos - this->pos).Normalized() * headSpeed * dt;
+			if (this->vel.LengthSquared() > headLimit * headLimit)
+				this->vel = this->vel.Normalized() * headLimit;
+		}
 	}
 	else
 	{//Recovering state
@@ -81,7 +86,7 @@ void SnakeHead::Update(double dt)
 		actionRate -= dt;
 		if (actionRate <= 0.0f)
 		{
-			actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN, ACTION_TIMER_MAX);
+			actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN + (10 * (1 - bodyRatio)), ACTION_TIMER_MAX + (10 * (1 - bodyRatio)));
 			Action(bodyRatio);
 		}
 	}
@@ -118,6 +123,8 @@ void SnakeHead::Update(double dt)
 			}
 			else
 			{
+				(*it)->SetMovementSpeed(movementSpeed);
+				(*it)->SetSpeedLimit(speedLimit);
 				it = bodyList.erase(it);
 			}
 		}
@@ -134,9 +141,9 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 			if (CheckCollision(b, dt))//if touching dead body part
 			{
 				body->Init(body->pos, body->GetMovementSpeed(), body->GetSpeedLimit());
+				this->health += 50;
 				bodyList.push_back(body);
 			}
-
 			if (isRecovering)
 			{
 				body->GoTo(this->pos, dt);
@@ -145,10 +152,10 @@ void SnakeHead::HandleInteraction(GameObject* b, double dt)
 	}
 	else
 	{
-		Player* player = dynamic_cast<Player*>(b);
-		if (player)
+		Entity* entity = dynamic_cast<Entity*>(b);
+		if (entity && this->team != entity->GetTeam())
 			if (CheckCollision(b, dt))
-				player->TakeDamage(DAMAGE_ONTOUCH);
+				entity->TakeDamage(DAMAGE_ONTOUCH);
 
 		GameObject::HandleInteraction(b, dt);
 	}
@@ -160,10 +167,11 @@ void SnakeHead::Action(float ratio)
 	float rand = Math::RandFloatMinMax(0, 1);
 	if (rand <= ratio)//attack
 	{
-		if (Math::RandInt() % 2)
-			Shoot();
-		else
+		int halfChance = Math::RandInt() % 2;
+		if (isCapturing || halfChance)
 			Enrage();
+		else
+			Shoot();
 	}
 	else//recover
 	{
@@ -174,7 +182,7 @@ void SnakeHead::Action(float ratio)
 void SnakeHead::Recover()
 {
 	isRecovering = true;
-	actionLifetime = 5.0f * (bodyList.size() / maxBodyCount) * 10;
+	actionLifetime = 2.0f + 10 * (1 - (bodyList.size() / maxBodyCount));
 }
 
 void SnakeHead::Shoot()

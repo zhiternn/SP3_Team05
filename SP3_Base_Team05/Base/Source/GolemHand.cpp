@@ -106,10 +106,10 @@ void GolemRightHand::HandleInteraction(GameObject* b, double dt)
     {
         CollisionResponse(b);
 
-        Player* player = dynamic_cast<Player*>(b);
-        if (player)
+		Entity* entity = dynamic_cast<Entity*>(b);
+		if (entity && this->team != entity->GetTeam())
         {
-            player->TakeDamage(ATTACK_COLLIDE_DAMAGE);
+			entity->TakeDamage(ATTACK_COLLIDE_DAMAGE);
         }
     }
 }
@@ -230,10 +230,10 @@ void GolemLeftHand::HandleInteraction(GameObject* b, double dt)
     {
         CollisionResponse(b);
 
-        Player* player = dynamic_cast<Player*>(b);
-        if (player)
+		Entity* entity = dynamic_cast<Entity*>(b);
+		if (entity && (this->team != entity->GetTeam()))
         {
-            player->TakeDamage(ATTACK_COLLIDE_DAMAGE);
+			entity->TakeDamage(ATTACK_COLLIDE_DAMAGE);
         }
     }
 }

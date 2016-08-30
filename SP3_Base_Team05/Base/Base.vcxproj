@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -22,6 +22,7 @@
     <ClCompile Include="Source\Entity.cpp" />
     <ClCompile Include="Source\GameObject.cpp" />
     <ClCompile Include="Source\Gamepad.cpp" />
+    <ClCompile Include="Source\GLFWController.cpp" />
     <ClCompile Include="Source\GolemHand.cpp" />
     <ClCompile Include="Source\GolemHead.cpp" />
     <ClCompile Include="Source\Inventory.cpp" />
@@ -45,6 +46,7 @@
     <ClCompile Include="Source\SceneSnakeBoss.cpp" />
     <ClCompile Include="Source\SceneSummoner.cpp" />
     <ClCompile Include="Source\SceneDetlaff.cpp" />
+    <ClCompile Include="Source\SceneTutorial.cpp" />
     <ClCompile Include="Source\shader.cpp" />
     <ClCompile Include="Source\SnakeBody.cpp" />
     <ClCompile Include="Source\SnakeHead.cpp" />
@@ -71,6 +73,7 @@
     <ClInclude Include="Source\Entity.h" />
     <ClInclude Include="Source\GameObject.h" />
     <ClInclude Include="Source\Gamepad.h" />
+    <ClInclude Include="Source\GLFWController.h" />
     <ClInclude Include="Source\GolemHand.h" />
     <ClInclude Include="Source\GolemHead.h" />
     <ClInclude Include="Source\Inventory.h" />

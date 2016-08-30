@@ -27,32 +27,20 @@ public:
     virtual void Render();
     virtual void Exit();
 
+	virtual void PlayerController(double dt);
+	virtual void GetGamePadInput(double dt);
+	virtual void RenderGameObjects();
+	virtual void RenderHUD();
+	virtual void UpdateGameObjects(double dt);
+
     void RenderGPass();
     void RenderMain();
     void RenderWorld();
-    void RenderHUD();
-	void RenderMinimap(float zoom);
 
     void RenderSkybox();
     void RenderSkyPlane();
 
-
 private:
-
-    void PlayerController(double dt);
-	void GetGamePadInput(double dt);
-    void UpdateGameObjects(double dt);
-    void RenderGameObjects();
-    void RenderGO(GameObject* go);
-
-    float m_worldWidth, m_worldHeight;
-    float m_orthoWidth, m_orthoHeight;
-
-    Camera* mainCamera;
-
-    Vector3 mousePos_screenBased;
-    Vector3 mousePos_worldBased;
-
     GolemHead* golemhead;
     GolemLeftHand* golemlhead;
     GolemRightHand* golemrhead;
