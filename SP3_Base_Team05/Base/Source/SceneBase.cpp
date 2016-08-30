@@ -201,13 +201,13 @@ void SceneBase::Init()
 	useController = options.UseControl();
 
 	mainCamera->Include(&(player->pos));
-	//if (!(GamePad.IsConnected() && useController))
+	if (!(glfwController.isConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
 	}
-	//else
+	else
 	{
-		//mainCamera->Include(&controllerStick_Pos);
+		mainCamera->Include(&controllerStick_Pos);
 	}
 }
 
@@ -271,70 +271,69 @@ void SceneBase::PlayerController(double dt)
 
 void SceneBase::GetGamePadInput(double dt)
 {
-	//Vector3 forceDir;
-	//Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
-	//player->SetFront(lookDir);
+	Vector3 forceDir;
+	Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
+	player->SetFront(lookDir);
 
-	////Update Gamepad
-	////GamePad.Update();
-
-	////Handle Gamepad movement
-
-	////= Y Axis Movement
-	//if (GamePad.Left_Stick_Y() > 0.2f)
-	//{
-	//	forceDir.y += 5 * GamePad.Left_Stick_Y();
-	//}
-	//if (GamePad.Left_Stick_Y() < -0.2f)
-	//{
-	//	forceDir.y += 5 * GamePad.Left_Stick_Y();
-	//}
-
-	////= X Axis Movement
-	//if (GamePad.Left_Stick_X() > 0.2f)
-	//{
-	//	forceDir.x += 5 * GamePad.Left_Stick_X();
-	//}
-	//if (GamePad.Left_Stick_X() < -0.2f)
-	//{
-	//	forceDir.x += 5 * GamePad.Left_Stick_X();
-	//}
-
-	////= Dash
-	//if (GamePad.LeftTrigger() > 0.2f)
-	//{
-	//	player->Dash(forceDir, dt);
-	//}
-
-	////= Update Movement
-	//if (forceDir.IsZero() == false)
-	//{
-	//	forceDir.Normalize();
-	//	player->Move(forceDir, dt);
-	//}
+	//Handle Gamepad movement
+	std::cout << glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) << std::endl;
+	//= Y Axis Movement 
+	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) > 0.2f)
+	{
+		forceDir.y += 5 * glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y);
+	}
+	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) < -0.2f)
+	{
+		forceDir.y += 5 * glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y);
+	}
 
 
-	////Change Weapons
-	////= Left Bumper
-	//if (GamePad.GetButtonDown(8) > 0.5f)
-	//{
-	//	player->ChangeProjectileUp();
-	//}
-	////= Right Bumper
-	//if (GamePad.GetButtonDown(9) > 0.5f)
-	//{
-	//	player->ChangeWeaponUp();
-	//}
 
-	////Shooting
-	//if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
-	//{
-	//	stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
-	//	player->Shoot(stickDir.Normalized());
-	//}
 
-	////Refresh Gamepad
-	//GamePad.RefreshState();
+	//= X Axis Movement
+	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_X) > 0.2f)
+	{
+		forceDir.x += 5 * glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_X);
+	}
+	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_X) < -0.2f)
+	{
+		forceDir.x += 5 * glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_X);
+	}
+
+	//= Dash
+	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::TRIGGERS) > 0.5f)
+	{
+		player->Dash(forceDir, dt);
+	}
+
+	if (glfwController.GetJoyStickButtonPressed(GLFWController::CONTROLLER_BUTTON::L_SHOULDER) != NULL)
+	{
+		player->ChangeProjectileUp();
+	}
+	if (glfwController.GetJoyStickButtonPressed(GLFWController::CONTROLLER_BUTTON::R_SHOULDER) != NULL)
+	{
+		player->ChangeWeaponUp();
+	}
+
+
+	//Shooting
+
+	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) > 0.2f
+		|| glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) < -0.2f
+		|| glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y) > 0.2f
+		|| glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y) < -0.2f)
+	{
+		stickDir = Vector3(glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X)
+			, -(glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y))
+			, 0);
+		player->Shoot(stickDir.Normalized());
+	}
+
+	if (forceDir.IsZero() == false)
+	{
+		forceDir.Normalize();
+		player->Move(forceDir, dt);
+	}
 }
 
 void SceneBase::Update(double dt)
@@ -354,20 +353,27 @@ void SceneBase::Update(double dt)
 			0
 			);
 	}
-	if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
+	
+	controllerStick_Pos.Set((glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) * 100) + player->pos.x,
+		(-(glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y)) * 100) + player->pos.y, 0);
+	controllerStick_WorldPos.Set(
+		glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_X) + mainCamera->target.x - (m_orthoWidth * 0.5f),
+		(-(glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::R_THUMBSTICK_Y)) * 100) + mainCamera->target.y - (m_orthoHeight * 0.5f),
+		0);
+
+	//Check if Gamepad is connected for controller input
+	if (useController && glfwController.isConnected())
 	{
-		//Check if Gamepad is connected for controller input
-		//if (useController && GamePad.IsConnected())
-		{
-			//Handle Controller Input 
-			//GetGamePadInput(dt);
-		}
-		//else
-		{
-			//Handle Keyboard and Mouse input
-			PlayerController(dt);
-		}
+		//Handle Controller Input 
+		GetGamePadInput(dt);
 	}
+	else if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
+	{
+		//Handle Keyboard and Mouse input
+		PlayerController(dt);
+	}
+		
+
 
 	if (Controls::GetInstance().OnPress(Controls::KEY_1))
 		isCulled = true;
@@ -675,7 +681,7 @@ void SceneBase::RenderHUD()
 	RenderMinimap(1.5f);
 	modelStack.PopMatrix();
 
-	//if (!((GamePad.IsConnected() && useController)))
+	if (!((glfwController.isConnected() && useController)))
 	{
 		// Render the crosshair
 		modelStack.PushMatrix();

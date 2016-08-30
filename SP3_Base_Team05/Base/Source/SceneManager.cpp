@@ -10,7 +10,7 @@ SceneManager::~SceneManager()
 	
 }
 //Clean Scene
-void SceneManager::ChangeScene(int num)
+void SceneManager::ChangeScene(SCENE scene)
 {
 
 	if (currentScene != NULL)
@@ -18,27 +18,31 @@ void SceneManager::ChangeScene(int num)
 		Clean();
 	}
 
-	switch (num)
+	switch (scene)
 	{
-	case 1:
+	case SCENE::SCENE_GOLEM:
 	{
 		currentScene = new SceneGolem();
 		break;
 	}
-	case 2:
+	case SCENE::SCENE_SNAKE:
 	{
 		currentScene = new SceneSnakeBoss();
 		break;
 	}
-	case 3:
+	case SCENE::SCENE_SUMMONER:
 	{
 		currentScene = new SceneSummoner();
 		break;
 	}
-	case 4:
+	case SCENE::SCENE_DETLAFF:
 	{
 		currentScene = new SceneDetlaff();
 		break;
+	}
+	case SCENE::SCENE_MENU:
+	{
+		currentScene = new MainMenu();
 	}
 	}
 	

@@ -15,6 +15,7 @@
 using std::vector;
 
 class SceneManager;
+
 class SceneSummoner : public SceneBase
 {
 public:
