@@ -31,8 +31,9 @@ public:
 		SetScale(1, 1, 1);
 		SetMass(0);
 		ropeLifetime = 5.0f;
+		ropeLength = 40.0f;
 	}
-	Hook(int dmg, float ropeLifetime = 5.0f, float lifeTime = 2.0f, float projSpeed = 50.0f, float size = 1.5f, float mass = 10.0f) :CProjectile(PROJECTILE_TYPE::HOOK)
+	Hook(int dmg, float ropeLifetime = 5.0f, float ropeLength = 40.0f, float lifeTime = 2.0f, float projSpeed = 50.0f, float size = 1.5f, float mass = 10.0f) :CProjectile(PROJECTILE_TYPE::HOOK)
 	{
 		SetDMG(dmg);
 		SetLifetime(lifeTime);
@@ -40,15 +41,19 @@ public:
 		SetScale(size, size, size);
 		SetMass(mass);
 		this->ropeLifetime = ropeLifetime;
+		this->ropeLength = ropeLength;
 	}
 	~Hook(){}
 
     virtual void Update(double dt);                                     //< Update Rope Stuff
 	virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Rope
+	virtual void Boost(float multiplier);
+	virtual void UpgradeEffect(float amount);
 	void Set();
 
 private:
 	float ropeLifetime;
+	float ropeLength;
 
 };
 
@@ -58,19 +63,21 @@ class TrapProjectile : public CProjectile
 public:
 	TrapProjectile() :CProjectile(PROJECTILE_TYPE::TRAP){
 		SetDMG(0);
-		SetLifetime(10);
+		SetLifetime(5);
 		SetProjectileSpeed(100.0f);
 		SetScale(1, 1, 1);
 		SetMass(0);
-		trapLifeTIme = 5.f;
+		trapSize = 20.f;
 	}
 	~TrapProjectile(){}
 
 	virtual void Update(double dt);
 	virtual void HandleInteraction(GameObject *b, double dt);
+	virtual void Boost(float multiplier);
+	virtual void UpgradeEffect(float amount);
 
 private:
-	float trapLifeTIme;
+	float trapSize;
 
 };
 
@@ -91,6 +98,8 @@ public:
     virtual void Init(Vector3 pos);                                     //< Initialize
     virtual void Update(double dt);                                     //< Update
     virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Shotgun Shell
+	virtual void Boost(float multiplier);
+	virtual void UpgradeEffect(float amount);
     virtual void TakeDamage(unsigned amount);
 
     void regenerateShield(float currHP, double dt);                     //< Regenerates Shield Health
@@ -137,6 +146,8 @@ public:
 
 	virtual void Update(double dt);																//< Update
 	virtual void HandleInteraction(GameObject* b, double dt);									//< Handles Interaction for Bullet
+	virtual void Boost(float multiplier);
+	virtual void UpgradeEffect(float amount);
 	virtual void SetupMesh();
 };
 

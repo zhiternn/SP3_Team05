@@ -15,7 +15,7 @@ Rope::~Rope()
 		delete target;
 }
 
-void Rope::Init(Vector3 pos, GameObject* target, float lifeTime)
+void Rope::Init(Vector3 pos, GameObject* target, float lifeTime, float length)
 {
 	type = GameObject::GO_ENVIRONMENT;
 	this->pos = pos;
@@ -23,6 +23,7 @@ void Rope::Init(Vector3 pos, GameObject* target, float lifeTime)
 	this->target = target;
 	lifetime = lifeTime;
 	collider.type = Collider::COLLIDER_NONE;
+	maxLength = length;
 }
 
 void Rope::Update(double dt)

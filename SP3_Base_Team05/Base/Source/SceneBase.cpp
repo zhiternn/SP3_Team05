@@ -640,37 +640,74 @@ void SceneBase::RenderMinimap(float zoom)
 	{
 		if (GameObject::goList[i]->IsActive())
 		{
-			Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
-			if (entity && entity->IsActive())
+			GameObject *go = GameObject::goList[i];
+			if (go->GetType() == GameObject::GO_WALL)
 			{
 				modelStack.PushMatrix();
-				Vector3 pos = entity->pos;
+				Vector3 pos = go->pos;
 				pos.x -= player->pos.x;// Move to player pos
 				pos.y -= player->pos.y;// Move to player pos
 				//sphere space == radius = 1
 				pos.x /= m_worldWidth * zoom; //convert to regular sphere space
 				pos.y /= m_worldHeight * zoom;//convert to regular sphere space
-				Vector3 scale = entity->GetScale();
+				Vector3 scale = go->GetScale();
 				scale.x /= m_worldWidth * zoom; //convert to regular sphere space
 				scale.y /= m_worldHeight * zoom;//convert to regular sphere space
 				modelStack.Translate(pos.x, pos.y, pos.z);
-				modelStack.Scale(scale.x, scale.y, scale.z);
 
-				switch (entity->GetEntityType())
+				switch (go->GetCollider().type)
 				{
-				case Entity::ENTITY_BOSS_MAIN:
-					RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+				case Collider::COLLIDER_BALL:
+					modelStack.Scale(scale.x, scale.y, scale.z);
+					RenderMesh(meshList[GEO_SPHERE], false);
 					break;
-				case Entity::ENTITY_BOSS_BODY:
-					RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
-					break;
-				case Entity::ENTITY_PLAYER:
-					RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+				case Collider::COLLIDER_BOX:
+				{
+					float degree = Math::RadianToDegree(atan2(go->GetFront().y, go->GetFront().x));
+					modelStack.Rotate(degree, 0, 0, 1);
+					modelStack.Scale(scale.x, scale.y, scale.z);
+					RenderMesh(meshList[GEO_QUAD], false);
+				}
 					break;
 				default:break;
 				}
 
 				modelStack.PopMatrix();
+			}
+			else
+			{
+				Entity* entity = dynamic_cast<Entity*>(GameObject::goList[i]);
+				if (entity && entity->IsActive())
+				{
+					modelStack.PushMatrix();
+					Vector3 pos = entity->pos;
+					pos.x -= player->pos.x;// Move to player pos
+					pos.y -= player->pos.y;// Move to player pos
+					//sphere space == radius = 1
+					pos.x /= m_worldWidth * zoom; //convert to regular sphere space
+					pos.y /= m_worldHeight * zoom;//convert to regular sphere space
+					Vector3 scale = entity->GetScale();
+					scale.x /= m_worldWidth * zoom; //convert to regular sphere space
+					scale.y /= m_worldHeight * zoom;//convert to regular sphere space
+					modelStack.Translate(pos.x, pos.y, pos.z);
+					modelStack.Scale(scale.x, scale.y, scale.z);
+
+					switch (entity->GetEntityType())
+					{
+					case Entity::ENTITY_BOSS_MAIN:
+						RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
+						break;
+					case Entity::ENTITY_BOSS_BODY:
+						RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+						break;
+					case Entity::ENTITY_PLAYER:
+						RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);
+						break;
+					default:break;
+					}
+
+					modelStack.PopMatrix();
+				}
 			}
 		}
 	}

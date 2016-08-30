@@ -95,10 +95,6 @@ private:
     ButtonPosition b_Play, b_Continue, b_Option, b_Credit, b_LevelUp, b_Exit, b_Back, b_Yes, b_No, b_On, b_Off, upgradeMG, upgradeSHG, upgradeSPG, upgradeBullet, upgradeTrap, upgradeHook;
 
     bool MusicOn, SoundOn, ControllerOn;
-
-    Inventory *inventory;
-    Weapon *weapon;
-    CProjectile *proj;
 };
 
 #endif
