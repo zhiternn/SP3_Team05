@@ -563,7 +563,7 @@ void MainMenu::LevelSelectPage()
                     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
                     isClicked = true;
                 }
-                sm.ChangeScene(1);
+                sm.ChangeScene(SCENE::SCENE_GOLEM);
             }
             else
             {
@@ -622,7 +622,7 @@ void MainMenu::LevelSelectPage()
                     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
                     isClicked = true;
                 }
-                sm.ChangeScene(2);
+                sm.ChangeScene(SCENE::SCENE_SNAKE);
             }
             else
             {
@@ -684,7 +684,7 @@ void MainMenu::LevelSelectPage()
                     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
                     isClicked = true;
                 }
-                sm.ChangeScene(3);
+                sm.ChangeScene(SCENE::SCENE_SUMMONER);
             }
             else
             {
@@ -805,7 +805,8 @@ void MainMenu::LevelSelectPage()
                     isClicked = true;
                 }
 
-                state = MENU_MAIN;
+                sm.ChangeScene(SCENE::SCENE_DETLAFF);
+				state = MENU_MAIN;
             }
             else
             {

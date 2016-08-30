@@ -25,15 +25,9 @@ void SceneSummoner::Init()
 	//Clear the List from previous Scene
 	GameObject::goList.clear();
 
-	//GameObject *go = FetchGO();
-	//go->SetActive(true);
-	//go->SetScale(20, 20, 20);
-	//go->SetFront(1, 0, 0);
-	//go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	//go->SetType(GameObject::GO_ENVIRONMENT);
-	//go->SetColliderType(Collider::COLLIDER_BOX);
 
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
+
 	GameObject::goList.push_back(player);
 
 	summoner = new Summoner();
@@ -41,18 +35,7 @@ void SceneSummoner::Init()
 	summoner->SetTarget(player);
 	summoner->Init(Vector3(m_worldWidth * 0.5f + 5, m_worldHeight * 0.5f, 0));
 
-	mainCamera->Include(&(player->pos));
-	//if (!(GamePad.IsConnected() && useController))
-	{
-		mainCamera->Include(&mousePos_worldBased);
-		Keyboard = false;
-	}
-	//else
-	{
-		//mainCamera->Include(&controllerStick_Pos);
-		//Keyboard = true;
-	}
-
+	GenerateWorld();
 }
 
 void SceneSummoner::PlayerController(double dt)
@@ -62,7 +45,7 @@ void SceneSummoner::PlayerController(double dt)
 
 void SceneSummoner::GetGamePadInput(double dt)
 {
-	//SceneBase::GetGamePadInput(dt);
+	SceneBase::GetGamePadInput(dt);
 }
 
 void SceneSummoner::Update(double dt)
@@ -70,19 +53,19 @@ void SceneSummoner::Update(double dt)
 	SceneBase::Update(dt);
 
 	//Update Camera target scheme if Controller is plugged in
-	//if (GamePad.IsConnected() && Keyboard)
-	//{
-	//	Keyboard = false;
+	if (glfwController.isConnected() && Keyboard)
+	{
+		Keyboard = false;
 
-	//	mainCamera->entityList.pop_back();
-	//	mainCamera->Include(&controllerStick_Pos);
-	//}
-	//else if (!(GamePad.IsConnected()))
-	//{
-	//	Keyboard = true;
-	//	mainCamera->entityList.pop_back();
-	//	mainCamera->Include(&mousePos_worldBased);
-	//}
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&controllerStick_Pos);
+	}
+	else if (!(glfwController.isConnected()))
+	{
+		Keyboard = true;
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&mousePos_worldBased);
+	}
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -95,6 +78,22 @@ void SceneSummoner::Update(double dt)
 	else if (summoner->IsCaptured())
 	{
 		player->inventory->AddCurrency(50 + summoner->GetHP());
+	}
+}
+
+void SceneSummoner::GenerateWorld()
+{
+	for (int i = 0; i < NUMBER_OF_WORLD_OBJECTS; ++i)
+	{
+		float randPosX = Math::RandFloatMinMax(0, m_worldWidth);
+		float randPosY = Math::RandFloatMinMax(0, m_worldHeight);
+		float randScaleX = Math::RandFloatMinMax(7, 10);
+		float randScaleY = Math::RandFloatMinMax(7, 10);
+		GameObject *wall = FetchGO();
+		wall->SetActive(true);
+		wall->SetColliderType(Collider::COLLIDER_BOX);
+		wall->SetPostion(randPosX, randPosY, 0);
+		wall->SetScale(randScaleX, randScaleY, 1);
 	}
 }
 
