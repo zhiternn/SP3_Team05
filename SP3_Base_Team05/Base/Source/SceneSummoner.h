@@ -17,6 +17,7 @@ using std::vector;
 static int NUMBER_OF_WORLD_OBJECTS = 25;
 
 class SceneManager;
+
 class SceneSummoner : public SceneBase
 {
 public:

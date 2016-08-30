@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Controls.h"
 #include "Projectile.h"
+#include "Particle.h"
 
 Player::Player():
 weapon(NULL)
@@ -94,6 +95,7 @@ void Player::Dash(Vector3 dir, double dt)
 		this->ApplyForce(dir, forceMagnitude * dt);
 		isDashed = true;
 		cooldownTimer = DASH_COOLDOWN;
+		EmitDashParticle(this->pos, -dir);
 	}
 }
 

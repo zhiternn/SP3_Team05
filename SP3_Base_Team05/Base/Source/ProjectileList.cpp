@@ -58,7 +58,8 @@ void TrapProjectile::Update(double dt)
 
 void TrapProjectile::HandleInteraction(GameObject *b, double dt)
 {
-	if (this->team == b->GetTeam())
+
+	if (this->team == b->GetTeam() || b->GetType() == GameObject::GO_ENVIRONMENT)
 		return;
 
 	if (CheckCollision(b, dt))
@@ -262,6 +263,7 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 {
 	if (this->team == b->GetTeam())
 		return;
+
 	if (CheckCollision(b, dt))
 	{
 		CollisionResponse(b);
@@ -285,7 +287,7 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 void Bullet::Boost(float multiplier)
 {
 	this->proj_speed += 20.0f * multiplier;
-	this->proj_dmg += 5.0f * multiplier;
+	this->proj_dmg += 10.0f * multiplier;
 	this->proj_lifetime += 3.0f * multiplier;
 }
 

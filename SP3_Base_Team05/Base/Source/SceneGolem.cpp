@@ -22,9 +22,6 @@ void SceneGolem::Init()
     SceneBase::Init();
     Math::InitRNG();
 
-	//Clear the list from previous scene
-	GameObject::goList.clear();
-
     //GameObject *go = FetchGO();
     //go->SetActive(true);
     //go->SetScale(20, 20, 20);
@@ -34,7 +31,7 @@ void SceneGolem::Init()
     //go->SetColliderType(Collider::COLLIDER_BOX);
 
     player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
-    GameObject::goList.push_back(player);
+    GameObject::goList.push_back(SceneBase::player);
 
     golemhead = new GolemHead();
     GameObject::goList.push_back(golemhead);
@@ -50,18 +47,6 @@ void SceneGolem::Init()
     GameObject::goList.push_back(golemrhead);
     golemrhead->SetTarget(player);
     golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 50.f, 0));
-
-	mainCamera->Include(&(player->pos));
-	if (!(glfwController.isConnected() && useController))
-	{
-		mainCamera->Include(&mousePos_worldBased);
-		Keyboard = false;
-	}
-	else
-	{
-		mainCamera->Include(&controllerStick_Pos);
-		Keyboard = true;
-	}
 
 }
 
@@ -81,6 +66,21 @@ void SceneGolem::GetGamePadInput(double dt)
 void SceneGolem::Update(double dt)
 {
     SceneBase::Update(dt);
+
+	//Update Camera target scheme if Controller is plugged in
+	if (glfwController.isConnected() && Keyboard)
+	{
+		Keyboard = false;
+
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&controllerStick_Pos);
+	}
+	else if (!(glfwController.isConnected()))
+	{
+		Keyboard = true;
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&mousePos_worldBased);
+	}
 
     mainCamera->Update(dt);
     mainCamera->Constrain(*player, mainCamera->target);
@@ -276,6 +276,8 @@ void SceneGolem::RenderMain()
 
 	RenderWorld();
 
+	RenderParticles();
+
     //RenderSkyPlane();
 }
 
@@ -385,11 +387,6 @@ void SceneGolem::RenderHUD()
 
 void SceneGolem::Exit()
 {
-    if (mainCamera)
-        delete mainCamera;
-    if (player)
-        delete player;
-
     SceneBase::Exit();
 }
 

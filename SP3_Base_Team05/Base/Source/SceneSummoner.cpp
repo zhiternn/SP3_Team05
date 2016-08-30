@@ -22,9 +22,6 @@ void SceneSummoner::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
-	//Clear the List from previous Scene
-	GameObject::goList.clear();
-
 	//GameObject *go = FetchGO();
 	//go->SetActive(true);
 	//go->SetScale(20, 20, 20);
@@ -34,7 +31,7 @@ void SceneSummoner::Init()
 	//go->SetColliderType(Collider::COLLIDER_BOX);
 
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
-	GameObject::goList.push_back(player);
+    GameObject::goList.push_back(SceneBase::player);
 
 	summoner = new Summoner();
 	GameObject::goList.push_back(summoner);
@@ -42,19 +39,6 @@ void SceneSummoner::Init()
 	summoner->Init(Vector3(m_worldWidth * 0.5f + 5, m_worldHeight * 0.5f, 0));
 
 	GenerateWorld();
-
-	mainCamera->Include(&(player->pos));
-	//if (!(GamePad.IsConnected() && useController))
-	{
-		mainCamera->Include(&mousePos_worldBased);
-		Keyboard = false;
-	}
-	//else
-	{
-		//mainCamera->Include(&controllerStick_Pos);
-		//Keyboard = true;
-	}
-
 }
 
 void SceneSummoner::PlayerController(double dt)
@@ -64,7 +48,7 @@ void SceneSummoner::PlayerController(double dt)
 
 void SceneSummoner::GetGamePadInput(double dt)
 {
-	//SceneBase::GetGamePadInput(dt);
+	SceneBase::GetGamePadInput(dt);
 }
 
 void SceneSummoner::Update(double dt)
@@ -72,19 +56,19 @@ void SceneSummoner::Update(double dt)
 	SceneBase::Update(dt);
 
 	//Update Camera target scheme if Controller is plugged in
-	//if (GamePad.IsConnected() && Keyboard)
-	//{
-	//	Keyboard = false;
+	if (glfwController.isConnected() && Keyboard)
+	{
+		Keyboard = false;
 
-	//	mainCamera->entityList.pop_back();
-	//	mainCamera->Include(&controllerStick_Pos);
-	//}
-	//else if (!(GamePad.IsConnected()))
-	//{
-	//	Keyboard = true;
-	//	mainCamera->entityList.pop_back();
-	//	mainCamera->Include(&mousePos_worldBased);
-	//}
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&controllerStick_Pos);
+	}
+	else if (!(glfwController.isConnected()))
+	{
+		Keyboard = true;
+		mainCamera->entityList.pop_back();
+		mainCamera->Include(&mousePos_worldBased);
+	}
 
 	mainCamera->Update(dt);
 	mainCamera->Constrain(*player, mainCamera->target);
@@ -251,6 +235,8 @@ void SceneSummoner::RenderMain()
 
 	RenderWorld();
 
+	RenderParticles();
+
 	//RenderSkyPlane();
 }
 
@@ -297,11 +283,6 @@ void SceneSummoner::RenderHUD()
 
 void SceneSummoner::Exit()
 {
-	if (mainCamera)
-		delete mainCamera;
-	if (player)
-		delete player;
-
 	SceneBase::Exit();
 }
 
