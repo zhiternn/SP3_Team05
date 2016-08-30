@@ -41,6 +41,8 @@ void SceneSummoner::Init()
 	summoner->SetTarget(player);
 	summoner->Init(Vector3(m_worldWidth * 0.5f + 5, m_worldHeight * 0.5f, 0));
 
+	GenerateWorld();
+
 	mainCamera->Include(&(player->pos));
 	//if (!(GamePad.IsConnected() && useController))
 	{
@@ -95,6 +97,22 @@ void SceneSummoner::Update(double dt)
 	else if (summoner->IsCaptured())
 	{
 		player->inventory->AddCurrency(50 + summoner->GetHP());
+	}
+}
+
+void SceneSummoner::GenerateWorld()
+{
+	for (int i = 0; i < NUMBER_OF_WORLD_OBJECTS; ++i)
+	{
+		float randPosX = Math::RandFloatMinMax(0, m_worldWidth);
+		float randPosY = Math::RandFloatMinMax(0, m_worldHeight);
+		float randScaleX = Math::RandFloatMinMax(7, 10);
+		float randScaleY = Math::RandFloatMinMax(7, 10);
+		GameObject *wall = FetchGO();
+		wall->SetActive(true);
+		wall->SetColliderType(Collider::COLLIDER_BOX);
+		wall->SetPostion(randPosX, randPosY, 0);
+		wall->SetScale(randScaleX, randScaleY, 1);
 	}
 }
 
