@@ -22,13 +22,7 @@ void SceneGolem::Init()
     SceneBase::Init();
     Math::InitRNG();
 
-    //GameObject *go = FetchGO();
-    //go->SetActive(true);
-    //go->SetScale(20, 20, 20);
-    //go->SetFront(1, 0, 0);
-    //go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-    //go->SetType(GameObject::GO_ENVIRONMENT);
-    //go->SetColliderType(Collider::COLLIDER_BOX);
+	GameObject::goList.clear();
 
     player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
     GameObject::goList.push_back(SceneBase::player);
@@ -126,20 +120,18 @@ void SceneGolem::Update(double dt)
         golemlhead->SetActive(false);
     }
 
-	//Update Camera target scheme if Controller is plugged in
-	//if (GamePad.IsConnected() && Keyboard)
-	//{
-	//	Keyboard = false;
+	if (golemhead->IsDead())
+	{
+		player->inventory->AddCurrency(100);
+		manager.ChangeScene(SCENE::SCENE_MENU);
+		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
+	}
 
-	//	mainCamera->entityList.pop_back();
-	//	mainCamera->Include(&controllerStick_Pos);
-	//}
-	//else if (!(GamePad.IsConnected()))
-	//{
-	//	Keyboard = true;
-	//	mainCamera->entityList.pop_back();
-	//	mainCamera->Include(&mousePos_worldBased);
-	//}
+	if (player->IsDead())
+	{
+		manager.ChangeScene(SCENE::SCENE_MENU);
+		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_LOSE);
+	}
 }
 
 void SceneGolem::Render()

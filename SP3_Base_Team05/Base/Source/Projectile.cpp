@@ -49,6 +49,11 @@ float CProjectile::GetDMG()
     return proj_dmg;
 }
 
+float CProjectile::GetEffect()
+{
+	return GetDMG();
+}
+
 /******************************************************************************/
 /*!
 \brief
@@ -118,6 +123,7 @@ void CProjectile::Init(Vector3 pos, Vector3 dir)
 	this->collider.type = Collider::COLLIDER_BALL;
 	this->pos = pos;
 	this->vel = dir.Normalized() * proj_speed;
+	this->mass = 0;
 }
 
 /******************************************************************************/
@@ -169,5 +175,4 @@ void CProjectile::HandleOutOfBounds(float minX, float maxX, float minY, float ma
 	{
 		this->active = false;
 	}
-
 }

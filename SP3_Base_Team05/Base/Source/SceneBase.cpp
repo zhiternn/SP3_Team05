@@ -717,7 +717,10 @@ void SceneBase::RenderMinimap(float zoom)
 						RenderMesh(meshList[GEO_MINIMAP_BOSS_MAIN_ICON], false);
 						break;
 					case Entity::ENTITY_BOSS_BODY:
-						RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
+						if (entity->IsDead())
+							RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_DEAD_ICON], false);
+						else
+							RenderMesh(meshList[GEO_MINIMAP_BOSS_BODY_ICON], false);
 						break;
 					case Entity::ENTITY_PLAYER:
 						RenderMesh(meshList[GEO_MINIMAP_PLAYER_ICON], false);

@@ -65,6 +65,8 @@ void MeshManager::Init()
 	meshList[GEO_PARTICLE_SKID]->textureArray[0] = LoadTGA("Image//particle_skid.tga");
 	meshList[GEO_PARTICLE_ATTACK] = MeshBuilder::GenerateQuad("p_atck", Color(1, 1, 1), 1);
 	meshList[GEO_PARTICLE_ATTACK]->textureArray[0] = LoadTGA("Image//particle_attack.tga");
+	meshList[GEO_PARTICLE_TELEPORT] = MeshBuilder::GenerateQuad("p_teleport", Color(1, 1, 1), 1);
+	meshList[GEO_PARTICLE_TELEPORT]->textureArray[0] = LoadTGA("Image//Detlaff_TGA//teleport.tga");
 
 	meshList[GEO_TRAP] = MeshBuilder::GenerateOBJ("trap", "Obj//sphereobj.obj");
 	meshList[GEO_TRAP]->textureArray[0] = LoadTGA("Image//trap.tga");
@@ -106,6 +108,7 @@ void MeshManager::Init()
 	meshList[GEO_MINIMAP_PLAYER_ICON] = MeshBuilder::GenerateCircle("player", Color(0.1f, 0.9f, 0.1f), 2);
 	meshList[GEO_MINIMAP_BOSS_MAIN_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(1.0f, 0.0f, 0.0f), 2);
 	meshList[GEO_MINIMAP_BOSS_BODY_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(0.5f, 0.1f, 0.1f), 2);
+	meshList[GEO_MINIMAP_BOSS_BODY_DEAD_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(0.3f, 0.3f, 0.3f), 2);
 
 	meshList[GEO_BORDER] = MeshBuilder::GenerateQuad("border", Color(1, 1, 1), 1.f);
 	meshList[GEO_HEALTH] = MeshBuilder::GenerateQuad("health", Color(0, 1, 0), 1.f);

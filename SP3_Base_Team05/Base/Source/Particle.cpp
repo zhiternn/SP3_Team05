@@ -199,7 +199,7 @@ void EmitSkidParticle(Vector3 pos, float size, Vector3 dir)
 	particle->scale.Set(size, size, size);
 }
 
-void EmitAttackParticle(Vector3 pos, float size, bool in)
+	void EmitAttackParticle(Vector3 pos, float size, bool in)
 {
 	Particle* particle = FetchParticle();
 	particle->mesh = meshList[GEO_PARTICLE_ATTACK];
@@ -207,7 +207,7 @@ void EmitAttackParticle(Vector3 pos, float size, bool in)
 	particle->Init(pos);
 	particle->scale.Set(size, size, size);
 	if (in == true)
-	{ 
+	{
 		particle->entered = false;
 		particle->entrySpeed = 70.f;
 		particle->entryEffect = Particle::ENTRY_SCALEIN;
@@ -219,4 +219,18 @@ void EmitAttackParticle(Vector3 pos, float size, bool in)
 		particle->exitSpeed = 70.f;
 		particle->exitEffect = Particle::EXIT_SCALEOUT;
 	}
+}
+
+void EmitTeleportParticle(Vector3 pos, float size)
+{
+	Particle* particle = FetchParticle();
+	particle->mesh = meshList[GEO_PARTICLE_TELEPORT];
+
+	particle->Init(pos);
+	particle->lifetime = 0.5f;
+	particle->scale.Set(0.1f, 0.1f, 0.1f);
+	particle->entered = false;
+	particle->entrySpeed = 500.f;
+	particle->entryEffect = Particle::ENTRY_SCALEIN;
+	particle->entryTarget.Set(size, size, size);
 }

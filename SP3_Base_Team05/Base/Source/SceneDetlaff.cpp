@@ -25,22 +25,9 @@ void SceneDetlaff::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
+	GameObject::goList.clear();
 
-
-	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
-
-	mainCamera = new Camera();
-	mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
-
-	/*GameObject *go = FetchGO();
-	go->SetActive(true);
-	go->SetScale(20, 20, 20);
-	go->SetFront(1, 0, 0);
-	go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	go->SetType(GameObject::GO_ENVIRONMENT);
-	go->SetColliderType(Collider::COLLIDER_BOX);*/
-
-	player->Init(Vector3(0, 1, 0));
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.1, 0));
     GameObject::goList.push_back(SceneBase::player);
 
 	detlaff = new CDetlaff();
@@ -92,6 +79,11 @@ void SceneDetlaff::Update(double dt)
 	enemyFireDelay -= dt;
 	enemyMovementDelay -= dt;
 
+	if ((detlaff->GetVelocity().x > 10.f) || (detlaff->GetVelocity().y > 10.f))
+	{
+		detlaff->SetVelocity(Vector3(10.f, 10.f, 0));
+	}
+
 	if (enemyFireDelay <= 0.f)
 	{
 		enemyFireDelay = ENEMY_FIRE_COOLDOWN;
@@ -103,22 +95,35 @@ void SceneDetlaff::Update(double dt)
 
 	if (enemyMovementDelay <= 0.f)
 	{
+		EmitTeleportParticle(detlaff->GetPosition(), detlaff->GetScale().x * 3.f);
 		enemyMovementDelay = ENEMY_MOVE_DELAY;
 		detlaff->Teleport(m_worldWidth - 100.f, m_worldHeight - 100.f);
 	}
 
 	if (detlaff->IsDead())
 	{
+		SceneBase::Exit();
 		player->inventory->AddCurrency(100);
+		manager.ChangeScene(SCENE::SCENE_MENU);
+		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
+
+		delete this;
 	}
 	else if (detlaff->IsCaptured())
 	{
 		player->inventory->AddCurrency(400);
+		manager.ChangeScene(SCENE::SCENE_MENU);
+		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
+
+		delete this;
 	}
 	
-	if ((detlaff->GetVelocity().x > 50.f) || (detlaff->GetVelocity().y > 50.f))
+	if (player->IsDead()) 
 	{
-		detlaff->SetVelocity(Vector3(10.f, 10.f, 10.f));
+		manager.ChangeScene(SCENE::SCENE_MENU);
+		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_LOSE);
+
+		delete this;
 	}
 }
 

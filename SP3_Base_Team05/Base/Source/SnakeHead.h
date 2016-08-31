@@ -6,8 +6,8 @@
 
 #include <vector>
 
-static const float ACTION_TIMER_MIN = 3.0f;
-static const float ACTION_TIMER_MAX = 6.0f;
+static const float ACTION_TIMER_MIN = 2.0f;
+static const float ACTION_TIMER_MAX = 4.0f;
 static const int ATTACK_RAM_DAMAGE = 20;
 static const float RAGING_SPEED_MULTIPLIER = 3.0f;
 static const float BODY_PICKUP_RECOVER_AMOUNT = 80.0f;

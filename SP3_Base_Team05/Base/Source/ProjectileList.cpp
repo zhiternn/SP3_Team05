@@ -52,6 +52,11 @@ void Hook::UpgradeEffect(float amount)
 		ropeLength = 5.0f;
 }
 
+float Hook::GetEffect()
+{
+	return ropeLifetime;
+}
+
 void TrapProjectile::Update(double dt)
 {
 	CProjectile::Update(dt);
@@ -88,6 +93,11 @@ void TrapProjectile::Boost(float multiplier)
 void TrapProjectile::UpgradeEffect(float amount)
 {
 	this->trapSize += amount;
+}
+
+float TrapProjectile::GetEffect()
+{
+	return trapSize;
 }
 
 void Shield::Init(Vector3 pos)
@@ -298,6 +308,11 @@ void Bullet::Boost(float multiplier)
 void Bullet::UpgradeEffect(float amount)
 {
 	this->proj_dmg += amount;
+}
+
+float Bullet::GetEffect()
+{
+	return GetDMG();
 }
 
 void Bullet::SetupMesh()

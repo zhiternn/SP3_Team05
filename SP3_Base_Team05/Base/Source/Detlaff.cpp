@@ -11,8 +11,7 @@ CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 	weapon = new Splitgun(360.f, 36);
 	weapon->AssignProjectile(new Bullet());
 	weapon_extra = NULL;
-	health = 600;
-//	this->SetRate(0.f);
+	this->SetHP(1000);
 }
 
 
@@ -33,7 +32,7 @@ void CDetlaff::Update(double dt)
 	//< THIS BOSS WILL BE AN IMMOBILE JUGGERNAUT
 
 	//Update States
-	if (this->GetHP() <= 0)
+	if (this->GetHP() <= 200)
 	{
 		switch (state)
 		{
@@ -41,7 +40,7 @@ void CDetlaff::Update(double dt)
 			{
 				//Spawn Stage 2 Boss
 				state = STATE_2;
-				this->health = 1200;
+				this->health = 1500;
 				//Create the stage 2 splitgun
 				weapon = new Splitgun(45.0f, 12);
 				weapon->AssignProjectile(new Bullet());

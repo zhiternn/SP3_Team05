@@ -19,6 +19,7 @@ void Rope::Init(Vector3 pos, GameObject* target, float lifeTime, float length)
 {
 	type = GameObject::GO_ENVIRONMENT;
 	this->pos = pos;
+	this->scale.y = 0.5f;
 	this->vel.SetZero();
 	this->target = target;
 	lifetime = lifeTime;

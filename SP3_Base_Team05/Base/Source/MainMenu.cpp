@@ -78,9 +78,10 @@ void MainMenu::Init()
 
     //upgradeFireRate, upgradeProjSpd, upgradeDmg;
 
-    upgradeFireRate.Set(92, 100, 47, 52);
-    upgradeProjSpd.Set(92, 100, 36, 42);
-    upgradeDmg.Set(92, 100, 26, 32);
+	upgradeDmg.Set(98, 106, 47, 52);
+	upgradeLifetime.Set(98, 106, 36, 42);
+	upgradeProjSpd.Set(98, 106, 26, 32);
+    
 }
 
 void MainMenu::Update(double dt)
@@ -170,11 +171,17 @@ void MainMenu::Render()
     case MainMenu::MENU_EXIT: 
 		confirmExit();
         break;
+	case MainMenu::MENU_WIN:
+		WinPage();
+		break;
+	case MainMenu::MENU_LOSE:
+		LosePage();
+		break;
     default:
         break;
     }
-    RenderHUD();
-    SetHUD(false);
+	RenderHUD();
+	SetHUD(false);
 }
 
 void MainMenu::RenderGPass()
@@ -745,7 +752,7 @@ void MainMenu::LevelSelectPage()
 
                 std::ostringstream ss;
                 ss.precision(5);
-                ss << "Detalff";
+                ss << "Detlaff";
                 RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 if (isClicked == false)
@@ -765,7 +772,7 @@ void MainMenu::LevelSelectPage()
 
                 std::ostringstream ss;
                 ss.precision(5);
-                ss << "Detalff!";
+                ss << "Detlaff!";
                 RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
@@ -786,7 +793,7 @@ void MainMenu::LevelSelectPage()
 
             std::ostringstream ss;
             ss.precision(5);
-            ss << "Detalff";
+            ss << "Detlaff";
             RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
         }
 
@@ -838,7 +845,7 @@ void MainMenu::LevelSelectPage()
 
             }
         }
-        else
+        /*else
         {
             modelStack.PushMatrix();
             modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.15)) * (60 / m_orthoHeight), 1);
@@ -850,7 +857,7 @@ void MainMenu::LevelSelectPage()
             ss3.precision(5);
             ss3 << "Menu";
             RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
-        }
+        }*/
     }
     else
     {
@@ -1081,20 +1088,44 @@ void MainMenu::LevelUpPage()
 	modelStack.PushMatrix();
     modelStack.Translate((m_orthoWidth * 0.6) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (58 / m_orthoHeight), 1);
 	modelStack.Scale(10, 10, 2);
+
+	ss.str("");
+	ss.precision(5);
+	
 	switch (player->inventory->bullets[player->projectileIter]->proj_type)
 	{
 	case CProjectile::BULLET:
         RenderMesh(meshList[GEO_PROJECTILE_BULLET], false);
+		ss << "Damage: ";
 		break;
 	case CProjectile::TRAP:
         RenderMesh(meshList[GEO_PROJECTILE_TRAP], false);
+		ss << "Radius: ";
 		break;
 	case CProjectile::HOOK:
         RenderMesh(meshList[GEO_PROJECTILE_HOOK], false);
+		ss << "Duration: ";
 		break;
 	default:break;
 	}
+	ss << player->inventory->bullets[player->projectileIter]->GetEffect();
 	modelStack.PopMatrix();
+
+	modelStack.PushMatrix();
+	modelStack.Translate((m_orthoWidth * 0.63) * (80 / m_orthoWidth), (m_orthoHeight * 0.325) * (60 / m_orthoHeight), 1);
+	modelStack.Scale(20, 12, 2);
+	RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+	modelStack.PopMatrix();
+
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, (m_orthoWidth * 0.55) * (80 / m_orthoWidth), (m_orthoHeight * 0.33) * (60 / m_orthoHeight));
+	ss.str("");
+	ss.precision(5);
+	ss << "Lifetime: " << player->inventory->bullets[player->projectileIter]->GetLifetime();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, (m_orthoWidth * 0.55) * (80 / m_orthoWidth), (m_orthoHeight * 0.29) * (60 / m_orthoHeight));
+	ss.str("");
+	ss.precision(5);
+	ss << "Speed: " << player->inventory->bullets[player->projectileIter]->GetProjectileSpeed();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, (m_orthoWidth * 0.55) * (80 / m_orthoWidth), (m_orthoHeight * 0.25) * (60 / m_orthoHeight));
 
     modelStack.PushMatrix();
     modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
@@ -1103,7 +1134,7 @@ void MainMenu::LevelUpPage()
     modelStack.PopMatrix();
 
     modelStack.PushMatrix();
-    modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (58 / m_orthoHeight), 1);
+    modelStack.Translate((m_orthoWidth * 0.25) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
     modelStack.Scale(10, 10, 2);
 	switch (player->inventory->weapons[player->weaponIter]->weapon_type)
 	{
@@ -1120,33 +1151,19 @@ void MainMenu::LevelUpPage()
 	}
     modelStack.PopMatrix();
 
-    //// Machine Gun Upgrade
-    //modelStack.PushMatrix();
-    //modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
-    //modelStack.Scale(5, 5, 2);
-    //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-    //modelStack.PopMatrix();
+	modelStack.PushMatrix();
+	modelStack.Translate((m_orthoWidth * 0.28) * (80 / m_orthoWidth), (m_orthoHeight * 0.37) * (60 / m_orthoHeight), 1);
+	modelStack.Scale(22, 4, 2);
+	RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+	modelStack.PopMatrix();
 
-    //// Shotgun Upgrade
-    //modelStack.PushMatrix();
-    //modelStack.Translate((m_orthoWidth * 0.62) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
-    //modelStack.Scale(5, 5, 2);
-    //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-    //modelStack.PopMatrix();
+	ss.str("");
+	ss.precision(5);
+	ss << "Firerate: " << player->inventory->weapons[player->weaponIter]->GetFireRate();
+	modelStack.PushMatrix();
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, (m_orthoWidth * 0.18) * (80 / m_orthoWidth), (m_orthoHeight * 0.35) * (60 / m_orthoHeight));
+	modelStack.PopMatrix();
 
-    //// Splitgun Upgrade
-    //modelStack.PushMatrix();
-    //modelStack.Translate((m_orthoWidth * 0.87) * (80 / m_orthoWidth), (m_orthoHeight * 0.75) * (60 / m_orthoHeight), 1);
-    //modelStack.Scale(5, 5, 2);
-    //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-    //modelStack.PopMatrix();
-
-    if ((mousePos_screenBased.x >= upgradeGun.minX && mousePos_screenBased.x <= upgradeGun.maxX
-        && mousePos_screenBased.y >= upgradeGun.minY && mousePos_screenBased.y <= upgradeGun.maxY) || (mousePos_screenBased.x >= upgradeFireRate.minX && mousePos_screenBased.x <= upgradeFireRate.maxX
-        && mousePos_screenBased.y >= upgradeFireRate.minY && mousePos_screenBased.y <= upgradeFireRate.maxY) || (mousePos_screenBased.x >= upgradeProjSpd.minX && mousePos_screenBased.x <= upgradeProjSpd.maxX
-        && mousePos_screenBased.y >= upgradeProjSpd.minY && mousePos_screenBased.y <= upgradeProjSpd.maxY) || (mousePos_screenBased.x >= upgradeDmg.minX && mousePos_screenBased.x <= upgradeDmg.maxX
-        && mousePos_screenBased.y >= upgradeDmg.minY && mousePos_screenBased.y <= upgradeDmg.maxY))
-    {
         if (mousePos_screenBased.x >= upgradeGun.minX && mousePos_screenBased.x <= upgradeGun.maxX
             && mousePos_screenBased.y >= upgradeGun.minY && mousePos_screenBased.y <= upgradeGun.maxY)
         {
@@ -1199,127 +1216,27 @@ void MainMenu::LevelUpPage()
                 modelStack.PopMatrix();
             }
         }
-        else
-        {
-            modelStack.PushMatrix();
-            modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-            modelStack.Scale(5, 5, 2);
-            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-            modelStack.PopMatrix();
-        }
+		else
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+			modelStack.Scale(5, 5, 2);
+			RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+			modelStack.PopMatrix();
+		}
 
-        // Projectile Lifetime
-        if (mousePos_screenBased.x >= upgradeFireRate.minX && mousePos_screenBased.x <= upgradeFireRate.maxX
-            && mousePos_screenBased.y >= upgradeFireRate.minY && mousePos_screenBased.y <= upgradeFireRate.maxY)
-        {
-            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
-            {
-                modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-                modelStack.Scale(5, 5, 2);
-                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-                modelStack.PopMatrix();
-
-                if (isClicked == false)
-                {
-                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
-                    isClicked = true;
-                }
-				if (player->inventory->IsDeducting(1000))
-				{
-					UpgradeLifetime();
-				}
-				else
-				{
-					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
-				}
-            }
-            else
-            {
-                modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-                modelStack.Scale(6, 6, 2);
-                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-                modelStack.PopMatrix();
-
-                modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-                modelStack.Scale(10, 10, 2);
-                RenderMesh(meshList[GEO_MENU_SELECTION], false);
-                modelStack.PopMatrix();
-            }
-        }
-        else
-        {
-            modelStack.PushMatrix();
-            modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-            modelStack.Scale(5, 5, 2);
-            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-            modelStack.PopMatrix();
-        }
-
-        // Projectile Speed
-        if (mousePos_screenBased.x >= upgradeProjSpd.minX && mousePos_screenBased.x <= upgradeProjSpd.maxX
-            && mousePos_screenBased.y >= upgradeProjSpd.minY && mousePos_screenBased.y <= upgradeProjSpd.maxY)
+        // Projectile Effect
+		if (mousePos_screenBased.x >= upgradeDmg.minX && mousePos_screenBased.x <= upgradeDmg.maxX
+			&& mousePos_screenBased.y >= upgradeDmg.minY && mousePos_screenBased.y <= upgradeDmg.maxY)
         {
             if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
             {
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.4) * (60 / m_orthoHeight), 1);
+				modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(5, 5, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
 
-                if (isClicked == false)
-                {
-                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
-                    isClicked = true;
-                }
-				if (player->inventory->IsDeducting(1000))
-				{
-					UpgradeProjSpd();
-				}
-				else
-				{
-					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
-				}
-			}
-            else
-            {
-                modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.4) * (60 / m_orthoHeight), 1);
-                modelStack.Scale(6, 6, 2);
-                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-                modelStack.PopMatrix();
-
-                modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.4) * (60 / m_orthoHeight), 1);
-                modelStack.Scale(10, 10, 2);
-                RenderMesh(meshList[GEO_MENU_SELECTION], false);
-                modelStack.PopMatrix();
-            }
-        }
-        else
-        {
-            modelStack.PushMatrix();
-            modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.4) * (60 / m_orthoHeight), 1);
-            modelStack.Scale(6, 6, 2);
-            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-            modelStack.PopMatrix();
-        }
-
-        // Projectile Damage Button
-        if (mousePos_screenBased.x >= upgradeDmg.minX && mousePos_screenBased.x <= upgradeDmg.maxX
-            && mousePos_screenBased.y >= upgradeDmg.minY && mousePos_screenBased.y <= upgradeDmg.maxY)
-        {
-            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
-            {
-                modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.3) * (60 / m_orthoHeight), 1);
-                modelStack.Scale(5, 5, 2);
-                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-                modelStack.PopMatrix();
-        
                 if (isClicked == false)
                 {
                     Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
@@ -1337,65 +1254,164 @@ void MainMenu::LevelUpPage()
             else
             {
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.3) * (60 / m_orthoHeight), 1);
+				modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(6, 6, 2);
                 RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
                 modelStack.PopMatrix();
-        
+
                 modelStack.PushMatrix();
-                modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.3) * (60 / m_orthoHeight), 1);
+				modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
                 modelStack.Scale(10, 10, 2);
                 RenderMesh(meshList[GEO_MENU_SELECTION], false);
                 modelStack.PopMatrix();
             }
         }
-        else
+		else
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
+			modelStack.Scale(5, 5, 2);
+			RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+			modelStack.PopMatrix();
+		}
+
+        // Projectile Lifetime
+		if (mousePos_screenBased.x >= upgradeLifetime.minX && mousePos_screenBased.x <= upgradeLifetime.maxX
+			&& mousePos_screenBased.y >= upgradeLifetime.minY && mousePos_screenBased.y <= upgradeLifetime.maxY)
         {
-            modelStack.PushMatrix();
-            modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.3) * (60 / m_orthoHeight), 1);
-            modelStack.Scale(5, 5, 2);
-            RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-            modelStack.PopMatrix();
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                modelStack.PushMatrix();
+				modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.4) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(5, 5, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+				if (player->inventory->IsDeducting(1000))
+				{
+					UpgradeLifetime();
+				}
+				else
+				{
+					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
+				}
+			}
+            else
+            {
+                modelStack.PushMatrix();
+				modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.4) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(6, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+
+                modelStack.PushMatrix();
+				modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.4) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(10, 10, 2);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+            }
         }
-    }
-    else
-    {
-        // gun shit
-        modelStack.PushMatrix();
-        modelStack.Translate((m_orthoWidth * 0.37) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-        modelStack.Scale(5, 5, 2);
-        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-        modelStack.PopMatrix();
+		else
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.4) * (60 / m_orthoHeight), 1);
+			modelStack.Scale(5, 5, 2);
+			RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+			modelStack.PopMatrix();
+		}
 
-        // Fire Rate Upgrade
-        modelStack.PushMatrix();
-        modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-        modelStack.Scale(5, 5, 2);
-        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-        modelStack.PopMatrix();
-
-        modelStack.PushMatrix();
-        modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.4) * (60 / m_orthoHeight), 1);
-        modelStack.Scale(5, 5, 2);
-        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-        modelStack.PopMatrix();
-
-        modelStack.PushMatrix();
-        modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.3) * (60 / m_orthoHeight), 1);
-        modelStack.Scale(5, 5, 2);
-        RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-        modelStack.PopMatrix();
-        //modelStack.PushMatrix();
-        //modelStack.Translate((m_orthoWidth * 0.75) * (80 / m_orthoWidth), (m_orthoHeight * 0.5) * (60 / m_orthoHeight), 1);
-        //modelStack.Scale(5, 5, 2);
-        //RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
-        //modelStack.PopMatrix();
-    }
+        // Projectile Speed Button
+		if (mousePos_screenBased.x >= upgradeProjSpd.minX && mousePos_screenBased.x <= upgradeProjSpd.maxX
+			&& mousePos_screenBased.y >= upgradeProjSpd.minY && mousePos_screenBased.y <= upgradeProjSpd.maxY)
+        {
+            if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.3) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(5, 5, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+        
+                if (isClicked == false)
+                {
+                    Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
+                    isClicked = true;
+                }
+				if (player->inventory->IsDeducting(1000))
+				{
+					UpgradeProjSpd();
+				}
+				else
+				{
+					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
+				}
+            }
+            else
+            {
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.3) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(6, 6, 2);
+                RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+                modelStack.PopMatrix();
+        
+                modelStack.PushMatrix();
+                modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.3) * (60 / m_orthoHeight), 1);
+                modelStack.Scale(10, 10, 2);
+                RenderMesh(meshList[GEO_MENU_SELECTION], false);
+                modelStack.PopMatrix();
+            }
+        }
+		else
+		{
+			modelStack.PushMatrix();
+			modelStack.Translate((m_orthoWidth * 0.8) * (80 / m_orthoWidth), (m_orthoHeight * 0.3) * (60 / m_orthoHeight), 1);
+			modelStack.Scale(5, 5, 2);
+			RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+			modelStack.PopMatrix();
+		}
+    
     /*
     upgradeMG.Set(29, 30, 44, 46);
     upgradeSHG.Set(49, 50, 44, 46);
     upgradeSPG.Set(69, 70, 44, 46);
     */
+}
+
+void MainMenu::WinPage()
+{
+	float LayoutScale = 0.1f;
+	standardLayout();
+
+	std::ostringstream ss;
+	ss.precision(5);
+	ss << "YOU WIN!";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 5, (m_orthoWidth * LayoutScale) * (80 / m_orthoWidth), ((m_orthoHeight * 0.5) + 3) * (60 / m_orthoHeight));
+
+	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+	{
+		state = MENU_MAIN;
+	}
+}
+
+void MainMenu::LosePage()
+{
+	float LayoutScale = 0.1f;
+	standardLayout();
+
+	std::ostringstream ss;
+	ss.precision(5);
+	ss << "YOU JUST GOT DESTROYED!";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 5, (m_orthoWidth * LayoutScale) * (80 / m_orthoWidth), ((m_orthoHeight * 0.5) + 3) * (60 / m_orthoHeight));
+
+	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+	{
+		state = MENU_MAIN;
+	}
 }
 
 void MainMenu::UpgradeMG()
@@ -1421,49 +1437,15 @@ void MainMenu::UpgradeSPG()
 
 void MainMenu::UpgradeLifetime()
 {
-    switch (player->inventory->bullets[player->projectileIter]->proj_type)
-    {
-    case CProjectile::BULLET:
-        player->inventory->bullets[player->projectileIter]->SetLifetime(player->inventory->bullets[player->projectileIter]->GetLifetime() + 1);
-        break;
-    case CProjectile::TRAP:
-        player->inventory->bullets[player->projectileIter]->SetLifetime(player->inventory->bullets[player->projectileIter]->GetLifetime() + 1);
-        break;
-    case CProjectile::HOOK:
-        player->inventory->bullets[player->projectileIter]->SetLifetime(player->inventory->bullets[player->projectileIter]->GetLifetime() + 1);
-        break;
-    default:break;
-    }
+    player->inventory->bullets[player->projectileIter]->SetLifetime(player->inventory->bullets[player->projectileIter]->GetLifetime() + 1);
 }
 void MainMenu::UpgradeProjSpd()
 {
-    switch (player->inventory->bullets[player->projectileIter]->proj_type)
-    {
-    case CProjectile::BULLET:
-        player->inventory->bullets[player->projectileIter]->SetProjectileSpeed(player->inventory->bullets[player->projectileIter]->GetProjectileSpeed() + 5);
-        break;
-    case CProjectile::TRAP:
-        player->inventory->bullets[player->projectileIter]->SetProjectileSpeed(player->inventory->bullets[player->projectileIter]->GetProjectileSpeed() + 5);
-        break;
-    case CProjectile::HOOK:
-        player->inventory->bullets[player->projectileIter]->SetProjectileSpeed(player->inventory->bullets[player->projectileIter]->GetProjectileSpeed() + 5);
-        break;
-    default:break;
-    }
+	player->inventory->bullets[player->projectileIter]->SetProjectileSpeed(player->inventory->bullets[player->projectileIter]->GetProjectileSpeed() + 5);
 }
 void MainMenu::UpgradeDmg()
 {
-    switch (player->inventory->bullets[player->projectileIter]->proj_type)
-    {
-    case CProjectile::BULLET:
-        player->inventory->bullets[player->projectileIter]->SetDMG(player->inventory->bullets[player->projectileIter]->GetDMG() + 2);
-        break;
-    case CProjectile::TRAP:
-        break;
-    case CProjectile::HOOK:
-        break;
-    default:break;
-    }
+    player->inventory->bullets[player->projectileIter]->UpgradeEffect(2);
 }
 
 void MainMenu::standardLayout()
@@ -2066,4 +2048,9 @@ void MainMenu::ControllerButton()
 void MainMenu::Exit()
 {
     SceneBase::Exit();
+}
+
+void MainMenu::SetState(MENU_STATE m_state)
+{
+	this->state = m_state;
 }
