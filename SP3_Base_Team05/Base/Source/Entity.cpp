@@ -22,6 +22,7 @@ void Entity::TakeDamage(unsigned amount)
 			Die();
 		}
 	}
+	
 }
 
 bool Entity::IsDead()

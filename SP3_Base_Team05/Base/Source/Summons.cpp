@@ -1,5 +1,7 @@
 #include "Summons.h"
 #include "MeshManager.h"
+#include "Player.h"
+#include "Particle.h"
 
 Summons::Summons()
 {
@@ -7,6 +9,8 @@ Summons::Summons()
 
 Summons::~Summons()
 {
+	if (weapon)
+		delete weapon;
 }
 
 void Summons::Init(Vector3 pos)
@@ -15,7 +19,7 @@ void Summons::Init(Vector3 pos)
 	entityType = Entity::ENTITY_BOSS_BODY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
-	speedLimit = 50.f;
+	speedLimit = 100.f;
 	scale.Set(7, 7, 7);
 	health = 300;
 	maxHealth = health;
@@ -26,25 +30,40 @@ void Summons::Init(Vector3 pos)
 	switch (randWeapon)
 	{
 	case 1:
-		weapon = new MachineGun();
-		break;
+	{
+		MachineGun *machinegun = new MachineGun(7);
+		weapon = machinegun;
+	}
+	break;
 	case 2:
-		weapon = new Shotgun();
-		break;
+	{
+		Shotgun *shotgun = new Shotgun(5, 0.35f, 0.5f);
+		weapon = shotgun;
+	}
+	break;
 	case 3:
-		weapon = new Splitgun();
-		break;
+	{
+		Splitgun *splitgun = new Splitgun(20, 5, 1);
+		weapon = splitgun;
+	}
+	break;
 	default:
 		break;
 	}
 	switch (randProjectile)
 	{
 	case 1:
-		weapon->AssignProjectile(new Bullet);
-		break;
+	{
+		Bullet *bullet = new Bullet(5, 2.0f, 150.f, 3.f, 3);
+		weapon->AssignProjectile(bullet);
+	}
+	break;
 	case 2:
-		weapon->AssignProjectile(new Hook);
-		break;
+	{
+		Hook *hook = new Hook(0, 0.1f, 20.0f);
+		weapon->AssignProjectile(hook);
+	}
+	break;
 	default:
 		break;
 	}
@@ -60,6 +79,33 @@ void Summons::Update(double dt)
 	weapon->Update(dt);
 }
 
+void Summons::Die()
+{
+	isDead = true;
+	active = false;
+	if (weapon)
+		delete weapon;
+}
+
+void Summons::HandleInteraction(GameObject* b, double dt)
+{
+	if (b->GetType() == GameObject::GO_WALL)
+		return;
+
+	Enemy::HandleInteraction(b, dt);
+	if (b->GetType() == GameObject::GO_ENTITY)
+	{
+		if (CheckCollision(b, dt))
+		{
+			Player* player = dynamic_cast<Player*>(b);
+			if (player)
+				player->TakeDamage(SUMMON_TOUCH_DAMAGE);
+
+			CollisionResponse(b);
+		}
+	}
+}
+
 void Summons::Goto(Vector3 pos)
 {
 	this->vel += (pos - this->pos).Normalized() * speedLimit;
@@ -71,8 +117,11 @@ void Summons::Goto(Vector3 pos)
 
 void Summons::Shoot(Vector3 dir)
 {
-	Vector3 playerPos = (dir - this->pos).Normalized();
-	weapon->Fire(this->pos, playerPos, team);
+	if (weapon != nullptr)
+	{
+		Vector3 playerPos = (dir - this->pos).Normalized();
+		weapon->Fire(this->pos, playerPos, team);
+	}
 }
 
 void Summons::SetupMesh()

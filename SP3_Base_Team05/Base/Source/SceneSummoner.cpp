@@ -15,6 +15,8 @@ SceneSummoner::~SceneSummoner()
 {
 	if (mainCamera)
 		delete mainCamera;
+	if (summoner)
+		delete summoner;
 }
 
 void SceneSummoner::Init()
@@ -95,6 +97,7 @@ void SceneSummoner::GenerateWorld()
 		GameObject *wall = new GameObject();
 		GameObject::goList.push_back(wall);
 		wall->SetActive(true);
+		wall->SetType(GameObject::GO_WALL);
 		wall->SetColliderType(Collider::COLLIDER_BOX);
 		wall->SetPostion(randPosX, randPosY, 0);
 		wall->SetScale(randScaleX, randScaleY, 1);
