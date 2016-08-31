@@ -29,7 +29,7 @@ private:
 class MachineGun : public Weapon
 {
 public:
-	MachineGun():accuracy(0.1f){
+	MachineGun(){
 		SetFireRate(20);
 		weapon_type = Weapon::W_MACHINEGUN;
 	}
@@ -40,9 +40,9 @@ public:
     }
 
 	virtual	void Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team);
-	float accuracy;
 
 private:
+	float accuracy = 0.1f;
 
 };
 

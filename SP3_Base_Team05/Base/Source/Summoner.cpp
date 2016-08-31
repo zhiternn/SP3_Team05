@@ -1,6 +1,9 @@
 #include "Summoner.h"
 #include "Controls.h"
 #include "MeshManager.h"
+#include "Player.h"
+#include "Particle.h"
+#include "SceneBase.h"
 
 Summoner::Summoner():
 Enemy()
@@ -9,6 +12,13 @@ Enemy()
 
 Summoner::~Summoner()
 {
+	for (auto q : summonsList)
+	{
+		if (q)
+		{
+			delete q;
+		}
+	}
 }
 
 void Summoner::Init(Vector3 pos)
@@ -25,6 +35,7 @@ void Summoner::Init(Vector3 pos)
 	maxHealth = health;
 	isDead = false;
 	attacking = false;
+	teleported = false;
 	agressiveLevel = 1 - ((float)health / maxHealth);
 	safetyThreshold = this->GetScale().x * 7;
 	chaseThreshold = safetyThreshold * 1.5f;
@@ -46,6 +57,7 @@ void Summoner::Init(Vector3 pos)
 void Summoner::Update(double dt)
 {
 	Enemy::Update(dt);
+
 	UpdateCooldowns(dt);
 	if (summonsList.size() < AMOUNT_OF_SUMMONS && summonCooldownTimer <= 0)
 	{
@@ -54,7 +66,6 @@ void Summoner::Update(double dt)
 		summons->Init(this->pos);
 		summons->SetTarget(target);
 		summonsList.push_back(summons);
-		GameObject::goList.push_back(summons);
 	}
 	if (this->health < maxHealth)
 	{
@@ -69,6 +80,7 @@ void Summoner::Update(double dt)
 				health += SUMMONER_HEALTH_REGEN_PERSEC;
 		}
 	}
+	CleaningUpMess();
 	Defend();
 	Attack();
 	for (auto q : summonsList)
@@ -99,17 +111,56 @@ void Summoner::Update(double dt)
 			vel = vel * 0.9f;
 		}
 	}
+	if (teleported)
+	{
+		this->vel.SetZero();
+	}
 }
 
 void Summoner::HandleInteraction(GameObject* b, double dt)
 {
+	if (b->GetType() == GameObject::GO_WALL)
+		return;
+
 	Enemy::HandleInteraction(b, dt);
+	if (b->GetType() == GameObject::GO_ENTITY)
+	{
+		if (CheckCollision(b, dt))
+		{
+			Player* player = dynamic_cast<Player*>(b);
+			if (player)
+				player->TakeDamage(SUMMONER_TOUCH_DAMAGE);
+
+			CollisionResponse(b);
+		}
+	}
+}
+
+void Summoner::HandleOutOfBounds(float minX, float maxX, float minY, float maxY)
+{
+	Vector3 randPos(
+		Math::RandFloatMinMax(minX, maxX), 
+		Math::RandFloatMinMax(minY, maxY), 
+		0);
+	//Checks against minX
+	if ((this->GetPosition().x - this->GetScale().x < minX && this->GetVelocity().x < 0) ||
+		(this->GetPosition().x + this->GetScale().x > maxX && this->GetVelocity().x > 0) ||
+		(this->GetPosition().y - this->GetScale().y < minY && this->GetVelocity().y < 0) ||
+		(this->GetPosition().y + this->GetScale().y > maxY && this->GetVelocity().y > 0))
+	{
+		this->pos = randPos;
+		teleported = true;
+	}
 }
 
 void Summoner::TakeDamage(unsigned amount)
 {
 	Entity::TakeDamage(amount);
 	agressiveLevel = 1 - ((float)health / maxHealth);
+	if (teleported)
+	{
+		teleported = false;
+	}
 }
 
 void Summoner::SetupMesh()
@@ -136,12 +187,12 @@ void Summoner::CleaningUpMess()
 
 void Summoner::Defend()
 {
-	CleaningUpMess();
+	
 	if (!summonsList.empty())
 	{
 		Vector3 N = (target->pos - this->pos).Normalized();
 		Vector3 NP = Vector3(-N.y, N.x, 0);
-		float diameter = summonsList.front()->GetScale().x * 2;
+		float diameter = summonsList.front()->GetScale().x;
 		float wallLength = ((summonsList.size() * agressiveLevel) - 1) * diameter;
 		wallLength = -wallLength * 0.5f;
 
@@ -162,7 +213,6 @@ void Summoner::Defend()
 
 void Summoner::Attack()
 {
-	CleaningUpMess();
 	if (!summonsList.empty())
 	{
 		Vector3 N = (target->pos - this->pos).Normalized();
@@ -199,7 +249,15 @@ void Summoner::UpdateCooldowns(double dt)
 	}
 	if (attackCooldownTimer <= 0)
 	{
+		EmitAttackParticle(this->pos, this->scale.x * 5, true);
 		attacking = true;
+		for (auto q : summonsList)
+		{
+			if (q->IsActive())
+			{
+				EmitAttackParticle(q->pos, q->GetScale().x * 7, false);
+			}
+		}
 	}
 	if (attacking)
 	{

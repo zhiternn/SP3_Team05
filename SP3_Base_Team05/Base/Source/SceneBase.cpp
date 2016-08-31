@@ -396,6 +396,17 @@ void SceneBase::Update(double dt)
 		mainCamera->Constrain(player, 40);
 	}
 
+	if (Controls::GetInstance().OnHold(Controls::KEY_N))
+	{
+		m_orthoHeight--; 
+		m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+	}
+	if (Controls::GetInstance().OnHold(Controls::KEY_M))
+	{
+		m_orthoHeight++;
+		m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+	}
+
 	if (Controls::GetInstance().OnPress(Controls::KEY_1))
 		isCulled = true;
 	if (Controls::GetInstance().OnPress(Controls::KEY_2))
@@ -768,16 +779,11 @@ void SceneBase::RenderHUD()
 	ss << "FPS: " << fps;
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
 
-	ss.str("");
-	ss.precision(4);
-	ss << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
-
-	RenderUI(meshList[GEO_UI_BACKGROUND], 7, 0, 60, 15, false);
+	RenderUI(meshList[GEO_UI_BACKGROUND], 8, 0, 60, 15, false);
 
 	ss.str("");
 	ss << "Weapon: ";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0.5f), 3, 0, 57);
 	switch (player->weapon->weapon_type)
 	{
 	case Weapon::W_SHOTGUN:
@@ -793,7 +799,7 @@ void SceneBase::RenderHUD()
 
 	ss.str("");
 	ss << "Projectile: ";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 22, 57);
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 0, 0.5f), 3, 22, 57);
 	switch (player->projectile->GetProjType())
 	{
 	case CProjectile::BULLET:
@@ -815,7 +821,6 @@ void SceneBase::RenderHUD()
 	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 54.5f, player->GetHP() / 10, false);
 
 	ss.str("");
-	ss.precision(2);
 	ss << "Dash";
 	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 50);
 	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * player->maxHealth / 10) + 11, 51.5f, DASH_COOLDOWN * player->maxHealth / 10, false);
@@ -848,13 +853,27 @@ void SceneBase::RenderGameObjects()
 						modelStack.Translate(-enemy->GetScale().x, 0, 0);
 
 						modelStack.PushMatrix();
-						modelStack.Scale(enemy->GetScale().x * 2 * healthRatio, 5, 1);
+						if (enemy->GetEntityType() == Entity::ENTITY_BOSS_MAIN)
+						{
+							modelStack.Scale(enemy->GetScale().x * 2 * healthRatio, 4, 1);
+						}
+						else
+						{
+							modelStack.Scale(enemy->GetScale().x * 2 * healthRatio, 2, 1);
+						}
 						modelStack.Translate(0.5f, 0.5f, 1);
 						RenderMesh(meshList[GEO_HEALTH], false);
 						modelStack.PopMatrix();
 
 						modelStack.PushMatrix();
-						modelStack.Scale(enemy->GetScale().x * 2, 5, 1);
+						if (enemy->GetEntityType() == Entity::ENTITY_BOSS_MAIN)
+						{
+							modelStack.Scale(enemy->GetScale().x * 2, 4, 1);
+						}
+						else
+						{
+							modelStack.Scale(enemy->GetScale().x * 2, 2, 1);
+						}
 						modelStack.Translate(0.5f, 0.5f, 0);
 						RenderMesh(meshList[GEO_BORDER], false);
 						modelStack.PopMatrix();
@@ -867,11 +886,11 @@ void SceneBase::RenderGameObjects()
 					float healthRatio = (float)enemy->GetHP() / (float)enemy->GetMaxHP();
 					float captureRatio = (float)enemy->GetCaptureRate() / (float)enemy->GetHP();
 					modelStack.PushMatrix();
-					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y + 5.0f, 50);
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y + 2.0f, 50);
 					modelStack.Translate(-enemy->GetScale().x, 0, 0);
 
 					modelStack.PushMatrix();
-					modelStack.Scale((enemy->GetScale().x * 2 * healthRatio) * captureRatio, 5, 1);
+					modelStack.Scale((enemy->GetScale().x * 2 * healthRatio) * captureRatio, 2, 1);
 					modelStack.Translate(0.5f, 0.5f, 1);
 					RenderMesh(meshList[GEO_CAPTURE], false);
 					modelStack.PopMatrix();

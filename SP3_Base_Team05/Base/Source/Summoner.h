@@ -4,10 +4,11 @@
 #include "Enemy.h"
 #include "Summons.h"
 
+static const float SUMMONER_TOUCH_DAMAGE = 10.f;
 static const float ATTACK_COOLDOWN = 1.5f;
 static const float SUMMONING_COOLDOWN = 3.f;
 static const float SUMMONER_HEALTH_REGEN_PERSEC = 10.f;
-static int AMOUNT_OF_SUMMONS = 5;
+static int AMOUNT_OF_SUMMONS = 1;
 
 class Summoner : public Enemy
 {
@@ -20,6 +21,7 @@ public:
 	virtual void TakeDamage(unsigned amount);
 	virtual void SetupMesh();
 	virtual void HandleInteraction(GameObject* b, double dt);
+	virtual void HandleOutOfBounds(float minX, float maxX, float minY, float maxY);
 
 	void CleaningUpMess();
 	void Defend();
@@ -33,6 +35,7 @@ private:
 	float summonCooldownTimer = 0;
 	float attackCooldownTimer = 3;
 	bool attacking;
+	bool teleported;
 
 	std::vector<Summons*> summonsList;
 
