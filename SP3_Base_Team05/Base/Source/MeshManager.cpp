@@ -104,6 +104,7 @@ void MeshManager::Init()
 	meshList[GEO_MINIMAP_PLAYER_ICON] = MeshBuilder::GenerateCircle("player", Color(0.1f, 0.9f, 0.1f), 2);
 	meshList[GEO_MINIMAP_BOSS_MAIN_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(1.0f, 0.0f, 0.0f), 2);
 	meshList[GEO_MINIMAP_BOSS_BODY_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(0.5f, 0.1f, 0.1f), 2);
+	meshList[GEO_MINIMAP_BOSS_BODY_DEAD_ICON] = MeshBuilder::GenerateCircle("minimap_background", Color(0.3f, 0.3f, 0.3f), 2);
 
 	meshList[GEO_BORDER] = MeshBuilder::GenerateQuad("border", Color(1, 1, 1), 1.f);
 	meshList[GEO_HEALTH] = MeshBuilder::GenerateQuad("health", Color(0, 1, 0), 1.f);

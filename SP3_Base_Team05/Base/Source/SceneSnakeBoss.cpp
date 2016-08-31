@@ -24,7 +24,7 @@ void SceneSnakeBoss::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
-	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
+	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.1f, 0));
 	GameObject::goList.push_back(SceneBase::player);
 
     mainCamera->Include(&(SceneBase::player->pos));
