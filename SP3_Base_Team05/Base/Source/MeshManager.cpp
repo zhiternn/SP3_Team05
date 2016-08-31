@@ -54,6 +54,16 @@ void MeshManager::Init()
 	meshList[GEO_ROPE] = MeshBuilder::GenerateQuad("rope", Color(1, 1, 1), 1);
 	meshList[GEO_ROPE]->textureArray[0] = LoadTGA("Image//rope.tga");
 
+	//PARTICLES
+	meshList[GEO_PARTICLE_SMOKE] = MeshBuilder::GenerateQuad("p_smoke", Color(1, 1, 1), 1);
+	meshList[GEO_PARTICLE_SMOKE]->textureArray[0] = LoadTGA("Image//particle_smoke.tga");
+	meshList[GEO_PARTICLE_HIT] = MeshBuilder::GenerateQuad("p_hit", Color(1, 1, 1), 1);
+	meshList[GEO_PARTICLE_HIT]->textureArray[0] = LoadTGA("Image//particle_hit.tga");
+	meshList[GEO_PARTICLE_SIGNAL] = MeshBuilder::GenerateQuad("p_signal", Color(1, 1, 1), 1);
+	meshList[GEO_PARTICLE_SIGNAL]->textureArray[0] = LoadTGA("Image//particle_signal.tga");
+	meshList[GEO_PARTICLE_SKID] = MeshBuilder::GenerateQuad("p_skid", Color(1, 1, 1), 1);
+	meshList[GEO_PARTICLE_SKID]->textureArray[0] = LoadTGA("Image//particle_skid.tga");
+
 	meshList[GEO_TRAP] = MeshBuilder::GenerateOBJ("trap", "Obj//sphereobj.obj");
 	meshList[GEO_TRAP]->textureArray[0] = LoadTGA("Image//trap.tga");
 	meshList[GEO_TRAP]->material.kAmbient.Set(0.1f, 0.1f, 0.1f);

@@ -176,7 +176,7 @@ void SceneBase::Init()
 	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 
 	//Camera Space View
-	m_orthoHeight = 200;
+	m_orthoHeight = 160;
 	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
 	
 	backgroundList.push_back(meshList[GEO_BACKGROUND2]);
@@ -191,9 +191,9 @@ void SceneBase::Init()
 	isCulled = true;
 	isWireFrame = false;
 
-	player->SetScale(3, 3, 3);
+	player->SetScale(3.5f, 3.5f, 3.5f);
 
-	GamePad = Gamepad(1);
+	//GamePad = Gamepad(1);
 	glfwController = GLFWController();
 
 	//Get player Controls

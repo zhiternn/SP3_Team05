@@ -57,6 +57,7 @@ void Player::Update(double dt)
 	}
 	if (isDashed)
 	{
+		EmitSkidParticle(this->pos, this->scale.x, vel.Normalized());
 		cooldownTimer -= dt;
 		if (cooldownTimer <= 0)
 		{

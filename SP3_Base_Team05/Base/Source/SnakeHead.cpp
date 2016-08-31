@@ -3,6 +3,7 @@
 #include "MeshManager.h"
 #include "Mtx44.h"
 #include "Player.h"
+#include "Particle.h"
 
 SnakeHead::SnakeHead()
 {
@@ -82,9 +83,16 @@ void SnakeHead::Update(double dt)
 
 	if (actionLifetime <= 0.0f)
 	{
+		static bool emitSignal = true;
 		actionRate -= dt;
+		if (actionRate <= 0.5f && emitSignal)
+		{
+			emitSignal = false;
+			EmitSignalParticle(this->pos, this->scale.x, this->scale.x * 7);
+		}
 		if (actionRate <= 0.0f)
 		{
+			emitSignal = true;
 			actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN + (10 * (1 - bodyRatio)), ACTION_TIMER_MAX + (10 * (1 - bodyRatio)));
 			Action();
 		}
@@ -178,7 +186,7 @@ void SnakeHead::Action()
 	float healthRatio = (float)health / (float)maxHealth;
 	float chanceToAttack = Math::Min(bodyRatio, healthRatio);//higher it is, more likely to attack
 	float rand = Math::RandFloatMinMax(0, 1);
-	if (rand <= chanceToAttack)//attack
+	if (rand <= chanceToAttack || healthRatio > 0.6f)//attack
 	{
 		bool chance = !(bool)(Math::RandInt() % 5);//20% chance to use enrage
 		std::cout << chance << std::endl;

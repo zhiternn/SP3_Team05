@@ -111,7 +111,7 @@ void Particle::ScaleOut(double dt)
 
 void Particle::SetupMesh()
 {
-	modelStack.Translate(this->pos.x, this->pos.y, this->pos.z);
+	modelStack.Translate(this->pos.x, this->pos.y, this->pos.z + 0.01f);
 	if (hasDirection)
 	{
 		float degree = Math::RadianToDegree(atan2(this->vel.y, this->vel.x));
@@ -147,14 +147,54 @@ Particle* FetchParticle()
 void EmitDashParticle(Vector3 pos, Vector3 dir)
 {
 	Particle* particle = FetchParticle();
-	particle->mesh = meshList[GEO_QUAD];
+	particle->mesh = meshList[GEO_PARTICLE_SMOKE];
 
+	pos.z += 0.01f;
 	particle->Init(pos, dir);
-	particle->lifetime = 1.0f;
+	particle->lifetime = 0.1f;
 	particle->scale.Set(0.1f, 0.1f, 0.1f);
 	particle->hasDirection = true;
 	particle->entered = false;
-	particle->entrySpeed = 10.0f;
+	particle->entrySpeed = 100.0f;
 	particle->entryEffect = Particle::ENTRY_SCALEIN;
-	particle->entryTarget.Set(10.0f, 10.0f, 10.0f);
+	particle->entryTarget.Set(20.0f, 20.0f, 20.0f);
+}
+
+void EmitHitParticle(Vector3 pos, float size)
+{
+	Particle* particle = FetchParticle();
+	particle->mesh = meshList[GEO_PARTICLE_HIT];
+
+	particle->Init(pos);
+	particle->lifetime = 0.0f;
+	particle->scale.Set(0.1f, 0.1f, 0.1f);
+	particle->entered = false;
+	particle->entrySpeed = 100.0f;
+	particle->entryEffect = Particle::ENTRY_SCALEIN;
+	particle->entryTarget.Set(size, size, size);
+}
+
+void EmitSignalParticle(Vector3 pos, float initialScale, float size)
+{
+	Particle* particle = FetchParticle();
+	particle->mesh = meshList[GEO_PARTICLE_SIGNAL];
+
+	particle->Init(pos);
+	particle->lifetime = 0.0f;
+	particle->scale.Set(initialScale, initialScale, initialScale);
+	particle->entered = false;
+	particle->entrySpeed = 80.0f;
+	particle->entryEffect = Particle::ENTRY_SCALEIN;
+	particle->entryTarget.Set(size, size, size);
+}
+
+void EmitSkidParticle(Vector3 pos, float size, Vector3 dir)
+{
+	Particle* particle = FetchParticle();
+	particle->mesh = meshList[GEO_PARTICLE_SKID];
+
+	particle->Init(pos, dir * 0.1f);
+	particle->hasDirection = true;
+	particle->lifetime = 4.0f;
+	particle->scale.Set(size, size, size);
 }

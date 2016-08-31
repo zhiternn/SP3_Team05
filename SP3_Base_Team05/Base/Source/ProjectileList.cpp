@@ -3,6 +3,7 @@
 #include "Trap.h"
 #include "MeshManager.h"
 #include "Player.h"
+#include "Particle.h"
 
 
 void Hook::Update(double dt)
@@ -280,7 +281,10 @@ void Bullet::HandleInteraction(GameObject *b, double dt)
 		}
 
 		if (b->collider.isTrigger == false)
+		{
+			EmitHitParticle(this->pos, this->scale.x * 15.0f);
 			this->SetActive(false);
+		}
 	}
 }
 

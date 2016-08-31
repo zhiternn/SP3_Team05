@@ -56,6 +56,7 @@ void SceneSnakeBoss::Init()
 		//top wall
 		go = FetchGO();
 		go->SetColliderType(Collider::COLLIDER_BOX);
+		go->collider.isTrigger = true;
 		go->SetType(GameObject::GO_WALL);
 		go->pos.Set(m_worldWidth * 0.5f, m_worldHeight + 0.5f, 0);
 		go->SetFront(0, 1, 0);
@@ -63,6 +64,7 @@ void SceneSnakeBoss::Init()
 		//bottom wall
 		go = FetchGO();
 		go->SetColliderType(Collider::COLLIDER_BOX);
+		go->collider.isTrigger = true;
 		go->SetType(GameObject::GO_WALL);
 		go->pos.Set(m_worldWidth * 0.5f, -0.5f, 0);
 		go->SetFront(0, 1, 0);
@@ -70,6 +72,7 @@ void SceneSnakeBoss::Init()
 		//left wall
 		go = FetchGO();
 		go->SetColliderType(Collider::COLLIDER_BOX);
+		go->collider.isTrigger = true;
 		go->SetType(GameObject::GO_WALL);
 		go->pos.Set(-0.5f, m_worldHeight * 0.5f, 0);
 		go->SetFront(1, 0, 0);
@@ -77,6 +80,7 @@ void SceneSnakeBoss::Init()
 		//right wall
 		go = FetchGO();
 		go->SetColliderType(Collider::COLLIDER_BOX);
+		go->collider.isTrigger = true;
 		go->SetType(GameObject::GO_WALL);
 		go->pos.Set(m_worldWidth + 0.5f, m_worldHeight * 0.5f, 0);
 		go->SetFront(1, 0, 0);
