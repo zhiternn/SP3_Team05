@@ -37,5 +37,6 @@ public:
 
 	void Init();
 	void Clean();
+	void Delete();
 };
 

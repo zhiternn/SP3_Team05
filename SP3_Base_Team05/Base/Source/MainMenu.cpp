@@ -171,11 +171,17 @@ void MainMenu::Render()
     case MainMenu::MENU_EXIT: 
 		confirmExit();
         break;
+	case MainMenu::MENU_WIN:
+		WinPage();
+		break;
+	case MainMenu::MENU_LOSE:
+		LosePage();
+		break;
     default:
         break;
     }
-    RenderHUD();
-    SetHUD(false);
+	RenderHUD();
+	SetHUD(false);
 }
 
 void MainMenu::RenderGPass()
@@ -746,7 +752,7 @@ void MainMenu::LevelSelectPage()
 
                 std::ostringstream ss;
                 ss.precision(5);
-                ss << "Detalff";
+                ss << "Detlaff";
                 RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 if (isClicked == false)
@@ -766,7 +772,7 @@ void MainMenu::LevelSelectPage()
 
                 std::ostringstream ss;
                 ss.precision(5);
-                ss << "Detalff!";
+                ss << "Detlaff!";
                 RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
                 modelStack.PushMatrix();
@@ -787,7 +793,7 @@ void MainMenu::LevelSelectPage()
 
             std::ostringstream ss;
             ss.precision(5);
-            ss << "Detalff";
+            ss << "Detlaff";
             RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
         }
 
@@ -839,7 +845,7 @@ void MainMenu::LevelSelectPage()
 
             }
         }
-        else
+        /*else
         {
             modelStack.PushMatrix();
             modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.15)) * (60 / m_orthoHeight), 1);
@@ -851,7 +857,7 @@ void MainMenu::LevelSelectPage()
             ss3.precision(5);
             ss3 << "Menu";
             RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
-        }
+        }*/
     }
     else
     {
@@ -1374,6 +1380,38 @@ void MainMenu::LevelUpPage()
     upgradeSHG.Set(49, 50, 44, 46);
     upgradeSPG.Set(69, 70, 44, 46);
     */
+}
+
+void MainMenu::WinPage()
+{
+	float LayoutScale = 0.1f;
+	standardLayout();
+
+	std::ostringstream ss;
+	ss.precision(5);
+	ss << "YOU WIN!";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 5, (m_orthoWidth * LayoutScale) * (80 / m_orthoWidth), ((m_orthoHeight * 0.5) + 3) * (60 / m_orthoHeight));
+
+	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+	{
+		state = MENU_MAIN;
+	}
+}
+
+void MainMenu::LosePage()
+{
+	float LayoutScale = 0.1f;
+	standardLayout();
+
+	std::ostringstream ss;
+	ss.precision(5);
+	ss << "YOU JUST GOT DESTROYED!";
+	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 0, 0), 5, (m_orthoWidth * LayoutScale) * (80 / m_orthoWidth), ((m_orthoHeight * 0.5) + 3) * (60 / m_orthoHeight));
+
+	if (Controls::GetInstance().OnPress(Controls::MOUSE_LBUTTON))
+	{
+		state = MENU_MAIN;
+	}
 }
 
 void MainMenu::UpgradeMG()
@@ -2010,4 +2048,9 @@ void MainMenu::ControllerButton()
 void MainMenu::Exit()
 {
     SceneBase::Exit();
+}
+
+void MainMenu::SetState(MENU_STATE m_state)
+{
+	this->state = m_state;
 }
