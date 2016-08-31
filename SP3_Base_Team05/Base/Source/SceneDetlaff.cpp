@@ -27,7 +27,7 @@ void SceneDetlaff::Init()
 
 	GameObject::goList.clear();
 
-	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
+	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.1, 0));
     GameObject::goList.push_back(SceneBase::player);
 
 	detlaff = new CDetlaff();

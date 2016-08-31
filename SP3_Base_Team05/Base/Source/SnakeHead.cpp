@@ -186,10 +186,9 @@ void SnakeHead::Action()
 	float healthRatio = (float)health / (float)maxHealth;
 	float chanceToAttack = Math::Min(bodyRatio, healthRatio);//higher it is, more likely to attack
 	float rand = Math::RandFloatMinMax(0, 1);
-	if (rand <= chanceToAttack || healthRatio > 0.6f)//attack
+	if (rand <= chanceToAttack || healthRatio > 0.5f)//attack
 	{
 		bool chance = !(bool)(Math::RandInt() % 5);//20% chance to use enrage
-		std::cout << chance << std::endl;
 		if (isCapturing || chance)
 			Enrage();
 		else
@@ -197,9 +196,13 @@ void SnakeHead::Action()
 	}
 	else//recover
 	{
-		//if lower health than lower body
-		if (healthRatio < bodyRatio && healthRatio > 0.2f)
+		if ((healthRatio < 0.4f && bodyRatio < 1.0f) || bodyRatio < 0.3f)
 		{
+			Recover();
+		}
+		else
+		{
+			//sacrifice body parts for recovery later on
 			for (int i = 0; i < bodyList.size(); ++i)
 			{
 				if (Math::RandInt() % 2)//50% percent chance to discard body
@@ -207,11 +210,7 @@ void SnakeHead::Action()
 					bodyList[i]->ApplyForce(bodyList[i]->pos - this->pos, 50.0f);
 					bodyList[i]->Die();
 				}
-			}
-		}
-		else
-		{
-			Recover();
+			}	
 		}
 	}
 }

@@ -44,6 +44,7 @@ public:
 	virtual void UpgradeEffect(float amount) = 0;
 
 	float GetDMG();													//< Returns Projectile Damage
+	virtual float GetEffect();
 	float GetLifetime();											//< Returns Projectile Lifetime								//< Returns Projectile Type
 	PROJECTILE_TYPE GetProjType();
 	float GetProjectileSpeed();

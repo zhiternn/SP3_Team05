@@ -49,6 +49,7 @@ public:
 	virtual void HandleInteraction(GameObject* b, double dt);           //< Handles Interaction for Rope
 	virtual void Boost(float multiplier);
 	virtual void UpgradeEffect(float amount);
+	virtual float GetEffect();
 	void Set();
 
 private:
@@ -75,6 +76,7 @@ public:
 	virtual void HandleInteraction(GameObject *b, double dt);
 	virtual void Boost(float multiplier);
 	virtual void UpgradeEffect(float amount);
+	virtual float GetEffect();
 
 private:
 	float trapSize;
@@ -148,6 +150,7 @@ public:
 	virtual void HandleInteraction(GameObject* b, double dt);									//< Handles Interaction for Bullet
 	virtual void Boost(float multiplier);
 	virtual void UpgradeEffect(float amount);
+	virtual float GetEffect();
 	virtual void SetupMesh();
 };
 

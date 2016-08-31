@@ -49,6 +49,11 @@ float CProjectile::GetDMG()
     return proj_dmg;
 }
 
+float CProjectile::GetEffect()
+{
+	return GetDMG();
+}
+
 /******************************************************************************/
 /*!
 \brief
@@ -170,5 +175,4 @@ void CProjectile::HandleOutOfBounds(float minX, float maxX, float minY, float ma
 	{
 		this->active = false;
 	}
-
 }
