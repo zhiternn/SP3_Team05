@@ -18,22 +18,25 @@ using std::vector;
 
 class MainMenu : public SceneBase
 {
-    enum MENU_STATE
-    {
-        MENU_MAIN = 0,
-        MENU_PLAY,
-        MENU_LOADLEVEL,
-        MENU_INSTRUCTIONS,
-        MENU_OPTIONS,
-        MENU_CREDITS,
-        MENU_LEVEL,
-        MENU_EXIT,
-
-        MENU_TOTAL
-    };
 public:
     MainMenu();
     ~MainMenu();
+
+	enum MENU_STATE
+	{
+		MENU_MAIN = 0,
+		MENU_PLAY,
+		MENU_LOADLEVEL,
+		MENU_INSTRUCTIONS,
+		MENU_OPTIONS,
+		MENU_CREDITS,
+		MENU_LEVEL,
+		MENU_WIN,
+		MENU_LOSE,
+		MENU_EXIT,
+
+		MENU_TOTAL
+	};
 
     virtual void Init();
     virtual void Update(double dt);
@@ -53,6 +56,8 @@ public:
     void CreditsPage();
     void LevelUpPage();
     void LevelSelectPage();
+	void WinPage();
+	void LosePage();
 
     void confirmExit();
     void standardLayout();
@@ -67,14 +72,17 @@ public:
     void MusicVFXButton();
     void ControllerButton();
 
+	void ContinueButton();
+
     void UpgradeMG();
     void UpgradeSHG();
-    void UpgradeSPG();
+	void UpgradeSPG();
 
     void UpgradeLifetime();
     void UpgradeProjSpd();
     void UpgradeDmg();
 
+	void SetState(MENU_STATE state);
 private:
 
     float m_worldWidth, m_worldHeight;

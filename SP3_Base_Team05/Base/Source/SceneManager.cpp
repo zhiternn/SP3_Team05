@@ -12,7 +12,6 @@ SceneManager::~SceneManager()
 //Clean Scene
 void SceneManager::ChangeScene(SCENE scene)
 {
-
 	if (currentScene != NULL)
 	{
 		Clean();
@@ -68,5 +67,10 @@ void SceneManager::Init()
 void SceneManager::Clean()
 {
 	currentScene->Exit();
-	//delete currentScene;
+}
+
+void SceneManager::Delete()
+{
+	delete currentScene;
+	currentScene = NULL;
 }

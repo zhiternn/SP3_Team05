@@ -118,6 +118,7 @@ void CProjectile::Init(Vector3 pos, Vector3 dir)
 	this->collider.type = Collider::COLLIDER_BALL;
 	this->pos = pos;
 	this->vel = dir.Normalized() * proj_speed;
+	this->mass = 0;
 }
 
 /******************************************************************************/

@@ -198,3 +198,17 @@ void EmitSkidParticle(Vector3 pos, float size, Vector3 dir)
 	particle->lifetime = 4.0f;
 	particle->scale.Set(size, size, size);
 }
+
+void EmitTeleportParticle(Vector3 pos, float size)
+{
+	Particle* particle = FetchParticle();
+	particle->mesh = meshList[GEO_PARTICLE_TELEPORT];
+
+	particle->Init(pos);
+	particle->lifetime = 0.5f;
+	particle->scale.Set(0.1f, 0.1f, 0.1f);
+	particle->entered = false;
+	particle->entrySpeed = 500.f;
+	particle->entryEffect = Particle::ENTRY_SCALEIN;
+	particle->entryTarget.Set(size, size, size);
+}
