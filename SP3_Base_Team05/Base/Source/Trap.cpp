@@ -37,7 +37,7 @@ void Trap::Update(double dt)
 void Trap::HandleInteraction(GameObject* b, double dt)
 {
 	Enemy *enemy = dynamic_cast<Enemy*>(b);
-	if (!enemy)
+	if (!enemy || enemy->GetEntityType() != Entity::ENTITY_BOSS_MAIN)
 		return;
 
 	float combinedRadius = this->scale.x + b->GetScale().x;
