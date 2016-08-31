@@ -44,6 +44,7 @@ void Player::Init(Vector3 pos)
 	vel.SetZero();
 	isDashed = false;
 	isDead = false;
+	shooting = false;;
 }
 
 void Player::Update(double dt)
@@ -101,7 +102,12 @@ void Player::Dash(Vector3 dir, double dt)
 
 void Player::Shoot(Vector3 dir)
 {
-	this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
+	shooting = true;
+	if (shooting)
+	{
+		this->weapon->Fire(this->pos, dir, CProjectile::TEAM_PLAYER);
+		shooting = false;
+	}
 }
 
 void Player::Shielding(Vector3 dir)

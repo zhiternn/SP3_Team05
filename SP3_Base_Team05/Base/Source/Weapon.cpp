@@ -31,6 +31,11 @@ float Weapon::GetFireRate()
 	return this->fireRate;
 }
 
+float Weapon::GetShootDelay()
+{
+	return shootDelay;
+}
+
 void Weapon::SetFireRate(float fireRate)
 {
 	this->fireRate = fireRate;

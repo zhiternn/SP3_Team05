@@ -50,6 +50,10 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 	{
 		shootDelay = 1.0f; // per second
 		CProjectile* proj;
+		Vector3 offset = Vector3(
+			Math::RandFloatMinMax(-accuracy, accuracy),
+			Math::RandFloatMinMax(-accuracy, accuracy),
+			0);
 
 		switch (projectileInfo->GetProjType())
 		{
@@ -67,7 +71,7 @@ void MachineGun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 		}
 
 		*proj = *projectileInfo;
-		proj->Init(pos, dir);
+		proj->Init(pos, dir + offset);
 		proj->Boost(0.1f);
 		proj->SetTeam(team);
 

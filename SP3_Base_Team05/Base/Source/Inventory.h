@@ -14,17 +14,17 @@ public:
 
 	std::vector<Weapon*> weapons;
 	std::vector<CProjectile*> bullets;
-	void AddCurrency(unsigned currency);
-	bool IsDeducting(unsigned currency);
+	void AddCurrency(int currency);
+	bool IsDeducting(int currency);
 
 	// Setters
-	void SetCurrency(unsigned currency);
+	void SetCurrency(int currency);
 
 	// Getters
-	unsigned GetCurrency();
+	int GetCurrency();
 
 private:
-	unsigned currency;
+	int currency;
 
 };
 

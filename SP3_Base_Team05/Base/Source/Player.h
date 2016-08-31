@@ -50,6 +50,7 @@ public:
     Shield *shield;
 	short projectileIter = 0;
 	float maxHealth;
+	bool shooting;
 
 private:
 	float damageBuffer;
