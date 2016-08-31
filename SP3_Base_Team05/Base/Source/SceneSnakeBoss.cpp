@@ -27,30 +27,6 @@ void SceneSnakeBoss::Init()
 	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
 	GameObject::goList.push_back(SceneBase::player);
 
-    mainCamera->Include(&(SceneBase::player->pos));
-	if (!(glfwController.isConnected() && useController))
-	{
-		mainCamera->Include(&mousePos_worldBased);
-		Keyboard = false;
-	}
-	else
-	{
-		mainCamera->Include(&controllerStick_Pos);
-		Keyboard = true;
-	}
-
-	mainCamera->Include(&(player->pos));
-	if (!(glfwController.isConnected() && useController))
-	{
-		mainCamera->Include(&mousePos_worldBased);
-		Keyboard = false;
-	}
-	else
-	{
-		mainCamera->Include(&controllerStick_Pos);
-		Keyboard = true;
-	}
-
 	GameObject *go;
 	{//setup border walls
 		//top wall
