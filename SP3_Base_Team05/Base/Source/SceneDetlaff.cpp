@@ -16,8 +16,6 @@ manager(SceneManager::GetInstance())
 
 SceneDetlaff::~SceneDetlaff()
 {
-	if (mainCamera)
-		delete mainCamera;
 }
 
 void SceneDetlaff::Init()
@@ -34,6 +32,7 @@ void SceneDetlaff::Init()
 	GameObject::goList.push_back(detlaff);
 	detlaff->SetTarget(player);
 	detlaff->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0));
+	detlaff->SetEntityType(Entity::ENTITY_BOSS_MAIN);
 	detlaff->SetScale(10, 10, 10);
 	detlaff->SetActive(true);
 	detlaff->SetColliderType(Collider::COLLIDER_BALL);
@@ -72,8 +71,6 @@ void SceneDetlaff::Update(double dt)
 		mainCamera->Include(&mousePos_worldBased);
 	}
 
-	mainCamera->Update(dt);
-	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
 
 	enemyFireDelay -= dt;

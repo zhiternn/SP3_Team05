@@ -13,12 +13,21 @@
 Player* SceneBase::player = new Player();
 
 SceneBase::SceneBase():
-options(OptionManager::GetInstance())
+options(OptionManager::GetInstance()),
+mainCamera(NULL)
 {
 }
 
 SceneBase::~SceneBase()
 {
+	if (mainCamera)
+		delete mainCamera;
+	for (std::vector<Mesh*>::iterator it = backgroundList.begin(); it != backgroundList.end();)
+		it = backgroundList.erase(it);
+	for (std::vector<GameObject*>::iterator it = GameObject::goList.begin(); it != GameObject::goList.end();)
+	{
+		it = GameObject::goList.erase(it);
+	}
 }
 
 void SceneBase::Init()
@@ -380,13 +389,12 @@ void SceneBase::Update(double dt)
 		//Handle Controller Input 
 		GetGamePadInput(dt);
 	}
-	else if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
+	else
 	{
-		//Handle Keyboard and Mouse input
 		PlayerController(dt);
+		mainCamera->Update(dt);
+		mainCamera->Constrain(player, 40);
 	}
-		
-
 
 	if (Controls::GetInstance().OnPress(Controls::KEY_1))
 		isCulled = true;

@@ -24,6 +24,7 @@ public:
 	void Include(Vector3* pos);
 
 	bool Deadzone(Vector3 *p, Vector3 cameraTarget, float ortho);
+	void Constrain(GameObject* constrain, float radius);
 
 	std::vector<Vector3*>entityList;
 
