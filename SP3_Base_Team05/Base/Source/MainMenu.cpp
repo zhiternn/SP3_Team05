@@ -112,8 +112,6 @@ void MainMenu::Update(double dt)
     else
         Application::GetInstance().theSoundEngine->setSoundVolume(0.0f);
 
-    //std::cout << mousePos_screenBased << std::endl;
-
     mainCamera->Update(dt);
 }
 
@@ -1217,10 +1215,6 @@ void MainMenu::LevelUpPage()
 						default:break;
 						}
 					}
-					else
-					{
-						std::cout << "NOT ENOUGH MONEY LA" << std::endl;
-					}
                 }
             }
             else
@@ -1268,10 +1262,6 @@ void MainMenu::LevelUpPage()
 				{
 					UpgradeDmg();
 				}
-				else
-				{
-					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
-				}
             }
             else
             {
@@ -1318,10 +1308,6 @@ void MainMenu::LevelUpPage()
 				{
 					UpgradeLifetime();
 				}
-				else
-				{
-					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
-				}
 			}
             else
             {
@@ -1367,10 +1353,6 @@ void MainMenu::LevelUpPage()
 				if (player->inventory->IsDeducting(1000))
 				{
 					UpgradeProjSpd();
-				}
-				else
-				{
-					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
 				}
             }
             else
@@ -1439,22 +1421,16 @@ void MainMenu::LosePage()
 void MainMenu::UpgradeMG()
 {
     player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.8);
-    std::cout << "Machine Gun Upgraded" << std::endl;
 }
 
 void MainMenu::UpgradeSHG()
 {
-    std::cout << player->inventory->weapons[player->weaponIter]->GetFireRate() << std::endl;
     player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.35);
-
-    std::cout << player->inventory->weapons[player->weaponIter]->GetFireRate() << std::endl;
-    std::cout << "Shotgun Upgraded" << std::endl;
 }
 
 void MainMenu::UpgradeSPG()
 {
     player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.7);
-    std::cout << "Splitgun Upgraded" << std::endl;
 }
 
 void MainMenu::UpgradeLifetime()

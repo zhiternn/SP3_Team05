@@ -22,6 +22,7 @@ void GolemHead::Init(Vector3 pos)
     health = 4000.f;
 	maxHealth = 4000.f;
     isDead = false;
+	this->isCaptured = false;
     regendelay = 0;
     golemGun = new Splitgun(360.f, 18);
     golemGun->AssignProjectile(new Hook());

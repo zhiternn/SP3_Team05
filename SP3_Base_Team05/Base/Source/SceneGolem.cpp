@@ -20,6 +20,11 @@ void SceneGolem::Init()
     SceneBase::Init();
     Math::InitRNG();
 
+	std::vector<GameObject*>::iterator it;
+	for (it = GameObject::goList.begin(); it != GameObject::goList.end();)
+	{
+		it = GameObject::goList.erase(it);
+	}
 	GameObject::goList.clear();
 
     player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
@@ -118,7 +123,10 @@ void SceneGolem::Update(double dt)
 
 	if (golemhead->IsDead())
 	{
-		player->inventory->AddCurrency(100);
+		player->inventory->AddCurrency(3000);
+		if (golemhead->IsCaptured())
+			player->inventory->AddCurrency(golemhead->GetMaxHP());
+
 		manager.ChangeScene(SCENE::SCENE_MENU);
 		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
 

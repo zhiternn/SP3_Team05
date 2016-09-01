@@ -300,7 +300,7 @@ void SceneBase::GetGamePadInput(double dt)
 	////////====================================== GLFW CONTROLLER CONTROLS =====================================/////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//Handle Gamepad movement
-	std::cout << glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) << std::endl;
+
 	//= Y Axis Movement 
 	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) > 0.2f)
 	{
@@ -471,6 +471,8 @@ void SceneBase::Update(double dt)
 		if (Particle::particleList[i]->active)
 			Particle::particleList[i]->Update(dt);
 	}
+
+	std::cout << "goList: " << GameObject::goList.size() << "   pList: " << Particle::particleList.size() << std::endl;
 
 	//static float time = 0.0f;
 	//time += dt * 0.1f;
@@ -886,7 +888,7 @@ void SceneBase::RenderGameObjects()
 					float healthRatio = (float)enemy->GetHP() / (float)enemy->GetMaxHP();
 					float captureRatio = (float)enemy->GetCaptureRate() / (float)enemy->GetHP();
 					modelStack.PushMatrix();
-					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y + 2.0f, 50);
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y + 4.0f, 50);
 					modelStack.Translate(-enemy->GetScale().x, 0, 0);
 
 					modelStack.PushMatrix();

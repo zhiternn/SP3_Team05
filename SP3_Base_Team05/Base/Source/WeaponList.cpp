@@ -27,7 +27,6 @@ void Shotgun::Fire(Vector3 pos, Vector3 dir, GameObject::TEAM_TYPE team)
 			case CProjectile::HOOK:
 				proj = FetchHook();
 				*static_cast<Hook*>(proj) = *static_cast<Hook*>(projectileInfo);
-				std::cout << static_cast<Hook*>(proj)->GetEffect() << std::endl;
 				break;
 			case CProjectile::TRAP:
 				proj = FetchTrapProjectile();

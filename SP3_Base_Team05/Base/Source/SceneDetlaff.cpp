@@ -23,6 +23,11 @@ void SceneDetlaff::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
+	std::vector<GameObject*>::iterator it;
+	for (it = GameObject::goList.begin(); it != GameObject::goList.end();)
+	{
+		it = GameObject::goList.erase(it);
+	}
 	GameObject::goList.clear();
 
 	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.1, 0));
@@ -99,16 +104,10 @@ void SceneDetlaff::Update(double dt)
 
 	if (detlaff->IsDead())
 	{
-		SceneBase::Exit();
-		player->inventory->AddCurrency(100);
-		manager.ChangeScene(SCENE::SCENE_MENU);
-		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
+		player->inventory->AddCurrency(3000);
+		if (detlaff->IsCaptured())
+			player->inventory->AddCurrency(detlaff->GetMaxHP());
 
-		delete this;
-	}
-	else if (detlaff->IsCaptured())
-	{
-		player->inventory->AddCurrency(400);
 		manager.ChangeScene(SCENE::SCENE_MENU);
 		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
 
