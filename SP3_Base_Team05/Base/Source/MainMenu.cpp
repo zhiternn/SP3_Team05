@@ -1425,12 +1425,12 @@ void MainMenu::UpgradeMG()
 
 void MainMenu::UpgradeSHG()
 {
-    player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.35);
+    player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.15);
 }
 
 void MainMenu::UpgradeSPG()
 {
-    player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.7);
+    player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.3);
 }
 
 void MainMenu::UpgradeLifetime()

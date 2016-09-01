@@ -28,13 +28,24 @@ void SceneSummoner::Init()
 	}
 	GameObject::goList.clear();
 
-	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
+	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
     GameObject::goList.push_back(SceneBase::player);
 
 	summoner = new Summoner();
 	GameObject::goList.push_back(summoner);
 	summoner->SetTarget(player);
 	summoner->Init(Vector3(m_worldWidth * 0.5f + 5, m_worldHeight * 0.5f, 0));
+
+	mainCamera->Include(&(SceneBase::player->pos));
+
+	if (!(glfwController.isConnected() && useController))
+	{
+		mainCamera->Include(&mousePos_worldBased);
+	}
+	else
+	{
+		mainCamera->Include(&controllerStick_Pos);
+	}
 
 	GenerateWorld();
 }

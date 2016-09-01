@@ -143,6 +143,9 @@ void MeshManager::InitSceneDetlaff()
 {
 	meshList[GEO_DETLAFF_1] = MeshBuilder::GenerateOBJ("DETLAFF", "obj\\snake_body.obj");
 	meshList[GEO_DETLAFF_1]->enableLight = true;
+	meshList[GEO_DETLAFF_1]->material.kAmbient.Set(0.4f, 0.4f, 0.4f);
+	meshList[GEO_DETLAFF_1]->material.kDiffuse.Set(0.4f, 0.4f, 0.4f);
+	meshList[GEO_DETLAFF_1]->material.kSpecular.Set(0.4f, 0.4f, 0.4f);
 	meshList[GEO_DETLAFF_1]->textureArray[0] = LoadTGA("Image//Detlaff_TGA//deathstar.tga");
 }
 

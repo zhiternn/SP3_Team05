@@ -27,8 +27,7 @@ void SceneGolem::Init()
 	}
 	GameObject::goList.clear();
 
-    player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
-    GameObject::goList.push_back(SceneBase::player);
+	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.1f, 0));
 
     golemhead = new GolemHead();
     GameObject::goList.push_back(golemhead);
@@ -44,6 +43,18 @@ void SceneGolem::Init()
     GameObject::goList.push_back(golemrhead);
     golemrhead->SetTarget(player);
     golemrhead->Init(Vector3(m_worldWidth*0.5f + 20.f, m_worldHeight*0.5f - 50.f, 0));
+
+	mainCamera->Include(&(SceneBase::player->pos));
+
+	if (!(glfwController.isConnected() && useController))
+	{
+		mainCamera->Include(&mousePos_worldBased);
+	}
+	else
+	{
+		mainCamera->Include(&controllerStick_Pos);
+	}
+
 
 }
 

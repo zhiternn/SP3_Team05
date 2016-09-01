@@ -51,3 +51,15 @@ bool GLFWController::isConnected()
 
 	return present;
 }
+
+bool GLFWController::joystick_callback(int joy, int Event)
+{
+	if (Event == GLFW_CONNECTED)
+	{
+		return true;
+	}
+	else if (Event == GLFW_DISCONNECTED)
+	{
+		return false;
+	}
+}
