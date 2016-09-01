@@ -43,6 +43,7 @@ public:
 	bool isConnected();
 	float GetJoyStickButtonPressed(CONTROLLER_BUTTON buttonQuery);
 	float GetJoyStickTriggerPressed(CONTROLLER_STICKS stickQuery);
+	bool joystick_callback(int joy, int Event);
 	
 };
 #endif
