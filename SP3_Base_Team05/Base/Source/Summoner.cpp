@@ -28,8 +28,8 @@ void Summoner::Init(Vector3 pos)
 	Entity::entityType = Entity::ENTITY_BOSS_MAIN;
 	active = true;
 	mass = 10;
-	speedLimit = 70.f;
-	movementSpeed = 70.f;
+	speedLimit = 60.0f;
+	movementSpeed = 60.0f;
 	scale.Set(15, 15, 15);
 	health = 1000;
 	maxHealth = health;
@@ -37,16 +37,8 @@ void Summoner::Init(Vector3 pos)
 	attacking = false;
 	teleported = false;
 	agressiveLevel = 1 - ((float)health / maxHealth);
-	safetyThreshold = this->GetScale().x * 7;
-	chaseThreshold = safetyThreshold * 1.5f;
-	for (int i = 0; i < AMOUNT_OF_SUMMONS; ++i)
-	{
-		Summons* summons = FetchSummons();
-		summons->Init(pos);
-		summons->SetTarget(target);
-		summons->SetTeam(this->team);
-		summonsList.push_back(summons);
-	}
+	safetyThreshold = this->GetScale().x * 6;
+	chaseThreshold = safetyThreshold * 1.6f;
 	for (auto q : summonsList)
 	{
 		q->Init(this->pos);
@@ -57,8 +49,14 @@ void Summoner::Init(Vector3 pos)
 void Summoner::Update(double dt)
 {
 	Enemy::Update(dt);
-
 	UpdateCooldowns(dt);
+	// if there's no summons on the field, instantly summon all
+	if (summonsList.size() <= 0 && summonCooldownTimer <= 0)
+	{
+		summonCooldownTimer = SUMMONING_COOLDOWN;
+		SummonAll();
+	}
+	// if there are summons on the field, summon one by one
 	if (summonsList.size() < AMOUNT_OF_SUMMONS && summonCooldownTimer <= 0)
 	{
 		summonCooldownTimer = SUMMONING_COOLDOWN;
@@ -148,6 +146,7 @@ void Summoner::HandleOutOfBounds(float minX, float maxX, float minY, float maxY)
 		(this->GetPosition().y - this->GetScale().y < minY && this->GetVelocity().y < 0) ||
 		(this->GetPosition().y + this->GetScale().y > maxY && this->GetVelocity().y > 0))
 	{
+		EmitTeleportParticle(this->pos, this->scale.x);
 		this->pos = randPos;
 		teleported = true;
 	}
@@ -185,6 +184,18 @@ void Summoner::CleaningUpMess()
 	}
 }
 
+void Summoner::SummonAll()
+{
+	for (int i = 0; i < AMOUNT_OF_SUMMONS; ++i)
+	{
+		Summons* summons = FetchSummons();
+		summons->Init(pos);
+		summons->SetTarget(target);
+		summons->SetTeam(this->team);
+		summonsList.push_back(summons);
+	}
+}
+
 void Summoner::Defend()
 {
 	
@@ -219,7 +230,7 @@ void Summoner::Attack()
 		Vector3 NP = Vector3(-N.y, N.x, 0);
 		float diameter = summonsList.front()->GetScale().x * 2;
 		float combinedRadius = scale.x + target->GetScale().x;
-		float offset = combinedRadius * 5;
+		float offset = combinedRadius * 3;
 
 		for (int i = 0; i < summonsList.size(); ++i)
 		{

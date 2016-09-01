@@ -26,8 +26,9 @@ void SceneGolem::Init()
 		it = GameObject::goList.erase(it);
 	}
 	GameObject::goList.clear();
-
+	
 	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.1f, 0));
+	GameObject::goList.push_back(SceneBase::player);
 
     golemhead = new GolemHead();
     GameObject::goList.push_back(golemhead);

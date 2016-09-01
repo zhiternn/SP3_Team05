@@ -28,7 +28,7 @@ void SceneSummoner::Init()
 	}
 	GameObject::goList.clear();
 
-	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - 5, 0));
+	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f - (m_worldHeight * 0.25f), 0));
     GameObject::goList.push_back(SceneBase::player);
 
 	summoner = new Summoner();
@@ -46,8 +46,6 @@ void SceneSummoner::Init()
 	{
 		mainCamera->Include(&controllerStick_Pos);
 	}
-
-	GenerateWorld();
 }
 
 void SceneSummoner::PlayerController(double dt)
@@ -100,24 +98,6 @@ void SceneSummoner::Update(double dt)
 		delete this;
 	}
 
-}
-
-void SceneSummoner::GenerateWorld()
-{
-	for (int i = 0; i < NUMBER_OF_WORLD_OBJECTS; ++i)
-	{
-		float randPosX = Math::RandFloatMinMax(0, m_worldWidth);
-		float randPosY = Math::RandFloatMinMax(0, m_worldHeight);
-		float randScaleX = Math::RandFloatMinMax(7, 10);
-		float randScaleY = Math::RandFloatMinMax(7, 10);
-		GameObject *wall = new GameObject();
-		GameObject::goList.push_back(wall);
-		wall->SetActive(true);
-		wall->SetType(GameObject::GO_WALL);
-		wall->SetColliderType(Collider::COLLIDER_BOX);
-		wall->SetPostion(randPosX, randPosY, 0);
-		wall->SetScale(randScaleX, randScaleY, 1);
-	}
 }
 
 void SceneSummoner::Render()

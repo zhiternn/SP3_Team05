@@ -4,7 +4,7 @@
 #include "Enemy.h"
 #include "WeaponList.h"
 
-static const float SUMMON_TOUCH_DAMAGE = 5.f;
+static const float SUMMON_TOUCH_DAMAGE = 10.f;
 
 class Summons : public Enemy
 {
