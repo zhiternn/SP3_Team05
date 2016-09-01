@@ -876,7 +876,7 @@ void SceneBase::RenderGameObjects()
 					float healthRatio = (float)enemy->GetHP() / (float)enemy->GetMaxHP();
 					float captureRatio = (float)enemy->GetCaptureRate() / (float)enemy->GetHP();
 					modelStack.PushMatrix();
-					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y + 2.0f, 50);
+					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().y + 4.0f, 50);
 					modelStack.Translate(-enemy->GetScale().x, 0, 0);
 
 					modelStack.PushMatrix();

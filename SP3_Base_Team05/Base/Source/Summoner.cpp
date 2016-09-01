@@ -141,6 +141,7 @@ void Summoner::HandleOutOfBounds(float minX, float maxX, float minY, float maxY)
 		Math::RandFloatMinMax(minY, maxY), 
 		0);
 	//Checks against minX
+
 	if ((this->GetPosition().x - this->GetScale().x < minX && this->GetVelocity().x < 0) ||
 		(this->GetPosition().x + this->GetScale().x > maxX && this->GetVelocity().x > 0) ||
 		(this->GetPosition().y - this->GetScale().y < minY && this->GetVelocity().y < 0) ||

@@ -49,7 +49,7 @@ void MainMenu::Init()
 
     //World Space View
     m_orthoHeight = 100;
-    m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+	m_orthoWidth = 128;
 
     mainCamera = new Camera();
     mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -111,8 +111,6 @@ void MainMenu::Update(double dt)
         Application::GetInstance().theSoundEngine->setSoundVolume(1.0f);
     else
         Application::GetInstance().theSoundEngine->setSoundVolume(0.0f);
-
-    //std::cout << mousePos_screenBased << std::endl;
 
     mainCamera->Update(dt);
 }
@@ -843,7 +841,6 @@ void MainMenu::LevelSelectPage()
                     isClicked = true;
                 }
 
-                sm.ChangeScene(SCENE::SCENE_MENU);
 				state = MENU_MAIN;
             }
             else
@@ -1217,10 +1214,6 @@ void MainMenu::LevelUpPage()
 						default:break;
 						}
 					}
-					else
-					{
-						std::cout << "NOT ENOUGH MONEY LA" << std::endl;
-					}
                 }
             }
             else
@@ -1268,10 +1261,6 @@ void MainMenu::LevelUpPage()
 				{
 					UpgradeDmg();
 				}
-				else
-				{
-					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
-				}
             }
             else
             {
@@ -1318,10 +1307,6 @@ void MainMenu::LevelUpPage()
 				{
 					UpgradeLifetime();
 				}
-				else
-				{
-					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
-				}
 			}
             else
             {
@@ -1367,10 +1352,6 @@ void MainMenu::LevelUpPage()
 				if (player->inventory->IsDeducting(1000))
 				{
 					UpgradeProjSpd();
-				}
-				else
-				{
-					std::cout << "NOT ENOUGH MONEY LA" << std::endl;
 				}
             }
             else
@@ -1439,22 +1420,16 @@ void MainMenu::LosePage()
 void MainMenu::UpgradeMG()
 {
     player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.8);
-    std::cout << "Machine Gun Upgraded" << std::endl;
 }
 
 void MainMenu::UpgradeSHG()
 {
-    std::cout << player->inventory->weapons[player->weaponIter]->GetFireRate() << std::endl;
     player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.35);
-
-    std::cout << player->inventory->weapons[player->weaponIter]->GetFireRate() << std::endl;
-    std::cout << "Shotgun Upgraded" << std::endl;
 }
 
 void MainMenu::UpgradeSPG()
 {
     player->inventory->weapons[player->weaponIter]->SetFireRate(player->inventory->weapons[player->weaponIter]->GetFireRate() + 0.7);
-    std::cout << "Splitgun Upgraded" << std::endl;
 }
 
 void MainMenu::UpgradeLifetime()
