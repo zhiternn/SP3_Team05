@@ -6,7 +6,7 @@
 
 #include <sstream>
 
-#define ENEMY_FIRE_COOLDOWN 2;
+#define ENEMY_FIRE_COOLDOWN 1.5;
 #define ENEMY_MOVE_DELAY 5;
 
 SceneDetlaff::SceneDetlaff():
