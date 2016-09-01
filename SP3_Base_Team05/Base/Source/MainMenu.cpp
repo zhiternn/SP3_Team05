@@ -47,7 +47,7 @@ void MainMenu::Init()
 
     //World Space View
     m_orthoHeight = 100;
-    m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+	m_orthoWidth = 128;
 
     mainCamera = new Camera();
     mainCamera->Init(Vector3(0, 0, 1), Vector3(0, 0, 0), Vector3(0, 1, 0));
@@ -238,7 +238,6 @@ void MainMenu::MainMenuPage()
 {
 	float boxposscale = 0.6;
 	float textposscale = 0.575;
-	std::cout << "MainMenu: " << boxposscale << std::endl;
 
 	// TITLE
 	float LayoutScale = 0.20f;
@@ -838,8 +837,6 @@ void MainMenu::LevelSelectPage()
 				modelStack.Scale(25, 7, 3);
 				RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
 				modelStack.PopMatrix();
-				std::cout << m_orthoWidth << std::endl;
-				std::cout << boxposscale << std::endl;
 
 				std::ostringstream ss;
 				ss.precision(5);
