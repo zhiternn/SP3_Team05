@@ -12,6 +12,7 @@ CDetlaff::CDetlaff() : target(NULL), state(STATE_1)
 	weapon->AssignProjectile(new Bullet());
 	weapon_extra = NULL;
 	this->SetHP(1000);
+	maxHealth = this->GetHP();
 }
 
 
@@ -41,6 +42,7 @@ void CDetlaff::Update(double dt)
 				//Spawn Stage 2 Boss
 				state = STATE_2;
 				this->health = 2000;
+				maxHealth = this->GetHP();
 				//Create the stage 2 splitgun
 				weapon = new Splitgun(45.0f, 12);
 				weapon->AssignProjectile(new Bullet());
@@ -51,6 +53,7 @@ void CDetlaff::Update(double dt)
 				//Spawn State 3 Boss
 				state = STATE_3;
 				this->health = 5000;
+				maxHealth = this->GetHP();
 				weapon = new Splitgun(90.f, 12);
 				weapon->AssignProjectile(new Hook());
 				weapon->GetProjInfo()->SetProjectileSpeed(100.0f);

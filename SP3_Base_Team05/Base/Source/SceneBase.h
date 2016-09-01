@@ -140,6 +140,7 @@ protected:
 	bool bLightEnabled;
 	bool isCulled;
 	bool isWireFrame;
+	bool displayFPS;
 	bool useController;
 	bool Keyboard;
 

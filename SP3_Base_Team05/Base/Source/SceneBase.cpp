@@ -199,6 +199,7 @@ void SceneBase::Init()
 	bLightEnabled = true;
 	isCulled = true;
 	isWireFrame = false;
+	displayFPS = false;
 
 	player->SetScale(3.5f, 3.5f, 3.5f);
 
@@ -430,6 +431,10 @@ void SceneBase::Update(double dt)
 	{
 		bLightEnabled = false;
 	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_0))
+	{
+		displayFPS = !displayFPS;
+	}
 
 	if (Controls::GetInstance().OnHold(Controls::KEY_I))
 		lights[0].position.z -= (float)(30.f * dt);
@@ -462,8 +467,6 @@ void SceneBase::Update(double dt)
 		if (Particle::particleList[i]->active)
 			Particle::particleList[i]->Update(dt);
 	}
-
-	std::cout << "goList: " << GameObject::goList.size() << "   pList: " << Particle::particleList.size() << std::endl;
 
 	//static float time = 0.0f;
 	//time += dt * 0.1f;
@@ -766,11 +769,15 @@ void SceneBase::RenderHUD()
 		modelStack.PopMatrix();
 	}
 
-	//On screen text
 	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
+	if (displayFPS)
+	{
+		//On screen text
+		ss.str("");
+		ss.precision(5);
+		ss << "FPS: " << fps;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
+	}
 
 	RenderUI(meshList[GEO_UI_BACKGROUND], 8, 0, 60, 15, false);
 

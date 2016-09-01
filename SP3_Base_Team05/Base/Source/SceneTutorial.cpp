@@ -7,7 +7,6 @@
 #include "Summoner.h"
 
 SceneTutorial::SceneTutorial() :
-mainCamera(NULL),
 manager(SceneManager::GetInstance())
 {
 }
@@ -21,55 +20,45 @@ void SceneTutorial::Init()
 	SceneBase::Init();
 	Math::InitRNG();
 
-	//World Space
-	m_worldHeight = 300;
-	m_worldWidth = m_worldHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
+	std::vector<GameObject*>::iterator it;
+	for (it = GameObject::goList.begin(); it != GameObject::goList.end();)
+	{
+		it = GameObject::goList.erase(it);
+	}
+	GameObject::goList.clear();
 
-	//Camera Space View
-	m_orthoHeight = 100;
-	m_orthoWidth = m_orthoHeight * (float)Application::GetWindowWidth() / Application::GetWindowHeight();
-
-	mainCamera = new Camera();
-	mainCamera->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 1), Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0), Vector3(0, 1, 0));
-
-	//GameObject *go = FetchGO();
-	//go->SetActive(true);
-	//go->SetScale(20, 20, 20);
-	//go->SetFront(1, 0, 0);
-	//go->SetPostion(m_worldWidth * 0.5f, m_worldHeight * 0.5f, 0);
-	//go->SetType(GameObject::GO_ENVIRONMENT);
-	//go->SetColliderType(Collider::COLLIDER_NONE);
-
-	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
+	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f + 20, 0));
     GameObject::goList.push_back(SceneBase::player);
 
 	enemy = FetchEnemy();
 	enemy->SetScale(5, 5, 5);
-	enemy->SetTarget(player);
-	enemy->SetEntityType(Entity::ENTITY_BOSS_BODY);
+	enemy->SetTarget(SceneBase::player);
+	enemy->SetEntityType(Entity::ENTITY_BOSS_MAIN);
 	enemy->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f));
+	enemy->SetHP(200);
+	enemy->SetMaxHP(enemy->GetHP());
 
+	mainCamera->Include(&SceneBase::player->pos);
 
-	mainCamera->Include(&player->pos);
-	//if (!(GamePad.IsConnected() && useController))
+	if (!(glfwController.isConnected() && useController))
 	{
 		mainCamera->Include(&mousePos_worldBased);
 	}
-	//else
+	else
 	{
-		//mainCamera->Include(&controllerStick_Pos);
+		mainCamera->Include(&controllerStick_Pos);
 	}
 
 	pauseGame = false;
 	firstTimeKill = true;
 	firstTimeCapture = true;
+	canExit = false;
 	for (int i = 0; i < Weapon::W_END; ++i)
 	{
 		weaponChecks[i] = true;
 	}
 	for (int i = 0; i < CProjectile::MAX; ++i)
 	{
-
 		projChecks[i] = true;
 	}
 }
@@ -226,97 +215,19 @@ void SceneTutorial::PlayerController(double dt)
 
 void SceneTutorial::GetGamePadInput(double dt)
 {
-	//Vector3 forceDir;
-	//Vector3 lookDir = (controllerStick_WorldPos - player->pos).Normalized();
-	//player->SetFront(lookDir);
-
-	////Update Gamepad
-	////GamePad.Update();
-
-	////Handle Gamepad movement
-
-	////= Y Axis Movement
-	//if (GamePad.Left_Stick_Y() > 0.2f)
-	//{
-	//	forceDir.y += 5 * GamePad.Left_Stick_Y();
-	//}
-	//if (GamePad.Left_Stick_Y() < -0.2f)
-	//{
-	//	forceDir.y += 5 * GamePad.Left_Stick_Y();
-	//}
-
-	////= X Axis Movement
-	//if (GamePad.Left_Stick_X() > 0.2f)
-	//{
-	//	forceDir.x += 5 * GamePad.Left_Stick_X();
-	//}
-	//if (GamePad.Left_Stick_X() < -0.2f)
-	//{
-	//	forceDir.x += 5 * GamePad.Left_Stick_X();
-	//}
-
-	////= Dash
-	//if (GamePad.LeftTrigger() > 0.2f)
-	//{
-	//	player->Dash(forceDir, dt);
-	//}
-
-	////= Update Movement
-	//if (forceDir.IsZero() == false)
-	//{
-	//	forceDir.Normalize();
-	//	player->Move(forceDir, dt);
-	//}
-
-
-	////Change Weapons
-	//if (GamePad.GetButtonDown(8) > 0.5f)
-	//{
-	//	player->ChangeProjectileUp();
-	//}
-	//if (GamePad.GetButtonDown(9) > 0.5f)
-	//{
-	//	player->ChangeWeaponUp();
-	//}
-
-	////Shooting
-	//if (GamePad.Right_Stick_Y() > 0.2f || GamePad.Right_Stick_Y() < -0.2f || GamePad.Right_Stick_X() > 0.2f || GamePad.Right_Stick_X() < -0.2f)
-	//{
-	//	stickDir = Vector3(GamePad.Right_Stick_X(), GamePad.Right_Stick_Y(), 0);
-	//	player->Shoot(stickDir.Normalized());
-	//}
-
-	////Refresh Gamepad
-	//GamePad.RefreshState();
-
+	SceneBase::GetGamePadInput(dt);
 }
 
 void SceneTutorial::Update(double dt)
 {
-	SceneBase::Update(dt);
-	{//handles required mouse calculationsdouble x, y;
-		double x, y;
-		Application::GetCursorPos(x, y);
-		int w = Application::GetWindowWidth();
-		int h = Application::GetWindowHeight();
-		x = m_orthoWidth * (x / w);
-		y = m_orthoHeight * ((h - y) / h);
-
-		mousePos_screenBased.Set(x, y, 0);
-		mousePos_worldBased.Set(
-			x + mainCamera->target.x - (m_orthoWidth * 0.5f),
-			y + mainCamera->target.y - (m_orthoHeight * 0.5f),
-			0
-			);
-	}
-
 	if (!pauseGame)
 	{
+		SceneBase::Update(dt);
 		mainCamera->Update(dt);
 		mainCamera->Constrain(*player, mainCamera->target);
 		if (enemy->IsDead() || enemy->IsCaptured())
 		{
-			if (enemy->IsDead() && firstTimeKill)
+			if (enemy->IsDead() && firstTimeKill && !enemy->IsCaptured())
 			{
 				firstTimeKill = false;
 				pauseGame = true;
@@ -335,39 +246,29 @@ void SceneTutorial::Update(double dt)
 
 			enemy->SetScale(5, 5, 5);
 			enemy->SetTarget(player);
-			enemy->SetEntityType(Entity::ENTITY_BOSS_BODY);
+			enemy->SetEntityType(Entity::ENTITY_BOSS_MAIN);
 			enemy->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.5f));
+			enemy->SetHP(200);
+			enemy->SetMaxHP(enemy->GetHP());
 		}
 		else if (!enemy->UpdateMovement(dt))
 		{
 			enemy->ChangeDestination(Enemy::MOVETO_TARGET, player->pos);
 		}
 		UpdateGameObjects(dt);
-
-		//Restrict the player from moving past the deadzone
-		if (mainCamera->Deadzone(&player->GetPosition(), mainCamera->GetPosition(), m_orthoHeight))
-		{
-			//Check if Gamepad is connected for controller input
-			//if (useController && GamePad.IsConnected())
-			{
-				//Handle Controller Input
-				//GetGamePadInput(dt);
-			}
-			//else
-			{
-				//Handle Keyboard and Mouse input
-				PlayerController(dt);
-			}
-		}
 	}
-	else
+	else if (Controls::GetInstance().OnRelease(Controls::KEY_RETURN))
 	{
-		if (Controls::GetInstance().OnRelease(Controls::KEY_RETURN))
-		{
-			tutorialLines.str("");
-			tutorialLines.clear();
-			pauseGame = false;
-		}
+		tutorialLines.str("");
+		tutorialLines.clear();
+		pauseGame = false;
+	}
+	if (Controls::GetInstance().OnRelease(Controls::KEY_BACKSPACE) && !firstTimeKill && !firstTimeCapture)
+	{
+		manager.ChangeScene(SCENE::SCENE_MENU);
+		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
+
+		delete this;
 	}
 }
 
@@ -396,6 +297,11 @@ void SceneTutorial::Render()
 	//RenderGPass();
 	RenderMain();
 	//glUniform1f(m_parameters[U_FOG_ENABLED], 0);
+
+	SetHUD(true);
+	if (!firstTimeKill && !firstTimeCapture)
+		RenderTextOnScreen(meshList[GEO_TEXT], "You may now press \"Backspace\" to return", Color(0, 1, 0), 3, 4, 30);
+	SetHUD(false);
 
 	SetHUD(true);
 	RenderHUD();
@@ -547,71 +453,7 @@ void SceneTutorial::RenderWorld()
 
 void SceneTutorial::RenderHUD()
 {
-	//Render Minimap
-	modelStack.PushMatrix();
-	modelStack.Translate(70, 50, 0);
-	modelStack.Scale(18, 18, 1);
-	RenderMinimap(1.0f);
-	modelStack.PopMatrix();
-
-	//if (!((GamePad.IsConnected() && useController)))
-	{
-		// Render the crosshair
-		modelStack.PushMatrix();
-		modelStack.Translate(mousePos_screenBased.x * 80 / m_orthoWidth, mousePos_screenBased.y * 60 / m_orthoHeight, 6);
-		modelStack.Scale(5, 5, 5);
-		RenderMesh(meshList[GEO_CROSSHAIR], false);
-		modelStack.PopMatrix();
-	}
-
-	//On screen text
-	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
-
-	ss.str("");
-	ss.precision(4);
-	ss << "Light(" << lights[0].position.x << ", " << lights[0].position.y << ", " << lights[0].position.z << ")";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 3);
-
-	ss.str("");
-	ss << "Weapon: ";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 0, 57);
-	switch (player->weapon->weapon_type)
-	{
-	case Weapon::W_SHOTGUN:
-	{
-		RenderUI(meshList[GEO_WEAPON_SHOTGUN], 5, 18, 58.5f, 1, false);
-	}
-		break;
-	case Weapon::W_MACHINEGUN:
-	{
-		RenderUI(meshList[GEO_WEAPON_MACHINEGUN], 5, 18, 58.5f, 1, false);
-	}
-		break;
-	case Weapon::W_SPLITGUN:
-	{
-		RenderUI(meshList[GEO_WEAPON_SPLITGUN], 5, 18, 58.5f, 1, false);
-	}
-		break;
-	}
-
-	ss.str("");
-	ss << "Bullet: ";
-	switch (player->projectile->GetProjType())
-	{
-	case CProjectile::BULLET:
-		ss << "Normal";
-		break;
-	case CProjectile::HOOK:
-		ss << "Hook";
-		break;
-	case CProjectile::TRAP:
-		ss << "Trap";
-		break;
-	}
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 3, 40, 57);
+	SceneBase::RenderHUD();
 
 	if (pauseGame)
 	{
@@ -621,22 +463,9 @@ void SceneTutorial::RenderHUD()
 		RenderMesh(meshList[GEO_QUAD], false);
 		modelStack.PopMatrix();
 
-		RenderTextOnScreen(meshList[GEO_TEXT], "Press \"Enter\" to continue", Color(0, 1, 0), 2.0f, 5, 27.5f);
-		RenderTextOnScreen(meshList[GEO_TEXT], tutorialLines.str(), Color(0, 1, 0), 3, 5, 30);
+		RenderTextOnScreen(meshList[GEO_TEXT], "Press \"Enter\" to continue", Color(0, 0, 0), 2.0f, 5, 27.5f);
+		RenderTextOnScreen(meshList[GEO_TEXT], tutorialLines.str(), Color(0, 0, 0), 3, 5, 30);
 	}
-
-	ss.str("");
-	ss << "HP";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 54);
-	RenderUI(meshList[GEO_BORDER], 2, (player->maxHealth / 10) + 11, 55.5f, player->maxHealth / 10, false);
-	RenderUI(meshList[GEO_HEALTH], 2, (player->GetHP() / 10) + 11, 55.5f, player->GetHP() / 10, false);
-
-	ss.str("");
-	ss.precision(2);
-	ss << "Dash";
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(1, 1, 1), 3, 0, 51);
-	RenderUI(meshList[GEO_BORDER], 2, (DASH_COOLDOWN * (player->maxHealth / 10)) + 11, 52.5f, DASH_COOLDOWN * (player->maxHealth / 10), false);
-	RenderUI(meshList[GEO_DASH], 2, ((DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10)) + 11, 52.5f, (DASH_COOLDOWN - player->cooldownTimer) * (player->maxHealth / 10), false);
 }
 
 void SceneTutorial::RenderMinimap(float zoom)
@@ -777,34 +606,5 @@ void SceneTutorial::UpdateGameObjects(double dt)
 
 void SceneTutorial::RenderGameObjects()
 {
-	for (int i = 0; i < GameObject::goList.size(); ++i)
-	{
-		if (GameObject::goList[i]->IsActive())
-		{
-			modelStack.PushMatrix();
-
-			GameObject::goList[i]->SetupMesh();
-			if (GameObject::goList[i]->mesh)
-				RenderMesh(GameObject::goList[i]->mesh, true);
-
-			modelStack.PopMatrix();
-			Enemy* enemy = dynamic_cast<Enemy*>(GameObject::goList[i]);
-			if (enemy)
-			{
-				if (!enemy->IsDead())
-				{
-					modelStack.PushMatrix();
-					modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x, 50);
-					modelStack.Scale(enemy->GetHP() / 10, 3, 1);
-					RenderMesh(meshList[GEO_HEALTH], false);
-					modelStack.PopMatrix();
-				}
-				modelStack.PushMatrix();
-				modelStack.Translate(enemy->pos.x, enemy->pos.y + enemy->GetScale().x + 5, 50);
-				modelStack.Scale(enemy->GetCaptureRate(), 3, 1);
-				RenderMesh(meshList[GEO_CAPTURE], false);
-				modelStack.PopMatrix();
-			}
-		}
-	}
+	SceneBase::RenderGameObjects();
 }

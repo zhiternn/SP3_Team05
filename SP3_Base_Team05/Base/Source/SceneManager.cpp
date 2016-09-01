@@ -39,6 +39,11 @@ void SceneManager::ChangeScene(SCENE scene)
 		currentScene = new SceneDetlaff();
 		break;
 	}
+	case SCENE::SCENE_TUTORIAL:
+	{
+		currentScene = new SceneTutorial();
+		break;
+	}
 	case SCENE::SCENE_MENU:
 	{
 		currentScene = new MainMenu();

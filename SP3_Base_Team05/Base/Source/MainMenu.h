@@ -84,15 +84,6 @@ public:
 
 	void SetState(MENU_STATE state);
 private:
-
-    float m_worldWidth, m_worldHeight;
-    float m_orthoWidth, m_orthoHeight;
-
-    Camera* mainCamera;
-
-    Vector3 mousePos_screenBased;
-    Vector3 mousePos_worldBased;
-
     MENU_STATE state;
     SceneManager &sm;
 	OptionManager &om;
@@ -100,7 +91,7 @@ private:
     bool isHover, isClicked;
     float continuetime;
 
-    ButtonPosition b_Play, b_Continue, b_Option, b_Credit, b_LevelUp, b_Exit, b_Back, b_Yes, b_No, b_On, b_Off, upgradeGun, upgradeLifetime, upgradeProjSpd, upgradeDmg;
+    ButtonPosition b_Play, b_Continue, b_Option, b_Credit, b_LevelUp, b_Tutorial, b_Exit, b_Back, b_Yes, b_No, b_On, b_Off, upgradeGun, upgradeLifetime, upgradeProjSpd, upgradeDmg;
 
     bool MusicOn, SoundOn, ControllerOn;
 };
