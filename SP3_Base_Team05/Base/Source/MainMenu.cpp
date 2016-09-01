@@ -613,6 +613,17 @@ void MainMenu::LevelSelectPage()
             ss.precision(5);
             ss << "Golem";
             RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale + 0.15)) * (60 / m_orthoHeight));
+
+			modelStack.PushMatrix();
+			modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.15)) * (60 / m_orthoHeight), 1);
+			modelStack.Scale(25, 6, 2);
+			RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+			modelStack.PopMatrix();
+
+			std::ostringstream ss3;
+			ss3.precision(5);
+			ss3 << "Menu";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
         }
 
         //OPTION BUTTON
@@ -674,6 +685,17 @@ void MainMenu::LevelSelectPage()
             ss1.precision(5);
             ss1 << "Snake";
             RenderTextOnScreen(meshList[GEO_TEXT], ss1.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale)) * (60 / m_orthoHeight));
+
+			modelStack.PushMatrix();
+			modelStack.Translate(5 * (80 / m_orthoWidth), (m_orthoHeight * (0.15)) * (60 / m_orthoHeight), 1);
+			modelStack.Scale(25, 6, 2);
+			RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
+			modelStack.PopMatrix();
+
+			std::ostringstream ss3;
+			ss3.precision(5);
+			ss3 << "Menu";
+			RenderTextOnScreen(meshList[GEO_TEXT], ss3.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (0.125)) * (60 / m_orthoHeight));
         }
         //CREDIT BUTTON
         if (mousePos_screenBased.x >= b_Credit.minX && mousePos_screenBased.x <= b_Credit.maxX
@@ -737,7 +759,7 @@ void MainMenu::LevelSelectPage()
             RenderTextOnScreen(meshList[GEO_TEXT], ss2.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.15)) * (60 / m_orthoHeight));
         }
 
-        //Detallff
+        //Detlaff
         if (mousePos_screenBased.x >= b_LevelUp.minX && mousePos_screenBased.x <= b_LevelUp.maxX
             && mousePos_screenBased.y >= b_LevelUp.minY && mousePos_screenBased.y <= b_LevelUp.maxY)
         {
@@ -906,7 +928,7 @@ void MainMenu::LevelSelectPage()
 
         std::ostringstream ss4;
         ss4.precision(5);
-        ss4 << "Detalff";
+        ss4 << "Detlaff";
         RenderTextOnScreen(meshList[GEO_TEXT], ss4.str(), Color(0, 1, 0), 2, 2, (m_orthoHeight * (textposscale - 0.3)) * (60 / m_orthoHeight));
 
 

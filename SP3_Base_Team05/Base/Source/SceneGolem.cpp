@@ -13,8 +13,6 @@ manager(SceneManager::GetInstance())
 
 SceneGolem::~SceneGolem()
 {
-	if (mainCamera)
-		delete mainCamera;
 }
 
 void SceneGolem::Init()
@@ -76,8 +74,6 @@ void SceneGolem::Update(double dt)
 		mainCamera->Include(&mousePos_worldBased);
 	}
 
-    mainCamera->Update(dt);
-    mainCamera->Constrain(*player, mainCamera->target);
     UpdateGameObjects(dt);
 
     if (golemhead->GetHP() <= 500)
@@ -125,12 +121,16 @@ void SceneGolem::Update(double dt)
 		player->inventory->AddCurrency(100);
 		manager.ChangeScene(SCENE::SCENE_MENU);
 		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
+
+		delete this;
 	}
 
 	if (player->IsDead())
 	{
 		manager.ChangeScene(SCENE::SCENE_MENU);
 		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_LOSE);
+
+		delete this;
 	}
 }
 

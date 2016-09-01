@@ -43,15 +43,26 @@ void Camera::Update(double dt)
 		cameraTarget.x /= entityList.size();
 		cameraTarget.y /= entityList.size();
 
-        
-		
 		//if so, update the camera position
 		this->target.Lerp( cameraTarget, 5*dt);
 		this->position = this->target;
 		this->position.z += 1;
-		
-
     }
+}
+
+void Camera::Constrain(GameObject* constrain, float radius)
+{
+	if (this->target.x > constrain->pos.x + radius)
+		this->target.x = constrain->pos.x + radius;
+	if (this->target.x < constrain->pos.x - radius)
+		this->target.x = constrain->pos.x - radius;
+	if (this->target.y > constrain->pos.y + radius)
+		this->target.y = constrain->pos.y + radius;
+	if (this->target.y < constrain->pos.y - radius)
+		this->target.y = constrain->pos.y - radius;
+
+	this->position = this->target;
+	this->position.z += 1;
 }
 
 void Camera::Include(Vector3* pos)

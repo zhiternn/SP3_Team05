@@ -63,6 +63,8 @@ void MeshManager::Init()
 	meshList[GEO_PARTICLE_SIGNAL]->textureArray[0] = LoadTGA("Image//particle_signal.tga");
 	meshList[GEO_PARTICLE_SKID] = MeshBuilder::GenerateQuad("p_skid", Color(1, 1, 1), 1);
 	meshList[GEO_PARTICLE_SKID]->textureArray[0] = LoadTGA("Image//particle_skid.tga");
+	meshList[GEO_PARTICLE_ATTACK] = MeshBuilder::GenerateQuad("p_atck", Color(1, 1, 1), 1);
+	meshList[GEO_PARTICLE_ATTACK]->textureArray[0] = LoadTGA("Image//particle_attack.tga");
 	meshList[GEO_PARTICLE_TELEPORT] = MeshBuilder::GenerateQuad("p_teleport", Color(1, 1, 1), 1);
 	meshList[GEO_PARTICLE_TELEPORT]->textureArray[0] = LoadTGA("Image//Detlaff_TGA//teleport.tga");
 

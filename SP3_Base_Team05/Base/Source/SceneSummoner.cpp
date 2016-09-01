@@ -14,8 +14,6 @@ manager(SceneManager::GetInstance())
 
 SceneSummoner::~SceneSummoner()
 {
-	if (mainCamera)
-		delete mainCamera;
 }
 
 void SceneSummoner::Init()
@@ -65,8 +63,6 @@ void SceneSummoner::Update(double dt)
 		mainCamera->Include(&mousePos_worldBased);
 	}
 
-	mainCamera->Update(dt);
-	mainCamera->Constrain(*player, mainCamera->target);
 	UpdateGameObjects(dt);
 
 	if (summoner->IsDead())
@@ -74,17 +70,23 @@ void SceneSummoner::Update(double dt)
 		player->inventory->AddCurrency(50);
 		manager.ChangeScene(SCENE::SCENE_MENU);
 		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
+
+		delete this;
 	}
 	else if (summoner->IsCaptured())
 	{
 		player->inventory->AddCurrency(50 + summoner->GetHP());
 		manager.ChangeScene(SCENE::SCENE_MENU);
 		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_WIN);
+
+		delete this;
 	}
 	if (player->IsDead())
 	{
 		manager.ChangeScene(SCENE::SCENE_MENU);
 		dynamic_cast<MainMenu*>(manager.GetScene())->SetState(MainMenu::MENU_LOSE);
+
+		delete this;
 	}
 
 }
@@ -100,6 +102,7 @@ void SceneSummoner::GenerateWorld()
 		GameObject *wall = new GameObject();
 		GameObject::goList.push_back(wall);
 		wall->SetActive(true);
+		wall->SetType(GameObject::GO_WALL);
 		wall->SetColliderType(Collider::COLLIDER_BOX);
 		wall->SetPostion(randPosX, randPosY, 0);
 		wall->SetScale(randScaleX, randScaleY, 1);

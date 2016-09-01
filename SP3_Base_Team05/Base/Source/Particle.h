@@ -67,6 +67,7 @@ void EmitDashParticle(Vector3 pos, Vector3 dir);
 void EmitHitParticle(Vector3 pos, float size);
 void EmitSignalParticle(Vector3 pos, float initialScale, float size);
 void EmitSkidParticle(Vector3 pos, float size, Vector3 dir);
+void EmitAttackParticle(Vector3 pos, float size, bool in);
 void EmitTeleportParticle(Vector3 pos, float size);
 
 #endif

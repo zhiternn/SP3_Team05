@@ -14,8 +14,6 @@ manager(SceneManager::GetInstance())
 
 SceneTutorial::~SceneTutorial()
 {
-	if (mainCamera)
-		delete mainCamera;
 }
 
 void SceneTutorial::Init()

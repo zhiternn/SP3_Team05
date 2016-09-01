@@ -18,7 +18,7 @@ class SceneBase : public Scene
 {
 public:
 	SceneBase();
-	~SceneBase();
+	virtual ~SceneBase();
 
 	virtual void Init();
 	virtual void Update(double dt);
