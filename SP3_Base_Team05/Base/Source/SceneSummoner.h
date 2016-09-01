@@ -35,8 +35,6 @@ public:
 	virtual void RenderHUD();
 	virtual void UpdateGameObjects(double dt);
 
-	void GenerateWorld();
-
 	void RenderGPass();
 	void RenderMain();
 	void RenderWorld();

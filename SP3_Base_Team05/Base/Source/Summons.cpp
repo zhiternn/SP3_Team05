@@ -19,7 +19,7 @@ void Summons::Init(Vector3 pos)
 	entityType = Entity::ENTITY_BOSS_BODY;
 	collider.type = Collider::COLLIDER_BALL;
 	mass = 1;
-	speedLimit = 100.f;
+	speedLimit = 60.f;
 	scale.Set(7, 7, 7);
 	health = 300;
 	maxHealth = health;
@@ -31,19 +31,19 @@ void Summons::Init(Vector3 pos)
 	{
 	case 1:
 	{
-		MachineGun *machinegun = new MachineGun(7);
+		MachineGun *machinegun = new MachineGun(3);
 		weapon = machinegun;
 	}
 	break;
 	case 2:
 	{
-		Shotgun *shotgun = new Shotgun(5, 0.35f, 0.5f);
+		Shotgun *shotgun = new Shotgun(3, 0.35f, 0.3f);
 		weapon = shotgun;
 	}
 	break;
 	case 3:
 	{
-		Splitgun *splitgun = new Splitgun(20, 5, 1);
+		Splitgun *splitgun = new Splitgun(45, 3, 0.3f);
 		weapon = splitgun;
 	}
 	break;
@@ -54,13 +54,13 @@ void Summons::Init(Vector3 pos)
 	{
 	case 1:
 	{
-		Bullet *bullet = new Bullet(5, 2.0f, 150.f, 3.f, 3);
+		Bullet *bullet = new Bullet(5, 2.0f, 100.0f, 1.0f, 5);
 		weapon->AssignProjectile(bullet);
 	}
 	break;
 	case 2:
 	{
-		Hook *hook = new Hook(0, 0.1f, 20.0f);
+		Hook *hook = new Hook(0, 0.0f, 20.0f);
 		weapon->AssignProjectile(hook);
 	}
 	break;
