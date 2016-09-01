@@ -93,7 +93,7 @@ void SnakeHead::Update(double dt)
 		if (actionRate <= 0.0f)
 		{
 			emitSignal = true;
-			actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN + (10 * (1 - bodyRatio)), ACTION_TIMER_MAX + (10 * (1 - bodyRatio)));
+			actionRate = Math::RandFloatMinMax(ACTION_TIMER_MIN + (5 * (1 - bodyRatio)), ACTION_TIMER_MAX + (5 * (1 - bodyRatio)));
 			Action();
 		}
 	}
@@ -196,7 +196,7 @@ void SnakeHead::Action()
 	}
 	else//recover
 	{
-		if ((healthRatio < 0.4f && bodyRatio < 1.0f) || bodyRatio < 0.3f)
+		if ((healthRatio < 0.6f && bodyRatio < 1.0f) || bodyRatio < 0.3f)
 		{
 			Recover();
 		}

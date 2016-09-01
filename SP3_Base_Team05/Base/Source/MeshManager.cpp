@@ -189,7 +189,7 @@ void MeshManager::InitMainMenu()
     meshList[GEO_MENU_CURSOR]->textureArray[0] = LoadTGA("Image//menucursor.tga");
 
     meshList[GEO_MENU_BACKGROUND] = MeshBuilder::GenerateQuad("GEO_MENU_BACKGROUND", Color(0, 0, 0), 1.f);
-    meshList[GEO_MENU_BACKGROUND]->textureArray[0] = LoadTGA("Image//background.tga");
+    meshList[GEO_MENU_BACKGROUND]->textureArray[0] = LoadTGA("Image//background1.tga");
 
     meshList[GEO_MENU_CHOICEBOX] = MeshBuilder::GenerateQuad("GEO_MENU_CHOICEBOX", Color(0, 0, 0), 1.f);
     meshList[GEO_MENU_CHOICEBOX]->textureArray[0] = LoadTGA("Image//choicebox.tga");

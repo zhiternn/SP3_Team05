@@ -51,6 +51,11 @@ void Entity::SetHP(short int HP)
 	this->health = HP;
 }
 
+void Entity::SetMaxHP(short int HP)
+{
+	this->maxHealth = HP;
+}
+
 Entity::ENTITY_TYPE Entity::GetEntityType()
 {
 	return entityType;

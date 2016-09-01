@@ -4,6 +4,7 @@
 #include "SceneGolem.h"
 #include "SceneSnakeBoss.h"
 #include "SceneSummoner.h"
+#include "SceneTutorial.h"
 #include "MainMenu.h"
 
 enum SCENE
@@ -12,6 +13,7 @@ enum SCENE
 	SCENE_SNAKE,
 	SCENE_SUMMONER,
 	SCENE_DETLAFF,
+	SCENE_TUTORIAL,
 	SCENE_MENU,
 	NUM_SCENES
 };

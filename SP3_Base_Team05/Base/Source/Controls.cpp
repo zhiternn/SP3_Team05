@@ -58,6 +58,7 @@ Controls::Controls()
 	buttons[KEY_RSHIFT].AssignHotKey(VK_RSHIFT);
 	buttons[KEY_LCTRL].AssignHotKey(VK_LCONTROL);
 	buttons[KEY_RCTRL].AssignHotKey(VK_RCONTROL);
+	buttons[KEY_BACKSPACE].AssignHotKey(VK_BACK);
 
 	buttons[MOUSE_LBUTTON].AssignHotKey(VK_LBUTTON);
 	buttons[MOUSE_RBUTTON].AssignHotKey(VK_RBUTTON);

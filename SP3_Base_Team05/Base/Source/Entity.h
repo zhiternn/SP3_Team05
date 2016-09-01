@@ -22,6 +22,7 @@ public:
 
 	// Setters
 	void SetHP(short int HP);
+	void SetMaxHP(short int HP);
 
 	// Getters
 	short int GetHP();

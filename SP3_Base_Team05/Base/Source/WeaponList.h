@@ -30,7 +30,7 @@ class MachineGun : public Weapon
 {
 public:
 	MachineGun(){
-		SetFireRate(20);
+		SetFireRate(14);
 		weapon_type = Weapon::W_MACHINEGUN;
 	}
 	MachineGun(float firerate){

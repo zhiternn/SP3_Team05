@@ -39,22 +39,15 @@ private:
 	bool pauseGame;
 	bool weaponChecks[Weapon::W_END];
 	bool projChecks[CProjectile::MAX];
+	bool canExit;
 	std::ostringstream tutorialLines;
 	bool firstTimeKill;
 	bool firstTimeCapture;
 
-	void PlayerController(double dt);
-	void GetGamePadInput(double dt);
-	void UpdateGameObjects(double dt);
-	void RenderGameObjects();
-
-	float m_worldWidth, m_worldHeight;
-	float m_orthoWidth, m_orthoHeight;
-
-	Camera* mainCamera;
-
-	Vector3 mousePos_screenBased;
-	Vector3 mousePos_worldBased;
+	virtual void PlayerController(double dt);
+	virtual void GetGamePadInput(double dt);
+	virtual void UpdateGameObjects(double dt);
+	virtual void RenderGameObjects();
 
 	Enemy* enemy;
 

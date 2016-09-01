@@ -199,6 +199,7 @@ void SceneBase::Init()
 	bLightEnabled = true;
 	isCulled = true;
 	isWireFrame = false;
+	displayFPS = false;
 
 	player->SetScale(3.5f, 3.5f, 3.5f);
 
@@ -290,6 +291,7 @@ void SceneBase::GetGamePadInput(double dt)
 	////////====================================== GLFW CONTROLLER CONTROLS =====================================/////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	//Handle Gamepad movement
 	//= Y Axis Movement 
 	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) > 0.2f)
 	{
@@ -428,6 +430,10 @@ void SceneBase::Update(double dt)
 	else if (Controls::GetInstance().OnPress(Controls::KEY_9))
 	{
 		bLightEnabled = false;
+	}
+	if (Controls::GetInstance().OnPress(Controls::KEY_0))
+	{
+		displayFPS = !displayFPS;
 	}
 
 	if (Controls::GetInstance().OnHold(Controls::KEY_I))
@@ -763,11 +769,15 @@ void SceneBase::RenderHUD()
 		modelStack.PopMatrix();
 	}
 
-	//On screen text
 	std::ostringstream ss;
-	ss.precision(5);
-	ss << "FPS: " << fps;
-	RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
+	if (displayFPS)
+	{
+		//On screen text
+		ss.str("");
+		ss.precision(5);
+		ss << "FPS: " << fps;
+		RenderTextOnScreen(meshList[GEO_TEXT], ss.str(), Color(0, 1, 0), 2.5f, 0, 0);
+	}
 
 	RenderUI(meshList[GEO_UI_BACKGROUND], 8, 0, 60, 15, false);
 
