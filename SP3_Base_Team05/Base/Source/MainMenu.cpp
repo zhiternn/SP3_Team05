@@ -1272,7 +1272,6 @@ void MainMenu::LevelUpPage()
             modelStack.Scale(5, 5, 2);
             RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
             modelStack.PopMatrix();
-
             if (isClicked == false)
             {
                 Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
@@ -1330,7 +1329,6 @@ void MainMenu::LevelUpPage()
             modelStack.Scale(5, 5, 2);
             RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
             modelStack.PopMatrix();
-
             if (isClicked == false)
             {
                 Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
@@ -1376,7 +1374,6 @@ void MainMenu::LevelUpPage()
             modelStack.Scale(5, 5, 2);
             RenderMesh(meshList[GEO_MENU_CHOICEBOX], false);
             modelStack.PopMatrix();
-
             if (isClicked == false)
             {
                 Application::GetInstance().theSoundEngine->play2D(Application::GetInstance().menu_click);
