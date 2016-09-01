@@ -25,8 +25,8 @@ void SceneDetlaff::Init()
 
 	GameObject::goList.clear();
 
-	player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.1, 0));
-    GameObject::goList.push_back(SceneBase::player);
+	SceneBase::player->Init(Vector3(m_worldWidth * 0.5f, m_worldHeight * 0.1f, 0));
+	GameObject::goList.push_back(SceneBase::player);
 
 	detlaff = new CDetlaff();
 	GameObject::goList.push_back(detlaff);
@@ -40,6 +40,19 @@ void SceneDetlaff::Init()
 
 	enemyFireDelay = ENEMY_FIRE_COOLDOWN;
 	enemyMovementDelay = ENEMY_MOVE_DELAY;
+
+	mainCamera->Include(&(SceneBase::player->pos));
+
+	if (!(glfwController.isConnected() && useController))
+	{
+		mainCamera->Include(&mousePos_worldBased);
+	}
+	else
+	{
+		mainCamera->Include(&controllerStick_Pos);
+	}
+
+
 }
 
 void SceneDetlaff::PlayerController(double dt)

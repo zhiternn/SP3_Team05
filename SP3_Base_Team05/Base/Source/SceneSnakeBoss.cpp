@@ -71,6 +71,18 @@ void SceneSnakeBoss::Init()
 	snake->SetScale(8, 8, 8);
 	snake->SetMass(3);
 	snake->Init(Vector3(m_worldWidth*0.5f, m_worldHeight*0.5f, 0), 20);
+
+	mainCamera->Include(&(SceneBase::player->pos));
+
+	if (!(glfwController.isConnected() && useController))
+	{
+		mainCamera->Include(&mousePos_worldBased);
+	}
+	else
+	{
+		mainCamera->Include(&controllerStick_Pos);
+	}
+
 }
 
 void SceneSnakeBoss::PlayerController(double dt)

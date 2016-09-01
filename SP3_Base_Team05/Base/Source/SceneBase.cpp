@@ -208,16 +208,6 @@ void SceneBase::Init()
 	//Get player Controls
 	useController = options.UseControl();
 
-	mainCamera->Include(&(player->pos));
-
-	if (!(glfwController.isConnected() && useController))
-	{
-		mainCamera->Include(&mousePos_worldBased);
-	}
-	else
-	{
-		mainCamera->Include(&controllerStick_Pos);
-	}
 }
 
 void SceneBase::PlayerController(double dt)
@@ -299,8 +289,7 @@ void SceneBase::GetGamePadInput(double dt)
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////====================================== GLFW CONTROLLER CONTROLS =====================================/////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//Handle Gamepad movement
-	std::cout << glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) << std::endl;
+
 	//= Y Axis Movement 
 	if (glfwController.GetJoyStickTriggerPressed(GLFWController::CONTROLLER_STICKS::L_THUMBSTICK_Y) > 0.2f)
 	{
@@ -388,6 +377,7 @@ void SceneBase::Update(double dt)
 	{
 		//Handle Controller Input 
 		GetGamePadInput(dt);
+		mainCamera->Update(dt);
 	}
 	else
 	{
