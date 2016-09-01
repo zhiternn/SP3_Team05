@@ -23,6 +23,7 @@ void Trap::Init(Vector3 pos, float size)
 	scale.Set(radius, radius, radius);
 	collider.type = Collider::COLLIDER_BALL;
 	collider.isTrigger = true;
+	std::cout << radius << std::endl;
 }
 
 void Trap::Update(double dt)

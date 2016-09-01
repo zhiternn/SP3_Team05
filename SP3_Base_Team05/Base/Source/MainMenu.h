@@ -86,7 +86,6 @@ public:
 private:
     MENU_STATE state;
     SceneManager &sm;
-	OptionManager &om;
 
     bool isHover, isClicked;
     float continuetime;

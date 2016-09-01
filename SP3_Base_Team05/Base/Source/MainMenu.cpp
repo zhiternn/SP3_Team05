@@ -17,7 +17,6 @@ Rendering Main Menu
 
 MainMenu::MainMenu() :
 sm(SceneManager::GetInstance()),
-om(OptionManager::GetInstance()),
 isHover(false),
 isClicked(false),
 continuetime(0),
@@ -2038,6 +2037,14 @@ void MainMenu::ControllerButton()
     float boxposscale = 0.6;
     float textposscale = 0.575;
 
+	if (options.GetInstance().UseControl())
+	{
+		ControllerOn = true;
+	}
+	else
+	{
+		ControllerOn = false;
+	}
 
     // Controller Yes No
     if (mousePos_screenBased.x >= b_On.minX && mousePos_screenBased.x <= b_On.maxX
@@ -2073,7 +2080,7 @@ void MainMenu::ControllerButton()
                 }
                 ControllerOn = true;
             }
-			om.SetControl(ControllerOn);
+			options.SetControl(ControllerOn);
             //, SoundOn, ControllerOn;
         }
         else
